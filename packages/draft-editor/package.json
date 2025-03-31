@@ -1,6 +1,6 @@
 {
   "name": "@kids-reporter/draft-editor",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -28,7 +28,7 @@
     "draft-js": "^0.11.7"
   },
   "peerDependencies": {
-    "@keystone-6/core": "5.2.0",
+    "@keystone-6/core": "5.8.0",
     "@keystone-ui/button": "^7.0.2",
     "@keystone-ui/fields": "^7.2.0",
     "@keystone-ui/modals": "^6.0.3",
