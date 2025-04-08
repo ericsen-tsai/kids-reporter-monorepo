@@ -12,9 +12,79 @@ import {
 } from '@/app/constants'
 import { getPostSummaries, sendGQLRequest, log, LogLevel } from '@/app/utils'
 
-export const metadata: Metadata = {
-  title: '分類: 少年報導者 The Reporter for Kids',
-  description: GENERAL_DESCRIPTION,
+const seoFields = `
+  ogTitle
+  ogDescription
+  ogImage {
+    resized {
+      medium
+    }
+  }
+`
+
+const query = `
+  query GetCategory($categoryWhere: CategoryWhereUniqueInput!, $subcategoryWhere: SubcategoryWhereInput!) {
+    category(where: $categoryWhere) {
+      ${seoFields}
+      subcategories(where: $subcategoryWhere) {
+        ${seoFields}
+      }
+    }
+  }
+`
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { path: string[] }
+}): Promise<Metadata> {
+  const categorySlug = params.path?.[0]
+  const subcategorySlug = params.path?.[1] ?? ''
+
+  const res = await sendGQLRequest({
+    query,
+    variables: {
+      categoryWhere: {
+        slug: categorySlug,
+      },
+      subcategoryWhere: {
+        slug: {
+          equals: subcategorySlug,
+        },
+      },
+    },
+  })
+
+  const category = res?.data?.data?.category
+
+  if (!category) {
+    log(
+      LogLevel.INFO,
+      `Category metadata not found. URL path is: /${params.path.join('/')}`
+    )
+    return {}
+  }
+
+  const title =
+    category?.subcategories?.[0]?.ogTitle ||
+    category?.ogTitle ||
+    '分類: 少年報導者 The Reporter for Kids'
+  const description =
+    category?.subcategories?.[0]?.ogDescription ||
+    category?.ogDescription ||
+    GENERAL_DESCRIPTION
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images:
+        category?.subcategories?.[0]?.ogImage?.resized?.medium ??
+        category?.ogImage?.resized?.medium,
+    },
+  }
 }
 
 const subcategoriesGQL = `

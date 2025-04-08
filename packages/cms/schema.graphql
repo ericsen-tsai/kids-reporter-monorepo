@@ -943,6 +943,9 @@ type Subcategory {
   slug: String
   name: String
   nameForCMS: String
+  ogTitle: String
+  ogDescription: String
+  ogImage: Photo
   category: Category
   subSubcategories(where: SubSubcategoryWhereInput! = {}, orderBy: [SubSubcategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubSubcategoryWhereUniqueInput): [SubSubcategory!]
   subSubcategoriesCount(where: SubSubcategoryWhereInput! = {}): Int
@@ -966,6 +969,9 @@ input SubcategoryWhereInput {
   slug: StringFilter
   name: StringFilter
   nameForCMS: StringFilter
+  ogTitle: StringFilter
+  ogDescription: StringFilter
+  ogImage: PhotoWhereInput
   category: CategoryWhereInput
   subSubcategories: SubSubcategoryManyRelationFilter
   createdAt: DateTimeNullableFilter
@@ -977,6 +983,8 @@ input SubcategoryOrderByInput {
   slug: OrderDirection
   name: OrderDirection
   nameForCMS: OrderDirection
+  ogTitle: OrderDirection
+  ogDescription: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -985,6 +993,9 @@ input SubcategoryUpdateInput {
   slug: String
   name: String
   nameForCMS: String
+  ogTitle: String
+  ogDescription: String
+  ogImage: PhotoRelateToOneForUpdateInput
   category: CategoryRelateToOneForUpdateInput
   subSubcategories: SubSubcategoryRelateToManyForUpdateInput
   createdAt: DateTime
@@ -1006,6 +1017,9 @@ input SubcategoryCreateInput {
   slug: String
   name: String
   nameForCMS: String
+  ogTitle: String
+  ogDescription: String
+  ogImage: PhotoRelateToOneForCreateInput
   category: CategoryRelateToOneForCreateInput
   subSubcategories: SubSubcategoryRelateToManyForCreateInput
   createdAt: DateTime

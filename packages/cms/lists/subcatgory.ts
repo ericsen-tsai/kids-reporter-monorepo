@@ -19,6 +19,18 @@ const listConfigurations = list({
       label: '次類別中文名稱（使用於 CMS）',
       validation: { isRequired: true },
     }),
+    ogTitle: text({
+      label: 'og:title',
+      validation: { isRequired: false },
+    }),
+    ogDescription: text({
+      label: 'og:description',
+      validation: { isRequired: false },
+    }),
+    ogImage: relationship({
+      label: 'og:image',
+      ref: 'Photo',
+    }),
     category: relationship({
       ref: 'Category.subcategories',
       many: false,
