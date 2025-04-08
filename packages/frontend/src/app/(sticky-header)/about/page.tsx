@@ -61,6 +61,14 @@ const teamMembers = [
     bio: '主編就是協助稿件從企劃到編輯完成的主要橋樑。我也負責Podcast及教案規劃，用多元的呈現方式，把重要議題轉成孩子有興趣閱讀、老師家長容易教學應用的素材。',
   },
   {
+    slug: 'sofia-wei',
+    name: '韋麗文',
+    role: AuthorRole.AUDITORS,
+    roleName: '主編',
+    avatar: '',
+    bio: '主編，是從世界的紋理中發掘新聞議題，帶領團隊深入挖掘故事，讓報導既有深度，也有溫度。引領議題的開局，讓對話持續延展，這正是新聞工作的魅力。',
+  },
+  {
     slug: 'wang-wei-han',
     name: '王崴漢',
     role: AuthorRole.AUDITORS,
