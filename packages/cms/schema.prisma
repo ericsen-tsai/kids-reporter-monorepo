@@ -101,6 +101,7 @@ model Photo {
   from_ProjectCategory_ogImage   ProjectCategory[] @relation("ProjectCategory_ogImage")
   from_Category_heroImage        Category[]        @relation("Category_heroImage")
   from_Category_ogImage          Category[]        @relation("Category_ogImage")
+  from_Subcategory_ogImage       Subcategory[]     @relation("Subcategory_ogImage")
   from_Tag_ogImage               Tag[]             @relation("Tag_ogImage")
 }
 
@@ -202,12 +203,17 @@ model Subcategory {
   slug             String           @unique @default("")
   name             String           @default("")
   nameForCMS       String           @unique @default("")
+  ogTitle          String           @default("")
+  ogDescription    String           @default("")
+  ogImage          Photo?           @relation("Subcategory_ogImage", fields: [ogImageId], references: [id])
+  ogImageId        Int?             @map("ogImage")
   category         Category?        @relation("Subcategory_category", fields: [categoryId], references: [id])
   categoryId       Int?             @map("category")
   subSubcategories SubSubcategory[] @relation("SubSubcategory_subcategory")
   createdAt        DateTime?        @default(now())
   updatedAt        DateTime?        @updatedAt
 
+  @@index([ogImageId])
   @@index([categoryId])
 }
 
