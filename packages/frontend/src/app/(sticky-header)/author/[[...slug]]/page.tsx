@@ -65,6 +65,7 @@ export async function generateMetadata({
   const authorMeta = authorMetaRes?.data?.data?.author
   if (!authorMeta) {
     log(LogLevel.WARNING, `Author meta not found! ${slug}`)
+    return {}
   }
 
   return {
