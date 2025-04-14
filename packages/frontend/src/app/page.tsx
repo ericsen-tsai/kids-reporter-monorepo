@@ -15,11 +15,9 @@ import {
   Theme,
 } from '@/app/constants'
 import { getPostSummaries, sendGQLRequest } from '@/app/utils'
-import { isProduction } from '@/environment-variables'
 
-// Specify revalidation time for static rendering in production env
-console.log('isProduction:', isProduction)
-export const revalidate = isProduction ? 300 : 0
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: '少年報導者 The Reporter for Kids - 理解世界 參與未來',
   description: GENERAL_DESCRIPTION,
