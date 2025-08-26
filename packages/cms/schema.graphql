@@ -1634,6 +1634,8 @@ type Member {
   name: String
   email: String
   twreporter_user_id: String
+  role: String
+  twoFactorAuth: JSON
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1651,6 +1653,7 @@ input MemberWhereInput {
   name: StringFilter
   email: StringFilter
   twreporter_user_id: StringFilter
+  role: StringFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -1660,6 +1663,7 @@ input MemberOrderByInput {
   name: OrderDirection
   email: OrderDirection
   twreporter_user_id: OrderDirection
+  role: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -1668,6 +1672,7 @@ input MemberUpdateInput {
   name: String
   email: String
   twreporter_user_id: String
+  role: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1681,6 +1686,7 @@ input MemberCreateInput {
   name: String
   email: String
   twreporter_user_id: String
+  role: String
   createdAt: DateTime
   updatedAt: DateTime
 }

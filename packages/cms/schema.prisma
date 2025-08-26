@@ -337,6 +337,7 @@ model Member {
   name               String    @default("")
   email              String    @default("")
   twreporter_user_id String    @unique @default("")
+  role               String    @default("member")
   createdAt          DateTime? @default(now())
   updatedAt          DateTime? @updatedAt
 
