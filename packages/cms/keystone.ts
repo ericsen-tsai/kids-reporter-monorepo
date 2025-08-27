@@ -367,6 +367,16 @@ const authConfig = withAuth(
   })
 )
 
+/**
+ * ⚠️  Note:
+ * `withAuth` overrides the return value of the session strategy
+ * and only recognizes the `listKey: 'User'` defined in `createAuth`.
+ * Any other return value (e.g. `{ listKey: 'Member', ... }`) would be
+ * replaced with `undefined`.
+ *
+ * To preserve the compositeSession config, it must be assigned directly
+ * to `authConfig.session` instead of passing it through `withAuth`.
+ */
 authConfig.session = compositeSession
 
 export default authConfig
