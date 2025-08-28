@@ -4,6 +4,7 @@ const {
   GQL_ORIGIN,
   GQL_HEADLESS_ACCOUNT_EMAIL,
   GQL_HEADLESS_ACCOUNT_PASSWORD,
+  GO_API_ENV,
 } = process.env
 
 /**
@@ -35,6 +36,14 @@ const envVar = {
         email: GQL_HEADLESS_ACCOUNT_EMAIL || '',
         password: GQL_HEADLESS_ACCOUNT_PASSWORD || '',
       },
+    },
+    goApi: {
+      origin:
+        GO_API_ENV === 'prod'
+          ? 'https://go-api.twreporter.org'
+          : GO_API_ENV === 'staging'
+          ? 'https://staging-go-api.twreporter.org'
+          : 'http://localhost:8080',
     },
   },
   cors: {
