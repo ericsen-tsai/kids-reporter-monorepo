@@ -36,6 +36,11 @@ const listConfigurations = list({
       label: 'membership_user.users.id',
       validation: { isRequired: true },
       isIndexed: 'unique',
+      access: {
+        read: allowRoles([RoleEnum.Admin, RoleEnum.Owner]),
+        create: () => false,
+        update: () => false,
+      },
     }),
     role: text({
       defaultValue: 'member',
@@ -44,11 +49,16 @@ const listConfigurations = list({
           fieldMode: 'hidden',
         },
         itemView: {
-          fieldMode: 'read',
+          fieldMode: 'hidden',
         },
         listView: {
           fieldMode: 'hidden',
         },
+      },
+      access: {
+        read: allowRoles([RoleEnum.Admin, RoleEnum.Owner]),
+        create: () => false,
+        update: () => false,
       },
     }),
     twoFactorAuth: virtual({
@@ -65,11 +75,16 @@ const listConfigurations = list({
           fieldMode: 'hidden',
         },
         itemView: {
-          fieldMode: 'read',
+          fieldMode: 'hidden',
         },
         listView: {
           fieldMode: 'hidden',
         },
+      },
+      access: {
+        read: allowRoles([RoleEnum.Admin, RoleEnum.Owner]),
+        create: () => false,
+        update: () => false,
       },
     }),
     createdAt: timestamp({
