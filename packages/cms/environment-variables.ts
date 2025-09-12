@@ -23,6 +23,9 @@ const {
   OPEN_AI_KEY,
   TWREPORTER_ID,
   SEARCH_API_KEY,
+  GO_API_JWT_SECRET,
+  GO_API_JWT_ISSUER,
+  GO_API_JWT_AUDIENCE,
 } = process.env
 
 enum DatabaseProvider {
@@ -94,6 +97,11 @@ const environmentVariables = {
   searchAPIKey: SEARCH_API_KEY || 'search-api-key',
   nodeEnv: NODE_ENV || 'development', // value could be 'development', 'production' or 'test'
   openAIKey: OPEN_AI_KEY || 'open-ai-key',
+  goApiJwt: {
+    secret: GO_API_JWT_SECRET || '',
+    issuer: GO_API_JWT_ISSUER || 'https://go-api.twreporter.org',
+    audience: GO_API_JWT_AUDIENCE || 'https://www.twreporter.org',
+  },
 }
 
 export default environmentVariables

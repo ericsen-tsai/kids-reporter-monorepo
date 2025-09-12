@@ -19,6 +19,7 @@ export const RoleEnum = {
   FrontendHeadlessAccount: 'frontend_headless_account',
   PreviewHeadlessAccount: 'preview_headless_account',
   CronjobHeadlessAccount: 'cronjob_headless_account',
+  Member: 'member',
 }
 
 export const allowRoles = (roles: string[]) => {
@@ -50,6 +51,7 @@ export const allowAllRoles = () => {
     RoleEnum.FrontendHeadlessAccount,
     RoleEnum.PreviewHeadlessAccount,
     RoleEnum.CronjobHeadlessAccount,
+    RoleEnum.Member,
   ]
   return allowRoles(roles)
 }
