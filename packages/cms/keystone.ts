@@ -6,7 +6,6 @@ import { RoleEnum } from './lists/utils/access-control-list'
 import appConfig from './config'
 import envVar from './environment-variables'
 import jwt from 'jsonwebtoken'
-import { Request, Response, NextFunction } from 'express'
 import { createAuth } from '@keystone-6/auth'
 import { statelessSessions } from '@keystone-6/core/session'
 import { InMemoryLRUCache } from '@apollo/utils.keyvaluecache'
@@ -329,28 +328,9 @@ const authConfig = withAuth(
 
         const corsMiddleware = cors(corsOpts)
 
-        // Check if the request is sent by an authenticated user
-        const authenticationMw = async (
-          req: Request,
-          res: Response,
-          next: NextFunction
-        ) => {
-          const context = await commonContext.withRequest(req, res)
-
-          // User has been logged in
-          if (context?.session?.data?.role) {
-            return next()
-          }
-
-          res.status(401).json({
-            status: 'fail',
-            data: 'Authentication fails due to session is not valid.',
-          })
-        }
-
-        // enable cors and authentication middlewares
-        app.options('/api/graphql', authenticationMw, corsMiddleware)
-        app.post('/api/graphql', authenticationMw, corsMiddleware)
+        // enable cors middleware
+        app.options('/api/graphql', corsMiddleware)
+        app.post('/api/graphql', corsMiddleware)
 
         // enable 2FA middleware and related routes
         twoFactorAuth(app, commonContext)
