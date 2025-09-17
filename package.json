@@ -12,7 +12,10 @@
   ],
   "scripts": {
     "prepare": "husky install",
-    "update": "yarn changeset && yarn changeset version"
+    "update": "yarn changeset && yarn changeset version",
+    "dev:cms": "cd packages/cms && dotenv -e .env.local -- yarn dev",
+    "dev:frontend": "cd packages/frontend && yarn dev --port 3001",
+    "dev:api-gateway": "cd packages/api-gateway && dotenv -e .env.local -- yarn dev"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.10",
@@ -25,7 +28,7 @@
     "@types/draft-js": "^0.11.10",
     "@types/lodash": "^4.14.197",
     "@types/node": "^18.0.0",
-    "@types/react": "^18.0.12",
+    "@types/react": "^18.3.24",
     "@types/styled-components": "^5.1.26",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
@@ -42,7 +45,8 @@
     "lint-staged": "^12.4.2",
     "prettier": "^2.0.0",
     "typescript": "^4.7.4",
-    "webpack-dev-server": "^4.15.1"
+    "webpack-dev-server": "^4.15.1",
+    "dotenv-cli": "^10.0.0"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": "eslint --cache --fix"

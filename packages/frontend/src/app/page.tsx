@@ -15,6 +15,7 @@ import {
   Theme,
 } from '@/app/constants'
 import { getPostSummaries, sendGQLRequest } from '@/app/utils'
+import { Fragment } from 'react'
 
 export const dynamic = 'force-dynamic'
 
@@ -234,14 +235,13 @@ export default async function Home() {
       <PostSelection latestPosts={latestPosts} featuredPosts={featuredPosts} />
       {sections.map((sectionConfig, index) => {
         return (
-          <>
+          <Fragment key={`section-${index}`}>
             <Section
-              key={`section-${index}`}
               config={sectionConfig}
               posts={sectionPostsArray?.[index]}
             />
             {index < sections.length - 1 ? <Divider /> : null}
-          </>
+          </Fragment>
         )
       })}
       <SearchAndTags tags={tags} />

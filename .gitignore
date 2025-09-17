@@ -50,3 +50,6 @@ gcskeyfile.json
 packages/**/lib
 packages/**/dist
 # packages/**/public/*
+
+# cursor
+.cursor
