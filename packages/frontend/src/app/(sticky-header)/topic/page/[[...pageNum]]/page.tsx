@@ -177,7 +177,7 @@ export default async function Topic({
     },
   })
   if (!projectsRes) {
-    log(LogLevel.WARNING, 'Emptyp topic response!')
+    log(LogLevel.WARNING, 'Empty topic response!')
     notFound()
   }
 
