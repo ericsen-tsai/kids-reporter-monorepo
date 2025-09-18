@@ -1,16 +1,16 @@
 import { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
-import PostList from '@/app/components/post-list'
-import Navigator from './navigator'
-import Pagination from '@/app/components/pagination'
+import PostList from '@/components/post-list'
+import Navigator from '../../_components/category/navigator'
+import Pagination from '@/components/pagination'
 import {
   GENERAL_DESCRIPTION,
   POST_PER_PAGE,
   POST_CONTENT_GQL,
   DEFAULT_THEME_COLOR,
   ERROR_PAGE,
-} from '@/app/constants'
-import { getPostSummaries, sendGQLRequest, log, LogLevel } from '@/app/utils'
+} from '@/constants'
+import { getPostSummaries, sendGQLRequest, log, LogLevel } from '@/utils'
 
 const seoFields = `
   ogTitle

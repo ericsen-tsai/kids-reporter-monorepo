@@ -5,19 +5,19 @@ import {
   Theme,
   GENERAL_DESCRIPTION,
   OG_SUFFIX,
-} from '@/app/constants'
-import { PublishedDate } from './styled'
-import { Content } from './content'
-import { Credits } from './credits'
+} from '@/constants'
+import { PublishedDate } from '../../_components/topic/styled'
+import { Content } from '../../_components/topic/content'
+import { Credits } from '../../_components/topic/credits'
 import {
   getFormattedDate,
   getPostSummaries,
   sendGQLRequest,
   log,
   LogLevel,
-} from '@/app/utils'
-import { Leading } from './leading'
-import { RelatedPosts } from './related-posts'
+} from '@/utils'
+import { Leading } from '../../_components/topic/leading'
+import { RelatedPosts } from '../../_components/topic/related-posts'
 import { notFound } from 'next/navigation'
 
 const query = `

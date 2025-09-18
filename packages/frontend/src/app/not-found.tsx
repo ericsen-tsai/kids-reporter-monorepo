@@ -1,6 +1,6 @@
-import { StickyHeader } from '@/app/components/header'
-import TopDetector from '@/app/components/top-detector'
-import { SearchIcon } from '@/app/icons'
+import { StickyHeader } from '@/components/header'
+import TopDetector from '@/components/top-detector'
+import { SearchIcon } from '@/icons'
 
 export default function NotFound() {
   return (

@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import PostList from '@/app/components/post-list'
-import Pagination from '@/app/components/pagination'
+import PostList from '@/components/post-list'
+import Pagination from '@/components/pagination'
 import {
   GENERAL_DESCRIPTION,
   POST_PER_PAGE,
@@ -9,8 +9,8 @@ import {
   KIDS_URL_ORIGIN,
   OG_SUFFIX,
   ContentType,
-} from '@/app/constants'
-import { getPostSummaries, sendGQLRequest, log, LogLevel } from '@/app/utils'
+} from '@/constants'
+import { getPostSummaries, sendGQLRequest, log, LogLevel } from '@/utils'
 
 const tagGQL = `
 query($where: TagWhereUniqueInput!, $take: Int, $skip: Int!, $orderBy: [PostOrderByInput!]!) {

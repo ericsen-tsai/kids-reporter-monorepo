@@ -1,5 +1,5 @@
-import { StickyHeader } from '@/app/components/header'
-import TopDetector from '@/app/components/top-detector'
+import { StickyHeader } from '@/components/header'
+import TopDetector from '@/components/top-detector'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

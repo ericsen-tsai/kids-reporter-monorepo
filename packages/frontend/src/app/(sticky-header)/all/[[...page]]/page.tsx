@@ -1,14 +1,14 @@
 import { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
-import PostList from '@/app/components/post-list'
-import Pagination from '@/app/components/pagination'
+import PostList from '@/components/post-list'
+import Pagination from '@/components/pagination'
 import {
   GENERAL_DESCRIPTION,
   POST_PER_PAGE,
   POST_CONTENT_GQL,
   ERROR_PAGE,
-} from '@/app/constants'
-import { getPostSummaries, sendGQLRequest, log, LogLevel } from '@/app/utils'
+} from '@/constants'
+import { getPostSummaries, sendGQLRequest, log, LogLevel } from '@/utils'
 
 export const metadata: Metadata = {
   title: '所有文章 - 少年報導者 The Reporter for Kids',

@@ -1,10 +1,10 @@
 import errors from '@twreporter/errors'
 import { NextResponse } from 'next/server'
-import { CardProp } from '@/app/(sticky-header)/search/card'
-import { ContentType, Theme } from '@/app/constants'
+import { CardProp } from '@/app/(sticky-header)/_components/search/card'
+import { ContentType, Theme } from '@/constants'
 import { customsearch } from '@googleapis/customsearch'
 import { customsearch_v1 } from '@googleapis/customsearch/v1'
-import { log, LogLevel, sendGQLRequest } from '@/app/utils'
+import { log, LogLevel, sendGQLRequest } from '@/utils'
 
 const topicQuery = `
 query Query($where: ProjectWhereUniqueInput!) {
