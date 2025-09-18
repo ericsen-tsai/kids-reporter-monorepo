@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-@source './src/app/**/*.{js,ts,jsx,tsx,mdx}';
+@source './src/**/*.{js,ts,jsx,tsx,mdx}';
 
 /* Design System Configuration */
 @theme {
