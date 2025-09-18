@@ -50,7 +50,7 @@ export const MainHeader = () => {
       aria-haspopup="listbox"
     >
       <input
-        className="text-gray-500 w-full h-full text-base bg-gray-100 pl-3 pr-10 border-none rounded-3xl focus:outline-none"
+        className="text-gray-500 w-full h-full text-base bg-gray-100 pl-3 pr-10 border-none rounded-3xl focus:outline-hidden"
         type="text"
         placeholder={SEARCH_PLACEHOLDER}
         name="q"

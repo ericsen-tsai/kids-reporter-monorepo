@@ -14,7 +14,7 @@ export const GoToMainSite = () => {
         className="stk-img wp-image-6055 w-28 lg:w-40"
         src="/assets/images/main_site_logo.svg"
       />
-      <div className="flex-shrink flex flex-col items-center md:items-start">
+      <div className="shrink flex flex-col items-center md:items-start">
         <h2
           style={{
             fontFamily:

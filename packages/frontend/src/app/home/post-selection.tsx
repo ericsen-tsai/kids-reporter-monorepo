@@ -57,10 +57,10 @@ export const PostSelection = (props: PostSelectionProp) => {
         alt="精選文章"
         loading="eager"
       />
-      <div className="max-w-screen-xl flex flex-col lg:flex-row p-6 gap-10">
+      <div className="max-w-(--breakpoint-xl) flex flex-col lg:flex-row p-6 gap-10">
         <div
           style={{ flexGrow: '8', flexBasis: '25%' }}
-          className="flex flex-col justify-between flex-shrink gap-5"
+          className="flex flex-col justify-between shrink gap-5"
         >
           <div className="flex flex-row justify-between items-center bg-white rounded-3xl pt-2.5 pb-3 pl-3.5 pr-5">
             <span
@@ -91,7 +91,7 @@ export const PostSelection = (props: PostSelectionProp) => {
         {featuredPosts?.length > 0 && (
           <div
             style={{ flexGrow: '25', flexBasis: '75%' }}
-            className="flex flex-col flex-shrink rounded-3xl gap-5"
+            className="flex flex-col shrink rounded-3xl gap-5"
           >
             <div
               style={{ rowGap: '20px' }}

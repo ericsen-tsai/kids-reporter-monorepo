@@ -211,7 +211,7 @@ export default async function PostPage({
   })
 
   return (
-    <main className="flex flex-col items-center max-w-screen-2xl">
+    <main className="flex flex-col items-center max-w-(--breakpoint-2xl)">
       {tocIndexes.length > 0 && <TOC indexes={tocIndexes} />}
       {post && <Article post={post} />}
     </main>

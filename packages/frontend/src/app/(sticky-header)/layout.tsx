@@ -6,7 +6,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <>
       <StickyHeader />
       <TopDetector />
-      <div className="flex flex-grow mt-16">{children}</div>
+      <div className="flex grow mt-16">{children}</div>
     </>
   )
 }

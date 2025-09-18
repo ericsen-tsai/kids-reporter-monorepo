@@ -27,7 +27,7 @@ export const SearchAndTags = (props: SearchAndTagsProp) => {
         aria-haspopup="listbox"
       >
         <input
-          className="w-full h-full border-solid border-2 rounded-full text-base bg-white pl-3 pr-10 focus:outline-none"
+          className="w-full h-full border-solid border-2 rounded-full text-base bg-white pl-3 pr-10 focus:outline-hidden"
           style={{
             color: 'var(#A3A3A3, var(--color))',
             borderColor: 'var(--theme-color)',

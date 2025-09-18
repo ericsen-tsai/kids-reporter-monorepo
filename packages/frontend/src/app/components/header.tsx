@@ -146,7 +146,7 @@ export const StickyHeader = () => {
       </div>
       <div
         style={{ padding: 'var(--panel-padding, 35px)' }}
-        className={`${styles['search-overlay']} flex-grow w-full flex flex-col justify-center items-center`}
+        className={`${styles['search-overlay']} grow w-full flex flex-col justify-center items-center`}
       >
         {searchInput}
       </div>
@@ -171,7 +171,7 @@ export const StickyHeader = () => {
       </div>
       <div
         style={{ padding: 'var(--panel-padding, 35px)' }}
-        className="flex-grow w-full flex flex-col justify-center items-center"
+        className="grow w-full flex flex-col justify-center items-center"
       >
         <Link href="/" className={`${styles['logo-mobile']} h-0 md:h-24`}>
           <img
@@ -216,7 +216,7 @@ export const StickyHeader = () => {
         className="flex justify-between h-16 ml-auto mr-auto bg-white"
       >
         <div className="flex items-center">{brand}</div>
-        <div className="hidden lg:flex flex-grow justify-between items-center">
+        <div className="hidden lg:flex grow justify-between items-center">
           <div
             style={{ margin: 'var(--margin, 0 10px)' }}
             className="flex flex-row items-center"

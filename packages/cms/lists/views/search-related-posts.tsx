@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
 import copyToClipboard from 'clipboard-copy'
@@ -32,6 +32,7 @@ const KeywordPost = styled.div`
   gap: 10px;
 `
 
+// @ts-ignore Button type is not compatible with styled-components
 const IconButton = styled(Button)`
   background-color: transparent;
   margin: 0 0 0 0.5rem;
