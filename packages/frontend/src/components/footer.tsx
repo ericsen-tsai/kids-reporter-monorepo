@@ -1,216 +1,208 @@
 import Link from 'next/link'
 import {
   FBIcon,
-  GithubIcon,
   IGIcon,
+  YouTubeIcon,
+  ThreadsIcon,
   MediumIcon,
   RSSIcon,
-  TwitterIcon,
 } from '@/icons'
-import { GENERAL_DESCRIPTION, SUBSCRIBE_URL, PRIVACY_POLICY } from '@/constants'
-import styles from './footer.module.css'
+import { PRIVACY_POLICY } from '@/constants'
+import Image from 'next/image'
+import Button from './button'
 
 const socialIcons = [
   {
     link: 'https://www.facebook.com/twreporter/',
     img: FBIcon,
+    name: 'Facebook',
   },
   {
     link: 'https://www.instagram.com/twreporter/',
     img: IGIcon,
+    name: 'Instagram',
   },
   {
-    link: 'https://twitter.com/tw_reporter_org',
-    img: TwitterIcon,
+    link: 'https://www.youtube.com/@TwreporterOrg',
+    img: YouTubeIcon,
+    name: 'YouTube',
+  },
+  {
+    link: 'https://www.threads.net/@twreporter',
+    img: ThreadsIcon,
+    name: 'Threads',
   },
   {
     link: 'https://medium.com/twreporter',
     img: MediumIcon,
-  },
-  {
-    link: 'https://github.com/twreporter',
-    img: GithubIcon,
+    name: 'Medium',
   },
   {
     link: 'https://kids-storage.twreporter.org/rss/rss.xml',
     img: RSSIcon,
+    name: 'RSS',
+  },
+]
+
+const navigationLinks = [
+  {
+    title: '關於我們',
+    href: '/about',
+  },
+  {
+    title: '呼叫報導仔',
+    href: '/about#callkidsreporter',
+  },
+  {
+    title: '我要投稿',
+    href: 'https://forms.gle/49AEG8kFj7QWjgij8',
+    external: true,
+  },
+  {
+    title: '加入小記者',
+    href: 'https://forms.gle/eGq5jagNTwriwSCX6',
+    external: true,
+  },
+  {
+    title: '訂閱電子報',
+    href: 'http://eepurl.com/idk8VH',
+    external: true,
+  },
+  {
+    title: '訂閱Podcast',
+    href: 'https://solink.soundon.fm/kidstwreporter',
+    external: true,
+  },
+  {
+    title: '聯絡我們',
+    href: '/about#mail',
+  },
+  {
+    title: '前往《報導者》',
+    href: 'https://www.twreporter.org/',
+    external: true,
   },
 ]
 
 export const Footer = () => {
   return (
-    <div className="flex flex-col w-full mt-10">
-      <div
-        style={{ padding: 'var(--stk-block-background-padding)' }}
-        className="flex w-full bg-gray-100 justify-center overflow-hidden"
-      >
-        <div
-          style={{
-            width: 'var(--container-width)',
-            maxWidth: 'var(--normal-container-max-width)',
-          }}
-          className={styles['footer-top']}
-        >
-          <div className={styles['footer-top__left']}>
-            <picture className={styles['footer-top__left-logo']}>
-              <img src="/assets/images/footer-logo.svg" alt="" loading="lazy" />
-            </picture>
-            <p
-              style={{ letterSpacing: 'var(--letterSpacing)' }}
-              className="leading-8 mb-8"
-            >
-              {GENERAL_DESCRIPTION}
-            </p>
-            <div className={styles['footer-top__left-social']}>
-              <div className={styles['footer-top__social-icon-group']}>
-                {socialIcons.map((icon, index) => {
-                  return (
-                    <Link
-                      key={`social-icon-${index}`}
-                      href={icon.link}
-                      className={styles['footer-top__social-icon-item']}
-                      target="_blank"
-                    >
-                      {icon.img}
-                    </Link>
-                  )
-                })}
-              </div>{' '}
+    <footer className="w-full bg-neutral-white">
+      {/* Main Footer Content */}
+      <div className="w-full bg-neutral-white px-(--margin-mobile) py-12 desktop:px-(--margin-desktop) desktop:py-14">
+        <div className="max-w-300 mx-auto">
+          <div className="flex flex-col items-center gap-8 desktop:flex-row desktop:justify-between">
+            {/* Logo and Description */}
+            <div className="flex flex-col items-center gap-6 max-w-sm desktop:items-start">
+              <div className="flex items-center">
+                <Link href="/" className="flex items-center">
+                  <Image
+                    src="/assets/images/footer-logo.svg"
+                    alt="少年報導者"
+                    loading="lazy"
+                    width={238}
+                    height={26}
+                  />
+                </Link>
+              </div>
+              <p className="text-neutral-900 text-p2 desktop:max-w-100">
+                《少年報導者》是由非營利媒體《報導者》針對兒少打造的深度新聞報導品牌，與兒童和少年一起理解世界，參與未來。
+              </p>
+              <Button size={44} variant="secondary" asChild className="w-75">
+                <Link href="https://support.twreporter.org/" target="_blank">
+                  贊助我們
+                </Link>
+              </Button>
             </div>
-          </div>
-          <div className={styles['footer-top__middle']}>
-            <div className={styles['footer-top__team-box']}>
-              <Link
-                href="/about"
-                className={styles['footer-top__team-box-item']}
-              >
-                <img
-                  src="/assets/images/footer_pic1.svg"
-                  alt="我們是誰"
-                  loading="lazy"
-                />
-                我們是誰
-              </Link>
-              <Link
-                href="/about#team"
-                className={`${styles['footer-top__team-box-item']} __mPS2id`}
-              >
-                <img
-                  src="/assets/images/footer_pic2.svg"
-                  alt="我們是誰"
-                  loading="lazy"
-                />
-                核心團隊
-              </Link>
-              <Link
-                href="/about#consultants"
-                className={`${styles['footer-top__team-box-item']} __mPS2id`}
-              >
-                <img
-                  src="/assets/images/footer_pic3.svg"
-                  alt="我們是誰"
-                  loading="lazy"
-                />
-                顧問群
-              </Link>
-              <Link
-                href="/about#mail"
-                className={`${styles['footer-top__team-box-item']} __mPS2id`}
-              >
-                <img
-                  src="/assets/images/footer_pic4.svg"
-                  alt="我們是誰"
-                  loading="lazy"
-                />
-                聯絡我們
-              </Link>
+
+            {/* Navigation Links */}
+            <div className="flex flex-row gap-6 desktop:pr-25 hd:pr-0">
+              <div className="flex flex-col gap-2">
+                {navigationLinks.slice(0, 4).map((link, index) => (
+                  <Link
+                    key={index}
+                    href={link.href}
+                    className="text-neutral-900 text-p2-bold hover:text-red-400 transition-colors duration-200"
+                    target={link.external ? '_blank' : undefined}
+                    rel={link.external ? 'noopener noreferrer' : undefined}
+                  >
+                    {link.title}
+                  </Link>
+                ))}
+              </div>
+              <div className="flex flex-col gap-2">
+                {navigationLinks.slice(4).map((link, index) => (
+                  <Link
+                    key={index + 4}
+                    href={link.href}
+                    className="text-neutral-900 text-p2-bold hover:text-red-400 transition-colors duration-200"
+                    target={link.external ? '_blank' : undefined}
+                    rel={link.external ? 'noopener noreferrer' : undefined}
+                  >
+                    {link.title}
+                  </Link>
+                ))}
+              </div>
             </div>
-            <div className={styles['footer-top__button-group']}>
-              <Link
-                href="https://support.twreporter.org/"
-                className="header-left__btn-1 rpjr-btn rpjr-btn-big"
-                target="_blank"
-              >
-                贊助我們
-              </Link>
-              <Link
-                href={SUBSCRIBE_URL}
-                target="_blank"
-                className="header-left__btn-1 rpjr-btn rpjr-btn-orange rpjr-btn-big"
-              >
-                訂閱我們
-              </Link>
-              <Link
-                href="https://www.twreporter.org/"
-                className="header-left__btn-1 rpjr-btn rpjr-btn-red rpjr-btn-big"
-                target="_blank"
-              >
-                前往報導者
-              </Link>
-            </div>
-          </div>
-          <div className={styles['footer-top__right']}>
-            <img
-              src="/assets/images/footer_pic5.svg"
-              className={styles['footer-top__fig']}
-              loading="lazy"
-            />
           </div>
         </div>
       </div>
-      <div
-        style={{ backgroundColor: 'var(--paletteColor6)' }}
-        className="w-full flex items-center flex-row justify-between p-10"
-      >
-        <div
-          style={{
-            width: 'var(--container-width)',
-            maxWidth: 'var(--normal-container-max-width)',
-            minHeight: 'var(--shrink-height, var(--height))',
-          }}
-          className="flex flex-col lg:flex-row justify-center pb-16 lg:pb-0 gap-5 lg:gap-0 lg:justify-between items-center ml-auto mr-auto "
-        >
-          <div className="flex flex-col lg:flex-row justify-center items-center gap-5">
-            <p
-              style={{
-                letterSpacing: 'var(--letterSpacing)',
-                color: 'var(--paletteColor4)',
-              }}
-              className="footer-number text-xs md:text-sm"
-            >
-              公益勸募許可字號｜衛部救字第1131363879號{' '}
-            </p>
-            <div
-              className={`${styles['footer-policy']} flex flex-row justify-center flex-no-wrap gap-5`}
-            >
-              <Link
-                href={PRIVACY_POLICY}
-                target="_blank"
-                className="text-gray-900 font-medium text-base"
-              >
-                <strong>隱私政策</strong>
-              </Link>{' '}
-              <Link
-                href="https://www.twreporter.org/a/license-footer"
-                target="_blank"
-                className="text-gray-900 font-medium text-base"
-              >
-                <strong>許可協議</strong>
-              </Link>{' '}
+
+      {/* Bottom Section */}
+      <div className="w-full bg-red-400 px-(--margin-mobile) py-6 desktop:px-(--margin-desktop)">
+        <div className="max-w-300 mx-auto">
+          <div className="flex flex-col items-center gap-5 desktop:flex-row desktop:justify-between desktop:gap-4">
+            {/* Social Icons */}
+            <div className="flex items-center gap-4 order-1 desktop:order-2">
+              {socialIcons.map((social, index) => (
+                <Link
+                  key={index}
+                  href={social.link}
+                  className="text-neutral-white hover:text-neutral-200 transition-colors duration-200"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.name}
+                >
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    {social.img}
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* Legal Text */}
+            <div className="text-neutral-white text-p3 text-center desktop:text-left desktop:order-1">
+              <p className="desktop:inline">
+                衛部救字第1131363879號｜勸募期間 2025/1/1~12/31
+                <span className="hidden desktop:inline">｜</span>
+              </p>
+              <p className="desktop:inline">
+                <Link
+                  href={PRIVACY_POLICY}
+                  target="_blank"
+                  className="text-neutral-white underline desktop:ml-1"
+                  rel="noopener noreferrer"
+                >
+                  隱私政策
+                </Link>
+                ｜
+                <Link
+                  href="https://www.twreporter.org/a/license-footer"
+                  target="_blank"
+                  className="text-neutral-white underline desktop:ml-1"
+                  rel="noopener noreferrer"
+                >
+                  許可協議
+                </Link>
+              </p>
+              <p className="hidden desktop:inline">｜</p>
+              <p className="desktop:inline">
+                Copyright © {new Date().getFullYear()} The Reporter
+              </p>
             </div>
           </div>
-          <p
-            style={{
-              letterSpacing: 'var(--letterSpacing)',
-              color: 'var(--paletteColor4)',
-            }}
-            className="footer-number text-xs md:text-sm"
-          >
-            Copyright © 2025 The Reporter
-          </p>
         </div>
       </div>
-    </div>
+    </footer>
   )
 }
 

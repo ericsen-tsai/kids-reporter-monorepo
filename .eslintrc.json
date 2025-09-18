@@ -1,5 +1,10 @@
 {
-  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:prettier/recommended", "next/core-web-vitals"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "next/core-web-vitals"
+  ],
   "plugins": ["@typescript-eslint", "prettier"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -12,6 +17,7 @@
   },
   "rules": {
     "no-html-link-for-pages": "off",
+    "react/display-name": "off",
     "prettier/prettier": "error",
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/consistent-type-definitions": ["error", "type"],
