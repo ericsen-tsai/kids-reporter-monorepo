@@ -113,15 +113,10 @@ const aiDialog = virtual({
   field: () =>
     graphql.field({
       type: graphql.JSON,
-      async resolve(item: Record<string, any>, args, context) {
-        const postID = item?.id
-        const post = await context.query.Post.findOne({
-          where: { id: postID },
-          query: 'id, content',
-        })
+      async resolve(item: Record<string, any>) {
         return {
           label: '生成內容',
-          content: post.content,
+          content: item.content,
           openAIKey: envVars.openAIKey,
         }
       },
@@ -147,15 +142,10 @@ const openingFieldConfig = group({
       field: () =>
         graphql.field({
           type: graphql.JSON,
-          async resolve(item: Record<string, any>, args, context) {
-            const postID = item?.id
-            const post = await context.query.Post.findOne({
-              where: { id: postID },
-              query: 'id, content',
-            })
+          async resolve(item: Record<string, any>) {
             return {
               label: 'AI助理生成',
-              content: post.content,
+              content: item.content,
               openAIKey: envVars.openAIKey,
             }
           },
@@ -191,15 +181,10 @@ const multipleChoiceQuestionsFieldConfig = group({
       field: () =>
         graphql.field({
           type: graphql.JSON,
-          async resolve(item: Record<string, any>, args, context) {
-            const postID = item?.id
-            const post = await context.query.Post.findOne({
-              where: { id: postID },
-              query: 'id, content',
-            })
+          async resolve(item: Record<string, any>) {
             return {
               label: 'AI助理生成',
-              content: post.content,
+              content: item.content,
               openAIKey: envVars.openAIKey,
             }
           },
