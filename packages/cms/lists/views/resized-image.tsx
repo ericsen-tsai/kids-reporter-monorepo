@@ -20,8 +20,8 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
                 <tr key={k}>
                   <td>{k.charAt(0).toUpperCase() + k.slice(1)}</td>
                   <td>
-                    <Link href={v} target="_blank">
-                      {v}
+                    <Link href={v as string} target="_blank">
+                      {v as string}
                     </Link>
                   </td>
                 </tr>

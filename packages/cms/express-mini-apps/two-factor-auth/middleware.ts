@@ -60,10 +60,10 @@ export function twoFactorAuthMiddleware(
         const parsedGql = gql`
           ${req.body?.query}
         `
-        const gqlOperation = parsedGql?.definitions?.[0]?.operation
-        const gqlOperationName = parsedGql.definitions[0].name?.value
-        const gqlOperationSelection =
-          parsedGql.definitions[0].selectionSet?.selections
+        const gqlOperation = (parsedGql?.definitions?.[0] as any)?.operation
+        const gqlOperationName = (parsedGql.definitions[0] as any).name?.value
+        const gqlOperationSelection = (parsedGql.definitions[0] as any)
+          .selectionSet?.selections
 
         const excludedSelections = [
           'authenticatedItem', // to get current user
@@ -71,7 +71,7 @@ export function twoFactorAuthMiddleware(
         if (
           gqlOperation == 'query' &&
           gqlOperationSelection.some(
-            (selection) =>
+            (selection: any) =>
               selection.name &&
               excludedSelections.includes(selection.name.value)
           )

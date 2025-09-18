@@ -29,7 +29,7 @@ const Link = (props: {
           const anchor = document.querySelector(url) as HTMLElement
           if (anchor) {
             window.scrollTo({
-              top: anchor.offsetTop - theme?.offsetTop,
+              top: anchor.offsetTop - (theme as any)?.offsetTop,
               behavior: 'smooth',
             })
           }

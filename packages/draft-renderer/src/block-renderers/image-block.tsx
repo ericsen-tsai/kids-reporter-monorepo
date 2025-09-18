@@ -91,7 +91,8 @@ export function ImageBlock({ className = '', data }: ImageBlockProps) {
         style={{ aspectRatio: aspectRatio }}
         $isDesktopAndAbove={isDesktopAndAbove}
         onClick={() =>
-          isDesktopAndAbove && theme?.handleImgModalOpen?.(commonImgProps)
+          isDesktopAndAbove &&
+          (theme as any)?.handleImgModalOpen?.(commonImgProps)
         }
       />
       {desc && <FigureCaption>{desc}</FigureCaption>}

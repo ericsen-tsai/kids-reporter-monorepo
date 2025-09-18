@@ -72,15 +72,15 @@ const AddQAComponent = (props: {
     { value: '' },
   ])
 
-  const onQuestionChange = (e) => {
+  const onQuestionChange = (e: any) => {
     setQuestion(e.target.value)
   }
 
-  const onAnswersChange = (e) => {
+  const onAnswersChange = (e: any) => {
     setAnswer(e.target.value)
   }
 
-  const onIsCorrectChange = (e) => {
+  const onIsCorrectChange = (e: any) => {
     setIsCorrect(e.target.checked)
   }
 

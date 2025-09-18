@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -20,14 +24,25 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@kids-reporter/draft-renderer": ["./src/local-types/kids-reporter__draft-renderer"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@kids-reporter/draft-renderer": [
+        "./src/local-types/kids-reporter__draft-renderer"
+      ]
     },
     "typeRoots": [
       "node_modules/@types",
       "src/local-types"
     ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

@@ -62,11 +62,11 @@ const AddQuestionTipComponent = (props: {
   const [question, setQuestion] = useState('')
   const [tip, setTip] = useState('')
 
-  const onQuestionChange = (e) => {
+  const onQuestionChange = (e: any) => {
     setQuestion(e.target.value)
   }
 
-  const onTipChange = (e) => {
+  const onTipChange = (e: any) => {
     setTip(e.target.value)
   }
 

@@ -8,6 +8,7 @@ import qrcode from 'qrcode'
 import { authenticator } from 'otplib'
 import { sign } from 'jsonwebtoken'
 
+// @ts-ignore
 import _errors from '@twreporter/errors'
 
 const cookieName2fa = appConfig.twoFactorAuth.cookieName

@@ -19,6 +19,7 @@ const EditableBlock = styled(_EditableBlock)`
       background-color: #f0f0f0;
       opacity: 0.3;
     }
+  }
 `
 
 type EntityData = {
@@ -56,7 +57,6 @@ export function EditableSlideshow(props: AtomicBlockProps<EntityData>) {
         <ImageSelector
           onChange={onChange}
           enableCaption={true}
-          enableUrl={false}
           enableAlignment={false}
           enableMultiSelect={true}
           alignment={data.alignment}
