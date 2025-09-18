@@ -110,9 +110,9 @@ function addManualOrderRelationshipFields(
 
           // user disconnects/removes some relationship items.
           const disconnectIds =
-            resolvedData[
-              targetFieldName
-            ]?.disconnect?.map((obj: { id: number }) => obj.id.toString()) || []
+            resolvedData[targetFieldName]?.disconnect?.map(
+              (obj: { id: number }) => obj.id.toString()
+            ) || []
 
           // filtered out to-be-disconnected relationship items
           currentOrder = previousOrder.filter(({ id }: { id: string }) => {

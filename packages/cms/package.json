@@ -7,7 +7,9 @@
     "start": "keystone start",
     "db-migrate": "keystone prisma migrate deploy",
     "build": "keystone build",
-    "postinstall": "SKIP_BUILD_DEPS=\"$SKIP_BUILD_DEPS\" make postinstall"
+    "postinstall": "SKIP_BUILD_DEPS=\"$SKIP_BUILD_DEPS\" make postinstall",
+    "lint:check": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "type-check": "tsc --noEmit"
   },
   "repository": {
     "type": "git",

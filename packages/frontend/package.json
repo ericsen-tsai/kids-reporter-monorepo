@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "analyze": "ANALYZE=true yarn build"
+    "analyze": "ANALYZE=true yarn build",
+    "lint:check": "next lint",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@googleapis/customsearch": "^1.0.4",
