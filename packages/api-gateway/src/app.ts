@@ -5,6 +5,7 @@ import cors from 'cors'
 import express from 'express'
 import middlewareCreator from './middlewares/index.js'
 import { createGraphQLProxy } from './gql-proxy-mini-app.js'
+import { createAuthMiniApp } from './auth-mini-app.js'
 
 // @twreporter/errors is a cjs module, therefore, we need to use its default property
 const errors = _errors.default
@@ -44,8 +45,11 @@ export function createApp({
   // 2. handle cors requests
   app.use(middlewareCreator.createLoggerMw(gcpProjectId), cors(corsOpts))
 
-  // mini app: weekly GraphQL API
+  // mini app: GraphQL API
   app.use(createGraphQLProxy(gql))
+
+  // Auth mini app
+  app.use(createAuthMiniApp())
 
   /**
    *  Application level error handler

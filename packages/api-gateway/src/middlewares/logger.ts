@@ -30,6 +30,14 @@ export function createLoggerMw(projectId: string): express.RequestHandler {
   const handler: express.RequestHandler = (req, res, next) => {
     const globalLogFields = getGlobalLogFields(req, projectId)
 
+    const authHeader = req.get('Authorization')
+    const safeAuthHeader =
+      authHeader && authHeader.startsWith('Bearer ')
+        ? 'Bearer ***REDACTED***'
+        : authHeader
+        ? '***REDACTED***'
+        : undefined
+
     console.log(
       JSON.stringify({
         severity: 'INFO',
@@ -38,7 +46,7 @@ export function createLoggerMw(projectId: string): express.RequestHandler {
           'req.headers': {
             'Content-Length': req.get('Content-Length'),
             'Content-Type': req.get('Content-Type'),
-            Authorization: req.get('Authorization'),
+            Authorization: safeAuthHeader,
           },
           'req.body': req.body,
         },
