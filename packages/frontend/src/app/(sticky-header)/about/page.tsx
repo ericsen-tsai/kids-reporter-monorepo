@@ -14,14 +14,14 @@ import {
   AuthorRole,
 } from '@/constants'
 import { sendGQLRequest } from '@/utils'
-import { isProduction } from '@/environment-variables'
+import envVars from '@/environment-variables'
 
 export const metadata: Metadata = {
   title: '關於少年報導者 - 少年報導者 The Reporter for Kids',
   description: GENERAL_DESCRIPTION,
 }
 
-export const revalidate = isProduction ? 86400 : 0 // 1 day
+export const revalidate = envVars.isProduction ? 86400 : 0 // 1 day
 
 const authorGQL = `
 query($where: AuthorWhereUniqueInput!) {

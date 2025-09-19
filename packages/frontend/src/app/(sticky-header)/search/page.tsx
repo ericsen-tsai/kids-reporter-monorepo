@@ -9,9 +9,7 @@ import {
 } from '@/app/api/search/utils'
 import { EMAIL, ContentType } from '@/constants'
 import { LogLevel, log } from '@/utils'
-
-const apiKey = process.env.SEARCH_API_KEY || ''
-const cx = process.env.SEARCH_ENGINE_ID || ''
+import envVars from '@/environment-variables'
 
 // Filtering search output: https://developers.google.com/custom-search/docs/structured_search
 const filterParams = Object.values(ContentType)
@@ -30,11 +28,12 @@ export default async function SearchPage({
   }
 
   let data
+
   try {
     data = await getFilteredSearchResults({
       q: `${searchParams.q} ${filterParams}`,
-      apiKey,
-      cx,
+      apiKey: envVars.searchAPIKey,
+      cx: envVars.twreporterID,
       start: 1,
       count: defaultCount,
     })

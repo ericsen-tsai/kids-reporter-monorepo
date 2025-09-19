@@ -1,7 +1,7 @@
-import { internalGqlEndpoint, gqlEndpoint } from '@/environment-variables'
+import envVars from '@/environment-variables'
 
-export const INTERNAL_API_URL = internalGqlEndpoint
-export const API_URL = gqlEndpoint
+export const INTERNAL_API_URL = envVars.internalGqlEndpoint
+export const API_URL = envVars.gqlEndpoint
 
 export const KIDS_URL_ORIGIN = 'https://kids.twreporter.org'
 export const SUBSCRIBE_URL = 'http://eepurl.com/idk8VH'
