@@ -1,5 +1,4 @@
 import { Metadata } from 'next'
-import MainHeader from '@/home/main-header'
 import MainSlider from '@/home/main-slider'
 import PostSelection from '@/home/post-selection'
 import Section from '@/home/section'
@@ -16,6 +15,7 @@ import {
 } from '@/constants'
 import { getPostSummaries, sendGQLRequest } from '@/utils'
 import { Fragment } from 'react'
+import Header from '@/components/header'
 
 export const dynamic = 'force-dynamic'
 
@@ -229,8 +229,8 @@ export default async function Home() {
     )) ?? []
 
   return (
-    <main className="flex flex-col items-center w-screen">
-      <MainHeader />
+    <main className="flex flex-col items-center w-screen pt-(--header-main-bar-height) desktop:pt-[calc(var(--header-bottom-navigation-height)+var(--header-main-bar-height))]">
+      <Header />
       {topics?.length > 0 && <MainSlider topics={topics} />}
       <PostSelection latestPosts={latestPosts} featuredPosts={featuredPosts} />
       {sections.map((sectionConfig, index) => {

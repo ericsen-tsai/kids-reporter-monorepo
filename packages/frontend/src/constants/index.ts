@@ -132,7 +132,6 @@ subSubcategoriesOrdered {
 publishedDate
 `
 
-export const STICKY_HEADER_HEIGHT = 62
 export const SEARCH_PLACEHOLDER = '搜尋更多新聞、議題'
 
 export const ERROR_PAGE = '/error'
@@ -294,3 +293,5 @@ export const POPULAR_KEYWORDS = [
   '教育',
   '環境保護',
 ]
+
+export const STICKY_HEADER_HEIGHT = 130

@@ -80,6 +80,7 @@ export type InputProps = {
   showClearButton?: boolean
   asChild?: boolean
   children?: React.ReactNode
+  inputRef?: React.RefObject<HTMLInputElement>
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'>
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -93,6 +94,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       asChild = false,
       className,
       children,
+      onFocus,
+      onBlur,
+      inputRef,
       ...props
     },
     ref
@@ -123,12 +127,18 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       setIsActive(true)
     }
 
-    const handleFocus = () => {
+    const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+      if (onFocus) {
+        onFocus(e)
+      }
       setIsFocused(true)
       setIsActive(true)
     }
 
-    const handleBlur = () => {
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+      if (onBlur) {
+        onBlur(e)
+      }
       setIsFocused(false)
       setIsActive(false)
     }
@@ -167,6 +177,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               onBlur={handleBlur}
               placeholder={placeholder}
               className="flex-1 bg-transparent text-gray-900 placeholder:text-gray-400 focus:outline-none"
+              ref={inputRef}
               {...props}
             />
 

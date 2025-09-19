@@ -1,249 +1,297 @@
 'use client'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { Navigation } from '@/components/navigation'
 import { useScrollLevel, ScrollLevel } from '@/utils/custom-hook'
-import { CrossIcon, HamburgerIcon, SearchIcon, LoginIcon } from '@/icons'
 import {
-  SUBSCRIBE_URL,
+  HamburgerIcon,
+  SearchIcon,
+  LoginIcon,
+  SettingsIcon,
+  ClearIcon,
+} from '@/icons'
+import {
   SEARCH_PLACEHOLDER,
-  IS_LOGIN_ENABLED,
+  SUBSCRIBE_URL,
+  MENU_ITEMS,
+  POPULAR_KEYWORDS,
 } from '@/constants'
-import styles from './header.module.css'
+import { cn } from '@/utils/cn'
+import Input from './input'
+import Image from 'next/image'
+import Button from './button'
 
-const slogan = (
-  <img src="/assets/images/header-left-slogan.svg" loading="eager" />
-)
-
-const ContributeBtn = (
-  <Link
-    href="/about#post"
-    className="header-left__btn-1 rpjr-btn leading-6 text-sm font-medium px-3"
-    style={{ marginRight: '14px', fontFamily: 'Noto Sans TC, Sans-Serif' }}
-  >
-    投稿
-  </Link>
-)
-
-const SubscribeBtn = (
-  <Link
-    href={SUBSCRIBE_URL}
-    target="_blank"
-    className="header-left__btn-1 rpjr-btn rpjr-btn-orange leading-6 text-sm font-medium px-3"
-    style={{ marginRight: '15px', fontFamily: 'Noto Sans TC, Sans-Serif' }}
-  >
-    訂閱
-  </Link>
-)
-
-const AboutUsBtn = (
-  <Link
-    href="/about#us"
-    style={{ fontFamily: 'Noto Sans TC, Sans-Serif' }}
-    className="rpjr-btn rpjr-btn-red leading-6 text-sm font-medium px-3"
-    aria-label="我們是誰"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    我們是誰
-  </Link>
-)
-
-export const StickyHeader = () => {
-  const [isHamburgerClicked, setIsHamburgerClicked] = useState(false)
-  const [isSearchClicked, setIsSearchClicked] = useState(false)
-  const scrollLevel = useScrollLevel()
-
-  const onHamburgerOverlayOpen = () => {
-    setIsHamburgerClicked(true)
-    document.body.classList.add('no-scroll')
-  }
-
-  const onSearchOverlayOpen = () => {
-    setIsSearchClicked(true)
-    document.body.classList.add('no-scroll')
-  }
-
-  const onHamburgerOverlayClose = () => {
-    setIsHamburgerClicked(false)
-    document.body.classList.remove('no-scroll')
-  }
-
-  const onSearchOverlayClose = () => {
-    setIsSearchClicked(false)
-    document.body.classList.remove('no-scroll')
-  }
-
-  const brand = (
-    <div className="pr-2.5">
-      <Link href="/" className="max-h-full" rel="home">
-        <img
-          src="/assets/images/LOGO.svg"
-          className="h-8 object-contain"
-          alt="少年報導者 The Reporter for Kids"
-          loading="eager"
-        />
-      </Link>
-    </div>
-  )
-
-  const search = (
-    <button
-      className={`${styles['search-icon']} cursor-pointer border-none mx-2.5`}
-      aria-label="開啟搜尋表單"
-      data-label="right"
-      onClick={onSearchOverlayOpen}
-    >
-      {SearchIcon}
-    </button>
-  )
-
-  const login = (
-    <Link href="/login" className="max-h-full" rel="login">
-      {LoginIcon}
+function LogoLink() {
+  return (
+    <Link href="/" className="flex items-center" rel="home">
+      <Image
+        src="/assets/images/brand-icon.svg"
+        alt="少年報導者 The Reporter for Kids"
+        loading="eager"
+        width={293}
+        height={32}
+      />
     </Link>
   )
+}
 
-  const about = (
-    <div className="h-8 flex items-stretch ml-2.5">{AboutUsBtn}</div>
-  )
-
-  const searchInput = (
-    <form role="search" method="get" action="/search" aria-haspopup="listbox">
-      <input
-        type="text"
-        placeholder={SEARCH_PLACEHOLDER}
-        name="q"
-        title="Search for..."
-        aria-label="Search for..."
-        autoFocus
-      />
-      <button
-        className="flex flex-row justify-center items-center"
-        type="submit"
-        aria-label="搜尋按鈕"
-      >
-        {SearchIcon}
-      </button>
-    </form>
-  )
-
-  const searchOverlay = (
-    <div
-      style={{ zIndex: '999' }}
-      className="fixed w-full h-full top-0 left-0 right-0 bottom-0 bg-white flex flex-col justify-center items-center"
-    >
-      <div
-        style={{ padding: 'var(--panel-padding, 30px)' }}
-        className="w-full flex flex-row justify-end pb-0"
-      >
-        <button
-          className="bg-transparent w-10 cursor-pointer border-none p-1"
-          onClick={onSearchOverlayClose}
-        >
-          {CrossIcon}
-        </button>
-      </div>
-      <div
-        style={{ padding: 'var(--panel-padding, 35px)' }}
-        className={`${styles['search-overlay']} grow w-full flex flex-col justify-center items-center`}
-      >
-        {searchInput}
-      </div>
-    </div>
-  )
-
-  const hamburgerOverlay = (
-    <div
-      className={`${styles['hamburger-overlay-mobile']} fixed w-full h-full top-0 left-0 right-0 bottom-0 bg-white flex flex-col justify-center items-center`}
-    >
-      <div
-        style={{ padding: 'var(--panel-padding, 30px)' }}
-        className="w-full flex flex-row justify-end pb-0"
-      >
-        <button
-          style={{ padding: '6px 5px' }}
-          className="bg-transparent w-10 cursor-pointer border-none"
-          onClick={onHamburgerOverlayClose}
-        >
-          {CrossIcon}
-        </button>
-      </div>
-      <div
-        style={{ padding: 'var(--panel-padding, 35px)' }}
-        className="grow w-full flex flex-col justify-center items-center"
-      >
-        <Link href="/" className={`${styles['logo-mobile']} h-0 md:h-24`}>
-          <img
-            style={{
-              maxWidth: 'initial',
-              height: 'inherit',
-              verticalAlign: 'initial',
-            }}
-            className="w-auto object-contain"
-            src="/assets/images/logo-full.svg"
-            alt="少年報導者 The Reporter for Kids"
-            loading="eager"
-          />
-        </Link>
-        <div className="flex flex-row flex-wrap justify-center sm:mt-10 md:mt-10 mt-16 mb-10">
-          {ContributeBtn}
-          {SubscribeBtn}
-          {AboutUsBtn}
-        </div>
-        {searchInput}
-        <div className={`${styles['mobile-menu']}`}>
-          <Navigation onClick={onHamburgerOverlayClose} />
-        </div>
-      </div>
-    </div>
-  )
+function SearchInputSection({ isSearchOpen }: { isSearchOpen: boolean }) {
+  const ref = useRef<HTMLInputElement>(null)
+  const [isFocused, setIsFocused] = useState(false)
+  const [searchValue, setSearchValue] = useState('')
+  useEffect(() => {
+    if (isSearchOpen) {
+      ref.current?.focus()
+    }
+  }, [isSearchOpen])
 
   return (
-    <div
-      style={{ zIndex: '999' }}
-      className={`${
-        scrollLevel === ScrollLevel.DOWN_HIDDEN ? styles.hidden : styles.header
-      } w-screen flex justify-between fixed top-0 bg-white`}
-      id="sticky-header"
-    >
-      <div
-        style={{
-          width: 'var(--container-width)',
-          maxWidth: 'var(--normal-container-max-width)',
-          minHeight: 'var(--shrink-height, var(--height))',
-        }}
-        className="flex justify-between h-16 ml-auto mr-auto bg-white"
+    <div onFocus={() => setIsFocused(true)} onBlur={() => setIsFocused(false)}>
+      <form
+        role="search"
+        method="get"
+        action="/search"
+        className={cn(
+          'h-full transition-all duration-300 ease-in-out overflow-hidden absolute top-0 right-28',
+          isSearchOpen ? 'w-66' : 'w-0'
+        )}
       >
-        <div className="flex items-center">{brand}</div>
-        <div className="hidden lg:flex grow justify-between items-center">
-          <div
-            style={{ margin: 'var(--margin, 0 10px)' }}
-            className="flex flex-row items-center"
-          >
-            {ContributeBtn}
-            {SubscribeBtn}
-            {slogan}
-          </div>
-          <div className={'flex flex-row items-center'}>
-            <div className={`${styles.menu}`}>
-              <Navigation />
-            </div>
-            {search}
-            {IS_LOGIN_ENABLED && login}
-            {about}
-          </div>
+        <Input
+          placeholder={SEARCH_PLACEHOLDER}
+          name="q"
+          title="Search for..."
+          aria-label="Search for..."
+          className="w-full h-full"
+          inputRef={ref}
+          onChange={setSearchValue}
+          value={searchValue}
+        />
+      </form>
+      <div
+        className={cn(
+          'bg-white rounded-xl p-4 mt-2 w-66  absolute top-12 overflow-hidden right-28 transition-all duration-300 ease-in-out shadow-lg',
+          isSearchOpen && isFocused
+            ? 'p-4 h-auto opacity-100'
+            : 'h-0 p-0 opacity-0'
+        )}
+      >
+        <h3 className="text-p3 font-bold text-neutral-700 mb-3">熱門搜尋</h3>
+        <div className="flex flex-wrap gap-2.5">
+          {POPULAR_KEYWORDS.map((keyword, index) => (
+            <button
+              key={index}
+              className="cursor-pointer bg-neutral-200 hover:bg-neutral-300 transition-colors duration-200 rounded-full px-3 py-1 text-p2 font-bold text-neutral-900"
+              onClick={() => setSearchValue(keyword)}
+            >
+              # {keyword}
+            </button>
+          ))}
         </div>
-        <div className="lg:hidden flex flex-row justify-center">
-          <button className="hamburger" onClick={onHamburgerOverlayOpen}>
-            {HamburgerIcon}
-          </button>
-          {isHamburgerClicked && hamburgerOverlay}
-        </div>
-        {isSearchClicked && searchOverlay}
       </div>
     </div>
   )
 }
 
-export default StickyHeader
+function ActionButtons({
+  hideCtaButtons = false,
+}: {
+  hideCtaButtons?: boolean
+}) {
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+
+  return (
+    <div className="flex items-center gap-4 relative">
+      <div className="flex items-center">
+        {/* CTA Buttons - Base layer */}
+        {!hideCtaButtons && !isSearchOpen && (
+          <div className="flex items-center gap-2">
+            <Button variant="secondary" size={32} asChild>
+              <Link href="/about#post">投稿</Link>
+            </Button>
+            <Button variant="primary" size={32} asChild>
+              <Link
+                href={SUBSCRIBE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                訂閱
+              </Link>
+            </Button>
+          </div>
+        )}
+
+        <SearchInputSection isSearchOpen={isSearchOpen} />
+      </div>
+
+      <button
+        className="flex items-center cursor-pointer justify-center min-w-10 w-10 h-10 rounded-full hover:bg-gray-100 transition-colors duration-200"
+        aria-label="搜尋"
+        onClick={() => setIsSearchOpen(!isSearchOpen)}
+      >
+        {isSearchOpen ? ClearIcon : SearchIcon}
+      </button>
+      <button
+        className="flex items-center cursor-pointer justify-center min-w-10 w-10 h-10 rounded-full hover:bg-gray-100 transition-colors duration-200"
+        aria-label="設定"
+      >
+        {SettingsIcon}
+      </button>
+    </div>
+  )
+}
+
+function BottomNavigation({
+  onHamburgerOverlayOpen,
+}: {
+  onHamburgerOverlayOpen: () => void
+}) {
+  return (
+    <div className="flex items-center justify-between w-full py-2 border-y border-neutral-border px-4">
+      <HamburgerButton onHamburgerOverlayOpen={onHamburgerOverlayOpen} />
+
+      {MENU_ITEMS.reduce((acc, item, index) => {
+        return [
+          ...acc,
+          <div key={item.label} className="flex items-center">
+            <Link
+              href={item.href}
+              className="py-1 text-p1 text-neutral-900 font-bold hover:text-red-400 transition-colors h-6 flex items-center"
+            >
+              {item.label}
+            </Link>
+          </div>,
+          ...(index < MENU_ITEMS.length - 1
+            ? [
+                <div
+                  key={`separator-${index}`}
+                  className="w-px h-4 bg-neutral-border mx-2"
+                />,
+              ]
+            : []),
+        ]
+      }, [] as React.ReactNode[])}
+    </div>
+  )
+}
+
+function HamburgerButton({
+  onHamburgerOverlayOpen,
+  hidden = false,
+}: {
+  onHamburgerOverlayOpen: () => void
+  hidden?: boolean
+}) {
+  return (
+    <button
+      className={cn(
+        'flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-all duration-200',
+        hidden && 'opacity-0 w-0'
+      )}
+      onClick={onHamburgerOverlayOpen}
+    >
+      {HamburgerIcon}
+    </button>
+  )
+}
+
+function Header({
+  postTitle = 'Hello World Hello WorldHello WorldHello WorldHello WorldHello World Hello WorldHello WorldHello WorldHello WorldHello World Hello WorldHello WorldHello WorldHello WorldHello World Hello WorldHello WorldHello WorldHello World',
+}: {
+  postTitle?: string
+}) {
+  const scrollLevel = useScrollLevel()
+
+  const onHamburgerOverlayOpen = () => {
+    document.body.classList.add('no-scroll')
+  }
+
+  const shouldHideBottomNavigation = scrollLevel === ScrollLevel.DOWN_HIDDEN
+
+  return (
+    <div
+      className="w-screen flex flex-col fixed top-0 max-w-300 mx-auto z-[999]"
+      id="sticky-header"
+    >
+      <div
+        className={cn(
+          'w-full mx-auto px-6 tablet:px-8 desktop:px-12 z-50 transition-all duration-300',
+          shouldHideBottomNavigation
+            ? 'bg-white'
+            : 'bg-white desktop:bg-transparent'
+        )}
+      >
+        <div className="flex items-center justify-between py-6 desktop:px-4">
+          <div
+            className={cn(
+              'flex items-center transition-all duration-300',
+              shouldHideBottomNavigation && 'gap-4'
+            )}
+          >
+            <div className="hidden desktop:inline-flex">
+              <HamburgerButton
+                onHamburgerOverlayOpen={onHamburgerOverlayOpen}
+                hidden={!shouldHideBottomNavigation}
+              />
+            </div>
+
+            <div
+              className={cn(
+                'flex items-center gap-8',
+                shouldHideBottomNavigation && 'gap-12'
+              )}
+            >
+              <LogoLink />
+              {!shouldHideBottomNavigation && (
+                <div className="hidden desktop:block">
+                  <span className="text-p2 text-neutral-900 font-medium tracking-wide">
+                    理解世界 × 參與未來
+                  </span>
+                </div>
+              )}
+              {shouldHideBottomNavigation && postTitle && (
+                <div className="hidden desktop:block pr-12">
+                  <p className="text-p2 text-neutral-900 font-medium tracking-wide max-w-124 text-ellipsis overflow-hidden whitespace-nowrap">
+                    {postTitle}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="hidden desktop:inline-flex">
+              <ActionButtons hideCtaButtons={shouldHideBottomNavigation} />
+            </div>
+
+            <div className="flex items-center gap-4">
+              <Link
+                href="/login"
+                className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                aria-label="登入"
+              >
+                {LoginIcon}
+              </Link>
+              <div className="desktop:hidden">
+                <HamburgerButton
+                  onHamburgerOverlayOpen={onHamburgerOverlayOpen}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        className={cn(
+          'hidden desktop:block w-full px-6 tablet:px-8 desktop:px-12 transition-all duration-300 z-10',
+          shouldHideBottomNavigation
+            ? 'transform -translate-y-full'
+            : 'transform translate-y-0'
+        )}
+      >
+        <BottomNavigation onHamburgerOverlayOpen={onHamburgerOverlayOpen} />
+      </div>
+    </div>
+  )
+}
+
+export default Header

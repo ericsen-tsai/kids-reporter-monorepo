@@ -12,8 +12,8 @@ enum ScrollDirection {
   DOWN = 'down',
 }
 
-const scrollDownDistance = 100
-const throttleThreshold = 500
+const scrollDownDistance = 10
+const throttleThreshold = 200
 
 export const useScrollLevel = () => {
   const [scrollLevel, setScrollLevel] = useState<ScrollLevel>(ScrollLevel.UP)
