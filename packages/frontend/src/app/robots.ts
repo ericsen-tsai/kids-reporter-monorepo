@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
-import { KIDS_URL_ORIGIN } from '@/app/constants'
+import { KIDS_URL_ORIGIN } from '@/constants'
 import { isProduction } from '@/environment-variables'
 
 const devConfig = {

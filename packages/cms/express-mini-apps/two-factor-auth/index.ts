@@ -11,7 +11,7 @@ import appConfig from '../../config'
 
 function verify2FAJWT(jwt: string, currentUserId: string) {
   try {
-    const decoded = verify(jwt, appConfig.twoFactorAuth.secret)
+    const decoded = verify(jwt, appConfig.twoFactorAuth.secret) as any
     const { userId, twoFactorExpire } = decoded
 
     if (currentUserId !== userId || Date.now() > twoFactorExpire) {

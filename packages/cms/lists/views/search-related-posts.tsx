@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
 import copyToClipboard from 'clipboard-copy'
@@ -32,6 +32,7 @@ const KeywordPost = styled.div`
   gap: 10px;
 `
 
+// @ts-ignore Button type is not compatible with styled-components
 const IconButton = styled(Button)`
   background-color: transparent;
   margin: 0 0 0 0.5rem;
@@ -45,8 +46,8 @@ export const Field = ({ field, value }: FieldProps<typeof controller>) => {
   const twreporterID = value?.twreporterID
 
   const tagsStr = value.tags
-    ?.filter((tag, index) => index < selectedTagsNum)
-    ?.map((tag) => tag.label)
+    ?.filter((tag: any, index: any) => index < selectedTagsNum)
+    ?.map((tag: any) => tag.label)
     ?.join('|')
 
   const [searchInput, setSearchInput] = useState<string>(tagsStr ?? '')
@@ -64,12 +65,12 @@ export const Field = ({ field, value }: FieldProps<typeof controller>) => {
       const response = await axios.get(`${customSearchURL}&q=${keywords}`)
       posts = response?.data?.items
         ?.filter(
-          (item) =>
+          (item: any) =>
             item?.link?.match('^https://www.twreporter.org/') &&
             (item?.pagemap?.metatags?.[0]['og:type'] === 'article' ||
               item?.link?.includes('/topics/'))
         )
-        ?.map((item) => {
+        ?.map((item: any) => {
           const metaTag = item?.pagemap?.metatags?.[0]
           return {
             src: item.link,
@@ -93,11 +94,11 @@ export const Field = ({ field, value }: FieldProps<typeof controller>) => {
     searchPostsByTags()
   }, [])
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: any) => {
     setSearchInput(e.target.value)
   }
 
-  const handlenKeyDown = async (e) => {
+  const handlenKeyDown = async (e: any) => {
     if (e.key === 'Enter') {
       await handleSearch()
     }

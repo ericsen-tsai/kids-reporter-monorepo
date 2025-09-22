@@ -1,8 +1,8 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import PostList from '@/app/components/post-list'
-import Pagination from '@/app/components/pagination'
+import PostList from '@/components/post-list'
+import Pagination from '@/components/pagination'
 import {
   DEFAULT_AVATAR,
   GENERAL_DESCRIPTION,
@@ -10,8 +10,8 @@ import {
   POST_CONTENT_GQL,
   KIDS_URL_ORIGIN,
   ContentType,
-} from '@/app/constants'
-import { getPostSummaries, sendGQLRequest, log, LogLevel } from '@/app/utils'
+} from '@/constants'
+import { getPostSummaries, sendGQLRequest, log, LogLevel } from '@/utils'
 
 const authorGQL = `
   query($authorWhere2: AuthorWhereUniqueInput!, $take: Int, $skip: Int!, $orderBy: [PostOrderByInput!]!) {

@@ -22,7 +22,7 @@ export const SinglePageContainer = ({
         <title>{title || 'Keystone'}</title>
       </Head>
       <Center
-        css={{
+        style={{
           minWidth: '100vw',
           minHeight: '100vh',
           backgroundColor: colors.backgroundMuted,
@@ -30,7 +30,7 @@ export const SinglePageContainer = ({
         rounding="medium"
       >
         <Box
-          css={{
+          style={{
             background: colors.background,
             width: 600,
             boxShadow: shadow.s100,

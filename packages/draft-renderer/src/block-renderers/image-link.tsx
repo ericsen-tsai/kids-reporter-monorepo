@@ -68,7 +68,8 @@ export const ImageLinkBlock = ({
         {...commonImgProps}
         $isDesktopAndAbove={isDesktopAndAbove}
         onClick={() =>
-          isDesktopAndAbove && theme?.handleImgModalOpen?.(commonImgProps)
+          isDesktopAndAbove &&
+          (theme as any)?.handleImgModalOpen?.(commonImgProps)
         }
       />
       <Editor

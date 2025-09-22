@@ -1,6 +1,6 @@
-import { StickyHeader } from '@/app/components/header'
-import TopDetector from '@/app/components/top-detector'
-import { SearchIcon } from '@/app/icons'
+import { StickyHeader } from '@/components/header'
+import TopDetector from '@/components/top-detector'
+import { SearchIcon } from '@/icons'
 
 export default function NotFound() {
   return (
@@ -40,7 +40,7 @@ export default function NotFound() {
           data-live-results="thumbs"
         >
           <input
-            className="w-full h-full border-solid border-2 rounded-full text-base bg-white pl-3 pr-10 focus:outline-none"
+            className="w-full h-full border-solid border-2 rounded-full text-base bg-white pl-3 pr-10 focus:outline-hidden"
             style={{
               color: 'var(#A3A3A3, var(--color))',
               borderColor: 'var(--paletteColor1)',

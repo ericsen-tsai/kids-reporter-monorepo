@@ -1,14 +1,14 @@
 import errors from '@twreporter/errors'
-import { LoadMoreResults } from './load-more-results'
-import { SearchInput } from './search-input'
-import { SearchTitle } from './styled'
+import { LoadMoreResults } from '../_components/search/load-more-results'
+import { SearchInput } from '../_components/search/search-input'
+import { SearchTitle } from '../_components/search/styled'
 import {
   getFilteredSearchResults,
   transferItemsToCards,
   defaultCount,
-} from '@/app/api/search/route'
-import { EMAIL, ContentType } from '@/app/constants'
-import { LogLevel, log } from '@/app/utils'
+} from '@/app/api/search/utils'
+import { EMAIL, ContentType } from '@/constants'
+import { LogLevel, log } from '@/utils'
 
 const apiKey = process.env.SEARCH_API_KEY || ''
 const cx = process.env.SEARCH_ENGINE_ID || ''

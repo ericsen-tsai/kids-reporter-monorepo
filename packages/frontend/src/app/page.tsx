@@ -1,20 +1,21 @@
 import { Metadata } from 'next'
-import MainHeader from '@/app/home/main-header'
-import MainSlider from '@/app/home/main-slider'
-import PostSelection from '@/app/home/post-selection'
-import Section from '@/app/home/section'
-import Divider from '@/app/home/divider'
-import SearchAndTags from '@/app/home/search-and-tags'
-import MakeFriends from '@/app/home/make-friend'
-import CallToAction from '@/app/home/call-to-action'
-import GoToMainSite from '@/app/home/go-to-main-site'
+import MainHeader from '@/home/main-header'
+import MainSlider from '@/home/main-slider'
+import PostSelection from '@/home/post-selection'
+import Section from '@/home/section'
+import Divider from '@/home/divider'
+import SearchAndTags from '@/home/search-and-tags'
+import MakeFriends from '@/home/make-friend'
+import CallToAction from '@/home/call-to-action'
+import GoToMainSite from '@/home/go-to-main-site'
 import {
   FALLBACK_IMG,
   GENERAL_DESCRIPTION,
   POST_CONTENT_GQL,
   Theme,
-} from '@/app/constants'
-import { getPostSummaries, sendGQLRequest } from '@/app/utils'
+} from '@/constants'
+import { getPostSummaries, sendGQLRequest } from '@/utils'
+import { Fragment } from 'react'
 
 export const dynamic = 'force-dynamic'
 
@@ -234,14 +235,13 @@ export default async function Home() {
       <PostSelection latestPosts={latestPosts} featuredPosts={featuredPosts} />
       {sections.map((sectionConfig, index) => {
         return (
-          <>
+          <Fragment key={`section-${index}`}>
             <Section
-              key={`section-${index}`}
               config={sectionConfig}
               posts={sectionPostsArray?.[index]}
             />
             {index < sections.length - 1 ? <Divider /> : null}
-          </>
+          </Fragment>
         )
       })}
       <SearchAndTags tags={tags} />

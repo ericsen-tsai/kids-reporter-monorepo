@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import AuthorCard from '@/app/components/author-card'
+import AuthorCard from '@/components/author-card'
 import {
   CREDIT_DONATE_URL,
   CONTRIBUTE_FORM,
@@ -12,8 +12,8 @@ import {
   SUBSCRIBE_URL,
   SUBSCRIBE_TITLE,
   AuthorRole,
-} from '@/app/constants'
-import { sendGQLRequest } from '@/app/utils'
+} from '@/constants'
+import { sendGQLRequest } from '@/utils'
 import { isProduction } from '@/environment-variables'
 
 export const metadata: Metadata = {

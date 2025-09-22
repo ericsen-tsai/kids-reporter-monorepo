@@ -568,7 +568,7 @@ const listConfigurations = list({
         listView: { fieldMode: 'hidden' },
       },
     }),
-    ...summaryFieldConfig,
+    ...((isChatGPTSummaryEnabled ? summaryFieldConfig : {}) as any),
   },
   ui: {
     label: 'Posts',

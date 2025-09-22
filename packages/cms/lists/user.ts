@@ -111,7 +111,7 @@ const listConfigurations = list({
     twoFactorAuth: virtual({
       field: graphql.field({
         type: graphql.JSON,
-        async resolve(item, args, context) {
+        async resolve(item: any, args: any, context: any) {
           const user = await context.query.User.findOne({
             where: { id: item.id.toString() },
             query: 'id twoFactorAuthSecret twoFactorAuthBypass',

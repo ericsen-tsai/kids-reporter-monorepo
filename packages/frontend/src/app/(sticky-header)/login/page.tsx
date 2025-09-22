@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { GENERAL_DESCRIPTION, IS_LOGIN_ENABLED } from '@/app/constants'
-import { LoginComponent } from '@/app/components/login'
+import { GENERAL_DESCRIPTION, IS_LOGIN_ENABLED } from '@/constants'
+import { LoginComponent } from '@/components/login'
 
 export const metadata: Metadata = {
   title: '關於少年報導者 - 少年報導者 The Reporter for Kids',

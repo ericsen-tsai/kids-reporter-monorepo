@@ -184,7 +184,7 @@ export const Field = ({
     </DragDropContext>
   )
 
-  const handleNewPostChange = (e) => {
+  const handleNewPostChange = (e: any) => {
     setNewPost(e.target.value)
   }
 

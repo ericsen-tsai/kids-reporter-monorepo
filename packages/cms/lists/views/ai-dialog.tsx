@@ -111,7 +111,7 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
     await askChatGPT()
   }
 
-  const handlePrompt = (event) => {
+  const handlePrompt = (event: any) => {
     setPrompt(event.target.value)
   }
 

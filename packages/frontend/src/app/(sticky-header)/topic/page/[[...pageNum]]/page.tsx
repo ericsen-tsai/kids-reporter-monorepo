@@ -2,8 +2,8 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { notFound } from 'next/navigation'
-import PostSlider from '@/app/components/post-slider'
-import Pagination from '@/app/components/pagination'
+import PostSlider from '@/components/post-slider'
+import Pagination from '@/components/pagination'
 import {
   GENERAL_DESCRIPTION,
   POST_PER_PAGE,
@@ -11,18 +11,18 @@ import {
   TOPIC_PAGE_ROUTE,
   FALLBACK_IMG,
   Theme,
-} from '@/app/constants'
+} from '@/constants'
 import {
   getFormattedDate,
   getPostSummaries,
   sendGQLRequest,
   log,
   LogLevel,
-} from '@/app/utils'
+} from '@/utils'
 import styles from './page.module.css'
 
 const ImageWithFallback = dynamic(
-  () => import('@/app/components/image-with-fallback'),
+  () => import('@/components/image-with-fallback'),
   { ssr: false }
 )
 
@@ -177,7 +177,7 @@ export default async function Topic({
     },
   })
   if (!projectsRes) {
-    log(LogLevel.WARNING, 'Emptyp topic response!')
+    log(LogLevel.WARNING, 'Empty topic response!')
     notFound()
   }
 

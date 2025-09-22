@@ -8,7 +8,9 @@
     "dev": "make dev",
     "build": "make build",
     "clean": "make clean",
-    "build-lib": "make build-lib"
+    "build-lib": "make build-lib",
+    "lint:check": "eslint src --ext .ts,.tsx,.js,.jsx",
+    "type-check": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
@@ -34,12 +36,12 @@
     "@keystone-ui/modals": "^6.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "styled-components": "5.3.5"
+    "styled-components": "6.1.19"
   },
   "devDependencies": {
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "styled-components": "5.3.5"
+    "styled-components": "6.1.19"
   },
   "files": [
     "lib"

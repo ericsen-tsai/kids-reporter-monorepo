@@ -85,7 +85,7 @@ export const FieldTemplate = (initPrompt: string) => {
       await askChatGPT()
     }
 
-    const handlePrompt = (event) => {
+    const handlePrompt = (event: any) => {
       setPrompt(event.target.value)
     }
 

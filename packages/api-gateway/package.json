@@ -8,7 +8,9 @@
     "start": "make start",
     "lint": "make lint",
     "clean": "make clean",
-    "build-lib": "make build-lib"
+    "build-lib": "make build-lib",
+    "lint:check": "eslint src --ext .ts,.js",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@twreporter/errors": "^1.1.2",

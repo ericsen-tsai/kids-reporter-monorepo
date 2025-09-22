@@ -19,7 +19,7 @@ export const richTextEditor =
     defaultValue = null,
     disabledButtons = [],
     ...config
-  }: JsonFieldConfig<ListTypeInfo> = {}): FieldTypeFunc<ListTypeInfo> =>
+  }: JsonFieldConfig<ListTypeInfo>): FieldTypeFunc<ListTypeInfo> =>
   (meta) => {
     if ((config as any).isIndexed === 'unique') {
       throw Error(

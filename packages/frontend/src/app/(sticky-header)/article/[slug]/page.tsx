@@ -1,15 +1,15 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { TOC, TOCIndex } from './table-of-content'
-import Article from './article'
+import { TOC, TOCIndex } from '../../_components/article/table-of-content'
+import Article from '../../_components/article/article'
 import {
   KIDS_URL_ORIGIN,
   GENERAL_DESCRIPTION,
   POST_CONTENT_GQL,
   OG_SUFFIX,
   ContentType,
-} from '@/app/constants'
-import { sendGQLRequest, log, LogLevel } from '@/app/utils'
+} from '@/constants'
+import { sendGQLRequest, log, LogLevel } from '@/utils'
 
 const topicRelatedPostsNum = 5
 
@@ -211,7 +211,7 @@ export default async function PostPage({
   })
 
   return (
-    <main className="flex flex-col items-center max-w-screen-2xl">
+    <main className="flex flex-col items-center max-w-(--breakpoint-2xl)">
       {tocIndexes.length > 0 && <TOC indexes={tocIndexes} />}
       {post && <Article post={post} />}
     </main>
