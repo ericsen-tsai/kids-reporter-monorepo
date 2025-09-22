@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { TOC, TOCIndex } from '../../_components/article/table-of-content'
 import Article from '../../_components/article/article'
+import { PostTitleSetter } from '@/components/header/post-title-setter'
 import {
   KIDS_URL_ORIGIN,
   GENERAL_DESCRIPTION,
@@ -212,6 +213,7 @@ export default async function PostPage({
 
   return (
     <main className="flex flex-col items-center max-w-(--breakpoint-2xl)">
+      <PostTitleSetter postTitle={post?.title} />
       {tocIndexes.length > 0 && <TOC indexes={tocIndexes} />}
       {post && <Article post={post} />}
     </main>

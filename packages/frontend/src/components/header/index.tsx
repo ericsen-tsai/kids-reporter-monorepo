@@ -2,13 +2,11 @@
 import { MobileHeader } from './mobile-header'
 import { DesktopHeader } from './desktop-header'
 import { DesktopHeaderCompact } from './desktop-header-compact'
+import { useHeaderContext } from './header-context'
 
-function Header({
-  // TODO: remove mock post title
-  postTitle = 'Hello World Hello WorldHello WorldHello WorldHello WorldHello World Hello WorldHello WorldHello WorldHello WorldHello World Hello WorldHello WorldHello WorldHello WorldHello World Hello WorldHello WorldHello WorldHello World',
-}: {
-  postTitle?: string
-}) {
+function Header() {
+  const context = useHeaderContext()
+  const postTitle = context?.postTitle
   const onHamburgerOverlayOpen = () => {
     document.body.classList.add('no-scroll')
   }
