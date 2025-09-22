@@ -6,7 +6,7 @@ import {
   getFilteredSearchResults,
   transferItemsToCards,
   defaultCount,
-} from '@/app/api/search/route'
+} from '@/app/api/search/utils'
 import { EMAIL, ContentType } from '@/constants'
 import { LogLevel, log } from '@/utils'
 

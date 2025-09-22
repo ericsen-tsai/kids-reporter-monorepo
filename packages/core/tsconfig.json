@@ -1,17 +1,8 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "jsx": "react-jsx",
-    "allowJs": true,
-    "noEmit": true
+    "typeRoots": ["node_modules/@types", "src/local-types"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules", "lib"],
-  "typeRoots": ["node_modules/@types", "src/local-types"]
+  "exclude": ["node_modules", "lib"]
 }

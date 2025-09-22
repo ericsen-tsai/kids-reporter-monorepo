@@ -1,14 +1,7 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "allowJs": true,
-    "noEmit": true
+    "jsx": "preserve"
   },
   "include": ["**/*.ts", "**/*.js"],
   "exclude": ["node_modules"]
