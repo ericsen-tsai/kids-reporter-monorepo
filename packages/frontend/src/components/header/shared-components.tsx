@@ -1,14 +1,7 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { useScrollLevel, ScrollLevel } from '@/utils/custom-hook'
-import {
-  HamburgerIcon,
-  SearchIcon,
-  LoginIcon,
-  SettingsIcon,
-  ClearIcon,
-} from '@/icons'
+import { HamburgerIcon, SearchIcon, SettingsIcon, ClearIcon } from '@/icons'
 import {
   SEARCH_PLACEHOLDER,
   SUBSCRIBE_URL,
@@ -16,11 +9,11 @@ import {
   POPULAR_KEYWORDS,
 } from '@/constants'
 import { cn } from '@/utils/cn'
-import Input from './input'
+import Input from '../input'
 import Image from 'next/image'
-import Button from './button'
+import Button from '../button'
 
-function LogoLink() {
+export function LogoLink() {
   return (
     <Link href="/" className="flex items-center" rel="home">
       <Image
@@ -34,7 +27,11 @@ function LogoLink() {
   )
 }
 
-function SearchInputSection({ isSearchOpen }: { isSearchOpen: boolean }) {
+export function SearchInputSection({
+  isSearchOpen,
+}: {
+  isSearchOpen: boolean
+}) {
   const ref = useRef<HTMLInputElement>(null)
   const [isFocused, setIsFocused] = useState(false)
   const [searchValue, setSearchValue] = useState('')
@@ -68,7 +65,7 @@ function SearchInputSection({ isSearchOpen }: { isSearchOpen: boolean }) {
       </form>
       <div
         className={cn(
-          'bg-white rounded-xl p-4 mt-2 w-66  absolute top-12 overflow-hidden right-28 transition-all duration-300 ease-in-out shadow-lg',
+          'bg-neutral-white rounded-xl p-4 mt-2 w-66  absolute top-12 overflow-hidden right-28 transition-all duration-300 ease-in-out shadow-lg z-50',
           isSearchOpen && isFocused
             ? 'p-4 h-auto opacity-100'
             : 'h-0 p-0 opacity-0'
@@ -91,7 +88,7 @@ function SearchInputSection({ isSearchOpen }: { isSearchOpen: boolean }) {
   )
 }
 
-function ActionButtons({
+export function ActionButtons({
   hideCtaButtons = false,
 }: {
   hideCtaButtons?: boolean
@@ -139,7 +136,7 @@ function ActionButtons({
   )
 }
 
-function BottomNavigation({
+export function BottomNavigation({
   onHamburgerOverlayOpen,
 }: {
   onHamburgerOverlayOpen: () => void
@@ -173,7 +170,7 @@ function BottomNavigation({
   )
 }
 
-function HamburgerButton({
+export function HamburgerButton({
   onHamburgerOverlayOpen,
   hidden = false,
 }: {
@@ -183,7 +180,7 @@ function HamburgerButton({
   return (
     <button
       className={cn(
-        'flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-all duration-200',
+        'flex items-center justify-center rounded-sm hover:bg-gray-100 transition-all duration-200',
         hidden && 'opacity-0 w-0'
       )}
       onClick={onHamburgerOverlayOpen}
@@ -192,106 +189,3 @@ function HamburgerButton({
     </button>
   )
 }
-
-function Header({
-  postTitle = 'Hello World Hello WorldHello WorldHello WorldHello WorldHello World Hello WorldHello WorldHello WorldHello WorldHello World Hello WorldHello WorldHello WorldHello WorldHello World Hello WorldHello WorldHello WorldHello World',
-}: {
-  postTitle?: string
-}) {
-  const scrollLevel = useScrollLevel()
-
-  const onHamburgerOverlayOpen = () => {
-    document.body.classList.add('no-scroll')
-  }
-
-  const shouldHideBottomNavigation = scrollLevel === ScrollLevel.DOWN_HIDDEN
-
-  return (
-    <div
-      className="w-screen flex flex-col fixed top-0 max-w-300 mx-auto z-[999]"
-      id="sticky-header"
-    >
-      <div
-        className={cn(
-          'w-full mx-auto px-6 tablet:px-8 desktop:px-12 z-50 transition-all duration-300',
-          shouldHideBottomNavigation
-            ? 'bg-white'
-            : 'bg-white desktop:bg-transparent'
-        )}
-      >
-        <div className="flex items-center justify-between py-6 desktop:px-4">
-          <div
-            className={cn(
-              'flex items-center transition-all duration-300',
-              shouldHideBottomNavigation && 'gap-4'
-            )}
-          >
-            <div className="hidden desktop:inline-flex">
-              <HamburgerButton
-                onHamburgerOverlayOpen={onHamburgerOverlayOpen}
-                hidden={!shouldHideBottomNavigation}
-              />
-            </div>
-
-            <div
-              className={cn(
-                'flex items-center gap-8',
-                shouldHideBottomNavigation && 'gap-12'
-              )}
-            >
-              <LogoLink />
-              {!shouldHideBottomNavigation && (
-                <div className="hidden desktop:block">
-                  <span className="text-p2 text-neutral-900 font-medium tracking-wide">
-                    理解世界 × 參與未來
-                  </span>
-                </div>
-              )}
-              {shouldHideBottomNavigation && postTitle && (
-                <div className="hidden desktop:block pr-12">
-                  <p className="text-p2 text-neutral-900 font-medium tracking-wide max-w-124 text-ellipsis overflow-hidden whitespace-nowrap">
-                    {postTitle}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <div className="hidden desktop:inline-flex">
-              <ActionButtons hideCtaButtons={shouldHideBottomNavigation} />
-            </div>
-
-            <div className="flex items-center gap-4">
-              <Link
-                href="/login"
-                className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 transition-colors duration-200"
-                aria-label="登入"
-              >
-                {LoginIcon}
-              </Link>
-              <div className="desktop:hidden">
-                <HamburgerButton
-                  onHamburgerOverlayOpen={onHamburgerOverlayOpen}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div
-        className={cn(
-          'hidden desktop:block w-full px-6 tablet:px-8 desktop:px-12 transition-all duration-300 z-10',
-          shouldHideBottomNavigation
-            ? 'transform -translate-y-full'
-            : 'transform translate-y-0'
-        )}
-      >
-        <BottomNavigation onHamburgerOverlayOpen={onHamburgerOverlayOpen} />
-      </div>
-    </div>
-  )
-}
-
-export default Header

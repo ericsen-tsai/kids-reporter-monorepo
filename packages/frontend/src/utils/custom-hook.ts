@@ -45,3 +45,22 @@ export const useScrollLevel = () => {
 
   return scrollLevel
 }
+
+export const useIsAtTop = (threshold = 5) => {
+  const [isAtTop, setIsAtTop] = useState(true)
+
+  useEffect(() => {
+    const checkIsAtTop = () => {
+      setIsAtTop(window.scrollY <= threshold)
+    }
+
+    checkIsAtTop()
+    window.addEventListener('scroll', checkIsAtTop, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', checkIsAtTop)
+    }
+  }, [threshold])
+
+  return isAtTop
+}

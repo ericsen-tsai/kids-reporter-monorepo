@@ -229,7 +229,7 @@ export default async function Home() {
     )) ?? []
 
   return (
-    <main className="flex flex-col items-center w-screen pt-(--header-main-bar-height) desktop:pt-[calc(var(--header-bottom-navigation-height)+var(--header-main-bar-height))]">
+    <main className="flex flex-col items-center w-screen">
       <Header />
       {topics?.length > 0 && <MainSlider topics={topics} />}
       <PostSelection latestPosts={latestPosts} featuredPosts={featuredPosts} />
