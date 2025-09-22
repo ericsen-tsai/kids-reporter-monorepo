@@ -198,6 +198,9 @@ type Post {
   ogTitle: String
   ogDescription: String
   ogImage: Photo
+  aiDialog: JSON
+  aiSuggestionOpening: JSON
+  opening: String
   aiSuggestion: JSON
   multipleChoiceQuestionsJSON: JSON
   aiEssaySuggestion: JSON
@@ -211,7 +214,6 @@ type Post {
   preview: JSON
   listPreview: String
   onlineUsers: JSON
-  summary: JSON
 }
 
 input PostWhereUniqueInput {
@@ -241,6 +243,7 @@ input PostWhereInput {
   ogTitle: StringFilter
   ogDescription: StringFilter
   ogImage: PhotoWhereInput
+  opening: StringFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
   createdBy: UserWhereInput
@@ -287,6 +290,7 @@ input PostOrderByInput {
   heroCaption: OrderDirection
   ogTitle: OrderDirection
   ogDescription: OrderDirection
+  opening: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -316,6 +320,7 @@ input PostUpdateInput {
   ogTitle: String
   ogDescription: String
   ogImage: PhotoRelateToOneForUpdateInput
+  opening: String
   multipleChoiceQuestionsJSON: JSON
   essayQuestionsJSON: JSON
   createdAt: DateTime
@@ -413,6 +418,7 @@ input PostCreateInput {
   ogTitle: String
   ogDescription: String
   ogImage: PhotoRelateToOneForCreateInput
+  opening: String
   multipleChoiceQuestionsJSON: JSON
   essayQuestionsJSON: JSON
   createdAt: DateTime
