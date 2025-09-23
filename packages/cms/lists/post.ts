@@ -109,135 +109,157 @@ const TWReporterRelatedPostsConfig = isTWReporterRelatedPostsEnabled
     })
   : {}
 
-const isChatGPTSummaryEnabled = true
-const summaryFieldConfig = isChatGPTSummaryEnabled
-  ? {
-      summary: virtual({
-        field: () =>
-          graphql.field({
-            type: graphql.JSON,
-            async resolve(item: Record<string, any>, args, context) {
-              const postID = item?.id
-              const post = await context.query.Post.findOne({
-                where: { id: postID },
-                query: 'id, content',
-              })
-              return {
-                label: '生成內容',
-                content: post.content,
-                openAIKey: envVars.openAIKey,
-              }
-            },
-          }),
-        ui: {
-          views: './lists/views/ai-dialog',
-          createView: {
-            fieldMode: 'hidden',
+const aiDialog = virtual({
+  field: () =>
+    graphql.field({
+      type: graphql.JSON,
+      async resolve(item: Record<string, any>) {
+        return {
+          label: '生成內容',
+          content: item.content,
+          openAIKey: envVars.openAIKey,
+        }
+      },
+    }),
+  ui: {
+    views: './lists/views/ai-dialog',
+    createView: {
+      fieldMode: 'hidden',
+    },
+    itemView: {
+      fieldPosition: 'sidebar',
+    },
+    listView: {
+      fieldMode: 'hidden',
+    },
+  },
+})
+
+const openingFieldConfig = group({
+  label: '進入對話',
+  fields: {
+    aiSuggestionOpening: virtual({
+      field: () =>
+        graphql.field({
+          type: graphql.JSON,
+          async resolve(item: Record<string, any>) {
+            return {
+              label: 'AI助理生成',
+              content: item.content,
+              openAIKey: envVars.openAIKey,
+            }
           },
-          itemView: {
-            fieldPosition: 'sidebar',
-          },
-          listView: {
-            fieldMode: 'hidden',
-          },
+        }),
+      ui: {
+        views: './lists/views/ai-suggestion-opening',
+        createView: {
+          fieldMode: 'hidden',
         },
-      }),
-    }
-  : {}
-const multipleChoiceQuestionsFieldConfig = isChatGPTSummaryEnabled
-  ? group({
-      label: '選擇題組',
-      fields: {
-        aiSuggestion: virtual({
-          field: () =>
-            graphql.field({
-              type: graphql.JSON,
-              async resolve(item: Record<string, any>, args, context) {
-                const postID = item?.id
-                const post = await context.query.Post.findOne({
-                  where: { id: postID },
-                  query: 'id, content',
-                })
-                return {
-                  label: 'AI助理生成',
-                  content: post.content,
-                  openAIKey: envVars.openAIKey,
-                }
-              },
-            }),
-          ui: {
-            views: './lists/views/ai-suggestion-multiple-choice',
-            createView: {
-              fieldMode: 'hidden',
-            },
-            itemView: {
-              fieldMode: 'edit',
-            },
-            listView: {
-              fieldMode: 'hidden',
-            },
-          },
-        }),
-        multipleChoiceQuestionsJSON: json({
-          label: '選擇題',
-          defaultValue: [],
-          ui: {
-            views: './lists/views/multiple-choice-questions',
-            createView: { fieldMode: 'hidden' },
-            itemView: { fieldMode: 'edit' },
-            listView: { fieldMode: 'hidden' },
-          },
-        }),
+        itemView: {
+          fieldMode: 'read',
+        },
+        listView: {
+          fieldMode: 'hidden',
+        },
       },
-    })
-  : {}
-const essayQuestionsFieldConfig = isChatGPTSummaryEnabled
-  ? group({
-      label: '思辨題組',
-      fields: {
-        aiEssaySuggestion: virtual({
-          field: () =>
-            graphql.field({
-              type: graphql.JSON,
-              async resolve(item: Record<string, any>, args, context) {
-                const postID = item?.id
-                const post = await context.query.Post.findOne({
-                  where: { id: postID },
-                  query: 'id, content',
-                })
-                return {
-                  label: 'AI助理生成',
-                  content: post.content,
-                  openAIKey: envVars.openAIKey,
-                }
-              },
-            }),
-          ui: {
-            views: './lists/views/ai-suggestion-essay',
-            createView: {
-              fieldMode: 'hidden',
-            },
-            itemView: {
-              fieldMode: 'edit',
-            },
-            listView: {
-              fieldMode: 'hidden',
-            },
-          },
-        }),
-        essayQuestionsJSON: json({
-          label: '思辨題',
-          defaultValue: [],
-          ui: {
-            views: './lists/views/essay-questions',
-            createView: { fieldMode: 'hidden' },
-            itemView: { fieldMode: 'edit' },
-            listView: { fieldMode: 'hidden' },
-          },
-        }),
+    }),
+    opening: text({
+      label: '開場白',
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'edit' },
+        listView: { fieldMode: 'hidden' },
       },
-    })
-  : {}
+    }),
+  },
+})
+
+const multipleChoiceQuestionsFieldConfig = group({
+  label: '選擇題組',
+  fields: {
+    aiSuggestion: virtual({
+      field: () =>
+        graphql.field({
+          type: graphql.JSON,
+          async resolve(item: Record<string, any>) {
+            return {
+              label: 'AI助理生成',
+              content: item.content,
+              openAIKey: envVars.openAIKey,
+            }
+          },
+        }),
+      ui: {
+        views: './lists/views/ai-suggestion-multiple-choice',
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'edit',
+        },
+        listView: {
+          fieldMode: 'hidden',
+        },
+      },
+    }),
+    multipleChoiceQuestionsJSON: json({
+      label: '選擇題',
+      defaultValue: [],
+      ui: {
+        views: './lists/views/multiple-choice-questions',
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'edit' },
+        listView: { fieldMode: 'hidden' },
+      },
+    }),
+  },
+})
+
+const essayQuestionsFieldConfig = group({
+  label: '思辨題組',
+  fields: {
+    aiEssaySuggestion: virtual({
+      field: () =>
+        graphql.field({
+          type: graphql.JSON,
+          async resolve(item: Record<string, any>, args, context) {
+            const postID = item?.id
+            const post = await context.query.Post.findOne({
+              where: { id: postID },
+              query: 'id, content',
+            })
+            return {
+              label: 'AI助理生成',
+              content: post.content,
+              openAIKey: envVars.openAIKey,
+            }
+          },
+        }),
+      ui: {
+        views: './lists/views/ai-suggestion-essay',
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'edit',
+        },
+        listView: {
+          fieldMode: 'hidden',
+        },
+      },
+    }),
+    essayQuestionsJSON: json({
+      label: '思辨題',
+      defaultValue: [],
+      ui: {
+        views: './lists/views/essay-questions',
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'edit' },
+        listView: { fieldMode: 'hidden' },
+      },
+    }),
+  },
+})
 
 const listConfigurations = list({
   fields: {
@@ -384,6 +406,8 @@ const listConfigurations = list({
       label: 'og:image',
       ref: 'Photo',
     }),
+    aiDialog,
+    ...openingFieldConfig,
     ...multipleChoiceQuestionsFieldConfig,
     ...essayQuestionsFieldConfig,
     createdAt: timestamp({
@@ -568,7 +592,6 @@ const listConfigurations = list({
         listView: { fieldMode: 'hidden' },
       },
     }),
-    ...summaryFieldConfig,
   },
   ui: {
     label: 'Posts',

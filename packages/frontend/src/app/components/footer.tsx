@@ -182,7 +182,7 @@ export const Footer = () => {
               }}
               className="footer-number text-xs md:text-sm"
             >
-              公益勸募許可字號｜衛部救字第1121364182號{' '}
+              公益勸募許可字號｜衛部救字第1131363879號{' '}
             </p>
             <div
               className={`${styles['footer-policy']} flex flex-row justify-center flex-no-wrap gap-5`}
@@ -210,7 +210,7 @@ export const Footer = () => {
             }}
             className="footer-number text-xs md:text-sm"
           >
-            Copyright © 2024 The Reporter
+            Copyright © 2025 The Reporter
           </p>
         </div>
       </div>
