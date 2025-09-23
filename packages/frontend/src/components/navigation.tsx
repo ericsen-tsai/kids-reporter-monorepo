@@ -34,13 +34,13 @@ export const Navigation = (props: { onClick?: () => void }) => {
                   props.onClick?.()
                 }}
                 role="menuitem"
-                className="px-4 py-2 text-p2 text-neutral-900 font-medium hover:text-red-400 transition-colors"
+                className="px-4 py-2 prose-p2 text-neutral-900 font-medium hover:text-red-400 transition-colors"
               >
                 {item.label}
               </Link>
 
               {hasSubItems && isExpanded && (
-                <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-48">
+                <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-sm z-50 min-w-48">
                   <ul className="py-2">
                     {item.subItems.map((subItem, subIndex) => (
                       <li key={`sub-item-${subIndex}`}>
@@ -49,7 +49,7 @@ export const Navigation = (props: { onClick?: () => void }) => {
                           onClick={() => {
                             props.onClick?.()
                           }}
-                          className="block px-4 py-2 text-p2 text-neutral-700 hover:bg-gray-50 hover:text-red-400 transition-colors"
+                          className="block px-4 py-2 prose-p2 text-neutral-700 hover:bg-gray-50 hover:text-red-400 transition-colors"
                         >
                           {subItem.label}
                         </Link>

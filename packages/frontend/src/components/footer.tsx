@@ -4,28 +4,10 @@ import {
   SOCIAL_MEDIA_ITEMS,
   ADDITIONAL_MENU_ITEMS,
 } from '@/constants'
-import {
-  FBIcon,
-  IGIcon,
-  MediumIcon,
-  RSSIcon,
-  ThreadsIcon,
-  YouTubeIcon,
-} from '@/icons'
+
 import Image from 'next/image'
 import Button from './button'
-
-const SOCIAL_MEDIA_ICON_MAP: Record<
-  (typeof SOCIAL_MEDIA_ITEMS)[number]['label'],
-  React.ReactNode
-> = {
-  Facebook: FBIcon,
-  Instagram: IGIcon,
-  Medium: MediumIcon,
-  RSS: RSSIcon,
-  Threads: ThreadsIcon,
-  YouTube: YouTubeIcon,
-}
+import SOCIAL_MEDIA_ICON_MAP from '@/utils/social-media-icon-map'
 
 export const Footer = () => {
   return (
@@ -47,7 +29,7 @@ export const Footer = () => {
                   />
                 </Link>
               </div>
-              <p className="text-neutral-900 text-p2 text-pretty tablet:w-100">
+              <p className="text-neutral-900 prose-p2 text-pretty tablet:w-100">
                 《少年報導者》是由非營利媒體《報導者》針對兒少打造的深度新聞報導品牌，與兒童和少年一起理解世界，參與未來。
               </p>
               <Button size={44} variant="secondary" asChild className="w-75">
@@ -64,7 +46,7 @@ export const Footer = () => {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="text-neutral-900 text-p2-bold hover:text-red-400 transition-colors duration-200 min-w-30"
+                    className="text-neutral-900 prose-p2-bold hover:text-red-400 transition-colors duration-200 min-w-30"
                     target={link.external ? '_blank' : undefined}
                     rel={link.external ? 'noopener noreferrer' : undefined}
                   >
@@ -77,7 +59,7 @@ export const Footer = () => {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="text-neutral-900 text-p2-bold hover:text-red-400 transition-colors duration-200 min-w-30"
+                    className="text-neutral-900 prose-p2-bold hover:text-red-400 transition-colors duration-200 min-w-30"
                     target={link.external ? '_blank' : undefined}
                     rel={link.external ? 'noopener noreferrer' : undefined}
                   >
@@ -114,7 +96,7 @@ export const Footer = () => {
             </div>
 
             {/* Legal Text */}
-            <div className="text-neutral-white text-p3 text-center desktop:text-left desktop:order-1">
+            <div className="text-neutral-white prose-p3 text-center desktop:text-left desktop:order-1">
               <p className="desktop:inline">
                 衛部救字第1131363879號｜勸募期間 2025/1/1~12/31
                 <span className="hidden desktop:inline">｜</span>

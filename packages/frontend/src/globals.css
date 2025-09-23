@@ -118,8 +118,7 @@
   --breakpoint-hd: 1440px;
 
   /* Header */
-  --header-main-bar-height: 88px;
-  --header-bottom-navigation-height: 42px;
+  --mobile-header-height: 64px;
 }
 
 @import './assets/style.css' layer(utilities);
@@ -542,5 +541,28 @@
   }
   .bg-neutral-white {
     background-color: var(--color-neutral-white);
+  }
+
+  /* Custom Scrollbar Utilities */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-neutral-gray-300) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: transparent;
   }
 }
