@@ -73,9 +73,9 @@ export function SearchInputSection({
       >
         <h3 className="text-p3 font-bold text-neutral-700 mb-3">熱門搜尋</h3>
         <div className="flex flex-wrap gap-2.5">
-          {POPULAR_KEYWORDS.map((keyword, index) => (
+          {POPULAR_KEYWORDS.map((keyword) => (
             <button
-              key={index}
+              key={keyword}
               className="cursor-pointer bg-neutral-200 hover:bg-neutral-300 transition-colors duration-200 rounded-full px-3 py-1 text-p2 font-bold text-neutral-900"
               onClick={() => setSearchValue(keyword)}
             >
