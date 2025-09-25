@@ -8,7 +8,7 @@ import {
   API_URL,
   INTERNAL_API_URL,
 } from '@/constants'
-import { isProduction } from '@/environment-variables'
+import envVars from '@/environment-variables'
 
 export const getThemeColor = (theme: Theme) => {
   if (theme === Theme.YELLOW) {
@@ -59,7 +59,7 @@ export const sendGQLRequest = async (
 ) => {
   // Define url based on environment, dev/staging needs pure internal api to bypass Identity-Aware Proxy(IAP)
   let url
-  if (typeof window === 'undefined' && !isProduction) {
+  if (typeof window === 'undefined' && !envVars.isProduction) {
     url = INTERNAL_API_URL
   } else {
     url = API_URL

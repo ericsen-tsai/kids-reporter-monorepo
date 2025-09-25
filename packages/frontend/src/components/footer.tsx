@@ -1,88 +1,31 @@
 import Link from 'next/link'
 import {
+  PRIVACY_POLICY,
+  SOCIAL_MEDIA_ITEMS,
+  ADDITIONAL_MENU_ITEMS,
+} from '@/constants'
+import {
   FBIcon,
   IGIcon,
-  YouTubeIcon,
-  ThreadsIcon,
   MediumIcon,
   RSSIcon,
+  ThreadsIcon,
+  YouTubeIcon,
 } from '@/icons'
-import { PRIVACY_POLICY } from '@/constants'
 import Image from 'next/image'
 import Button from './button'
 
-const socialIcons = [
-  {
-    link: 'https://www.facebook.com/twreporter/',
-    img: FBIcon,
-    name: 'Facebook',
-  },
-  {
-    link: 'https://www.instagram.com/twreporter/',
-    img: IGIcon,
-    name: 'Instagram',
-  },
-  {
-    link: 'https://www.youtube.com/@TwreporterOrg',
-    img: YouTubeIcon,
-    name: 'YouTube',
-  },
-  {
-    link: 'https://www.threads.net/@twreporter',
-    img: ThreadsIcon,
-    name: 'Threads',
-  },
-  {
-    link: 'https://medium.com/twreporter',
-    img: MediumIcon,
-    name: 'Medium',
-  },
-  {
-    link: 'https://kids-storage.twreporter.org/rss/rss.xml',
-    img: RSSIcon,
-    name: 'RSS',
-  },
-]
-
-const navigationLinks = [
-  {
-    title: '關於我們',
-    href: '/about',
-  },
-  {
-    title: '呼叫報導仔',
-    href: '/about#callkidsreporter',
-  },
-  {
-    title: '我要投稿',
-    href: 'https://forms.gle/49AEG8kFj7QWjgij8',
-    external: true,
-  },
-  {
-    title: '加入小記者',
-    href: 'https://forms.gle/eGq5jagNTwriwSCX6',
-    external: true,
-  },
-  {
-    title: '訂閱電子報',
-    href: 'http://eepurl.com/idk8VH',
-    external: true,
-  },
-  {
-    title: '訂閱Podcast',
-    href: 'https://solink.soundon.fm/kidstwreporter',
-    external: true,
-  },
-  {
-    title: '聯絡我們',
-    href: '/about#mail',
-  },
-  {
-    title: '前往《報導者》',
-    href: 'https://www.twreporter.org/',
-    external: true,
-  },
-]
+const SOCIAL_MEDIA_ICON_MAP: Record<
+  (typeof SOCIAL_MEDIA_ITEMS)[number]['label'],
+  React.ReactNode
+> = {
+  Facebook: FBIcon,
+  Instagram: IGIcon,
+  Medium: MediumIcon,
+  RSS: RSSIcon,
+  Threads: ThreadsIcon,
+  YouTube: YouTubeIcon,
+}
 
 export const Footer = () => {
   return (
@@ -117,7 +60,7 @@ export const Footer = () => {
             {/* Navigation Links */}
             <div className="flex flex-row gap-6 desktop:pr-25 hd:pr-0">
               <div className="flex flex-col gap-2">
-                {navigationLinks.slice(0, 4).map((link, index) => (
+                {ADDITIONAL_MENU_ITEMS.slice(0, 4).map((link, index) => (
                   <Link
                     key={index}
                     href={link.href}
@@ -125,12 +68,12 @@ export const Footer = () => {
                     target={link.external ? '_blank' : undefined}
                     rel={link.external ? 'noopener noreferrer' : undefined}
                   >
-                    {link.title}
+                    {link.label}
                   </Link>
                 ))}
               </div>
               <div className="flex flex-col gap-2">
-                {navigationLinks.slice(4).map((link, index) => (
+                {ADDITIONAL_MENU_ITEMS.slice(4).map((link, index) => (
                   <Link
                     key={index + 4}
                     href={link.href}
@@ -138,7 +81,7 @@ export const Footer = () => {
                     target={link.external ? '_blank' : undefined}
                     rel={link.external ? 'noopener noreferrer' : undefined}
                   >
-                    {link.title}
+                    {link.label}
                   </Link>
                 ))}
               </div>
@@ -153,17 +96,17 @@ export const Footer = () => {
           <div className="flex flex-col items-center gap-5 desktop:flex-row desktop:justify-between desktop:gap-4">
             {/* Social Icons */}
             <div className="flex items-center gap-4 order-1 desktop:order-2">
-              {socialIcons.map((social, index) => (
+              {SOCIAL_MEDIA_ITEMS.map((social, index) => (
                 <Link
                   key={index}
-                  href={social.link}
+                  href={social.href}
                   className="text-neutral-white hover:text-neutral-200 transition-colors duration-200"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={social.name}
+                  aria-label={social.label}
                 >
                   <div className="w-6 h-6 flex items-center justify-center">
-                    {social.img}
+                    {SOCIAL_MEDIA_ICON_MAP[social.label]}
                   </div>
                 </Link>
               ))}

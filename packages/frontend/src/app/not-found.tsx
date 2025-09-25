@@ -1,11 +1,11 @@
-import { StickyHeader } from '@/components/header'
+import Header from '@/components/header'
 import TopDetector from '@/components/top-detector'
 import { SearchIcon } from '@/icons'
 
 export default function NotFound() {
   return (
     <>
-      <StickyHeader />
+      <Header />
       <div
         style={{ width: '95vw' }}
         className="flex flex-col justify-center items-center mb-16"

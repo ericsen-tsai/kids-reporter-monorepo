@@ -1,12 +1,13 @@
-import { StickyHeader } from '@/components/header'
+import Header from '@/components/header'
 import TopDetector from '@/components/top-detector'
+import { HeaderProvider } from '@/components/header/header-context'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      <StickyHeader />
+    <HeaderProvider>
+      <Header />
       <TopDetector />
-      <div className="flex grow mt-16">{children}</div>
-    </>
+      <div className="flex grow">{children}</div>
+    </HeaderProvider>
   )
 }

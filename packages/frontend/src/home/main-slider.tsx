@@ -40,7 +40,7 @@ export const MainSlider = (props: SliderProp) => {
         backgroundPosition: 'bottom right 15%',
         backgroundSize: '317px',
       }}
-      className={`main-slider max-w-7xl w-screen flex items-center justify-center flex-col ml-auto mr-auto mb-5 pt-20 lg:pt-10 bg-no-repeat theme-${Theme.YELLOW}`}
+      className={`main-slider max-w-7xl w-screen flex items-center justify-center flex-col ml-auto mr-auto mb-5 lg:pt-10 bg-no-repeat theme-${Theme.YELLOW}`}
     >
       <div className="w-full flex items-center justify-center flex-row relative">
         <Swiper

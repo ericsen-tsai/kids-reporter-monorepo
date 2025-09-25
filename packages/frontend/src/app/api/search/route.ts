@@ -7,9 +7,7 @@ import {
   defaultCount,
   defaultStart,
 } from './utils'
-
-const apiKey = process.env.SEARCH_API_KEY || ''
-const cx = process.env.SEARCH_ENGINE_ID || ''
+import envVars from '@/environment-variables'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -30,8 +28,8 @@ export async function GET(request: Request) {
 
   try {
     const searchResults = await getFilteredSearchResults({
-      cx,
-      apiKey,
+      cx: envVars.twreporterID,
+      apiKey: envVars.searchAPIKey,
       q,
       start,
       count,

@@ -1,7 +1,7 @@
-import { internalGqlEndpoint, gqlEndpoint } from '@/environment-variables'
+import envVars from '@/environment-variables'
 
-export const INTERNAL_API_URL = internalGqlEndpoint
-export const API_URL = gqlEndpoint
+export const INTERNAL_API_URL = envVars.internalGqlEndpoint
+export const API_URL = envVars.gqlEndpoint
 
 export const KIDS_URL_ORIGIN = 'https://kids.twreporter.org'
 export const SUBSCRIBE_URL = 'http://eepurl.com/idk8VH'
@@ -132,7 +132,6 @@ subSubcategoriesOrdered {
 publishedDate
 `
 
-export const STICKY_HEADER_HEIGHT = 62
 export const SEARCH_PLACEHOLDER = '搜尋更多新聞、議題'
 
 export const ERROR_PAGE = '/error'
@@ -141,4 +140,158 @@ export const FALLBACK_IMG = '/assets/images/image_placeholder.png'
 
 export const DEBOUNCE_THRESHOLD = 100
 
-export const IS_LOGIN_ENABLED = false
+export const IS_LOGIN_ENABLED = true
+
+export const MENU_ITEMS = [
+  {
+    label: '最新',
+    href: '/',
+    subItems: [],
+  },
+  {
+    label: '專題',
+    href: '/topic/page',
+    subItems: [],
+  },
+  {
+    label: '新聞',
+    href: '/category/news',
+    subItems: [
+      { label: '焦點新聞', href: '/category/news/times' },
+      { label: '真的假的', href: '/category/news/knowledge' },
+      { label: '人物故事', href: '/category/news/story' },
+      { label: '文化報導', href: '/category/news/explore' },
+      { label: '專欄', href: '/category/news/column' },
+      { label: '英文新聞', href: '/categories/news/english-version' },
+    ],
+  },
+  {
+    label: '多媒體',
+    href: '/category/comics',
+    subItems: [
+      { label: '圖解新聞', href: '/category/comics/times' },
+      { label: '新聞遊戲', href: '/category/comics/test-news' },
+      { label: '圖文故事', href: '/category/comics/graphic-story' },
+    ],
+  },
+  {
+    label: '校園',
+    href: '/category/campus/news-classroom',
+    subItems: [
+      { label: '校園寶可夢', href: '/category/campus/campus-pokemon' },
+      { label: '上課好好玩', href: '/category/campus/teaching' },
+      { label: '小讀者連線', href: '/category/campus/joining' },
+    ],
+  },
+  {
+    label: 'Podcast',
+    href: '/category/listening-news',
+    subItems: [
+      {
+        label: '小記者，問什麼？',
+        href: '/category/listening-news/kids-reporter-ask',
+      },
+      {
+        label: '新聞讀報',
+        href: '/category/listening-news/multilingual-listening-news',
+      },
+      {
+        label: '新聞關鍵字',
+        href: '/category/listening-news/listening-news-keywords',
+      },
+      {
+        label: '文化關鍵字',
+        href: '/category/listening-news/listening-news-culture-keywords',
+      },
+    ],
+  },
+  {
+    label: '教案',
+    href: '/category/classroom',
+    subItems: [],
+  },
+]
+
+export const ADDITIONAL_MENU_ITEMS = [
+  {
+    label: '閱讀探索設定',
+    href: '/reading-settings',
+    subItems: [],
+  },
+  {
+    label: '關於我們',
+    href: '/about',
+    subItems: [],
+  },
+  {
+    label: '呼叫報導仔流程',
+    href: '/about#callkidsreporter',
+    subItems: [],
+  },
+  {
+    label: '投稿專區',
+    href: 'https://forms.gle/49AEG8kFj7QWjgij8',
+    subItems: [],
+    external: true,
+  },
+  {
+    label: '加入小記者',
+    href: 'https://forms.gle/eGq5jagNTwriwSCX6',
+    subItems: [],
+    external: true,
+  },
+  {
+    label: '訂閱Podcast',
+    href: 'https://solink.soundon.fm/kidstwreporter',
+    subItems: [],
+    external: true,
+  },
+  {
+    label: '聯絡我們',
+    href: '/about#mail',
+    subItems: [],
+  },
+  {
+    label: '報導者',
+    href: 'https://www.twreporter.org/',
+    subItems: [],
+    external: true,
+  },
+]
+
+export const SOCIAL_MEDIA_ITEMS = [
+  {
+    label: 'Facebook',
+    href: 'https://www.facebook.com/twreporter/',
+  },
+  {
+    label: 'Instagram',
+    href: 'https://www.instagram.com/twreporter/',
+  },
+  {
+    label: 'YouTube',
+    href: 'https://www.youtube.com/@TwreporterOrg',
+  },
+  {
+    label: 'Threads',
+    href: 'https://www.threads.com/@twreporter',
+  },
+  {
+    label: 'Medium',
+    href: 'https://medium.com/twreporter',
+  },
+  {
+    label: 'RSS',
+    href: 'https://kids-storage.twreporter.org/rss/rss.xml',
+  },
+] as const
+
+export const POPULAR_KEYWORDS = [
+  '氣候變遷',
+  'AI人工智慧',
+  '選舉',
+  '教育',
+  '環境保護',
+]
+
+export const STICKY_HEADER_HEIGHT = 130

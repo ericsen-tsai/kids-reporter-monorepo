@@ -17,6 +17,9 @@
   --color-neutral-gray-900: #232323;
   --color-neutral-black: #000000;
 
+  /* Colors - Border */
+  --color-neutral-border: #00000026;
+
   /* Colors - Brand Red */
   --color-red-100: #fff0f2;
   --color-red-200: #ffc4ca;
@@ -113,6 +116,10 @@
   --breakpoint-tablet: 768px;
   --breakpoint-desktop: 1024px;
   --breakpoint-hd: 1440px;
+
+  /* Header */
+  --header-main-bar-height: 88px;
+  --header-bottom-navigation-height: 42px;
 }
 
 @import './assets/style.css' layer(utilities);
