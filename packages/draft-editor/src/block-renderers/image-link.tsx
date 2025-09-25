@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 import styled from 'styled-components'
 import { Drawer, DrawerController } from '@keystone-ui/modals'
 import { TextInput } from '@keystone-ui/fields'
@@ -156,7 +156,7 @@ export const EditableImageLink = (props: AtomicBlockProps<ImageLinkValue>) => {
   const entityKey = block.getEntityAt(0)
   const entity = contentState.getEntity(entityKey)
   const data = entity.getData() || {}
-  const { url, alignment, rawContentState } = data // eslint-disable-line
+  const { url, alignment, rawContentState } = data
 
   const onChange = (inputValue: ImageLinkValue) => {
     setIsEditorOpen(false)

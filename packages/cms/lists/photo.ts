@@ -89,14 +89,12 @@ const listConfigurations: ListConfig<any> = list({
           }
 
           Object.entries(resizedTargets).forEach(([key, value]) => {
-            rtn[
-              key
-            ] = `${config.googleCloudStorage.origin}/resized/${filename}-${value}.webp`
+            rtn[key] =
+              `${config.googleCloudStorage.origin}/resized/${filename}-${value}.webp`
           })
 
-          rtn[
-            'original'
-          ] = `${config.googleCloudStorage.origin}/images/${filename}${extension}`
+          rtn['original'] =
+            `${config.googleCloudStorage.origin}/images/${filename}${extension}`
           return Object.assign(empty, rtn)
         },
       }),

@@ -188,7 +188,6 @@ export function InfoBoxInArticleBody({ className, data }: InfoBoxBlockProps) {
             blockRendererFn={blockRendererFn}
             editorState={editorState}
             readOnly
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
             onChange={() => {}}
           />
           <ClearFloat />

@@ -11,9 +11,11 @@ export const TopDetector = () => {
         const backToTopElement = document.querySelector(
           `#${BACK_TO_TOP_ELEMENT_ID}`
         )
-        entry.isIntersecting
-          ? backToTopElement?.classList?.add('hidden')
-          : backToTopElement?.classList?.remove('hidden')
+        if (entry.isIntersecting) {
+          backToTopElement?.classList?.add('hidden')
+        } else {
+          backToTopElement?.classList?.remove('hidden')
+        }
       },
       {
         root: null,

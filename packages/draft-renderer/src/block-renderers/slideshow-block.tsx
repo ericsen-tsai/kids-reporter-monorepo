@@ -1,5 +1,5 @@
 import Multimedia from './multimedia'
-import React, { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 import { getColorHex } from '../utils/index'
 import { mediaQuery } from '../utils/media-query'
@@ -265,6 +265,7 @@ const SlidesFlexBox = styled.div`
     if (props.isSliding) {
       return `transition: transform ${props.duration}ms ease-in-out;`
     }
+    return ''
   }}
 
   ${mediaQuery.smallOnly} {

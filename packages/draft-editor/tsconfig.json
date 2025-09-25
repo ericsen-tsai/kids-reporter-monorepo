@@ -1,8 +1,14 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "typeRoots": ["node_modules/@types", "src/local-types"]
+    "typeRoots": ["node_modules/@types", "src/local-types"],
+    "skipLibCheck": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "../draft-renderer/src/**/*.ts",
+    "../draft-renderer/src/**/*.tsx"
+  ],
   "exclude": ["node_modules", "lib"]
 }

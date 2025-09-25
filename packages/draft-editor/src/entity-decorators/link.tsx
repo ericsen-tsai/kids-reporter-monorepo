@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { ContentState } from 'draft-js'
 import { AlertDialog } from '@keystone-ui/modals'
 import { TextInput } from '@keystone-ui/fields'

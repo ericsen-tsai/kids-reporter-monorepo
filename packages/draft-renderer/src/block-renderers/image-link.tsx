@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 import {
   Editor,
@@ -76,7 +76,6 @@ export const ImageLinkBlock = ({
         blockRenderMap={blockRenderMap}
         editorState={editorState}
         readOnly
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
         onChange={() => {}}
       />
     </Figure>
@@ -128,6 +127,8 @@ const ArticleBodyContainer = styled.div<{ $alignment?: string }>`
             margin: 5px 27px 5px 0px;
           }
         `
+      default:
+        return ''
     }
   }}
 `

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import styled from 'styled-components'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { FieldProps } from '@keystone-6/core/types'
@@ -28,6 +28,7 @@ const AuthorContainer = styled.div`
   gap: 15px;
 `
 
+// @ts-ignore Button type is not compatible with styled-components
 const IconButton = styled(Button)`
   background-color: transparent;
   margin: 0 0 0 0.5rem;
@@ -44,7 +45,7 @@ const DndItem = styled.div`
 const PostComponent = (props: {
   index: number
   post: Post
-  actionElement: React.ReactNode
+  actionElement: ReactNode
 }) => {
   const post = props.post
   return (
@@ -53,7 +54,7 @@ const PostComponent = (props: {
         {`${props.index}.`}
         <img width="100px" src={post.ogImgSrc} />
         <div style={{ flex: '2' }}>{post.ogTitle}</div>
-        <a href={post.src} target="_blank">
+        <a href={post.src} target="_blank" rel="noreferrer">
           <CornerUpRightIcon size="small" />
         </a>
         {props.actionElement}
@@ -83,7 +84,7 @@ export const Field = ({
       let postJSON
       try {
         postJSON = JSON.parse(newPost)
-      } catch (e) {
+      } catch {
         console.error('Failed to parse post to json!', newPost)
         window.alert('資料格式錯誤!Failed to parse post to json!')
         return

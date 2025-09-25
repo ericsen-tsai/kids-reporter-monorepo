@@ -83,10 +83,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const currentState = isFocused
       ? 'focus'
       : hasValue
-      ? isActive
-        ? 'active'
-        : 'unfocus'
-      : 'default'
+        ? isActive
+          ? 'active'
+          : 'unfocus'
+        : 'default'
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = e.target.value

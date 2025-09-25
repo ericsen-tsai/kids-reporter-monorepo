@@ -1,11 +1,11 @@
 //see docs: https://babeljs.io/docs/config-files
-//we use babelrc.js rather than .babelrc for our babel setting
+//we use babel.config.cjs rather than .babelrc.js for our babel setting
 
 const pkg = require('./package.json')
 const pkgName = pkg.name
 const pkgVersion = pkg.version
 
-module.exports = function(api) {
+module.exports = function (api) {
   api.cache(true)
   const plugins = [
     [
@@ -35,6 +35,24 @@ module.exports = function(api) {
     ],
   ]
   return {
+    presets: [
+      [
+        '@babel/env',
+        {
+          modules: 'auto',
+          targets: {
+            node: '14',
+          },
+        },
+      ],
+      [
+        '@babel/preset-react',
+        {
+          development: process.env.NODE_ENV !== 'production',
+        },
+      ],
+      '@babel/preset-typescript',
+    ],
     plugins,
   }
 }

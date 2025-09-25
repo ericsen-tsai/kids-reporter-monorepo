@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { Fragment, useState } from 'react'
 import styled from 'styled-components'
 import {
   CompositeDecorator,
@@ -86,7 +86,7 @@ function AnnotationBlock(props: {
   )
 
   return (
-    <React.Fragment>
+    <Fragment>
       <AnnotationWrapper
         onClick={(e) => {
           e.preventDefault()
@@ -102,12 +102,11 @@ function AnnotationBlock(props: {
             editorState={editorState}
             blockRenderMap={blockRenderMaps.annotation}
             readOnly
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
             onChange={() => {}}
           />
         </AnnotationBody>
       ) : null}
-    </React.Fragment>
+    </Fragment>
   )
 }
 

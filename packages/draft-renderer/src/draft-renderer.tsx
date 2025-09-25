@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import blockRenderMaps from './block-render-maps/index'
 import {
   Editor,
@@ -17,7 +17,7 @@ const blockRendererFn = (block: any) => {
   return atomicBlockObj
 }
 
-enum FontSizeLevel {
+export enum FontSizeLevel {
   NORMAL = 'normal',
   LARGE = 'large',
 }
@@ -72,7 +72,6 @@ const DraftRenderer = ({
         blockRendererFn={blockRendererFn}
         customStyleFn={customStyleFn}
         readOnly
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
         onChange={() => {}}
       />
     </ThemeProvider>
@@ -101,7 +100,6 @@ const ArticleIntroductionDraftRenderer = ({
         blockRenderMap={blockRenderMaps.brief}
         customStyleFn={customStyleFn}
         readOnly
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
         onChange={() => {}}
       />
     </ThemeProvider>
@@ -129,7 +127,6 @@ const ProjectContentDraftRenderer = ({
         blockRendererFn={blockRendererFn}
         customStyleFn={customStyleFn}
         readOnly
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
         onChange={() => {}}
       />
     </ThemeProvider>

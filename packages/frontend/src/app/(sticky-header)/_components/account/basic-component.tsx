@@ -62,7 +62,9 @@ export const ToggleButton = ({
   onChange: () => void
 }) => {
   const handleChange = () => {
-    onChange && onChange()
+    if (onChange) {
+      onChange()
+    }
   }
 
   return (
