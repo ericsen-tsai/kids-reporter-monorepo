@@ -2,8 +2,7 @@
 
 import { cn } from '@/utils/cn'
 import { cva } from 'class-variance-authority'
-import React, { useState, forwardRef } from 'react'
-import { Slot } from '@radix-ui/react-slot'
+import { useState, forwardRef } from 'react'
 
 // Search icon component
 const SearchIcon = ({ className }: { className?: string }) => (
@@ -78,7 +77,6 @@ export type InputProps = {
   onChange?: (value: string) => void
   onClear?: () => void
   showClearButton?: boolean
-  asChild?: boolean
   children?: React.ReactNode
   inputRef?: React.RefObject<HTMLInputElement>
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'>
@@ -91,9 +89,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       onChange,
       onClear,
       showClearButton = true,
-      asChild = false,
       className,
-      children,
       onFocus,
       onBlur,
       inputRef,
@@ -159,41 +155,32 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const inputClasses = cn(inputVariants({ state: currentState }), className)
 
-    const Comp = asChild ? Slot : 'div'
-
     return (
-      <Comp className={inputClasses} ref={ref}>
+      <div className={inputClasses} ref={ref}>
         <SearchIcon className="text-gray-600 flex-shrink-0" />
+        <input
+          type="text"
+          value={currentValue}
+          onChange={handleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          placeholder={placeholder}
+          className="flex-1 bg-transparent text-gray-900 placeholder:text-gray-400 focus:outline-none"
+          ref={inputRef}
+          {...props}
+        />
 
-        {asChild ? (
-          children
-        ) : (
-          <>
-            <input
-              type="text"
-              value={currentValue}
-              onChange={handleChange}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              placeholder={placeholder}
-              className="flex-1 bg-transparent text-gray-900 placeholder:text-gray-400 focus:outline-none"
-              ref={inputRef}
-              {...props}
-            />
-
-            {showClearButton && hasValue && (
-              <button
-                type="button"
-                onClick={handleClear}
-                className="cursor-pointer text-gray-400 hover:text-gray-600 flex-shrink-0 transition-colors p-1 -m-1 rounded-full hover:bg-gray-100 active:bg-gray-200"
-                aria-label="Clear input"
-              >
-                <CloseIcon />
-              </button>
-            )}
-          </>
+        {showClearButton && hasValue && (
+          <button
+            type="button"
+            onClick={handleClear}
+            className="cursor-pointer text-gray-400 hover:text-gray-600 flex-shrink-0 transition-colors p-1 -m-1 rounded-full hover:bg-gray-100 active:bg-gray-200"
+            aria-label="Clear input"
+          >
+            <CloseIcon />
+          </button>
         )}
-      </Comp>
+      </div>
     )
   }
 )
