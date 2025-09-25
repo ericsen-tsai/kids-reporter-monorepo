@@ -22,7 +22,7 @@ import relationshipUtil, {
   OrderedRelationshipConfig,
 } from './utils/manual-order-relationship'
 import { slugConfig } from './config'
-
+import type { ListConfig } from '@keystone-6/core/types'
 const subSubcategories: OrderedRelationshipConfig = {
   fieldName: 'subSubcategories',
   relationshipConfig: {
@@ -239,7 +239,7 @@ const essayQuestionsFieldConfig = isChatGPTSummaryEnabled
     })
   : {}
 
-const listConfigurations = list({
+const listConfigurations: ListConfig<any> = list({
   fields: {
     slug: slugConfig,
     title: text({

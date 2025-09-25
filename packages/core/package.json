@@ -27,7 +27,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@keystone-6/core": "5.8.0"
+    "@keystone-6/core": "6.5.1"
   },
   "dependencies": {
     "@google-cloud/storage": "^5.18.0",

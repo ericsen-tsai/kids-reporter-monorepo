@@ -307,11 +307,12 @@ const authConfig = withAuth(
       },
     },
     server: {
-      healthCheck: {
-        path: '/health_check',
-        data: { status: 'healthy' },
-      },
       extendExpressApp: (app, commonContext) => {
+        // Health check endpoint
+        app.get('/health_check', (req, res) => {
+          res.status(200).json({ status: 'healthy' })
+        })
+
         const corsOpts = {
           origin: envVar.cors.allowOrigins,
         }

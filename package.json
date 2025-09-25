@@ -38,7 +38,7 @@
     "babel-plugin-file-loader": "^2.0.0",
     "babel-plugin-inline-react-svg": "^2.0.1",
     "eslint": "^7.7.0",
-    "eslint-config-next": "13.4.9",
+    "eslint-config-next": "14.2.33",
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-babel": "^5.3.0",
     "eslint-plugin-node": "^11.1.0",
@@ -55,8 +55,8 @@
     "*.{js,ts,jsx,tsx}": "eslint --cache --fix"
   },
   "resolutions": {
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   },
   "version": "0.0.0",
   "packageManager": "yarn@1.22.19"

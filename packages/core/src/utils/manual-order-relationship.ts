@@ -58,7 +58,7 @@ type ManualOrderFieldConfig = {
  */
 function addManualOrderRelationshipFields(
   manualOrderFields: ManualOrderFieldConfig[] = [],
-  list: ListConfig<any, any>
+  list: ListConfig<any>
 ) {
   manualOrderFields.forEach((mo) => {
     if (!list.fields?.[mo.fieldName]) {
@@ -179,7 +179,7 @@ function addManualOrderRelationshipFields(
  *  And the GQL resolver will be defined in `resolve` function.
  */
 function addVirtualFieldToReturnItemsInInputOrder(
-  list: ListConfig<any, any>,
+  list: ListConfig<any>,
   manualOrderField: ManualOrderFieldConfig
 ) {
   const virtualFieldName = `${manualOrderField.targetFieldName}InInputOrder`

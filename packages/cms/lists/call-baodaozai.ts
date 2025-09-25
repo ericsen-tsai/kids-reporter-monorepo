@@ -5,6 +5,7 @@ import {
 } from './utils/access-control-list'
 import { list } from '@keystone-6/core'
 import { timestamp } from '@keystone-6/core/fields'
+import type { ListConfig } from '@keystone-6/core/types'
 import {
   customFields,
   richTextEditorButtonNames,
@@ -44,7 +45,7 @@ const genRichTextEditorConfig = (label: string) => {
   })
 }
 
-const listConfigurations = list({
+const listConfigurations: ListConfig<any> = list({
   fields: {
     home: genRichTextEditorConfig('首頁'),
     topics: genRichTextEditorConfig('專題集合頁'),

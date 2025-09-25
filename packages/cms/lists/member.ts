@@ -1,6 +1,7 @@
 import { list, graphql } from '@keystone-6/core'
 import { text, timestamp, virtual } from '@keystone-6/core/fields'
 import { allowRoles, RoleEnum } from './utils/access-control-list'
+import type { ListConfig } from '@keystone-6/core/types'
 
 const operationAccessControl = allowRoles([
   RoleEnum.FrontendHeadlessAccount,
@@ -23,7 +24,7 @@ const filterAccessControl = ({ session }: { session?: any }) => {
   return false
 }
 
-const listConfigurations = list({
+const listConfigurations: ListConfig<any> = list({
   fields: {
     name: text({
       label: '稱呼',
