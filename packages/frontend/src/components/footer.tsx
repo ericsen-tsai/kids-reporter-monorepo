@@ -100,7 +100,7 @@ export const Footer = () => {
                 <Link
                   key={social.label}
                   href={social.href}
-                  className="text-neutral-white hover:text-neutral-200 transition-colors duration-200"
+                  className="text-neutral-white hover:text-neutral-200 transition-colors duration-200 relative"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
