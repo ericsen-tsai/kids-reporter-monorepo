@@ -2,7 +2,7 @@
 
 import { cn } from '@/utils/cn'
 import { cva } from 'class-variance-authority'
-import { useState, forwardRef } from 'react'
+import { useState, forwardRef, useRef } from 'react'
 
 // Search icon component
 const SearchIcon = ({ className }: { className?: string }) => (
@@ -100,7 +100,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const [internalValue, setInternalValue] = useState('')
     const [isFocused, setIsFocused] = useState(false)
     const [isActive, setIsActive] = useState(false)
-
+    const innerInputRef = useRef<HTMLInputElement>(null)
     const currentValue = value !== undefined ? value : internalValue
     const hasValue = currentValue.length > 0
 
@@ -151,6 +151,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       if (onClear) {
         onClear()
       }
+
+      const currentRef = inputRef ?? innerInputRef
+      currentRef.current?.focus()
     }
 
     const inputClasses = cn(inputVariants({ state: currentState }), className)
@@ -166,7 +169,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           onBlur={handleBlur}
           placeholder={placeholder}
           className="flex-1 bg-transparent text-gray-900 placeholder:text-gray-400 focus:outline-none ml-2 flex-shrink-1 max-w-[72%]"
-          ref={inputRef}
+          ref={inputRef ?? innerInputRef}
           {...props}
         />
 
