@@ -1,0 +1,9 @@
+# Build outputs
+lib/
+dist/
+*.js
+*.d.js
+
+# Generated files
+.keystone/
+schema.graphql

@@ -1,7 +1,9 @@
 import Link from 'next/link'
+
 import PostCard from '@/components/post-card'
-import { PostSummary, Loading } from '@/components/types'
+import { Loading, PostSummary } from '@/components/types'
 import { getFormattedDate } from '@/utils'
+
 import styles from './post-selection.module.css'
 
 type PostSelectionProp = {
@@ -13,14 +15,14 @@ const PostBrick = ({ post }: { post: PostSummary }) => {
   return (
     post && (
       <Link className={`${styles['post-brick']} flex flex-col`} href={post.url}>
-        <div className="flex flex-row justify-between items-center">
+        <div className="flex flex-row items-center justify-between">
           <p
             style={{ lineHeight: '160%', letterSpacing: '.2em' }}
-            className="font-medium text-sm text-gray-500 text-left"
+            className="text-left text-sm font-medium text-gray-500"
           >{`${post.category ?? ''}/${post.subSubcategory ?? ''}`}</p>
           <p
             style={{ letterSpacing: '.05em', color: 'var(--paletteColor6)' }}
-            className="font-bold text-sm text-right items-center"
+            className="items-center text-right text-sm font-bold"
           >
             {post.publishedDate ? getFormattedDate(post.publishedDate) : ''}
           </p>
@@ -33,7 +35,7 @@ const PostBrick = ({ post }: { post: PostSummary }) => {
             lineHeight: '160%',
             letterSpacing: '.08em',
           }}
-          className="overflow-hidden font-bold text-lg text-gray-900 text-left mt-5"
+          className="mt-5 overflow-hidden text-left text-lg font-bold text-gray-900"
         >
           {post.title}
         </p>
@@ -49,30 +51,30 @@ export const PostSelection = (props: PostSelectionProp) => {
   return (
     <div
       style={{ backgroundColor: '#fff9ec' }}
-      className="w-full flex flex-col items-center py-5"
+      className="flex w-full flex-col items-center py-5"
     >
       <img
-        className="max-w-52 w-full my-8 mx-auto"
+        className="mx-auto my-8 w-full max-w-52"
         src={'/assets/images/selected_news.png'}
         alt="精選文章"
         loading="eager"
       />
-      <div className="max-w-(--breakpoint-xl) flex flex-col lg:flex-row p-6 gap-10">
+      <div className="flex max-w-(--breakpoint-xl) flex-col gap-10 p-6 lg:flex-row">
         <div
           style={{ flexGrow: '8', flexBasis: '25%' }}
-          className="flex flex-col justify-between shrink gap-5"
+          className="flex shrink flex-col justify-between gap-5"
         >
-          <div className="flex flex-row justify-between items-center bg-white rounded-3xl pt-2.5 pb-3 pl-3.5 pr-5">
+          <div className="flex flex-row items-center justify-between rounded-3xl bg-white pt-2.5 pr-5 pb-3 pl-3.5">
             <span
               style={{ lineHeight: '160%', letterSpacing: '.08em' }}
-              className="flex items-center font-bold text-xl text-gray-900 gap-2.5"
+              className="flex items-center gap-2.5 text-xl font-bold text-gray-900"
             >
               <img src={'/assets/images/home-icon-clock.svg'} loading="eager" />
               最新文章
             </span>
             <Link
               style={{ lineHeight: '160%', letterSpacing: '.08em' }}
-              className="flex items-center font-medium text-lg text-gray-900 gap-1"
+              className="flex items-center gap-1 text-lg font-medium text-gray-900"
               href={'/all'}
             >
               更多
@@ -81,7 +83,7 @@ export const PostSelection = (props: PostSelectionProp) => {
           </div>
           <div
             style={{ flex: '1' }}
-            className="sm:hidden md:grid lg:grid md:grid-cols-2 lg:grid-cols-1 lg:grid-rows-6 bg-white rounded-3xl px-7 py-5 gap-8"
+            className="gap-8 rounded-3xl bg-white px-7 py-5 sm:hidden md:grid md:grid-cols-2 lg:grid lg:grid-cols-1 lg:grid-rows-6"
           >
             {latestPosts?.map((post, index) => {
               return <PostBrick key={`latest-post-${index}`} post={post} />
@@ -91,11 +93,11 @@ export const PostSelection = (props: PostSelectionProp) => {
         {featuredPosts?.length > 0 && (
           <div
             style={{ flexGrow: '25', flexBasis: '75%' }}
-            className="flex flex-col shrink rounded-3xl gap-5"
+            className="flex shrink flex-col gap-5 rounded-3xl"
           >
             <div
               style={{ rowGap: '20px' }}
-              className="inline-flex justify-between flex-wrap"
+              className="inline-flex flex-wrap justify-between"
             >
               <div className={`${styles['card-child-1']}`}>
                 {featuredPosts?.[0] && (

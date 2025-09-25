@@ -1,13 +1,14 @@
+import { blockRenderers } from '@kids-reporter/draft-renderer'
 import React, { useState } from 'react'
 import styled from 'styled-components'
+
 import { AtomicBlockProps } from '../block-renderer-fn.type'
 import {
-  ImageSelectorOnChangeFn,
-  ImageSelector,
   ImageEntityWithMeta,
+  ImageSelector,
+  ImageSelectorOnChangeFn,
 } from '../buttons/selector/image-selector'
 import { EditableBlock as _EditableBlock } from './styled'
-import { blockRenderers } from '@kids-reporter/draft-renderer'
 
 const { SlideshowInArticleBody } = blockRenderers
 

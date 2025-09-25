@@ -1,11 +1,12 @@
 // @ts-ignore `@twreporter/errors` does not have tyepscript definition file yet
 import _errors from '@twreporter/errors'
-import consts from './constants.js'
 import cors from 'cors'
 import express from 'express'
-import middlewareCreator from './middlewares/index.js'
-import { createGraphQLProxy } from './gql-proxy-mini-app.js'
+
 import { createAuthMiniApp } from './auth-mini-app.js'
+import consts from './constants.js'
+import { createGraphQLProxy } from './gql-proxy-mini-app.js'
+import middlewareCreator from './middlewares/index.js'
 
 // @twreporter/errors is a cjs module, therefore, we need to use its default property
 const errors = _errors.default
@@ -54,7 +55,12 @@ export function createApp({
   /**
    *  Application level error handler
    */
-  const errorHandler: express.ErrorRequestHandler = (err, req, res, /* eslint-disable-line */ next) => {
+  const errorHandler: express.ErrorRequestHandler = (
+    err,
+    req,
+    res,
+    /* eslint-disable-line */ next
+  ) => {
     const annotatingError = errors.helpers.wrap(
       err,
       'UnknownError',

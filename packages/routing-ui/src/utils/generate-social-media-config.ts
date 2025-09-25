@@ -1,12 +1,13 @@
+import { JSX } from 'react'
+
 import {
   FBIcon,
   IGIcon,
-  YouTubeIcon,
-  ThreadsIcon,
   MediumIcon,
   RSSIcon,
+  ThreadsIcon,
+  YouTubeIcon,
 } from '../icons'
-import { JSX } from 'react'
 import { SocialMediaHrefs } from '../types'
 
 export type SocialMediaConfig = {

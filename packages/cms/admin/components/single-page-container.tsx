@@ -1,10 +1,9 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 
-import { ReactNode } from 'react'
-
-import { jsx, Box, Center, useTheme } from '@keystone-ui/core'
 import { Head } from '@keystone-6/core/admin-ui/router'
+import { Box, Center, jsx, useTheme } from '@keystone-ui/core'
+import { ReactNode } from 'react'
 
 type SinglePageContainerProps = {
   children: ReactNode

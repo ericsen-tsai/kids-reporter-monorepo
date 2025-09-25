@@ -1,7 +1,8 @@
 import Link from 'next/link'
+
 import PostSlider from '@/components/post-slider'
 import { PostSummary } from '@/components/types'
-import { Theme, DEFAULT_THEME_COLOR } from '@/constants'
+import { DEFAULT_THEME_COLOR, Theme } from '@/constants'
 
 export type SectionConfig = {
   image: string
@@ -25,11 +26,11 @@ export const Section = (props: SectionProp) => {
     config && (
       <div
         style={{ width: 'min(var(--normal-container-max-width), 100%)' }}
-        className="flex flex-col items-center mb-2"
+        className="mb-2 flex flex-col items-center"
       >
         <div
           style={{ width: '95%' }}
-          className="flex flex-row justify-between items-center mb-12 pt-10"
+          className="mb-12 flex flex-row items-center justify-between pt-10"
         >
           <div style={{ flex: '1' }} className="hidden lg:flex">
             <img
@@ -40,7 +41,7 @@ export const Section = (props: SectionProp) => {
           </div>
           <div style={{ flex: '1' }} className="flex flex-row justify-center">
             <img
-              className="w-full flex h-24 items-center justify-center"
+              className="flex h-24 w-full items-center justify-center"
               src={`/assets/images/${config.titleImg}`}
               alt={config.title}
               loading="lazy"
@@ -48,21 +49,21 @@ export const Section = (props: SectionProp) => {
           </div>
           <div
             style={{ flex: '1' }}
-            className="hidden md:flex flex-row justify-end"
+            className="hidden flex-row justify-end md:flex"
           >
             <Link
               href={config.link}
-              className={`rpjr-btn rpjr-btn-theme-outline theme-${theme} text-xl pt-2 px-5 pb-3`}
+              className={`rpjr-btn rpjr-btn-theme-outline theme-${theme} px-5 pt-2 pb-3 text-xl`}
             >
               看更多文章 <i className="icon-rpjr-icon-arrow-right"></i>
             </Link>
           </div>
         </div>
         {posts?.length > 0 && <PostSlider posts={posts} sliderTheme={theme} />}
-        <div style={{ width: '90%' }} className="flex md:hidden p-2.5">
+        <div style={{ width: '90%' }} className="flex p-2.5 md:hidden">
           <Link
             href={config.link}
-            className={`rpjr-btn rpjr-btn-theme-outline theme-${theme} w-full flex flex-row justify-center items-center p-2 text-sm gap-1 rounded-2xl`}
+            className={`rpjr-btn rpjr-btn-theme-outline theme-${theme} flex w-full flex-row items-center justify-center gap-1 rounded-2xl p-2 text-sm`}
           >
             看更多文章 <i className="icon-rpjr-icon-arrow-right"></i>
           </Link>

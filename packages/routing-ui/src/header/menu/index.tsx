@@ -1,14 +1,15 @@
 'use client'
 
-import { useEffect } from 'react'
-import Link from 'next/link'
-import { cn } from '../../utils/cn'
-import { ClearIcon } from '../../icons/index'
-import Button from '../../components/button'
 import Image from 'next/image'
-import { SearchInputSection } from '../shared-components'
-import { generateSocialMediaConfig } from '../../utils/generate-social-media-config'
+import Link from 'next/link'
+import { useEffect } from 'react'
+
+import Button from '../../components/button'
+import { ClearIcon } from '../../icons/index'
 import type { MenuItem, SocialMediaHrefs } from '../../types'
+import { cn } from '../../utils/cn'
+import { generateSocialMediaConfig } from '../../utils/generate-social-media-config'
+import { SearchInputSection } from '../shared-components'
 import HeaderMenuItem from './header-menu-item'
 import HeaderMenuItemGroup from './header-menu-item-group'
 
@@ -26,8 +27,8 @@ type MenuProps = {
 
 function Divider() {
   return (
-    <div className="w-full px-6 tablet:px-8 py-4">
-      <div className="w-full h-px bg-neutral-300"></div>
+    <div className="px-6 tablet:px-8 py-4 w-full">
+      <div className="bg-neutral-300 h-px w-full"></div>
     </div>
   )
 }
@@ -78,8 +79,8 @@ function Menu({
       {/* Overlay */}
       <div
         className={cn(
-          'fixed inset-0 bg-neutral-500/50 z-1001 transition-opacity duration-300',
-          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          'inset-0 bg-neutral-500/50 fixed z-1001 transition-opacity duration-300',
+          isOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
         )}
         onClick={onClose}
       />
@@ -87,12 +88,12 @@ function Menu({
       {/* Menu */}
       <div
         className={cn(
-          'fixed top-0 left-0 h-full w-full tablet:w-80 bg-white shadow-2xl z-1001 transform transition-transform duration-300 ease-in-out scrollbar-thin pt-(--mobile-header-height) tablet:pt-0',
+          'top-0 left-0 tablet:w-80 bg-white shadow-2xl ease-in-out scrollbar-thin tablet:pt-0 fixed z-1001 h-full w-full transform pt-(--mobile-header-height) transition-transform duration-300',
           isOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
-        <div className="flex flex-col h-full overflow-y-auto">
-          <div className="items-center justify-between px-6 tablet:px-8 py-4 hidden tablet:flex mt-4">
+        <div className="flex h-full flex-col overflow-y-auto">
+          <div className="px-6 tablet:px-8 py-4 mt-4 hidden items-center justify-between tablet:flex">
             <div className="flex items-center">
               <Link href="/">
                 <Image
@@ -107,7 +108,7 @@ function Menu({
             </div>
             <button
               onClick={onClose}
-              className="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full text-neutral-600 hover:text-neutral-800 transition-colors duration-200"
+              className="w-8 h-8 text-neutral-600 hover:text-neutral-800 flex cursor-pointer items-center justify-center rounded-full transition-colors duration-200"
               aria-label="關閉選單"
             >
               {ClearIcon}
@@ -122,13 +123,8 @@ function Menu({
             />
           </div>
 
-          {/* Menu Content */}
-          <div className="flex-1 py-4">
-            {/* Latest News */}
-            <HeaderMenuItem
-              label={menuItems[0].label}
-              href={menuItems[0].href}
-            />
+          <div className="py-4 flex-1">
+            <HeaderMenuItem {...menuItems?.[0]} />
 
             <Divider />
 
@@ -164,12 +160,12 @@ function Menu({
 
             {/* Social Media */}
             <div className="px-6 tablet:px-8">
-              <div className="flex items-center gap-4 justify-center tablet:justify-between tablet:gap-0 px-4">
+              <div className="gap-4 tablet:gap-0 px-4 flex items-center justify-center tablet:justify-between">
                 {socialMediaConfig.map((item) => (
                   <Link
                     key={item.label}
                     href={item.href}
-                    className="text-neutral-900 hover:text-red-500 transition-colors duration-200"
+                    className="text-neutral-900 transition-colors duration-200 hover:text-red-500"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={item.label}
@@ -185,7 +181,7 @@ function Menu({
 
           {/* Action Buttons */}
           <div className="px-6 tablet:px-8 py-6 tablet:pt-6 tablet:pb-8">
-            <div className="flex flex-col gap-4">
+            <div className="gap-4 flex flex-col">
               <Button variant="secondary" size={44} asChild className="w-full">
                 <a
                   href={subscribeUrl}

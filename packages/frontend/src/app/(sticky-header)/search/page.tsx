@@ -1,15 +1,17 @@
 import errors from '@twreporter/errors'
+
+import {
+  defaultCount,
+  getFilteredSearchResults,
+  transferItemsToCards,
+} from '@/app/api/search/utils'
+import { ContentType, EMAIL } from '@/constants'
+import envVars from '@/environment-variables'
+import { log, LogLevel } from '@/utils'
+
 import { LoadMoreResults } from '../_components/search/load-more-results'
 import { SearchInput } from '../_components/search/search-input'
 import { SearchTitle } from '../_components/search/styled'
-import {
-  getFilteredSearchResults,
-  transferItemsToCards,
-  defaultCount,
-} from '@/app/api/search/utils'
-import { EMAIL, ContentType } from '@/constants'
-import { LogLevel, log } from '@/utils'
-import envVars from '@/environment-variables'
 
 // Filtering search output: https://developers.google.com/custom-search/docs/structured_search
 const filterParams = Object.values(ContentType)
@@ -55,7 +57,7 @@ export default async function SearchPage({
 
   const searchImg = (
     <img
-      className="md:px-4 px-3"
+      className="px-3 md:px-4"
       src="/assets/images/search-result.png"
       loading="lazy"
     />
@@ -64,7 +66,7 @@ export default async function SearchPage({
   const resultCount = data?.totalResults && (
     <p
       style={{ letterSpacing: '0.08em', color: '#595959' }}
-      className="w-full text-left text-sm font-medium pt-4 border-t-2 border-gray-200"
+      className="w-full border-t-2 border-gray-200 pt-4 text-left text-sm font-medium"
     >
       找到 {data.totalResults} 項結果
     </p>
@@ -75,7 +77,7 @@ export default async function SearchPage({
     : []
 
   return (
-    <div className="xl:max-w-4xl md:max-w-2xl max-w-full flex flex-col justify-center items-center pt-8 mx-4">
+    <div className="mx-4 flex max-w-full flex-col items-center justify-center pt-8 md:max-w-2xl xl:max-w-4xl">
       {searchImg}
       <SearchInput value={searchParams.q} />
       {resultCount}

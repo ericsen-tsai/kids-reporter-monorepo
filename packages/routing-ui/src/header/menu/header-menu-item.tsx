@@ -1,7 +1,8 @@
-import { useHeaderContext } from '../header-context'
+import Link from 'next/link'
+
 import { MenuItem } from '../../types'
 import { cn } from '../../utils/cn'
-import Link from 'next/link'
+import { useHeaderContext } from '../header-context'
 
 type HeaderMenuItemProps = {
   contentClassName?: string
@@ -33,11 +34,11 @@ function HeaderMenuItem({
   const content = (
     <div
       className={cn(
-        'group flex items-center justify-between w-full text-neutral-900 group-hover:text-neutral-900 transition-colors duration-100',
+        'group text-neutral-900 group-hover:text-neutral-900 flex w-full items-center justify-between transition-colors duration-100',
         contentClassName
       )}
     >
-      <div className="flex items-center gap-2">
+      <div className="gap-2 flex items-center">
         {showIcon && icon && (
           <div className="w-4 h-4 flex items-center justify-center">{icon}</div>
         )}
@@ -77,13 +78,13 @@ function HeaderMenuItem({
       <div className="w-full">
         <button
           onClick={handleExpand}
-          className="cursor-pointer w-full px-6 tablet:px-8 py-2 flex items-center justify-between hover:bg-neutral-black/5 active:bg-neutral-black/10 transition-colors duration-200"
+          className="px-6 tablet:px-8 py-2 flex w-full cursor-pointer items-center justify-between transition-colors duration-200 hover:bg-neutral-black/5 active:bg-neutral-black/10"
         >
           {content}
         </button>
         <div
           className={cn(
-            'overflow-hidden transition-all duration-300 ease-in-out',
+            'ease-in-out overflow-hidden transition-all duration-300',
             isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
           )}
         >
@@ -91,7 +92,7 @@ function HeaderMenuItem({
             <Link
               key={index}
               href={subItem.href}
-              className="block px-6 tablet:px-12 py-2 pl-12 prose-p2 font-medium hover:bg-neutral-black/5 active:bg-neutral-black/10 hover:text-neutral-900 transition-colors duration-200"
+              className="px-6 tablet:px-12 py-2 pl-12 prose-p2 font-medium hover:text-neutral-900 block transition-colors duration-200 hover:bg-neutral-black/5 active:bg-neutral-black/10"
               onClick={closeMenu}
             >
               {subItem.label}
@@ -109,7 +110,7 @@ function HeaderMenuItem({
         target="_blank"
         rel="noopener noreferrer"
         className={
-          'block px-6 tablet:px-8 py-2 hover:bg-neutral-black/5 active:bg-neutral-black/10 transition-colors duration-200'
+          'px-6 tablet:px-8 py-2 block transition-colors duration-200 hover:bg-neutral-black/5 active:bg-neutral-black/10'
         }
       >
         {content}
@@ -121,7 +122,7 @@ function HeaderMenuItem({
     <Link
       href={href}
       className={
-        'block px-6 tablet:px-8 py-2 hover:bg-neutral-black/5 active:bg-neutral-black/10 transition-colors duration-200'
+        'px-6 tablet:px-8 py-2 block transition-colors duration-200 hover:bg-neutral-black/5 active:bg-neutral-black/10'
       }
       onClick={closeMenu}
     >

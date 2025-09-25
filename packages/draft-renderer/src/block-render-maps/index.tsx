@@ -1,11 +1,11 @@
 import { blockRenderMap as blockRenderMapForAnnotation } from './annotation'
 import { blockRenderMap as blockRenderMapForBrief } from './article-brief'
 import { blockRenderMap as blockRenderMapForContent } from './article-content'
+import { blockRenderMap as blockRenderMapForImageLink } from './image-link'
 import {
   blockRenderMap as blockRenderMapForInfoBox,
   blockRenderMapForInfoBoxWithHeaderBorder,
 } from './info-box'
-import { blockRenderMap as blockRenderMapForImageLink } from './image-link'
 import { blockRenderMap as blockRenderMapForProjectContent } from './project-content'
 
 export default {

@@ -1,7 +1,8 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { GENERAL_DESCRIPTION, IS_LOGIN_ENABLED } from '@/constants'
+
 import { RegisterComponent } from '@/components/login'
+import { GENERAL_DESCRIPTION, IS_LOGIN_ENABLED } from '@/constants'
 
 export const metadata: Metadata = {
   title: '關於少年報導者 - 少年報導者 The Reporter for Kids',
@@ -14,7 +15,7 @@ export default async function Register() {
   }
 
   return (
-    <main className="flex flex-col justify-center items-center my-24">
+    <main className="my-24 flex flex-col items-center justify-center">
       <RegisterComponent />
     </main>
   )

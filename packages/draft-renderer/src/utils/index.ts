@@ -1,4 +1,4 @@
+import { getColorHex, ThemeColorEnum } from './color'
 import { colorHex } from './constants'
-import { ThemeColorEnum, getColorHex } from './color'
 
-export { ThemeColorEnum, colorHex, getColorHex }
+export { colorHex, getColorHex, ThemeColorEnum }

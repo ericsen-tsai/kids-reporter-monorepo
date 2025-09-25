@@ -1,9 +1,10 @@
 'use client'
 
-import { SearchIconSmall } from '@/icons'
-import { cn } from '@/utils/cn'
 import { cva } from 'class-variance-authority'
-import { useState, forwardRef, useRef } from 'react'
+import { forwardRef, useRef, useState } from 'react'
+
+import { SearchIconSmall } from '../icons'
+import { cn } from '../utils/cn'
 
 // Close icon component
 const CloseIcon = ({ className }: { className?: string }) => (
@@ -28,7 +29,7 @@ const CloseIcon = ({ className }: { className?: string }) => (
 
 const inputVariants = cva(
   // Base styles
-  'flex items-center prose-p1 bg-neutral-100 desktop:bg-white! rounded-full px-4 py-1.5 transition-colors duration-200 h-11 border border-transparent hover:border-neutral-600',
+  'prose-p1 bg-neutral-100 desktop:bg-white! px-4 py-1.5 h-11 hover:border-neutral-600 flex items-center rounded-full border border-transparent transition-colors duration-200',
   {
     variants: {
       state: {
@@ -134,7 +135,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const inputClasses = cn(inputVariants({ state: currentState }), className)
 
     return (
-      <div className="flex flex-col gap-2">
+      <div className="gap-2 flex flex-col">
         <div className={inputClasses} ref={ref}>
           {SearchIconSmall}
           <input
@@ -144,7 +145,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             onFocus={handleFocus}
             onBlur={handleBlur}
             placeholder={placeholder}
-            className="flex-1 bg-transparent text-neutral-900 placeholder:text-neutral-400 placeholder:font-medium focus:outline-none ml-2 flex-shrink-1 max-w-[72%]"
+            className="text-neutral-900 placeholder:text-neutral-400 placeholder:font-medium ml-2 max-w-[72%] flex-1 flex-shrink-1 bg-transparent focus:outline-none"
             ref={inputRef ?? innerInputRef}
             {...props}
           />
@@ -153,7 +154,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             <button
               type="button"
               onClick={handleClear}
-              className="cursor-pointer text-neutral-400 hover:text-neutral-600 flex-shrink-0 transition-colors p-1/2 rounded-full active:bg-neutral-200 ml-auto"
+              className="text-neutral-400 hover:text-neutral-600 p-1/2 active:bg-neutral-200 ml-auto flex-shrink-0 cursor-pointer rounded-full transition-colors"
               aria-label="Clear input"
             >
               <CloseIcon />

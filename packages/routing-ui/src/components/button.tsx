@@ -1,27 +1,28 @@
 'use client'
 
-import { cn } from '../utils/cn'
+import { Slot } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
 import React from 'react'
-import { Slot } from '@radix-ui/react-slot'
+
+import { cn } from '../utils/cn'
 
 const buttonVariants = cva(
   // Base styles
-  'inline-flex items-center justify-center gap-2.5 rounded-full font-bold font-noto transition-colors duration-200 cursor-pointer',
+  'font-noto gap-2.5 font-bold inline-flex cursor-pointer items-center justify-center rounded-full transition-colors duration-200',
   {
     variants: {
       variant: {
         primary: [
-          'bg-red-400 text-white border-0',
+          'text-white border-0 bg-red-400',
           'hover:bg-red-500',
           'active:bg-red-600',
           'disabled:bg-gray-400 disabled:text-white disabled:cursor-default',
         ],
         secondary: [
           'bg-white text-gray-900 border-2 border-red-400',
-          'hover:bg-red-500 hover:text-white hover:border-red-500',
-          'active:bg-red-600 active:text-white active:border-red-600',
-          'disabled:bg-white disabled:text-gray-400 disabled:border-gray-400 disabled:cursor-default',
+          'hover:text-white hover:border-red-500 hover:bg-red-500',
+          'active:text-white active:border-red-600 active:bg-red-600',
+          'disabled:border-gray-400 disabled:bg-white disabled:text-gray-400 disabled:cursor-default',
         ],
       },
       size: {

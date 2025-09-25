@@ -29,7 +29,7 @@ export const Tags = (props: TagsProp) => {
       {tags?.length > 0 && (
         <div
           style={{ columnGap: '15px', rowGap: '30px' }}
-          className="max-w-xl w-full flex flex-wrap items-center justify-center mt-6 ml-auto mx-auto mb-0"
+          className="mx-auto mt-6 mb-0 ml-auto flex w-full max-w-xl flex-wrap items-center justify-center"
         >
           {tags.map((tag, index) => {
             return (

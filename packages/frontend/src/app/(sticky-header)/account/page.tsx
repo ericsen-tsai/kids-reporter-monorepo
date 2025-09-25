@@ -1,9 +1,11 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+
 import { GENERAL_DESCRIPTION, IS_LOGIN_ENABLED } from '@/constants'
+
 import {
-  AccountTabs,
   AccountSettings,
+  AccountTabs,
 } from '../_components/account/account-tabs'
 
 export const metadata: Metadata = {
@@ -32,7 +34,7 @@ export default async function Account() {
   return (
     <main
       style={{ width: '95vw' }}
-      className="flex flex-row justify-center gap-10 md:mb-40 mb-32"
+      className="mb-32 flex flex-row justify-center gap-10 md:mb-40"
     >
       <AccountTabs accoutSettings={mockup} />
     </main>

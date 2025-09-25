@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { DEFAULT_AVATAR, AuthorRole, Theme } from '@/constants'
+
+import { AuthorRole, DEFAULT_AVATAR, Theme } from '@/constants'
 
 const getTheme = (group: AuthorRole) => {
   switch (group) {
@@ -37,10 +38,10 @@ export const AuthorCard = (props: AuthorCardProp) => {
   return (
     authors?.length > 0 && (
       <div className="author-section">
-        <h3 className="text-3xl font-bold text-center mt-10 mb-10">
+        <h3 className="mt-10 mb-10 text-center text-3xl font-bold">
           {props.title}
         </h3>
-        <div className="max-w-6xl w-full flex flex-wrap justify-evenly items-stretch gap-10 mx-auto">
+        <div className="mx-auto flex w-full max-w-6xl flex-wrap items-stretch justify-evenly gap-10">
           {authors.map((author, index) => {
             const avatarURL = author.avatar ?? DEFAULT_AVATAR
             const theme = getTheme(author?.role)
@@ -48,10 +49,10 @@ export const AuthorCard = (props: AuthorCardProp) => {
             return (
               author && (
                 <div
-                  className="w-80 flex flex-col gap-0 items-center justify-center box-border bg-white pt-10 px-9 border-2 border-gray-200 rounded-3xl"
+                  className="box-border flex w-80 flex-col items-center justify-center gap-0 rounded-3xl border-2 border-gray-200 bg-white px-9 pt-10"
                   key={`author-card-${index}`}
                 >
-                  <div className="w-32 h-32 overflow-hidden rounded-full mx-auto">
+                  <div className="mx-auto h-32 w-32 overflow-hidden rounded-full">
                     <img
                       className="max-w-full align-middle"
                       src={avatarURL}
@@ -61,7 +62,7 @@ export const AuthorCard = (props: AuthorCardProp) => {
                   </div>
                   <span
                     style={{ lineHeight: '160%', letterSpacing: '0.08em' }}
-                    className="font-bold text-center text-xl text-gray-900 mt-3"
+                    className="mt-3 text-center text-xl font-bold text-gray-900"
                   >
                     {author.name}
                   </span>
@@ -73,7 +74,7 @@ export const AuthorCard = (props: AuthorCardProp) => {
                       letterSpacing: '0.08em',
                       color: 'var(--theme-color, #27B5F7)',
                     }}
-                    className={`flex font-bold text-sm my-4 px-3 py-0.5 rounded-3xl theme-${theme}`}
+                    className={`my-4 flex rounded-3xl px-3 py-0.5 text-sm font-bold theme-${theme}`}
                   >
                     {author.roleName ? author.roleName : author.role}
                   </div>
@@ -84,12 +85,12 @@ export const AuthorCard = (props: AuthorCardProp) => {
                       WebkitBoxOrient: 'vertical',
                       WebkitLineClamp: '5',
                     }}
-                    className="overflow-hidden not-italic font-normal text-base tracking-wider text-gray-900"
+                    className="overflow-hidden text-base font-normal tracking-wider text-gray-900 not-italic"
                   >
                     {author.bio}
                   </span>
                   {author.slug && (
-                    <div className="text-center text-lg mt-5 mb-10">
+                    <div className="mt-5 mb-10 text-center text-lg">
                       <Link
                         href={`/author/${author.slug}`}
                         style={{ color: 'var(--theme-color)' }}

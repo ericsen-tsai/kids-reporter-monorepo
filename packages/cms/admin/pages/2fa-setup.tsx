@@ -1,20 +1,18 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 /** @jsxFrag */
-import { useEffect } from 'react'
-import { useState, FormEvent } from 'react'
-import Image from 'next/image'
-
-import { jsx, H1, Stack } from '@keystone-ui/core'
+import { gql, useQuery } from '@keystone-6/core/admin-ui/apollo'
 import { Button } from '@keystone-ui/button'
+import { H1, jsx, Stack } from '@keystone-ui/core'
 import { TextInput } from '@keystone-ui/fields'
 import { Notice } from '@keystone-ui/notice'
-import { useQuery, gql } from '@keystone-6/core/admin-ui/apollo'
+import axios from 'axios'
+import Image from 'next/image'
+import { useEffect } from 'react'
+import { FormEvent, useState } from 'react'
 
 import { ChangeUserButton } from '../components/change-user-button'
 import { SinglePageContainer } from '../components/single-page-container'
-
-import axios from 'axios'
 
 const GET_USER = gql`
   query GetCurrentUser {

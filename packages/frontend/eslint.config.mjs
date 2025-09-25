@@ -1,10 +1,10 @@
 import baseConfig, {
-  typescriptConfig,
   javascriptConfig,
   nodeConfig,
+  typescriptConfig,
 } from '../../eslint.base.config.mjs'
 
-export default [
+const config = [
   ...baseConfig,
   // Override for frontend package - React/Next.js focused
   {
@@ -12,8 +12,11 @@ export default [
     files: ['src/**/*.{ts,tsx}'],
     rules: {
       ...typescriptConfig.rules,
-      // Frontend specific rules
+      // Next.js specific rules
       'no-html-link-for-pages': 'off',
+      // Disable rules that conflict with Next.js patterns
+      'react/no-unescaped-entities': 'off',
+      'react/display-name': 'off',
     },
   },
   {
@@ -21,8 +24,11 @@ export default [
     files: ['src/**/*.{js,jsx}'],
     rules: {
       ...javascriptConfig.rules,
-      // Frontend specific rules
+      // Next.js specific rules
       'no-html-link-for-pages': 'off',
+      // Disable rules that conflict with Next.js patterns
+      'react/no-unescaped-entities': 'off',
+      'react/display-name': 'off',
     },
   },
   {
@@ -37,3 +43,5 @@ export default [
     ignores: ['.next/**', 'node_modules/**', 'dist/**', 'build/**', 'out/**'],
   },
 ]
+
+export default config

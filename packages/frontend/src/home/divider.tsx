@@ -1,7 +1,7 @@
 export const Divider = () => {
   return (
     <hr
-      className="h-1.5 border-0 bg-no-repeat bg-transparent my-5"
+      className="my-5 h-1.5 border-0 bg-transparent bg-no-repeat"
       style={{
         width: 'min(var(--normal-container-max-width), 90%)',
         backgroundSize: 'auto 6px',

@@ -1,30 +1,33 @@
 'use client'
-import { useState } from 'react'
+import './article.css'
+
 import Link from 'next/link'
-import { ArticleContext } from './article-context'
-import Title from './title'
-import HeroImage from './hero-image'
-import ImageModal from './image-modal'
-import { NewsReading } from './news-reading'
-import PublishedDate from './published-date'
-import SubSubcategory from './subSubcategory'
-import { Sidebar, MobileSidebar } from './sidebar'
-import Brief, { AuthorGroup } from './brief'
-import PostRenderer from './post-renderer'
-import CallToAction from './call-to-action'
-import RelatedPosts from './related-posts'
-import Tags from '@/components/tags'
+import { useState } from 'react'
+
 import AuthorCard, { Author } from '@/components/author-card'
 import Divider from '@/components/divider'
+import Tags from '@/components/tags'
 import {
   AUTHOR_ROLES_IN_ORDER,
   AuthorRole,
   DEFAULT_AVATAR,
-  FontSizeLevel,
   DEFAULT_THEME_COLOR,
+  FontSizeLevel,
 } from '@/constants'
 import { getPostSummaries } from '@/utils'
-import './article.css'
+
+import { ArticleContext } from './article-context'
+import Brief, { AuthorGroup } from './brief'
+import CallToAction from './call-to-action'
+import HeroImage from './hero-image'
+import ImageModal from './image-modal'
+import { NewsReading } from './news-reading'
+import PostRenderer from './post-renderer'
+import PublishedDate from './published-date'
+import RelatedPosts from './related-posts'
+import { MobileSidebar, Sidebar } from './sidebar'
+import SubSubcategory from './subSubcategory'
+import Title from './title'
 
 const getPostContents = (post: any) => {
   // Assemble authors for brief

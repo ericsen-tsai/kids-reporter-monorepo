@@ -73,7 +73,8 @@
 }
 
 @media screen and (max-width: 999px) {
-  .prev-btn, .next-btn {
+  .prev-btn,
+  .next-btn {
     width: 32px;
   }
 }
@@ -88,7 +89,8 @@
 }
 
 @media screen and (max-width: 767px) {
-  .prev-btn, .next-btn {
+  .prev-btn,
+  .next-btn {
     top: 25vw;
   }
   .prev-btn {

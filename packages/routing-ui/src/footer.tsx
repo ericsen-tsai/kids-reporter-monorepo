@@ -1,9 +1,9 @@
-import Link from 'next/link'
 import Image from 'next/image'
+import Link from 'next/link'
 
 import Button from './components/button'
-import { generateSocialMediaConfig } from './utils/generate-social-media-config'
 import { MenuItem, SocialMediaHrefs } from './types'
+import { generateSocialMediaConfig } from './utils/generate-social-media-config'
 
 type FooterProps = {
   socialMediaHrefs: SocialMediaHrefs
@@ -23,11 +23,11 @@ const Footer = ({
   return (
     <footer className="w-full bg-neutral-white">
       {/* Main Footer Content */}
-      <div className="w-full bg-neutral-white px-(--margin-mobile) py-12 desktop:px-(--margin-desktop) desktop:py-14">
+      <div className="py-12 desktop:py-14 w-full bg-neutral-white px-(--margin-mobile) desktop:px-(--margin-desktop)">
         <div className="max-w-300 mx-auto">
-          <div className="flex flex-col items-center gap-8 desktop:flex-row desktop:justify-between">
+          <div className="gap-8 flex flex-col items-center desktop:flex-row desktop:justify-between">
             {/* Logo and Description */}
-            <div className="flex flex-col items-center max-w-100 gap-6 w-full desktop:items-start">
+            <div className="max-w-100 gap-6 flex w-full flex-col items-center desktop:items-start">
               <div className="flex items-center">
                 <Link href="/" className="flex items-center">
                   <Image
@@ -49,13 +49,13 @@ const Footer = ({
               </Button>
             </div>
 
-            <div className="flex flex-row gap-6">
-              <div className="flex flex-col gap-2">
+            <div className="gap-6 flex flex-row">
+              <div className="gap-2 flex flex-col">
                 {additionalMenuItems.slice(0, 4).map((link) => (
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="text-neutral-900 prose-p2-bold hover:text-red-400 transition-colors duration-200 min-w-30"
+                    className="text-neutral-900 prose-p2-bold min-w-30 transition-colors duration-200 hover:text-red-400"
                     target={link.external ? '_blank' : undefined}
                     rel={link.external ? 'noopener noreferrer' : undefined}
                   >
@@ -63,12 +63,12 @@ const Footer = ({
                   </Link>
                 ))}
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="gap-2 flex flex-col">
                 {additionalMenuItems.slice(4).map((link) => (
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="text-neutral-900 prose-p2-bold hover:text-red-400 transition-colors duration-200 min-w-30"
+                    className="text-neutral-900 prose-p2-bold min-w-30 transition-colors duration-200 hover:text-red-400"
                     target={link.external ? '_blank' : undefined}
                     rel={link.external ? 'noopener noreferrer' : undefined}
                   >
@@ -81,31 +81,31 @@ const Footer = ({
         </div>
       </div>
 
-      <div className="w-full bg-red-400 px-(--margin-mobile) py-6 desktop:px-(--margin-desktop)">
+      <div className="py-6 w-full bg-red-400 px-(--margin-mobile) desktop:px-(--margin-desktop)">
         <div className="max-w-300 mx-auto">
-          <div className="flex flex-col items-center gap-5 desktop:flex-row desktop:justify-between desktop:gap-4">
-            <div className="flex items-center gap-4 order-1 desktop:order-2">
+          <div className="gap-5 desktop:gap-4 flex flex-col items-center desktop:flex-row desktop:justify-between">
+            <div className="gap-4 order-1 flex items-center desktop:order-2">
               {socialMediaConfig.map((social) => {
                 const IconComponent = social.icon
                 return (
                   <Link
                     key={social.label}
                     href={social.href}
-                    className="text-neutral-white hover:text-neutral-200 transition-colors duration-200 relative"
+                    className="hover:text-neutral-200 relative text-neutral-white transition-colors duration-200"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
                   >
-                    <div className="relative peer w-6 h-6 rounded-full flex items-center justify-center text-neutral-white z-10 hover:text-red-500 transition-all duration-200">
+                    <div className="peer w-6 h-6 relative z-10 flex items-center justify-center rounded-full text-neutral-white transition-all duration-200 hover:text-red-500">
                       {IconComponent}
                     </div>
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-2 w-[23px] h-[23px] rounded-full flex items-center justify-center peer-hover:bg-white z-1 transition-all duration-200"></div>
+                    <div className="p-2 peer-hover:bg-white absolute top-1/2 left-1/2 z-1 flex h-[23px] w-[23px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full transition-all duration-200"></div>
                   </Link>
                 )
               })}
             </div>
 
-            <div className="text-neutral-white prose-p3 text-center desktop:text-left desktop:order-1">
+            <div className="prose-p3 text-center text-neutral-white desktop:order-1 desktop:text-left">
               <p className="desktop:inline">
                 衛部救字第1131363879號｜勸募期間 2025/1/1~12/31
                 <span className="hidden desktop:inline">｜</span>
@@ -114,7 +114,7 @@ const Footer = ({
                 <Link
                   href={privacyPolicyUrl}
                   target="_blank"
-                  className="text-neutral-white underline desktop:ml-1"
+                  className="desktop:ml-1 text-neutral-white underline"
                   rel="noopener noreferrer"
                 >
                   隱私政策
@@ -123,7 +123,7 @@ const Footer = ({
                 <Link
                   href="https://www.twreporter.org/a/license-footer"
                   target="_blank"
-                  className="text-neutral-white underline desktop:ml-1"
+                  className="desktop:ml-1 text-neutral-white underline"
                   rel="noopener noreferrer"
                 >
                   許可協議

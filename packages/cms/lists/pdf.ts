@@ -1,6 +1,7 @@
-import config from '../config'
 import { graphql, list } from '@keystone-6/core'
-import { timestamp, text, file, virtual } from '@keystone-6/core/fields'
+import { file, text, timestamp, virtual } from '@keystone-6/core/fields'
+
+import config from '../config'
 import {
   allowAllRoles,
   allowRoles,

@@ -1,6 +1,6 @@
-import { FieldProps } from '@keystone-6/core/types'
-import { FieldLabel, FieldContainer } from '@keystone-ui/fields'
 import { controller } from '@keystone-6/core/fields/types/virtual/views'
+import { FieldProps } from '@keystone-6/core/types'
+import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
 import Link from 'next/link'
 
 export const Field = ({ value }: FieldProps<typeof controller>) => {

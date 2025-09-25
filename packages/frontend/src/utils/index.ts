@@ -1,12 +1,14 @@
-import axios, { AxiosRequestConfig } from 'axios'
 import errors from '@twreporter/errors'
-import { Theme, ThemeColor } from '@/constants'
+import axios, { AxiosRequestConfig } from 'axios'
+
 import { PostSummary } from '@/components/types'
 import {
-  FALLBACK_IMG,
-  DEFAULT_THEME_COLOR,
   API_URL,
+  DEFAULT_THEME_COLOR,
+  FALLBACK_IMG,
   INTERNAL_API_URL,
+  Theme,
+  ThemeColor,
 } from '@/constants'
 import envVars from '@/environment-variables'
 

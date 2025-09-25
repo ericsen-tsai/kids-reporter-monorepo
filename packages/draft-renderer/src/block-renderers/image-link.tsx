@@ -1,17 +1,18 @@
-import { useEffect, useState } from 'react'
-import styled, { useTheme } from 'styled-components'
 import {
+  convertFromRaw,
   Editor,
   EditorState,
   RawDraftContentState,
-  convertFromRaw,
 } from 'draft-js'
 import debounce from 'lodash/debounce'
-import { InfoBoxContainer } from './image-block'
+import { useEffect, useState } from 'react'
+import styled, { useTheme } from 'styled-components'
+
 import blockRenderMaps from '../block-render-maps/index'
 import { decorator } from '../entity-decorators/index'
-import { breakpoints, mediaQuery } from '../utils/media-query'
 import { DEBOUNCE_THRESHOLD } from '../utils/constants'
+import { breakpoints, mediaQuery } from '../utils/media-query'
+import { InfoBoxContainer } from './image-block'
 
 const fallbackImg = '/assets/images/image_placeholder.png'
 

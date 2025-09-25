@@ -1,15 +1,16 @@
-import Script from 'next/script'
-import BackToTop from '@/components/back-to-top'
-
-import StyledComponentsRegistry from '@/components/registry'
 import '../globals.css'
+
 import { Footer, HeaderProvider } from '@kids-reporter/routing-ui'
+import Script from 'next/script'
+
+import BackToTop from '@/components/back-to-top'
+import StyledComponentsRegistry from '@/components/registry'
 import {
-  POPULAR_KEYWORDS,
-  SOCIAL_MEDIA_ITEMS,
   ADDITIONAL_MENU_ITEMS,
   DONATE_URL,
+  POPULAR_KEYWORDS,
   PRIVACY_POLICY,
+  SOCIAL_MEDIA_ITEMS,
 } from '@/constants'
 
 const gtmID = 'GTM-T37WZJ44'

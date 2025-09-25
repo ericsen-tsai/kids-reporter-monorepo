@@ -1,12 +1,13 @@
+import { DefaultDraftBlockRenderMap } from 'draft-js'
 import Immutable from 'immutable'
 import React from 'react'
 import styled from 'styled-components'
-import { DefaultDraftBlockRenderMap } from 'draft-js'
+
 import {
   Atomic,
-  Paragraph as _Paragraph,
-  List,
   Heading as _Heading,
+  List,
+  Paragraph as _Paragraph,
 } from './article-content'
 
 export const Paragraph = styled(_Paragraph)`

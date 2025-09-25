@@ -1,16 +1,18 @@
+import { HeaderPostTitleSetter } from '@kids-reporter/routing-ui'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { TOC, TOCIndex } from '../../_components/article/table-of-content'
-import Article from '../../_components/article/article'
-import { HeaderPostTitleSetter } from '@kids-reporter/routing-ui'
+
 import {
-  KIDS_URL_ORIGIN,
-  GENERAL_DESCRIPTION,
-  POST_CONTENT_GQL,
-  OG_SUFFIX,
   ContentType,
+  GENERAL_DESCRIPTION,
+  KIDS_URL_ORIGIN,
+  OG_SUFFIX,
+  POST_CONTENT_GQL,
 } from '@/constants'
-import { sendGQLRequest, log, LogLevel } from '@/utils'
+import { log, LogLevel, sendGQLRequest } from '@/utils'
+
+import Article from '../../_components/article/article'
+import { TOC, TOCIndex } from '../../_components/article/table-of-content'
 
 const topicRelatedPostsNum = 5
 
@@ -212,7 +214,7 @@ export default async function PostPage({
   })
 
   return (
-    <main className="flex flex-col items-center max-w-(--breakpoint-2xl)">
+    <main className="flex max-w-(--breakpoint-2xl) flex-col items-center">
       <HeaderPostTitleSetter postTitle={post?.title} />
       {tocIndexes.length > 0 && <TOC indexes={tocIndexes} />}
       {post && <Article post={post} />}

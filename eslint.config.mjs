@@ -4,11 +4,12 @@ import globals from 'globals'
 export default [
   ...baseConfig,
   {
-    files: ['packages/*/src/**/*.{js,ts}'],
+    files: ['packages/**/*.{js,ts}'],
     languageOptions: {
       globals: {
-        ...globals.node,
         ...globals.es2022,
+        ...globals.node,
+        process: 'readonly',
       },
     },
   },

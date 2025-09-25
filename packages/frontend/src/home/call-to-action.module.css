@@ -1,19 +1,19 @@
-  .top {
-    background-image: url(/assets/images/Home-CTA-subscribe-mobile.svg);
-    background-size: 150px;
-  }
+.top {
+  background-image: url(/assets/images/Home-CTA-subscribe-mobile.svg);
+  background-size: 150px;
+}
 
-  .mail {
-    flex: 1;
-    background-size: 150px;
-    background-image: url(/assets/images/Home-CTA-mail.svg);
-  }
+.mail {
+  flex: 1;
+  background-size: 150px;
+  background-image: url(/assets/images/Home-CTA-mail.svg);
+}
 
-  .contribute {
-    flex: 1;
-    background-image: url(/assets/images/Home-CTA-contribute.svg);
-    background-size: 150px;
-  }
+.contribute {
+  flex: 1;
+  background-image: url(/assets/images/Home-CTA-contribute.svg);
+  background-size: 150px;
+}
 
 @media screen and (min-width: 1024px) {
   .top {
@@ -26,7 +26,7 @@
   }
 
   .contribute {
-    background-Image: url(/assets/images/Home-CTA-contribute.svg);
+    background-image: url(/assets/images/Home-CTA-contribute.svg);
     flex-grow: 2;
     background-size: 300px;
   }

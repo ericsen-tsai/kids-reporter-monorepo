@@ -5,10 +5,10 @@ export const RelatedPosts = (props: PostSliderProp) => {
     props?.posts?.length > 0 && (
       <div
         style={{ width: '95vw' }}
-        className="flex flex-col justify-center items-center px-0 py-12"
+        className="flex flex-col items-center justify-center px-0 py-12"
       >
         <img
-          className="w-full h-20 mb-4 "
+          className="mb-4 h-20 w-full"
           src="/assets/images/post-related-post-title.svg"
           alt="相關文章"
           loading="lazy"

@@ -1,18 +1,19 @@
 import {
   ContentBlock,
   ContentState,
+  convertFromRaw,
   Editor,
   EditorState,
   RawDraftContentState,
-  convertFromRaw,
 } from 'draft-js'
 import React from 'react'
 import styled, { css } from 'styled-components'
+
 import blockRenderMaps from '../block-render-maps/index'
 import { ImageInInfoBox } from '../block-renderers/image-block'
 import { ImageLinkInInfoBox } from '../block-renderers/image-link'
-import { ThemeColorEnum } from '../utils/index'
 import { decorator } from '../entity-decorators/index'
+import { ThemeColorEnum } from '../utils/index'
 import { mediaQuery } from '../utils/media-query'
 
 enum InfoBoxTypeEnum {

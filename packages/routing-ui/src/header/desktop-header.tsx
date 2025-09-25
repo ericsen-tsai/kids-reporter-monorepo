@@ -1,14 +1,15 @@
 'use client'
 import Link from 'next/link'
+
 import { LoginIcon } from '../icons'
+import type { MenuItem } from '../types'
+import { cn } from '../utils/cn'
 import {
-  LogoLink,
   ActionButtons,
   BottomNavigation,
   HamburgerButton,
+  LogoLink,
 } from './shared-components'
-import { cn } from '../utils/cn'
-import type { MenuItem } from '../types'
 
 type DesktopHeaderProps = {
   onHamburgerOverlayOpen: () => void
@@ -33,31 +34,31 @@ export function DesktopHeader({
 }: DesktopHeaderProps) {
   return (
     <>
-      <div className="h-(--desktop-header-height) hidden desktop:block"></div>
+      <div className="hidden h-(--desktop-header-height) desktop:block"></div>
       <div
         className={cn(
-          'hidden desktop:block w-full fixed top-0 left-1/2 transform -translate-x-1/2 z-1000 transition-all duration-500 ease-in-out',
+          'top-0 ease-in-out fixed left-1/2 z-1000 hidden w-full -translate-x-1/2 transform transition-all duration-500 desktop:block',
           compactMode && 'bg-white',
           hide
-            ? 'opacity-0 -translate-y-full pointer-events-none'
-            : 'opacity-100 translate-y-0 pointer-events-auto'
+            ? 'pointer-events-none -translate-y-full opacity-0'
+            : 'translate-y-0 pointer-events-auto opacity-100'
         )}
       >
-        <div className="w-full bg-transparent px-12 hidden desktop:block">
+        <div className="px-12 hidden w-full bg-transparent desktop:block">
           <div className="max-w-300 mx-auto">
             <div
               className={cn(
-                'flex items-center justify-between px-4 py-[18px]',
+                'px-4 flex items-center justify-between py-[18px]',
                 compactMode && 'py-2.5'
               )}
             >
               <div className={'flex items-center'}>
                 <div
                   className={cn(
-                    'transition-all duration-500 ease-in-out overflow-hidden',
+                    'ease-in-out overflow-hidden transition-all duration-500',
                     compactMode
-                      ? 'opacity-100 scale-100 translate-x-0 w-auto max-w-12 mr-4'
-                      : 'opacity-0 scale-95 -translate-x-2 w-0 max-w-0 pointer-events-none'
+                      ? 'translate-x-0 max-w-12 mr-4 w-auto scale-100 opacity-100'
+                      : '-translate-x-2 w-0 max-w-0 pointer-events-none scale-95 opacity-0'
                   )}
                 >
                   <HamburgerButton
@@ -69,28 +70,28 @@ export function DesktopHeader({
                   <LogoLink compactMode={compactMode} />
                 </div>
                 {postTitle && (
-                  <div className="block pr-12">
-                    <p className="prose-p2 text-neutral-900 font-medium tracking-wide max-w-124 text-ellipsis overflow-hidden whitespace-nowrap">
+                  <div className="pr-12 block">
+                    <p className="prose-p2 text-neutral-900 font-medium tracking-wide max-w-124 overflow-hidden text-ellipsis whitespace-nowrap">
                       {postTitle}
                     </p>
                   </div>
                 )}
                 <div
                   className={cn(
-                    'overflow-hidden transition-all duration-500 ease-in-out',
+                    'ease-in-out overflow-hidden transition-all duration-500',
                     compactMode
-                      ? 'opacity-0 max-h-0 -translate-x-8 scale-95'
-                      : 'opacity-100 max-h-20 max-w-auto scale-100',
+                      ? 'max-h-0 -translate-x-8 scale-95 opacity-0'
+                      : 'max-h-20 max-w-auto scale-100 opacity-100',
                     postTitle && compactMode && 'max-w-0'
                   )}
                 >
-                  <span className="prose-p2 text-nowrap text-neutral-900 font-medium tracking-[2.2px]! inline-block translate-y-0 opacity-100">
+                  <span className="prose-p2 text-neutral-900 font-medium translate-y-0 inline-block tracking-[2.2px]! text-nowrap opacity-100">
                     理解世界 × 參與未來
                   </span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="gap-4 flex items-center">
                 <ActionButtons
                   tags={keywords}
                   hideCtaButtons={compactMode}
@@ -99,7 +100,7 @@ export function DesktopHeader({
                 />
                 <Link
                   href="/login"
-                  className="flex items-center justify-center w-8 h-8 text-red-400 hover:text-red-500 rounded-full transition-colors duration-200"
+                  className="w-8 h-8 flex items-center justify-center rounded-full text-red-400 transition-colors duration-200 hover:text-red-500"
                   aria-label="登入"
                 >
                   {LoginIcon}
@@ -109,10 +110,10 @@ export function DesktopHeader({
 
             <div
               className={cn(
-                'transition-all duration-500 ease-in-out overflow-hidden',
+                'ease-in-out overflow-hidden transition-all duration-500',
                 compactMode
-                  ? 'opacity-0 h-0 -translate-y-4'
-                  : 'opacity-100 h-auto translate-y-0'
+                  ? 'h-0 -translate-y-4 opacity-0'
+                  : 'translate-y-0 h-auto opacity-100'
               )}
             >
               <BottomNavigation

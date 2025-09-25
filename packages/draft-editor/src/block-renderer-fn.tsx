@@ -1,12 +1,13 @@
-import { AtomicBlockProps } from './block-renderer-fn.type'
+import { blockRenderers } from '@kids-reporter/draft-renderer'
 import { ContentBlock } from 'draft-js'
+
+import { AtomicBlockProps } from './block-renderer-fn.type'
 import { EditableBlockquote } from './block-renderers/blockquote'
 import { EditableEmbeddedCode } from './block-renderers/embedded-code'
 import { EditableImage } from './block-renderers/image'
 import { EditableImageLink } from './block-renderers/image-link'
 import { EditableInfoBox } from './block-renderers/info-box'
 import { EditableSlideshow } from './block-renderers/slideshow'
-import { blockRenderers } from '@kids-reporter/draft-renderer'
 
 const { Divider, NewsReading } = blockRenderers
 

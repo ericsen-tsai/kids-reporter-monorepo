@@ -1,6 +1,6 @@
-import { BaseItem } from '@keystone-6/core/types'
-import { ListConfig, graphql } from '@keystone-6/core'
+import { graphql, ListConfig } from '@keystone-6/core'
 import { json, virtual } from '@keystone-6/core/fields'
+import { BaseItem } from '@keystone-6/core/types'
 
 type ManualOrderFieldConfig = {
   fieldName: string

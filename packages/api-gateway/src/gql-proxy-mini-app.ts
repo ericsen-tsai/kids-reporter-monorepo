@@ -1,9 +1,10 @@
-import axios from 'axios'
-import consts from './constants.js'
 // @ts-ignore `@twreporter/errors` does not have tyepscript definition file yet
 import _errors from '@twreporter/errors'
+import axios from 'axios'
 import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
+
+import consts from './constants.js'
 
 // @twreporter/errors is a cjs module, therefore, we need to use its default property
 const errors = _errors.default

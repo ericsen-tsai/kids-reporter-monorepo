@@ -1,16 +1,17 @@
-import { useEffect } from 'react'
-import blockRenderMaps from './block-render-maps/index'
 import {
+  convertFromRaw,
   Editor,
   EditorState,
   RawDraftContentState,
-  convertFromRaw,
 } from 'draft-js'
-import { ThemeColorEnum } from './utils/index'
+import { useEffect } from 'react'
 import { ThemeProvider } from 'styled-components'
+
+import blockRenderMaps from './block-render-maps/index'
 import { atomicBlockRenderer } from './block-renderer-fn'
 import { customStyleFn } from './custom-style-fn'
 import { decorator } from './entity-decorators'
+import { ThemeColorEnum } from './utils/index'
 
 const blockRendererFn = (block: any) => {
   const atomicBlockObj = atomicBlockRenderer(block)
@@ -134,8 +135,8 @@ const ProjectContentDraftRenderer = ({
 }
 
 export {
-  DraftRenderer,
   ArticleBodyDraftRenderer,
   ArticleIntroductionDraftRenderer,
+  DraftRenderer,
   ProjectContentDraftRenderer,
 }

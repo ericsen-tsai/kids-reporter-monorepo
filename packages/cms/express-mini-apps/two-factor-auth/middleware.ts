@@ -1,9 +1,9 @@
-import { Express, Request, Response, NextFunction } from 'express'
-import { KeystoneContext } from '@keystone-6/core/types'
 import { gql } from '@keystone-6/core/admin-ui/apollo'
+import { KeystoneContext } from '@keystone-6/core/types'
+import { Express, NextFunction, Request, Response } from 'express'
 
-import { verify2FAJWT } from './index'
 import appConfig from '../../config'
+import { verify2FAJWT } from './index'
 
 const cookieName2fa = appConfig.twoFactorAuth.cookieName
 

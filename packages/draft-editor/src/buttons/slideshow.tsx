@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
-import {
-  ImageSelector as DefaultImageSelector,
-  ImageEntityWithMeta,
-} from './selector/image-selector'
 import { AtomicBlockUtils, EditorState } from 'draft-js'
+import React, { useState } from 'react'
+
+import {
+  ImageEntityWithMeta,
+  ImageSelector as DefaultImageSelector,
+} from './selector/image-selector'
 
 export function SlideshowButton(props: {
   editorState: EditorState

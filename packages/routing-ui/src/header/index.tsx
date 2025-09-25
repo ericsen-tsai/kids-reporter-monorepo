@@ -1,15 +1,15 @@
 'use client'
-import { MobileHeader } from './mobile-header'
-import { DesktopHeader } from './desktop-header'
-import { useHeaderContext } from './header-context'
 import {
+  ScrollLevel,
   useIsAtTop,
   useMediaQuery,
   useScrollLevel,
-  ScrollLevel,
 } from '../hooks'
 import type { MenuItem, SocialMediaHrefs } from '../types'
+import { DesktopHeader } from './desktop-header'
+import { useHeaderContext } from './header-context'
 import Menu from './menu'
+import { MobileHeader } from './mobile-header'
 
 type HeaderProps = {
   menuItems: MenuItem[]

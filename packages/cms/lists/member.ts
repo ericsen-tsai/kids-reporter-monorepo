@@ -1,5 +1,6 @@
-import { list, graphql } from '@keystone-6/core'
+import { graphql, list } from '@keystone-6/core'
 import { text, timestamp, virtual } from '@keystone-6/core/fields'
+
 import { allowRoles, RoleEnum } from './utils/access-control-list'
 import type { ListConfig } from '@keystone-6/core/types'
 

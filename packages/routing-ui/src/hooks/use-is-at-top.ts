@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const useIsAtTop = (threshold = 35) => {
   const [isAtTop, setIsAtTop] = useState(true)

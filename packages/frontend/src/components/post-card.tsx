@@ -1,8 +1,9 @@
-import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import { PostSummary, Loading } from '@/components/types'
-import { getFormattedDate } from '@/utils'
+import Link from 'next/link'
+
+import { Loading, PostSummary } from '@/components/types'
 import { FALLBACK_IMG } from '@/constants'
+import { getFormattedDate } from '@/utils'
 
 const ImageWithFallback = dynamic(
   () => import('@/components/image-with-fallback'),
@@ -26,7 +27,7 @@ export const PostCard = ({
     post && (
       <Link
         href={post.url}
-        className={`w-full h-full pl-1 pr-1 flex justify-start flex-col bg-transparent rounded-2xl theme-${
+        className={`flex h-full w-full flex-col justify-start rounded-2xl bg-transparent pr-1 pl-1 theme-${
           post.theme
         } ${className ?? ''}`}
       >
@@ -36,21 +37,21 @@ export const PostCard = ({
         >
           <ImageWithFallback
             style={{ borderRadius: isSimple ? '20px 20px 0 0' : '20px' }}
-            className={`w-full h-full object-cover align-middle overflow-hidden rounded-2xl`}
+            className={`h-full w-full overflow-hidden rounded-2xl object-cover align-middle`}
             src={post.image ?? FALLBACK_IMG}
             loading={loading}
           />
         </div>
         <div
           style={{ borderRadius: isSimple ? '0 0 20px 20px' : '' }}
-          className={`h-full flex flex-col justify-between pt-5 pb-1 md:pb-5 ${
+          className={`flex h-full flex-col justify-between pt-5 pb-1 md:pb-5 ${
             isSimple ? 'px-5' : ''
           } bg-white`}
         >
           <div className="flex flex-col justify-start">
             <span
               style={{ color: 'var(--theme-color)', lineHeight: '160%' }}
-              className="text-left font-medium text-base tracking-wider mb-1"
+              className="mb-1 text-left text-base font-medium tracking-wider"
             >
               {post.category}
             </span>
@@ -63,7 +64,7 @@ export const PostCard = ({
                 lineHeight: '160%',
                 letterSpacing: '0.08em',
               }}
-              className="md:min-h-16 overflow-hidden not-italic font-bold text-xl text-gray-900 text-left mb-5"
+              className="mb-5 overflow-hidden text-left text-xl font-bold text-gray-900 not-italic md:min-h-16"
             >
               {post.title}
             </span>
@@ -75,22 +76,22 @@ export const PostCard = ({
                   WebkitLineClamp: '3',
                   lineHeight: '160%',
                 }}
-                className="overflow-hidden text-left not-italic font-medium text-base tracking-wider text-gray-900 mb-5"
+                className="mb-5 overflow-hidden text-left text-base font-medium tracking-wider text-gray-900 not-italic"
               >
                 {post.desc}
               </span>
             )}
           </div>
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             {post.subSubcategory && (
               <span
                 style={{ background: 'var(--theme-color)', lineHeight: '160%' }}
-                className="text-center text-white font-normal text-xs tracking-wider pointer-events-none rounded-3xl px-3 py-1"
+                className="pointer-events-none rounded-3xl px-3 py-1 text-center text-xs font-normal tracking-wider text-white"
               >
                 {post.subSubcategory}
               </span>
             )}
-            <span className="text-gray-500 text-xs">
+            <span className="text-xs text-gray-500">
               {(post.publishedDate && getFormattedDate(post.publishedDate)) ??
                 ''}
             </span>

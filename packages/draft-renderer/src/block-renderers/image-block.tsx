@@ -1,8 +1,9 @@
+import debounce from 'lodash/debounce'
 import { useEffect, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
-import debounce from 'lodash/debounce'
-import { breakpoints, mediaQuery } from '../utils/media-query'
+
 import { DEBOUNCE_THRESHOLD } from '../utils/constants'
+import { breakpoints, mediaQuery } from '../utils/media-query'
 
 const Figure = styled.figure`
   width: 100%;

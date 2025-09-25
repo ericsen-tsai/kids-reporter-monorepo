@@ -20,28 +20,29 @@
     "dev": "tsup --watch",
     "lint": "eslint . --config ../../eslint.config.mjs",
     "lint:check": "eslint . --config ../../eslint.config.mjs",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "postinstall": "yarn build"
   },
   "dependencies": {
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "next": "^14.2.33",
+    "@radix-ui/react-slot": "^1.2.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "tailwind-merge": "^3.3.1",
-    "@radix-ui/react-slot": "^1.2.3",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.7",
     "@types/react": "^18.3.7",
     "@types/react-dom": "18.3.7",
-    "@types/lodash": "^4.17.7",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.14",
     "tsup": "^8.5.0",
     "typescript": "^5.9.2"
   },
   "peerDependencies": {
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "next": "^14.2.33",
     "tailwindcss": "^4.1.14"
   }
 }

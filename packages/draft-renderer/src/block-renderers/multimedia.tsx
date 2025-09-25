@@ -1,6 +1,7 @@
-import { mediaQuery } from '../utils/media-query'
 import styled from 'styled-components'
+
 import { getColorHex } from '../utils/index'
+import { mediaQuery } from '../utils/media-query'
 
 const mockup = {
   mobile: {

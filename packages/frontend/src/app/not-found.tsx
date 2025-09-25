@@ -1,12 +1,13 @@
 import { Header, SearchIcon } from '@kids-reporter/routing-ui'
+
 import TopDetector from '@/components/top-detector'
 import {
-  MENU_ITEMS,
   ADDITIONAL_MENU_ITEMS,
-  SOCIAL_MEDIA_ITEMS,
-  SEARCH_PLACEHOLDER,
-  SUBSCRIBE_URL,
   DONATE_URL,
+  MENU_ITEMS,
+  SEARCH_PLACEHOLDER,
+  SOCIAL_MEDIA_ITEMS,
+  SUBSCRIBE_URL,
 } from '@/constants'
 
 export default function NotFound() {
@@ -22,17 +23,17 @@ export default function NotFound() {
       />
       <div
         style={{ width: '95vw' }}
-        className="flex flex-col justify-center items-center mb-16"
+        className="mb-16 flex flex-col items-center justify-center"
       >
         <TopDetector />
         <img
-          className="max-w-72 md:max-w-md lg:max-w-xl w-full"
+          className="w-full max-w-72 md:max-w-md lg:max-w-xl"
           src="/assets/images/404.png"
           alt="Not found"
           loading="lazy"
         />
-        <div className="flex flex-col justify-center items-center gap-2.5">
-          <h1 className="text-3xl md:text-4xl font-bold">
+        <div className="flex flex-col items-center justify-center gap-2.5">
+          <h1 className="text-3xl font-bold md:text-4xl">
             很抱歉，找不到符合條件的頁面。
           </h1>
           <div
@@ -48,13 +49,13 @@ export default function NotFound() {
         <form
           role="search"
           method="get"
-          className="max-w-sm w-full h-10 flex flex-row items-center mt-6 mb-12 relative"
+          className="relative mt-6 mb-12 flex h-10 w-full max-w-sm flex-row items-center"
           action="/search"
           aria-haspopup="listbox"
           data-live-results="thumbs"
         >
           <input
-            className="w-full h-full border-solid border-2 rounded-full text-base bg-white pl-3 pr-10 focus:outline-hidden"
+            className="h-full w-full rounded-full border-2 border-solid bg-white pr-10 pl-3 text-base focus:outline-hidden"
             style={{
               color: 'var(#A3A3A3, var(--color))',
               borderColor: 'var(--paletteColor1)',
@@ -67,7 +68,7 @@ export default function NotFound() {
           />
           <button
             type="submit"
-            className="w-4 h-4 absolute bg-transparent cursor-pointer border-0 right-2.5"
+            className="absolute right-2.5 h-4 w-4 cursor-pointer border-0 bg-transparent"
             aria-label="搜尋按鈕"
           >
             {SearchIcon}

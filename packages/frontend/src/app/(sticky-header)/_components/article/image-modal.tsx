@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react'
 import debounce from 'lodash/debounce'
+import { useEffect, useRef, useState } from 'react'
+
 import { Loading } from '@/components/types'
-import { Z_INDEX_TOP, DEBOUNCE_THRESHOLD } from '@/constants'
+import { DEBOUNCE_THRESHOLD, Z_INDEX_TOP } from '@/constants'
 import { breakpoints } from '@/utils/media-query'
 
 enum CrossIconPos {
@@ -98,7 +99,7 @@ export const ImageModal = (props: {
 
   const closeBtn = (
     <button
-      className="absolute white bg-transparent w-6 h-6 cursor-pointer border-none flex flex-col items-center justify-center"
+      className="absolute flex h-6 w-6 cursor-pointer flex-col items-center justify-center border-none bg-transparent"
       style={{
         ...CrossIconPosCss(crossIconPos),
         filter: 'drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.8))',
@@ -106,7 +107,7 @@ export const ImageModal = (props: {
       onClick={handleImgModalClose}
     >
       <svg
-        className="w-full h-full"
+        className="h-full w-full"
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -124,13 +125,13 @@ export const ImageModal = (props: {
   return (
     isOpen && (
       <div
-        className="w-screen h-screen fixed top-0 left-0 hidden lg:flex lg:flex-col items-center justify-center bg-black/50"
+        className="fixed top-0 left-0 hidden h-screen w-screen items-center justify-center bg-black/50 lg:flex lg:flex-col"
         style={{ zIndex: Z_INDEX_TOP + 1 }}
         onClick={handleImgModalClose}
       >
         <div className="relative">
           <img
-            className="max-w-screen max-h-screen object-contain"
+            className="max-h-screen max-w-screen object-contain"
             ref={imgRef}
             loading={Loading.EAGER}
             {...imgProps}

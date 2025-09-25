@@ -1,11 +1,13 @@
 'use client'
 
-import axios from 'axios'
-import styled from 'styled-components'
 import errors from '@twreporter/errors'
-import { Cards, CardProp } from './cards'
+import axios from 'axios'
 import { useState } from 'react'
+import styled from 'styled-components'
+
 import { AXIOS_TIMEOUT } from '@/utils'
+
+import { CardProp, Cards } from './cards'
 
 const LoadMoreBt = styled.div`
   color: #232323;
@@ -72,7 +74,7 @@ export const LoadMoreResults = ({
   }
 
   return (
-    <div className="text-center w-full">
+    <div className="w-full text-center">
       <Cards items={cardItems} />
       {loadMoreError ? <span>載入發生錯誤，請稍候再試</span> : null}
       {nextQuery && !isLoading ? (

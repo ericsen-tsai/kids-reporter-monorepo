@@ -1,14 +1,16 @@
 'use client'
+import { useRef } from 'react'
 import styled from 'styled-components'
+
+import { Photo } from '@/types'
+import { mediaQuery } from '@/utils/media-query'
+
 import {
   Container,
-  FullScreenImage,
   DownButton,
+  FullScreenImage,
   TitleContainer,
 } from './styled'
-import { Photo } from '@/types'
-import { useRef } from 'react'
-import { mediaQuery } from '@/utils/media-query'
 
 const PositionedTitle = styled(TitleContainer)`
   display: flex;

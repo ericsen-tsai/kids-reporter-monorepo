@@ -1,26 +1,27 @@
 'use client'
-import { useState, useRef, useEffect } from 'react'
+import { cva } from 'class-variance-authority'
+import Image from 'next/image'
 import Link from 'next/link'
+import { useEffect, useRef, useState } from 'react'
+
+import { Button, Input } from '../components'
 import {
-  HamburgerIconSmall,
+  ClearIcon,
   HamburgerIcon,
+  HamburgerIconSmall,
   SearchIcon,
   SettingsIcon,
-  ClearIcon,
 } from '../icons'
-import Image from 'next/image'
-import { cn } from '../utils/cn'
-import { Button, Input } from '../components'
 import type { MenuItem } from '../types'
-import { cva } from 'class-variance-authority'
+import { cn } from '../utils/cn'
 
 const searchFormVariants = cva(
-  'h-full transition-all duration-300 ease-in-out',
+  'ease-in-out h-full transition-all duration-300',
   {
     variants: {
       mode: {
-        inline: 'w-full h-11',
-        popover: 'absolute top-0 -right-4 overflow-hidden w-66 opacity-0',
+        inline: 'h-11 w-full',
+        popover: 'top-0 -right-4 w-66 absolute overflow-hidden opacity-0',
       },
       isSearchOpen: {
         true: '',
@@ -31,7 +32,7 @@ const searchFormVariants = cva(
       {
         mode: 'popover',
         isSearchOpen: true,
-        class: 'opacity-100 w-66 pointer-events-auto',
+        class: 'w-66 pointer-events-auto opacity-100',
       },
       {
         mode: 'popover',
@@ -43,12 +44,12 @@ const searchFormVariants = cva(
 )
 
 const searchDropdownVariants = cva(
-  'bg-neutral-white rounded-xl mt-2 w-66 transition-all duration-200 ease-in-out z-50 h-0 p-0 opacity-0',
+  'rounded-xl mt-2 w-66 ease-in-out h-0 p-0 z-50 bg-neutral-white opacity-0 transition-all duration-200',
   {
     variants: {
       mode: {
         inline: '',
-        popover: 'absolute top-12 -right-4 shadow-custom p-4',
+        popover: 'top-12 -right-4 shadow-custom p-4 absolute',
       },
       isSearchOpen: {
         true: '',
@@ -75,12 +76,12 @@ const searchDropdownVariants = cva(
         mode: 'inline',
         isFocused: true,
         class:
-          'w-full opacity-100 h-min translate-y-0 pt-6 mt-0 bg-neutral-transparent',
+          'translate-y-0 pt-6 mt-0 bg-neutral-transparent h-min w-full opacity-100',
       },
       {
         mode: 'inline',
         isFocused: false,
-        class: 'w-full -translate-y-3 pointer-events-none',
+        class: '-translate-y-3 pointer-events-none w-full',
       },
     ],
   }
@@ -94,7 +95,7 @@ export function LogoLink({ compactMode = false }: { compactMode?: boolean }) {
         alt="少年報導者 The Reporter for Kids"
         loading="eager"
         className={cn(
-          'h-5 w-auto tablet:h-6 desktop:h-8 transition-all duration-500 ease-in-out',
+          'h-5 tablet:h-6 desktop:h-8 ease-in-out w-auto transition-all duration-500',
           compactMode && 'desktop:h-[26px]'
         )}
         width={293}
@@ -145,7 +146,7 @@ export function SearchInputSection(props: SearchInputSectionProps) {
     <div
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
-      className={mode === 'inline' ? 'w-full relative' : 'h-11'}
+      className={mode === 'inline' ? 'relative w-full' : 'h-11'}
     >
       <form
         role="search"
@@ -175,11 +176,11 @@ export function SearchInputSection(props: SearchInputSectionProps) {
         })}
       >
         <h3 className="prose-p3 font-bold text-neutral-700 mb-3">熱門搜尋</h3>
-        <div className="flex flex-wrap gap-2.5">
+        <div className="gap-2.5 flex flex-wrap">
           {tags.map((keyword) => (
             <a
               key={keyword}
-              className="cursor-pointer transition-colors duration-200 rounded-full px-3 py-1 prose-p2 font-bold text-neutral-900 bg-neutral-200 hover:bg-red-500 hover:text-neutral-white"
+              className="px-3 py-1 prose-p2 font-bold text-neutral-900 bg-neutral-200 cursor-pointer rounded-full transition-colors duration-200 hover:bg-red-500 hover:text-neutral-white"
               href={`/search?q=${encodeURIComponent(keyword)}`}
             >
               #{keyword}
@@ -227,11 +228,11 @@ export function ActionButtons({
   }, [])
 
   return (
-    <div className="flex items-center relative">
-      <div className="flex items-center mr-6 relative" ref={containerRef}>
+    <div className="relative flex items-center">
+      <div className="mr-6 relative flex items-center" ref={containerRef}>
         {/* CTA Buttons - Base layer */}
         {!hideCtaButtons && !isSearchOpen && (
-          <div className="flex items-center gap-4">
+          <div className="gap-4 flex items-center">
             <Button variant="secondary" size={32} asChild>
               <Link href="/about#post">投稿</Link>
             </Button>
@@ -256,7 +257,7 @@ export function ActionButtons({
       </div>
 
       <button
-        className="flex items-center cursor-pointer justify-center w-8 h-8 rounded-full text-neutral-600 hover:text-neutral-800 transition-all duration-200 mr-4"
+        className="w-8 h-8 text-neutral-600 hover:text-neutral-800 mr-4 flex cursor-pointer items-center justify-center rounded-full transition-all duration-200"
         aria-label="搜尋"
         onClick={() => setIsSearchOpen(!isSearchOpen)}
         ref={buttonRef}
@@ -264,7 +265,7 @@ export function ActionButtons({
         {isSearchOpen ? ClearIcon : SearchIcon}
       </button>
       <button
-        className="flex items-center cursor-pointer justify-center w-8 h-8 rounded-full text-neutral-600 hover:text-neutral-800 transition-all duration-200"
+        className="w-8 h-8 text-neutral-600 hover:text-neutral-800 flex cursor-pointer items-center justify-center rounded-full transition-all duration-200"
         aria-label="設定"
       >
         {SettingsIcon}
@@ -281,7 +282,7 @@ export function BottomNavigation({
   menuItems: MenuItem[]
 }) {
   return (
-    <div className="flex items-center justify-between w-full py-2 border-y border-neutral-border px-4">
+    <div className="py-2 px-4 flex w-full items-center justify-between border-y border-neutral-border">
       <HamburgerButton onHamburgerOverlayOpen={onHamburgerOverlayOpen} small />
 
       {menuItems.reduce((acc, item, index) => {
@@ -290,7 +291,7 @@ export function BottomNavigation({
           <div key={item.label} className="flex items-center">
             <Link
               href={item.href}
-              className="py-1 prose-p1 text-neutral-900 font-bold! hover:text-red-400 transition-colors h-6 flex items-center"
+              className="py-1 prose-p1 text-neutral-900 font-bold! h-6 flex items-center transition-colors hover:text-red-400"
             >
               {item.label}
             </Link>
@@ -299,7 +300,7 @@ export function BottomNavigation({
             ? [
                 <div
                   key={`separator-${index}`}
-                  className="w-px h-4 bg-neutral-border mx-2"
+                  className="h-4 mx-2 w-px bg-neutral-border"
                 />,
               ]
             : []),
@@ -319,7 +320,7 @@ export function HamburgerButton({
   return (
     <button
       className={cn(
-        'cursor-pointer flex items-center justify-center rounded-sm transition-all duration-300 ease-in-out hover:[&>svg>rect:nth-child(1)]:fill-blue-500 hover:[&>svg>rect:nth-child(3)]:fill-yellow-500 hover:[&>svg>rect:nth-child(2)]:fill-red-500 hover:[&>svg>path:nth-child(1)]:fill-blue-500 hover:[&>svg>path:nth-child(3)]:fill-yellow-500 hover:[&>svg>path:nth-child(2)]:fill-red-500',
+        'rounded-sm ease-in-out flex cursor-pointer items-center justify-center transition-all duration-300 hover:[&>svg>path:nth-child(1)]:fill-blue-500 hover:[&>svg>path:nth-child(2)]:fill-red-500 hover:[&>svg>path:nth-child(3)]:fill-yellow-500 hover:[&>svg>rect:nth-child(1)]:fill-blue-500 hover:[&>svg>rect:nth-child(2)]:fill-red-500 hover:[&>svg>rect:nth-child(3)]:fill-yellow-500',
         small ? 'w-6 h-6' : 'w-8 h-8'
       )}
       onClick={onHamburgerOverlayOpen}

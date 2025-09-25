@@ -1,11 +1,12 @@
 import { graphql } from '@keystone-6/core'
 import {
   json,
-  virtual,
   relationship,
   RelationshipFieldConfig,
+  virtual,
 } from '@keystone-6/core/fields'
 import { BaseListTypeInfo } from '@keystone-6/core/types'
+
 import { RelationshipInfo } from '../views/relationship-order-editor'
 
 const orderJsonSuffix = 'OrderJson'

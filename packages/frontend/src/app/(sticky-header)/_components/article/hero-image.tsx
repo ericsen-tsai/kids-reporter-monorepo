@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
-import dynamic from 'next/dynamic'
 import debounce from 'lodash/debounce'
+import dynamic from 'next/dynamic'
+import { useEffect, useState } from 'react'
+
+import { DEBOUNCE_THRESHOLD, FALLBACK_IMG } from '@/constants'
 import { Photo } from '@/types'
-import { FALLBACK_IMG, DEBOUNCE_THRESHOLD } from '@/constants'
 import { breakpoints } from '@/utils/media-query'
+
 import { useArticleContext } from './article-context'
 
 const ImageWithFallback = dynamic(
@@ -49,7 +51,7 @@ export const HeroImage = (props: HeroImageProp) => {
 
   return (
     image && (
-      <figure className="max-w-5xl mx-auto pt-10 pb-12">
+      <figure className="mx-auto max-w-5xl pt-10 pb-12">
         <div className="relative inline-flex w-full overflow-hidden">
           <ImageWithFallback
             className="max-w-full object-contain"
@@ -69,7 +71,7 @@ export const HeroImage = (props: HeroImageProp) => {
         </div>
         <figcaption
           style={{ color: 'var(--paletteColor3)' }}
-          className="pt-2.5 mt-1 text-sm leading-7 text-center"
+          className="mt-1 pt-2.5 text-center text-sm leading-7"
         >
           {caption ?? ''}
         </figcaption>

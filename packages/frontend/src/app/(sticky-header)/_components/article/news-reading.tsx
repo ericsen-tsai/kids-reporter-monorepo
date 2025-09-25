@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { mediaQuery } from '@/utils/media-query'
+
 import { Color } from '@/constants'
+import { mediaQuery } from '@/utils/media-query'
 
 const Title = styled.h3`
   color: #232323;

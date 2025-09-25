@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+
 import { useHeaderContext } from './header-context'
 
 type PostTitleSetterProps = {

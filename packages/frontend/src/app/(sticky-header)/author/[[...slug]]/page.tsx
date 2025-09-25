@@ -1,17 +1,18 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import PostList from '@/components/post-list'
+
 import Pagination from '@/components/pagination'
+import PostList from '@/components/post-list'
 import {
+  ContentType,
   DEFAULT_AVATAR,
   GENERAL_DESCRIPTION,
-  POST_PER_PAGE,
-  POST_CONTENT_GQL,
   KIDS_URL_ORIGIN,
-  ContentType,
+  POST_CONTENT_GQL,
+  POST_PER_PAGE,
 } from '@/constants'
-import { getPostSummaries, sendGQLRequest, log, LogLevel } from '@/utils'
+import { getPostSummaries, log, LogLevel, sendGQLRequest } from '@/utils'
 
 const authorGQL = `
   query($authorWhere2: AuthorWhereUniqueInput!, $take: Int, $skip: Int!, $orderBy: [PostOrderByInput!]!) {
@@ -138,12 +139,12 @@ export default async function Author({ params }: { params: { slug: any } }) {
   return (
     <main
       style={{ width: '95vw' }}
-      className="flex flex-col justify-center items-center mb-10 gap-10"
+      className="mb-10 flex flex-col items-center justify-center gap-10"
     >
-      <div className="max-w-2xl flex flex-col justify-center items-center pt-10 px-9 bg-white gap-1.5">
-        <div className="max-w-44 max-h-44 overflow-hidden object-cover rounded-full mx-auto mb-1.5">
+      <div className="flex max-w-2xl flex-col items-center justify-center gap-1.5 bg-white px-9 pt-10">
+        <div className="mx-auto mb-1.5 max-h-44 max-w-44 overflow-hidden rounded-full object-cover">
           <img
-            className="max-w-44 max-h-44 w-full object-cover"
+            className="max-h-44 w-full max-w-44 object-cover"
             src={avatarURL}
             alt={author.name}
             loading="lazy"
@@ -151,7 +152,7 @@ export default async function Author({ params }: { params: { slug: any } }) {
         </div>
         <h1
           style={{ lineHeight: '160%', letterSpacing: '.08em' }}
-          className="text-center text-xl text-gray-900 font-bold mt-3 mb-9"
+          className="mt-3 mb-9 text-center text-xl font-bold text-gray-900"
         >
           {author.name}
         </h1>
@@ -162,7 +163,7 @@ export default async function Author({ params }: { params: { slug: any } }) {
               letterSpacing: '.05em',
               color: 'var(--paletteColor1)',
             }}
-            className="text-center not-italic font-medium text-base mb-2"
+            className="mb-2 text-center text-base font-medium not-italic"
             href={`mailto:${author.email}`}
           >
             {author.email}
@@ -170,7 +171,7 @@ export default async function Author({ params }: { params: { slug: any } }) {
         )}
         <p
           style={{ lineHeight: '200%', letterSpacing: '.05em' }}
-          className="text-center not-italic font-normal text-lg text-gray-900 whitespace-pre-wrap"
+          className="text-center text-lg font-normal whitespace-pre-wrap text-gray-900 not-italic"
         >
           {author.bio}
         </p>

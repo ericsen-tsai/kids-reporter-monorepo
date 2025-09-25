@@ -1,12 +1,13 @@
 import { Header } from '@kids-reporter/routing-ui'
+
 import TopDetector from '@/components/top-detector'
 import {
-  MENU_ITEMS,
   ADDITIONAL_MENU_ITEMS,
-  SOCIAL_MEDIA_ITEMS,
-  SEARCH_PLACEHOLDER,
-  SUBSCRIBE_URL,
   DONATE_URL,
+  MENU_ITEMS,
+  SEARCH_PLACEHOLDER,
+  SOCIAL_MEDIA_ITEMS,
+  SUBSCRIBE_URL,
 } from '@/constants'
 
 export default function Layout({ children }: { children: React.ReactNode }) {

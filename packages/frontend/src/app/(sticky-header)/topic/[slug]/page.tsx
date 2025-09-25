@@ -1,25 +1,27 @@
+import { HeaderPostTitleSetter } from '@kids-reporter/routing-ui'
 import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+
 import {
-  KIDS_URL_ORIGIN,
   ContentType,
-  Theme,
   GENERAL_DESCRIPTION,
+  KIDS_URL_ORIGIN,
   OG_SUFFIX,
+  Theme,
 } from '@/constants'
-import { PublishedDate } from '../../_components/topic/styled'
-import { Content } from '../../_components/topic/content'
-import { Credits } from '../../_components/topic/credits'
 import {
   getFormattedDate,
   getPostSummaries,
-  sendGQLRequest,
   log,
   LogLevel,
+  sendGQLRequest,
 } from '@/utils'
+
+import { Content } from '../../_components/topic/content'
+import { Credits } from '../../_components/topic/credits'
 import { Leading } from '../../_components/topic/leading'
 import { RelatedPosts } from '../../_components/topic/related-posts'
-import { HeaderPostTitleSetter } from '@kids-reporter/routing-ui'
-import { notFound } from 'next/navigation'
+import { PublishedDate } from '../../_components/topic/styled'
 
 const query = `
   fragment ImageEntity on Photo {

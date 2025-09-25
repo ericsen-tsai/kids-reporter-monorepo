@@ -1,8 +1,9 @@
 import { CompositeDecorator } from 'draft-js'
+
+import { anchorDecorator } from './anchor'
 import { annotationDecorator } from './annotation-decorator'
 import { linkDecorator } from './link-decorator'
 import { tocAnchorDecorator } from './toc-anchor'
-import { anchorDecorator } from './anchor'
 
 export { annotationDecorator, linkDecorator }
 

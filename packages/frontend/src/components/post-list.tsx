@@ -1,12 +1,13 @@
+import './post-list.module.css'
+
 import PostCard from '@/components/post-card'
 import { PostSummary } from '@/components/types'
-import './post-list.module.css'
 
 export const PostList = ({ posts }: { posts: PostSummary[] }) => {
   return (
     <>
       {posts?.length > 0 ? (
-        <div className="max-w-7xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid max-w-7xl grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post, index) => {
             return (
               post && <PostCard key={`author-post-card-${index}`} post={post} />

@@ -1,8 +1,9 @@
 'use client'
 import Link from 'next/link'
+
 import { ClearIcon, LoginIcon } from '../icons'
-import { LogoLink, HamburgerButton } from './shared-components'
 import { cn } from '../utils/cn'
+import { HamburgerButton, LogoLink } from './shared-components'
 
 type MobileHeaderProps = {
   onHamburgerOverlayOpen: () => void
@@ -24,17 +25,17 @@ export function MobileHeader({
       <div className="h-(--mobile-header-height) desktop:hidden"></div>
       <div
         className={cn(
-          'w-full px-6 tablet:px-8 desktop:hidden transition-all duration-300 ease-in-out fixed top-0 bg-neutral-white opacity-100 translate-y-0 pointer-events-auto z-1002 tablet:z-1000'
+          'px-6 tablet:px-8 ease-in-out top-0 translate-y-0 pointer-events-auto fixed z-1002 w-full bg-neutral-white opacity-100 transition-all duration-300 tablet:z-1000 desktop:hidden'
         )}
       >
-        <div className="flex items-center justify-between py-4">
+        <div className="py-4 flex items-center justify-between">
           <LogoLink />
 
-          <div className="flex items-center gap-4">
+          <div className="gap-4 flex items-center">
             {!showCloseButton && (
               <Link
                 href="/login"
-                className="flex items-center justify-center w-8 h-8 rounded-full text-red-400 hover:text-red-500 transition-colors duration-200"
+                className="w-8 h-8 flex items-center justify-center rounded-full text-red-400 transition-colors duration-200 hover:text-red-500"
                 aria-label="登入"
               >
                 {LoginIcon}
@@ -43,7 +44,7 @@ export function MobileHeader({
             {showCloseButton ? (
               <button
                 onClick={onCloseMenu}
-                className="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full text-neutral-600 hover:text-neutral-800 transition-colors duration-200"
+                className="w-8 h-8 text-neutral-600 hover:text-neutral-800 flex cursor-pointer items-center justify-center rounded-full transition-colors duration-200"
                 aria-label="關閉選單"
               >
                 {ClearIcon}

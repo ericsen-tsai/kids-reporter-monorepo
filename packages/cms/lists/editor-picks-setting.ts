@@ -1,11 +1,11 @@
+import { group, list, ListConfig } from '@keystone-6/core'
+import { relationship, text, timestamp } from '@keystone-6/core/fields'
+
 import {
   allowAllRoles,
   allowRoles,
   RoleEnum,
 } from './utils/access-control-list'
-import { list, group } from '@keystone-6/core'
-import { relationship, text, timestamp } from '@keystone-6/core/fields'
-import type { ListConfig } from '@keystone-6/core/types'
 import relationshipUtil, {
   OrderedRelationshipConfig,
 } from './utils/manual-order-relationship'

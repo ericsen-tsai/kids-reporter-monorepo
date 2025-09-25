@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+
 import { ThemeColor } from '@/constants'
 
 const Container = styled.div`
@@ -85,13 +86,13 @@ export const ToggleButton = ({
 export const Checkbox = (props: { checked: boolean; label: string }) => {
   return (
     <div className="inline-flex items-center">
-      <label className="flex items-center cursor-pointer relative">
+      <label className="relative flex cursor-pointer items-center">
         <input
           type="checkbox"
-          className={`peer h-5 w-5 cursor-pointer transition-all appearance-none rounded-sm border-2 border-[#575757] checked:bg-[#27B5F7] checked:border-[#27B5F7]`}
+          className={`peer h-5 w-5 cursor-pointer appearance-none rounded-sm border-2 border-[#575757] transition-all checked:border-[#27B5F7] checked:bg-[#27B5F7]`}
           id="check1"
         />
-        <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform text-white opacity-0 peer-checked:opacity-100">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-3.5 w-3.5"

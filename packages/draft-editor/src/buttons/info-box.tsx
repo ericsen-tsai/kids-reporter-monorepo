@@ -1,17 +1,18 @@
-import { useState } from 'react'
-import buttonNames from './bt-names'
+import { Drawer, DrawerController } from '@keystone-ui/modals'
 import {
   AtomicBlockUtils,
+  convertFromRaw,
+  convertToRaw,
   EditorState,
   RawDraftContentState,
-  convertToRaw,
-  convertFromRaw,
 } from 'draft-js'
-import { Drawer, DrawerController } from '@keystone-ui/modals'
-import { RichTextEditor } from '../rich-text-editor'
-import { Select } from './form/select'
+import { useState } from 'react'
+
 import { editableAnnotationDecorator } from '../entity-decorators/annotation'
 import { editableLinkDecorator } from '../entity-decorators/link'
+import { RichTextEditor } from '../rich-text-editor'
+import buttonNames from './bt-names'
+import { Select } from './form/select'
 
 const disabledButtons = [
   buttonNames.h2,

@@ -1,5 +1,6 @@
-import envVars from '@/environment-variables'
 import { MenuItem, SettingsIconSmall } from '@kids-reporter/routing-ui'
+
+import envVars from '@/environment-variables'
 
 export const INTERNAL_API_URL = envVars.internalGqlEndpoint
 export const API_URL = envVars.gqlEndpoint

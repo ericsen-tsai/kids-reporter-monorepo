@@ -2,13 +2,13 @@ export const MakeFriends = () => {
   return (
     <div
       style={{ backgroundColor: '#fff9ec' }}
-      className="w-screen flex flex-col items-center mb-16"
+      className="mb-16 flex w-screen flex-col items-center"
     >
-      <div className="max-w-4xl flex flex-col md:flex-row items-center justify-center gap-10">
-        <div className="max-w-lg flex flex-col items-center md:items-start pt-8 pb-5 pr-8 pl-8">
+      <div className="flex max-w-4xl flex-col items-center justify-center gap-10 md:flex-row">
+        <div className="flex max-w-lg flex-col items-center pt-8 pr-8 pb-5 pl-8 md:items-start">
           <h3
             style={{ fontFamily: 'SweiMarkerSansCJKtc-Regular,Sans-serif' }}
-            className="trext-center text-2xl md:text-3xl mb-8"
+            className="mb-8 text-center text-2xl md:text-3xl"
           >
             和報導仔交朋友
           </h3>
@@ -36,7 +36,7 @@ export const MakeFriends = () => {
           </p>
         </div>
         <img
-          className="max-w-44 lg:max-w-80 w-full"
+          className="w-full max-w-44 lg:max-w-80"
           src={'/assets/images/reporter_pic.svg'}
           loading="lazy"
         />

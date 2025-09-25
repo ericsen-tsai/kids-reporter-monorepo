@@ -1,15 +1,13 @@
-import { Express, CookieOptions } from 'express'
 import { KeystoneContext } from '@keystone-6/core/types'
+// @ts-ignore twreporter errors is not typed
+import _errors from '@twreporter/errors'
+import { CookieOptions, Express } from 'express'
+import { sign } from 'jsonwebtoken'
+import { authenticator } from 'otplib'
+import qrcode from 'qrcode'
 
 import appConfig from '../../config'
 import { verify2FAJWT } from './index'
-
-import qrcode from 'qrcode'
-import { authenticator } from 'otplib'
-import { sign } from 'jsonwebtoken'
-
-// @ts-ignore twreporter errors is not typed
-import _errors from '@twreporter/errors'
 
 const cookieName2fa = appConfig.twoFactorAuth.cookieName
 

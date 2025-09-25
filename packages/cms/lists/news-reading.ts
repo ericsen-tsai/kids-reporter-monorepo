@@ -1,5 +1,6 @@
 import { list } from '@keystone-6/core'
 import { integer, relationship, text, timestamp } from '@keystone-6/core/fields'
+
 import {
   allowAllRoles,
   allowRoles,
@@ -124,4 +125,4 @@ const NewsReadingGroup: ListConfig<any> = list({
   },
 })
 
-export { NewsReadingGroupItem, NewsReadingGroup }
+export { NewsReadingGroup, NewsReadingGroupItem }

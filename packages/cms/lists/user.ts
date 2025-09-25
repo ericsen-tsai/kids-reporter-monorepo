@@ -1,12 +1,13 @@
-import { list, graphql } from '@keystone-6/core'
+import { graphql, list } from '@keystone-6/core'
 import {
-  text,
+  checkbox,
   password,
   select,
+  text,
   timestamp,
   virtual,
-  checkbox,
 } from '@keystone-6/core/fields'
+
 import {
   allowAllRoles,
   allowRoles,

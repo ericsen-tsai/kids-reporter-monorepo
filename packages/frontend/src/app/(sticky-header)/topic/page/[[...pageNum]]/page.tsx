@@ -1,24 +1,26 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import PostSlider from '@/components/post-slider'
+
 import Pagination from '@/components/pagination'
+import PostSlider from '@/components/post-slider'
 import {
-  GENERAL_DESCRIPTION,
-  POST_PER_PAGE,
-  POST_CONTENT_GQL,
-  TOPIC_PAGE_ROUTE,
   FALLBACK_IMG,
+  GENERAL_DESCRIPTION,
+  POST_CONTENT_GQL,
+  POST_PER_PAGE,
   Theme,
+  TOPIC_PAGE_ROUTE,
 } from '@/constants'
 import {
   getFormattedDate,
   getPostSummaries,
-  sendGQLRequest,
   log,
   LogLevel,
+  sendGQLRequest,
 } from '@/utils'
+
 import styles from './page.module.css'
 
 const ImageWithFallback = dynamic(
@@ -78,34 +80,34 @@ const TopicCard = (props: { topic: TopicSummary }) => {
   const topic = props.topic
   return (
     <Link href={topic.url}>
-      <div className="flex relative flex-col lg:flex-row items-stretch">
+      <div className="relative flex flex-col items-stretch lg:flex-row">
         <div className={styles['hero-image-container']}>
           <ImageWithFallback
-            className="w-full h-full object-cover align-middle"
+            className="h-full w-full object-cover align-middle"
             src={topic.image ?? FALLBACK_IMG}
             loading="lazy"
           />
         </div>
         <div
           style={{ width: 'fit-content', height: 'fit-content', zIndex: '2' }}
-          className="absolute top-5 left-5 bg-white lg:hidden flex flex-row items-center rounded-3xl px-4 py-1 gap-1"
+          className="absolute top-5 left-5 flex flex-row items-center gap-1 rounded-3xl bg-white px-4 py-1 lg:hidden"
         >
           <img className="w-10" src={topicIcon} loading="lazy" />
           <span
             style={{ lineHeight: '160%', letterSpacing: '0.08em' }}
-            className="font-bold text-xl"
+            className="text-xl font-bold"
           >
             專題
           </span>
         </div>
         <div
-          className={`${styles['topic-info']} flex flex-col justify-between items-start bg-white border-solid border-gray-300`}
+          className={`${styles['topic-info']} flex flex-col items-start justify-between border-solid border-gray-300 bg-white`}
         >
-          <div className="w-full hidden lg:flex flex-row items-center gap-1">
+          <div className="hidden w-full flex-row items-center gap-1 lg:flex">
             <img className="max-w-10" src={topicIcon} loading="lazy" />
             <span
               style={{ lineHeight: '160%', letterSpacing: '0.08em' }}
-              className="font-bold text-xl"
+              className="text-xl font-bold"
             >
               專題
             </span>
@@ -118,7 +120,7 @@ const TopicCard = (props: { topic: TopicSummary }) => {
               lineHeight: '160%',
               letterSpacing: '0.08em',
             }}
-            className="overflow-hidden font-bold text-2xl mb-4"
+            className="mb-4 overflow-hidden text-2xl font-bold"
           >
             {topic.title}
           </p>
@@ -130,12 +132,12 @@ const TopicCard = (props: { topic: TopicSummary }) => {
               lineHeight: '160%',
               letterSpacing: '0.08em',
             }}
-            className="overflow-hidden font-normal text-base mb-4"
+            className="mb-4 overflow-hidden text-base font-normal"
           >
             {topic.desc}
           </p>
-          <div className="w-full flex flex-row justify-between items-end">
-            <p className="font-medium text-base tracking-wider text-gray-500">
+          <div className="flex w-full flex-row items-end justify-between">
+            <p className="text-base font-medium tracking-wider text-gray-500">
               {getFormattedDate(topic.publishedDate) ?? ''} 最後更新
             </p>
             {moreComponent}
@@ -220,16 +222,16 @@ export default async function Topic({
 
   return (
     <main
-      className={`${styles.main} flex flex-col justify-center items-center mb-10`}
+      className={`${styles.main} mb-10 flex flex-col items-center justify-center`}
     >
-      <div className="max-w-7xl w-full flex flex-col justify-center items-center gap-10">
+      <div className="flex w-full max-w-7xl flex-col items-center justify-center gap-10">
         <img
-          className="max-w-xl w-full"
+          className="w-full max-w-xl"
           src={'/assets/images/topic_pic.svg'}
           loading="lazy"
         />
         {featuredTopic && (
-          <div className="w-full flex flex-col justify-center bg-white lg:bg-gray-100 p-0 lg:p-5 gap-5 rounded-3xl">
+          <div className="flex w-full flex-col justify-center gap-5 rounded-3xl bg-white p-0 lg:bg-gray-100 lg:p-5">
             <TopicCard topic={featuredTopic} />
             <div className="hidden lg:block">
               {featuredTopicPosts && featuredTopicPosts.length > 0 && (
@@ -244,7 +246,7 @@ export default async function Topic({
           </div>
         )}
         {topicsForListing.length > 0 && (
-          <div className="w-full flex flex-col justify-center items-center gap-10">
+          <div className="flex w-full flex-col items-center justify-center gap-10">
             {topicsForListing.map((topic, index) => {
               return (
                 topic && <TopicCard key={`topic-card-${index}`} topic={topic} />

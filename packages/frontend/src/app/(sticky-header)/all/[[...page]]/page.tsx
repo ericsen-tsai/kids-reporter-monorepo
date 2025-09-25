@@ -1,14 +1,15 @@
 import { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
-import PostList from '@/components/post-list'
+
 import Pagination from '@/components/pagination'
+import PostList from '@/components/post-list'
 import {
-  GENERAL_DESCRIPTION,
-  POST_PER_PAGE,
-  POST_CONTENT_GQL,
   ERROR_PAGE,
+  GENERAL_DESCRIPTION,
+  POST_CONTENT_GQL,
+  POST_PER_PAGE,
 } from '@/constants'
-import { getPostSummaries, sendGQLRequest, log, LogLevel } from '@/utils'
+import { getPostSummaries, log, LogLevel, sendGQLRequest } from '@/utils'
 
 export const metadata: Metadata = {
   title: '所有文章 - 少年報導者 The Reporter for Kids',
@@ -86,10 +87,10 @@ export default async function LatestPosts({
   return (
     <main
       style={{ width: '95vw' }}
-      className="flex flex-col justify-center items-center mb-10 gap-10"
+      className="mb-10 flex flex-col items-center justify-center gap-10"
     >
       <img
-        className="max-w-xl w-full"
+        className="w-full max-w-xl"
         src={'/assets/images/new_article.svg'}
         loading="lazy"
       />
