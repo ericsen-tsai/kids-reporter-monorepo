@@ -26,33 +26,19 @@ function Header() {
 
   const isAtTop = useIsAtTop()
 
-  const shouldHideMobileHeader = (() => {
-    if (isMobile) {
-      return isAtTop && !isMenuOpen
-    }
-    return isAtTop
-  })()
-
   return (
     <>
-      <div className="w-full max-w-300 mx-auto">
-        <MobileHeader
-          onHamburgerOverlayOpen={onHamburgerOverlayOpen}
-          isFixed={false}
-        />
-
+      <div className="hidden desktop:block w-full max-w-300 mx-auto">
         <DesktopHeader
           onHamburgerOverlayOpen={onHamburgerOverlayOpen}
           keywords={keywords}
         />
       </div>
       <MobileHeader
-        isFixed
-        hide={shouldHideMobileHeader}
         onCloseMenu={onCloseMenu}
         showCloseButtonWhenMenuOpen={isMobile}
-        isMenuOpen={isMenuOpen}
         onHamburgerOverlayOpen={onHamburgerOverlayOpen}
+        isMenuOpen={isMenuOpen}
       />
       <DesktopHeaderCompact
         onHamburgerOverlayOpen={onHamburgerOverlayOpen}
