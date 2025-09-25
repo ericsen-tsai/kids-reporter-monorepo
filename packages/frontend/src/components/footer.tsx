@@ -47,7 +47,7 @@ export const Footer = () => {
                   />
                 </Link>
               </div>
-              <p className="text-neutral-900 text-p2 desktop:max-w-100">
+              <p className="text-neutral-900 text-p2 text-pretty tablet:w-100">
                 《少年報導者》是由非營利媒體《報導者》針對兒少打造的深度新聞報導品牌，與兒童和少年一起理解世界，參與未來。
               </p>
               <Button size={44} variant="secondary" asChild className="w-75">
@@ -60,11 +60,11 @@ export const Footer = () => {
             {/* Navigation Links */}
             <div className="flex flex-row gap-6 desktop:pr-25 hd:pr-0">
               <div className="flex flex-col gap-2">
-                {ADDITIONAL_MENU_ITEMS.slice(0, 4).map((link, index) => (
+                {ADDITIONAL_MENU_ITEMS.slice(0, 4).map((link) => (
                   <Link
-                    key={index}
+                    key={link.label}
                     href={link.href}
-                    className="text-neutral-900 text-p2-bold hover:text-red-400 transition-colors duration-200"
+                    className="text-neutral-900 text-p2-bold hover:text-red-400 transition-colors duration-200 min-w-30"
                     target={link.external ? '_blank' : undefined}
                     rel={link.external ? 'noopener noreferrer' : undefined}
                   >
@@ -73,11 +73,11 @@ export const Footer = () => {
                 ))}
               </div>
               <div className="flex flex-col gap-2">
-                {ADDITIONAL_MENU_ITEMS.slice(4).map((link, index) => (
+                {ADDITIONAL_MENU_ITEMS.slice(4).map((link) => (
                   <Link
-                    key={index + 4}
+                    key={link.label}
                     href={link.href}
-                    className="text-neutral-900 text-p2-bold hover:text-red-400 transition-colors duration-200"
+                    className="text-neutral-900 text-p2-bold hover:text-red-400 transition-colors duration-200 min-w-30"
                     target={link.external ? '_blank' : undefined}
                     rel={link.external ? 'noopener noreferrer' : undefined}
                   >
@@ -96,18 +96,19 @@ export const Footer = () => {
           <div className="flex flex-col items-center gap-5 desktop:flex-row desktop:justify-between desktop:gap-4">
             {/* Social Icons */}
             <div className="flex items-center gap-4 order-1 desktop:order-2">
-              {SOCIAL_MEDIA_ITEMS.map((social, index) => (
+              {SOCIAL_MEDIA_ITEMS.map((social) => (
                 <Link
-                  key={index}
+                  key={social.label}
                   href={social.href}
                   className="text-neutral-white hover:text-neutral-200 transition-colors duration-200"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
                 >
-                  <div className="w-6 h-6 flex items-center justify-center">
+                  <div className="relative peer w-6 h-6 rounded-full flex items-center justify-center text-neutral-white z-10 hover:text-red-500 transition-all duration-200">
                     {SOCIAL_MEDIA_ICON_MAP[social.label]}
                   </div>
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-2 w-[23px] h-[23px] rounded-full flex items-center justify-center peer-hover:bg-white z-1 transition-all duration-200"></div>
                 </Link>
               ))}
             </div>
