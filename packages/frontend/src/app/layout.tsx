@@ -3,14 +3,19 @@ import BackToTop from '@/components/back-to-top'
 import Footer from '@/components/footer'
 import StyledComponentsRegistry from '@/components/registry'
 import '../globals.css'
+import { HeaderProvider } from '@/components/header/header-context'
+import { POPULAR_KEYWORDS } from '@/constants'
 
 const gtmID = 'GTM-T37WZJ44'
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  // TODO: get keywords from backend
+  const keywords = POPULAR_KEYWORDS
+
   return (
     <html>
       <Script id="google-tag-manager" strategy="afterInteractive">
@@ -23,16 +28,18 @@ export default function RootLayout({
         `}
       </Script>
       <StyledComponentsRegistry>
-        <body>
-          {children}
-          <BackToTop />
-          <Footer />
-          <noscript
-            dangerouslySetInnerHTML={{
-              __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=${gtmID}" height="0" width="0" style="display: none; visibility: hidden;"></iframe>`,
-            }}
-          />
-        </body>
+        <HeaderProvider keywords={keywords}>
+          <body>
+            {children}
+            <BackToTop />
+            <Footer />
+            <noscript
+              dangerouslySetInnerHTML={{
+                __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=${gtmID}" height="0" width="0" style="display: none; visibility: hidden;"></iframe>`,
+              }}
+            />
+          </body>
+        </HeaderProvider>
       </StyledComponentsRegistry>
     </html>
   )

@@ -145,7 +145,7 @@ export const IS_LOGIN_ENABLED = true
 export const MENU_ITEMS = [
   {
     label: '最新',
-    href: '/',
+    href: '/all',
     subItems: [],
   },
   {
@@ -252,7 +252,7 @@ export const ADDITIONAL_MENU_ITEMS = [
     subItems: [],
   },
   {
-    label: '報導者',
+    label: '前往《報導者》',
     href: 'https://www.twreporter.org/',
     subItems: [],
     external: true,

@@ -118,8 +118,7 @@
   --breakpoint-hd: 1440px;
 
   /* Header */
-  --header-main-bar-height: 88px;
-  --header-bottom-navigation-height: 42px;
+  --mobile-header-height: 64px;
 }
 
 @import './assets/style.css' layer(utilities);
@@ -296,7 +295,7 @@
   }
 
   /* Typography Utilities - Headlines Large */
-  .text-h1-large {
+  .prose-h1-large {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-h1-large);
     font-weight: 700;
@@ -304,7 +303,7 @@
     letter-spacing: var(--letter-spacing-wide);
   }
 
-  .text-h2-large {
+  .prose-h2-large {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-h2-large);
     font-weight: 700;
@@ -312,7 +311,7 @@
     letter-spacing: var(--letter-spacing-wide);
   }
 
-  .text-h3-large {
+  .prose-h3-large {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-h3-large);
     font-weight: 700;
@@ -320,7 +319,7 @@
     letter-spacing: var(--letter-spacing-wide);
   }
 
-  .text-h4-large {
+  .prose-h4-large {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-h4-large);
     font-weight: 700;
@@ -328,7 +327,7 @@
     letter-spacing: var(--letter-spacing-wide);
   }
 
-  .text-h5-large {
+  .prose-h5-large {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-h5-large);
     font-weight: 700;
@@ -336,7 +335,7 @@
     letter-spacing: var(--letter-spacing-wide);
   }
 
-  .text-h6-large {
+  .prose-h6-large {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-h6-large);
     font-weight: 700;
@@ -345,7 +344,7 @@
   }
 
   /* Typography Utilities - Headlines Small */
-  .text-h1-small {
+  .prose-h1-small {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-h1-small);
     font-weight: 700;
@@ -353,7 +352,7 @@
     letter-spacing: var(--letter-spacing-wide);
   }
 
-  .text-h2-small {
+  .prose-h2-small {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-h2-small);
     font-weight: 700;
@@ -361,7 +360,7 @@
     letter-spacing: var(--letter-spacing-wide);
   }
 
-  .text-h3-small {
+  .prose-h3-small {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-h3-small);
     font-weight: 700;
@@ -369,7 +368,7 @@
     letter-spacing: var(--letter-spacing-wide);
   }
 
-  .text-h4-small {
+  .prose-h4-small {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-h4-small);
     font-weight: 700;
@@ -377,7 +376,7 @@
     letter-spacing: var(--letter-spacing-wide);
   }
 
-  .text-h5-small {
+  .prose-h5-small {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-h5-small);
     font-weight: 700;
@@ -385,7 +384,7 @@
     letter-spacing: var(--letter-spacing-wide);
   }
 
-  .text-h6-small {
+  .prose-h6-small {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-h6-small);
     font-weight: 700;
@@ -394,7 +393,7 @@
   }
 
   /* Typography Utilities - Paragraphs */
-  .text-p1 {
+  .prose-p1 {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-p1);
     font-weight: 500;
@@ -402,7 +401,7 @@
     letter-spacing: var(--letter-spacing-wide);
   }
 
-  .text-p1-bold {
+  .prose-p1-bold {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-p1);
     font-weight: 700;
@@ -410,7 +409,7 @@
     letter-spacing: var(--letter-spacing-wide);
   }
 
-  .text-p2 {
+  .prose-p2 {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-p2);
     font-weight: 500;
@@ -418,7 +417,7 @@
     letter-spacing: var(--letter-spacing-wide);
   }
 
-  .text-p2-bold {
+  .prose-p2-bold {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-p2);
     font-weight: 700;
@@ -426,7 +425,7 @@
     letter-spacing: var(--letter-spacing-wide);
   }
 
-  .text-p3 {
+  .prose-p3 {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-p3);
     font-weight: 500;
@@ -434,7 +433,7 @@
     letter-spacing: var(--letter-spacing-wide);
   }
 
-  .text-p3-bold {
+  .prose-p3-bold {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-p3);
     font-weight: 700;
@@ -442,7 +441,7 @@
     letter-spacing: var(--letter-spacing-wide);
   }
 
-  .text-p4 {
+  .prose-p4 {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-p4);
     font-weight: 500;
@@ -450,7 +449,7 @@
     letter-spacing: var(--letter-spacing-wide);
   }
 
-  .text-p4-bold {
+  .prose-p4-bold {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-p4);
     font-weight: 700;
@@ -542,5 +541,28 @@
   }
   .bg-neutral-white {
     background-color: var(--color-neutral-white);
+  }
+
+  /* Custom Scrollbar Utilities */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-neutral-gray-300) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: transparent;
   }
 }

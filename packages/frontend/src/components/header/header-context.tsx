@@ -1,19 +1,51 @@
 'use client'
 
-import { createContext, useContext, ReactNode, useState } from 'react'
+import {
+  createContext,
+  useContext,
+  ReactNode,
+  useState,
+  useMemo,
+  useCallback,
+} from 'react'
 
 type HeaderContextType = {
   postTitle?: string
   setPostTitle: (title?: string) => void
+  isMenuOpen: boolean
+  openMenu: () => void
+  closeMenu: () => void
+  keywords: string[]
 }
 
 const HeaderContext = createContext<HeaderContextType | undefined>(undefined)
 
-export function HeaderProvider({ children }: { children: ReactNode }) {
+export function HeaderProvider({
+  children,
+  keywords,
+}: {
+  children: ReactNode
+  keywords: string[]
+}) {
   const [postTitle, setPostTitle] = useState<string | undefined>(undefined)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const openMenu = useCallback(() => setIsMenuOpen(true), [])
+  const closeMenu = useCallback(() => setIsMenuOpen(false), [])
+
+  const contextValue = useMemo(
+    () => ({
+      postTitle,
+      setPostTitle,
+      isMenuOpen,
+      openMenu,
+      closeMenu,
+      keywords,
+    }),
+    [postTitle, setPostTitle, isMenuOpen, openMenu, closeMenu, keywords]
+  )
 
   return (
-    <HeaderContext.Provider value={{ postTitle, setPostTitle }}>
+    <HeaderContext.Provider value={contextValue}>
       {children}
     </HeaderContext.Provider>
   )

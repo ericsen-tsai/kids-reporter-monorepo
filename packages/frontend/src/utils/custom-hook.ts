@@ -46,7 +46,7 @@ export const useScrollLevel = () => {
   return scrollLevel
 }
 
-export const useIsAtTop = (threshold = 5) => {
+export const useIsAtTop = (threshold = 50) => {
   const [isAtTop, setIsAtTop] = useState(true)
 
   useEffect(() => {
