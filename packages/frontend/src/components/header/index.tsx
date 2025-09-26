@@ -28,12 +28,10 @@ function Header() {
 
   return (
     <>
-      <div className="hidden desktop:block w-full max-w-300 mx-auto">
-        <DesktopHeader
-          onHamburgerOverlayOpen={onHamburgerOverlayOpen}
-          keywords={keywords}
-        />
-      </div>
+      <DesktopHeader
+        onHamburgerOverlayOpen={onHamburgerOverlayOpen}
+        keywords={keywords}
+      />
       <MobileHeader
         onCloseMenu={onCloseMenu}
         showCloseButtonWhenMenuOpen={isMobile}

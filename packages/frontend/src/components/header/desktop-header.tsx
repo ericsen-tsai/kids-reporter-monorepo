@@ -13,30 +13,34 @@ export function DesktopHeader({
   keywords,
 }: DesktopHeaderProps) {
   return (
-    <div className="w-full bg-transparent px-12 hidden desktop:block">
-      <div className="flex items-center justify-between px-4 py-[18px]">
-        <div className="flex items-center gap-8">
-          <LogoLink />
-          <div>
-            <span className="prose-p2 text-neutral-900 font-medium tracking-wide">
-              理解世界 × 參與未來
-            </span>
-          </div>
-        </div>
+    <div className="hidden desktop:block w-full ">
+      <div className="w-full bg-transparent px-12 hidden desktop:block">
+        <div className="max-w-300 mx-auto">
+          <div className="flex items-center justify-between px-4 py-[18px]">
+            <div className="flex items-center gap-8">
+              <LogoLink />
+              <div>
+                <span className="prose-p2 text-neutral-900 font-medium tracking-wide">
+                  理解世界 × 參與未來
+                </span>
+              </div>
+            </div>
 
-        <div className="flex items-center gap-4">
-          <ActionButtons tags={keywords} />
-          <Link
-            href="/login"
-            className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 transition-colors duration-200"
-            aria-label="登入"
-          >
-            {LoginIcon}
-          </Link>
+            <div className="flex items-center gap-4">
+              <ActionButtons tags={keywords} />
+              <Link
+                href="/login"
+                className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                aria-label="登入"
+              >
+                {LoginIcon}
+              </Link>
+            </div>
+          </div>
+
+          <BottomNavigation onHamburgerOverlayOpen={onHamburgerOverlayOpen} />
         </div>
       </div>
-
-      <BottomNavigation onHamburgerOverlayOpen={onHamburgerOverlayOpen} />
     </div>
   )
 }
