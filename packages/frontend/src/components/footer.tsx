@@ -17,7 +17,7 @@ export const Footer = () => {
         <div className="max-w-300 mx-auto">
           <div className="flex flex-col items-center gap-8 desktop:flex-row desktop:justify-between">
             {/* Logo and Description */}
-            <div className="flex flex-col items-center gap-6 max-w-sm desktop:items-start">
+            <div className="flex flex-col items-center max-w-100 gap-6 w-full desktop:items-start">
               <div className="flex items-center">
                 <Link href="/" className="flex items-center">
                   <Image
@@ -29,7 +29,7 @@ export const Footer = () => {
                   />
                 </Link>
               </div>
-              <p className="text-neutral-900 prose-p2 text-pretty tablet:w-100">
+              <p className="text-neutral-900 prose-p2 w-full">
                 《少年報導者》是由非營利媒體《報導者》針對兒少打造的深度新聞報導品牌，與兒童和少年一起理解世界，參與未來。
               </p>
               <Button size={44} variant="secondary" asChild className="w-75">
@@ -40,7 +40,7 @@ export const Footer = () => {
             </div>
 
             {/* Navigation Links */}
-            <div className="flex flex-row gap-6 desktop:pr-25 hd:pr-0">
+            <div className="flex flex-row gap-6">
               <div className="flex flex-col gap-2">
                 {ADDITIONAL_MENU_ITEMS.slice(0, 4).map((link) => (
                   <Link
