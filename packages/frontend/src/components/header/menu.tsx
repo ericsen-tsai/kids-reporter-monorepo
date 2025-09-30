@@ -30,8 +30,8 @@ type MenuItemProps = {
   external?: boolean
   showIcon?: boolean
   icon?: JSX.Element
-  labelClassName?: string
   isExpanded?: boolean
+  contentClassName?: string
   onExpand?: (label: string | null) => void
 }
 
@@ -42,9 +42,9 @@ function MenuItem({
   external,
   showIcon,
   icon,
-  labelClassName,
   isExpanded,
   onExpand,
+  contentClassName,
 }: MenuItemProps) {
   const hasSubItems = subItems && subItems.length > 0
   const context = useHeaderContext()
@@ -57,16 +57,22 @@ function MenuItem({
   }
 
   const content = (
-    <div className="flex items-center justify-between w-full">
+    <div
+      className={cn(
+        'group flex items-center justify-between w-full text-neutral-900 group-hover:text-neutral-900 transition-colors duration-100',
+        contentClassName
+      )}
+    >
       <div className="flex items-center gap-2">
         {showIcon && icon && (
-          <div className="w-4 h-4 flex items-center justify-center">{icon}</div>
+          <div className={cn('w-4 h-4 flex items-center justify-center')}>
+            {icon}
+          </div>
         )}
         <span
           className={cn(
-            'prose-p1-bold text-neutral-900',
-            labelClassName,
-            isExpanded && 'text-red-500'
+            'prose-p1-bold',
+            isExpanded && 'text-red-400 group-hover:text-red-400'
           )}
         >
           {label}
@@ -76,8 +82,8 @@ function MenuItem({
       {hasSubItems && (
         <div
           className={cn(
-            'w-6 h-6 flex items-center justify-center transition-transform duration-200',
-            isExpanded && 'rotate-180 text-red-500'
+            'w-6 h-6 flex items-center justify-center transition-transform',
+            isExpanded && 'rotate-180 text-red-400 group-hover:text-red-400'
           )}
         >
           <svg width="14" height="7" viewBox="0 0 14 7" fill="none">
@@ -96,10 +102,10 @@ function MenuItem({
 
   if (hasSubItems) {
     return (
-      <div className={'w-full'}>
+      <div className="w-full">
         <button
           onClick={handleExpand}
-          className="cursor-pointer w-full px-8 py-2 flex items-center justify-between hover:bg-gray-50 transition-colors duration-200"
+          className="cursor-pointer w-full px-6 tablet:px-8 py-2 flex items-center justify-between hover:bg-neutral-black/5 active:bg-neutral-black/10 transition-colors duration-200"
         >
           {content}
         </button>
@@ -113,7 +119,7 @@ function MenuItem({
             <Link
               key={index}
               href={subItem.href}
-              className="block px-8 py-2 pl-12 prose-p2 font-medium hover:bg-gray-50 hover:text-neutral-900 transition-colors duration-200"
+              className="block px-6 tablet:px-8 py-2 pl-12 prose-p2 font-medium hover:bg-neutral-black/5 active:bg-neutral-black/10 hover:text-neutral-900 transition-colors duration-200"
               onClick={closeMenu}
             >
               {subItem.label}
@@ -131,7 +137,7 @@ function MenuItem({
         target="_blank"
         rel="noopener noreferrer"
         className={
-          'block px-8 py-2 hover:bg-gray-50 transition-colors duration-200'
+          'block px-6 tablet:px-8 py-2 hover:bg-neutral-black/5 active:bg-neutral-black/10 transition-colors duration-200'
         }
       >
         {content}
@@ -143,7 +149,7 @@ function MenuItem({
     <Link
       href={href}
       className={
-        'block px-8 py-2 hover:bg-gray-50 transition-colors duration-200'
+        'block px-6 tablet:px-8 py-2 hover:bg-neutral-black/5 active:bg-neutral-black/10 transition-colors duration-200'
       }
       onClick={closeMenu}
     >
@@ -181,7 +187,7 @@ function MenuItemGroup({ isMenuOpen }: { isMenuOpen: boolean }) {
 
 function Divider() {
   return (
-    <div className="w-full px-8 py-4">
+    <div className="w-full px-6 tablet:px-8 py-4">
       <div className="w-full h-px bg-neutral-300"></div>
     </div>
   )
@@ -235,7 +241,7 @@ export function Menu({ isOpen, onClose, keywords }: MenuProps) {
         )}
       >
         <div className="flex flex-col h-full overflow-y-auto">
-          <div className="items-center justify-between px-8 py-4 hidden tablet:flex">
+          <div className="items-center justify-between px-6 tablet:px-8 py-4 hidden tablet:flex mt-4">
             <div className="flex items-center">
               <Image
                 src="/assets/images/brand-icon.svg"
@@ -248,18 +254,16 @@ export function Menu({ isOpen, onClose, keywords }: MenuProps) {
             </div>
             <button
               onClick={onClose}
-              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors duration-200"
+              className="w-8 h-8 flex items-center justify-center rounded-full text-neutral-600 hover:bg-neutral-100 hover:text-neutral-800 transition-colors duration-200"
               aria-label="關閉選單"
             >
               {ClearIcon}
             </button>
           </div>
 
-          <div className="px-8 pt-4 desktop:hidden">
+          <div className="px-6 tablet:px-8 pt-4 desktop:hidden">
             <SearchInputSection mode="inline" tags={keywords} />
           </div>
-
-          <Divider />
 
           {/* Menu Content */}
           <div className="flex-1 py-4">
@@ -281,7 +285,7 @@ export function Menu({ isOpen, onClose, keywords }: MenuProps) {
               href="/reading-settings"
               showIcon
               icon={SettingsIconSmall}
-              labelClassName="text-neutral-600 prose-p1"
+              contentClassName="text-neutral-600 [&_span]:text-(length:--font-size-p2) hover:text-neutral-900"
             />
 
             <Divider />
@@ -294,7 +298,7 @@ export function Menu({ isOpen, onClose, keywords }: MenuProps) {
                   label={item.label}
                   href={item.href}
                   external={item.external}
-                  labelClassName="text-neutral-600 prose-p1"
+                  contentClassName="text-neutral-600 [&_span]:text-(length:--font-size-p2) hover:text-neutral-900"
                 />
               ))}
             </div>
@@ -302,8 +306,8 @@ export function Menu({ isOpen, onClose, keywords }: MenuProps) {
             <Divider />
 
             {/* Social Media */}
-            <div className="px-8 py-4">
-              <div className="flex items-center justify-between px-4">
+            <div className="px-6 tablet:px-8 py-4">
+              <div className="flex items-center gap-4 justify-center tablet:justify-between tablet:gap-0 px-4">
                 {SOCIAL_MEDIA_ITEMS.map((item) => (
                   <Link
                     key={item.label}
@@ -323,8 +327,8 @@ export function Menu({ isOpen, onClose, keywords }: MenuProps) {
           </div>
 
           {/* Action Buttons */}
-          <div className="px-8 py-6 border-t border-neutral-200">
-            <div className="flex flex-col gap-4">
+          <div className="px-6 tablet:px-8 py-6 tablet:pt-6 tablet:pb-8">
+            <div className="flex flex-col gap-4 border-t border-neutral-200 ">
               <Button variant="secondary" size={44} asChild className="w-full">
                 <a
                   href={SUBSCRIBE_URL}
