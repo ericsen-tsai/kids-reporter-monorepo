@@ -1,36 +1,9 @@
 'use client'
 
+import { SearchIconSmall } from '@/icons'
 import { cn } from '@/utils/cn'
 import { cva } from 'class-variance-authority'
 import { useState, forwardRef, useRef } from 'react'
-
-// Search icon component
-const SearchIcon = ({ className }: { className?: string }) => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    className={className}
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <circle
-      cx="11"
-      cy="11"
-      r="8"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      fill="none"
-    />
-    <path
-      d="m21 21-4.35-4.35"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-)
 
 // Close icon component
 const CloseIcon = ({ className }: { className?: string }) => (
@@ -160,7 +133,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div className={inputClasses} ref={ref}>
-        <SearchIcon className="text-gray-600 flex-shrink-0" />
+        {SearchIconSmall}
         <input
           type="text"
           value={currentValue}

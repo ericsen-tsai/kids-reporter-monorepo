@@ -42,6 +42,28 @@ export const SearchIcon = (
   </svg>
 )
 
+export const SearchIconSmall = (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M10.5 4.25C13.9518 4.25 16.75 7.04822 16.75 10.5C16.75 13.9518 13.9518 16.75 10.5 16.75C7.04822 16.75 4.25 13.9518 4.25 10.5C4.25 7.04822 7.04822 4.25 10.5 4.25Z"
+      stroke="#8E8E8E"
+      stroke-width="2.5"
+    />
+    <path
+      d="M15.75 15.75L21 21"
+      stroke="#8E8E8E"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+    />
+  </svg>
+)
+
 export const ClearIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
