@@ -119,6 +119,9 @@
 
   /* Header */
   --mobile-header-height: 64px;
+
+  /* Custom Shadows */
+  --shadow-custom: 0 0 24px 0 rgba(0, 0, 0, 0.1);
 }
 
 @import './assets/style.css' layer(utilities);
