@@ -20,7 +20,7 @@ const searchFormVariants = cva(
     variants: {
       mode: {
         inline: 'w-full h-11',
-        popover: 'absolute top-0 right-28 overflow-hidden w-0',
+        popover: 'absolute top-0 right-28 overflow-hidden w-66 opacity-0',
       },
       isSearchOpen: {
         true: '',
@@ -31,19 +31,24 @@ const searchFormVariants = cva(
       {
         mode: 'popover',
         isSearchOpen: true,
-        class: 'w-66',
+        class: 'opacity-100 w-66 pointer-events-auto',
+      },
+      {
+        mode: 'popover',
+        isSearchOpen: false,
+        class: 'pointer-events-none',
       },
     ],
   }
 )
 
 const searchDropdownVariants = cva(
-  'bg-neutral-white rounded-xl mt-2 w-66 transition-all duration-300 ease-in-out z-50 h-0 p-0 opacity-0',
+  'bg-neutral-white rounded-xl mt-2 w-66 transition-all duration-200 ease-in-out z-50 h-0 p-0 opacity-0',
   {
     variants: {
       mode: {
         inline: '',
-        popover: 'absolute top-12 right-28 shadow-custom',
+        popover: 'absolute top-12 right-28 shadow-custom p-4',
       },
       isSearchOpen: {
         true: '',
