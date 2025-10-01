@@ -44,7 +44,7 @@ export function MobileHeader({
             {showCloseButton ? (
               <button
                 onClick={onCloseMenu}
-                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors duration-200"
+                className="w-8 h-8 flex items-center justify-center rounded-full text-neutral-600 hover:bg-neutral-100 hover:text-neutral-800 transition-colors duration-200"
                 aria-label="關閉選單"
               >
                 {ClearIcon}
