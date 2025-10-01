@@ -20,7 +20,7 @@ export function DesktopHeader({
             <div className="flex items-center gap-8">
               <LogoLink />
               <div>
-                <span className="prose-p2 text-neutral-900 font-medium tracking-wide">
+                <span className="prose-p2 text-neutral-900 font-medium tracking-[2.2px]!">
                   理解世界 × 參與未來
                 </span>
               </div>
@@ -30,7 +30,7 @@ export function DesktopHeader({
               <ActionButtons tags={keywords} />
               <Link
                 href="/login"
-                className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                className="flex items-center justify-center w-8 h-8 text-red-400 hover:text-red-500 rounded-full hover:bg-gray-100 transition-colors duration-200"
                 aria-label="登入"
               >
                 {LoginIcon}

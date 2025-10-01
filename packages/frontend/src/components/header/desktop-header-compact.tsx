@@ -20,16 +20,19 @@ export function DesktopHeaderCompact({
   return (
     <div
       className={cn(
-        'w-full bg-white hidden desktop:block fixed top-0 left-1/2 transform -translate-x-1/2 z-1000 transition-all duration-300 ease-in-out shadow-sm',
+        'w-full bg-white hidden desktop:block fixed top-0 left-1/2 transform -translate-x-1/2 z-1000 transition-all duration-300 ease-in-out',
         hide
           ? 'opacity-0 -translate-y-full pointer-events-none'
           : 'opacity-100 translate-y-0 pointer-events-auto'
       )}
     >
-      <div className="py-[14px] desktop:px-16">
+      <div className="py-[14px] desktop:px-12">
         <div className="flex items-center justify-between max-w-300 mx-auto px-4">
           <div className="flex items-center gap-4">
-            <HamburgerButton onHamburgerOverlayOpen={onHamburgerOverlayOpen} />
+            <HamburgerButton
+              onHamburgerOverlayOpen={onHamburgerOverlayOpen}
+              small
+            />
 
             <div className="flex items-center gap-12">
               <LogoLink />
@@ -47,7 +50,7 @@ export function DesktopHeaderCompact({
             <ActionButtons hideCtaButtons={true} tags={keywords} />
             <Link
               href="/login"
-              className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 transition-colors duration-200"
+              className="flex items-center justify-center w-8 h-8 rounded-full text-red-400 hover:text-red-500 hover:bg-gray-100 transition-colors duration-200"
               aria-label="登入"
             >
               {LoginIcon}

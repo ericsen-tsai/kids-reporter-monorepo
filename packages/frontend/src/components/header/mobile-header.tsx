@@ -25,7 +25,7 @@ export function MobileHeader({
       <div className="h-(--mobile-header-height) desktop:hidden"></div>
       <div
         className={cn(
-          'w-full px-6 tablet:px-8 desktop:hidden transition-all duration-300 ease-in-out fixed top-0 bg-neutral-white shadow-sm opacity-100 translate-y-0 pointer-events-auto z-1002 tablet:z-1000'
+          'w-full px-6 tablet:px-8 desktop:hidden transition-all duration-300 ease-in-out fixed top-0 bg-neutral-white opacity-100 translate-y-0 pointer-events-auto z-1002 tablet:z-1000'
         )}
       >
         <div className="flex items-center justify-between py-4">
@@ -35,7 +35,7 @@ export function MobileHeader({
             {!showCloseButton && (
               <Link
                 href="/login"
-                className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                className="flex items-center justify-center w-8 h-8 rounded-full text-red-400 hover:text-red-500 hover:bg-gray-100 transition-colors duration-200"
                 aria-label="登入"
               >
                 {LoginIcon}
@@ -44,7 +44,7 @@ export function MobileHeader({
             {showCloseButton ? (
               <button
                 onClick={onCloseMenu}
-                className="w-8 h-8 flex items-center justify-center rounded-full text-neutral-600 hover:bg-neutral-100 hover:text-neutral-800 transition-colors duration-200"
+                className="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full text-neutral-600 hover:bg-neutral-100 hover:text-neutral-800 transition-colors duration-200"
                 aria-label="關閉選單"
               >
                 {ClearIcon}
