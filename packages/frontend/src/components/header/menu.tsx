@@ -328,7 +328,7 @@ export function Menu({ isOpen, onClose, keywords }: MenuProps) {
 
           {/* Action Buttons */}
           <div className="px-6 tablet:px-8 py-6 tablet:pt-6 tablet:pb-8">
-            <div className="flex flex-col gap-4 border-t border-neutral-200 ">
+            <div className="flex flex-col gap-4 border-t border-neutral-200">
               <Button variant="secondary" size={44} asChild className="w-full">
                 <a
                   href={SUBSCRIBE_URL}
