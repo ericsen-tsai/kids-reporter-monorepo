@@ -35,7 +35,7 @@ export function MobileHeader({
             {!showCloseButton && (
               <Link
                 href="/login"
-                className="flex items-center justify-center w-8 h-8 rounded-full text-red-400 hover:text-red-500 hover:bg-gray-100 transition-colors duration-200"
+                className="flex items-center justify-center w-8 h-8 rounded-full text-red-400 hover:text-red-500 transition-colors duration-200"
                 aria-label="登入"
               >
                 {LoginIcon}
@@ -44,7 +44,7 @@ export function MobileHeader({
             {showCloseButton ? (
               <button
                 onClick={onCloseMenu}
-                className="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full text-neutral-600 hover:bg-neutral-100 hover:text-neutral-800 transition-colors duration-200"
+                className="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full text-neutral-600 hover:text-neutral-800 transition-colors duration-200"
                 aria-label="關閉選單"
               >
                 {ClearIcon}

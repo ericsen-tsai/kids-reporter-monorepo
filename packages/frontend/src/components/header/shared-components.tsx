@@ -240,7 +240,7 @@ export function ActionButtons({
       </div>
 
       <button
-        className="flex items-center cursor-pointer justify-center min-w-10 w-10 h-10 rounded-full text-neutral-600 hover:text-neutral-800 hover:bg-neutral-100 transition-all duration-200 mr-4"
+        className="flex items-center cursor-pointer justify-center min-w-10 w-10 h-10 rounded-full text-neutral-600 hover:text-neutral-800 transition-all duration-200 mr-4"
         aria-label="搜尋"
         onClick={() => setIsSearchOpen(!isSearchOpen)}
         ref={buttonRef}
@@ -248,7 +248,7 @@ export function ActionButtons({
         {isSearchOpen ? ClearIcon : SearchIcon}
       </button>
       <button
-        className="flex items-center cursor-pointer justify-center min-w-10 w-10 h-10 rounded-full text-neutral-600 hover:text-neutral-800 hover:bg-neutral-100 transition-all duration-200"
+        className="flex items-center cursor-pointer justify-center min-w-10 w-10 h-10 rounded-full text-neutral-600 hover:text-neutral-800 transition-all duration-200"
         aria-label="設定"
       >
         {SettingsIcon}
@@ -300,7 +300,7 @@ export function HamburgerButton({
 }) {
   return (
     <button
-      className="cursor-pointer flex items-center justify-center rounded-sm transition-all duration-300 ease-in-out hover:bg-gray-100 hover:[&>svg>rect:nth-child(1)]:fill-blue-500 hover:[&>svg>rect:nth-child(3)]:fill-yellow-500 hover:[&>svg>rect:nth-child(2)]:fill-red-500"
+      className="cursor-pointer flex items-center justify-center rounded-sm transition-all duration-300 ease-in-out hover:[&>svg>rect:nth-child(1)]:fill-blue-500 hover:[&>svg>rect:nth-child(3)]:fill-yellow-500 hover:[&>svg>rect:nth-child(2)]:fill-red-500 hover:[&>svg>path:nth-child(1)]:fill-blue-500 hover:[&>svg>path:nth-child(3)]:fill-yellow-500 hover:[&>svg>path:nth-child(2)]:fill-red-500"
       onClick={onHamburgerOverlayOpen}
     >
       {small ? HamburgerIconSmall : HamburgerIcon}

@@ -150,7 +150,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           <button
             type="button"
             onClick={handleClear}
-            className="cursor-pointer text-gray-400 hover:text-gray-600 flex-shrink-0 transition-colors p-1/2 rounded-full hover:bg-gray-100 active:bg-gray-200 ml-auto"
+            className="cursor-pointer text-gray-400 hover:text-gray-600 flex-shrink-0 transition-colors p-1/2 rounded-full active:bg-gray-200 ml-auto"
             aria-label="Clear input"
           >
             <CloseIcon />

@@ -81,7 +81,7 @@ export function DesktopHeader({
                 <ActionButtons tags={keywords} hideCtaButtons={compactMode} />
                 <Link
                   href="/login"
-                  className="flex items-center justify-center w-8 h-8 text-red-400 hover:text-red-500 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                  className="flex items-center justify-center w-8 h-8 text-red-400 hover:text-red-500 rounded-full transition-colors duration-200"
                   aria-label="登入"
                 >
                   {LoginIcon}
