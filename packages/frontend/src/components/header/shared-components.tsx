@@ -3,10 +3,87 @@ import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { HamburgerIcon, SearchIcon, SettingsIcon, ClearIcon } from '@/icons'
 import { SEARCH_PLACEHOLDER, SUBSCRIBE_URL, MENU_ITEMS } from '@/constants'
-import { cn } from '@/utils/cn'
+import { cva } from 'class-variance-authority'
 import Input from '../input'
 import Image from 'next/image'
 import Button from '../button'
+
+const searchFormVariants = cva(
+  'h-full transition-all duration-300 ease-in-out',
+  {
+    variants: {
+      mode: {
+        inline: 'w-full h-11',
+        popover: 'absolute top-0 right-28 overflow-hidden w-0',
+      },
+      isSearchOpen: {
+        true: '',
+        false: '',
+      },
+    },
+    compoundVariants: [
+      {
+        mode: 'popover',
+        isSearchOpen: true,
+        class: 'w-66',
+      },
+    ],
+  }
+)
+
+const searchDropdownVariants = cva(
+  'bg-neutral-white rounded-xl mt-2 w-66 transition-all duration-300 ease-in-out z-50 h-0 p-0 opacity-0',
+  {
+    variants: {
+      mode: {
+        inline: '',
+        popover: 'absolute top-12 right-28 shadow-custom',
+      },
+      isSearchOpen: {
+        true: '',
+        false: '',
+      },
+      isFocused: {
+        true: '',
+        false: '',
+      },
+    },
+    compoundVariants: [
+      {
+        mode: 'popover',
+        isSearchOpen: true,
+        isFocused: true,
+        class: 'p-4 h-min opacity-100',
+      },
+      {
+        mode: 'inline',
+        isFocused: true,
+        class:
+          'w-full opacity-100 h-min translate-y-0 pt-6 mt-0 bg-neutral-transparent',
+      },
+      {
+        mode: 'inline',
+        isFocused: false,
+        class: 'w-full -translate-y-10 pointer-events-none',
+      },
+    ],
+  }
+)
+
+const hamburgerButtonVariants = cva(
+  'flex items-center justify-center rounded-sm hover:bg-gray-100 transition-all duration-200',
+  {
+    variants: {
+      hidden: {
+        true: 'opacity-0 w-0',
+        false: '',
+      },
+    },
+    defaultVariants: {
+      hidden: false,
+    },
+  }
+)
 
 export function LogoLink() {
   return (
@@ -44,73 +121,62 @@ export function SearchInputSection(props: SearchInputSectionProps) {
   const tags = props.tags
 
   useEffect(() => {
-    if (mode === 'popover' && isSearchOpen) {
+    if (mode === 'inline') {
+      return
+    }
+    if (isSearchOpen) {
       ref.current?.focus()
       setIsFocused(true)
+      document.body.classList.add('no-scroll')
+      return
     }
+    setIsFocused(false)
+    document.body.classList.remove('no-scroll')
   }, [mode, isSearchOpen])
 
   return (
     <div
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
-      className={cn(mode === 'inline' ? 'w-full' : '')}
+      className={mode === 'inline' ? 'w-full' : 'h-11'}
     >
       <form
         role="search"
         method="get"
         action="/search"
-        className={cn(
-          'h-full transition-all duration-300 ease-in-out',
-          mode === 'popover'
-            ? 'absolute top-0 right-28 overflow-hidden w-0'
-            : '',
-          mode === 'popover' && isSearchOpen && 'w-66',
-          mode === 'inline' && 'w-full h-11'
-        )}
+        className={searchFormVariants({
+          mode,
+          isSearchOpen: mode === 'popover' ? isSearchOpen : undefined,
+        })}
       >
         <Input
           placeholder={SEARCH_PLACEHOLDER}
           name="q"
           title="Search for..."
           aria-label="Search for..."
-          className="w-full h-full"
+          className="w-[99%]"
           inputRef={ref}
           onChange={setSearchValue}
           value={searchValue}
         />
       </form>
       <div
-        className={cn(
-          'bg-neutral-white rounded-xl mt-2 w-66 transition-all duration-300 ease-in-out z-50 h-0 p-0 opacity-0',
-          mode === 'popover' &&
-            'absolute top-12 overflow-hidden right-28 shadow-sm',
-          mode === 'popover' &&
-            isSearchOpen &&
-            isFocused &&
-            'p-4 h-auto opacity-100',
-          mode === 'inline' &&
-            isFocused &&
-            'w-full opacity-100 h-auto translate-y-0 pt-6 mt-0 bg-neutral-transparent',
-          mode === 'inline' &&
-            !isFocused &&
-            'w-full -translate-y-10 pointer-events-none'
-        )}
+        className={searchDropdownVariants({
+          mode,
+          isSearchOpen: mode === 'popover' ? isSearchOpen : undefined,
+          isFocused,
+        })}
       >
         <h3 className="prose-p3 font-bold text-neutral-700 mb-3">熱門搜尋</h3>
         <div className="flex flex-wrap gap-2.5">
           {tags.map((keyword) => (
-            <button
+            <a
               key={keyword}
-              className="cursor-pointer bg-neutral-200 hover:bg-neutral-300 transition-colors duration-200 rounded-full px-3 py-1 prose-p2 font-bold text-neutral-900"
-              onClick={() => {
-                setSearchValue(keyword)
-                ref.current?.focus()
-                setIsFocused(true)
-              }}
+              className="cursor-pointer transition-colors duration-200 rounded-full px-3 py-1 prose-p2 font-bold text-neutral-900 bg-neutral-200 hover:bg-red-500 hover:text-neutral-white"
+              href={`/search?q=${encodeURIComponent(keyword)}`}
             >
               # {keyword}
-            </button>
+            </a>
           ))}
         </div>
       </div>
@@ -127,10 +193,31 @@ export function ActionButtons({
 }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
 
+  const containerRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const containerElement = containerRef.current
+      const buttonElement = buttonRef.current
+      if (!containerElement || !buttonElement) return
+      if (
+        !containerElement.contains(event.target as Node) &&
+        !buttonElement.contains(event.target as Node)
+      ) {
+        setIsSearchOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+
   return (
     <div className="flex items-center gap-4 relative">
-      <div className="flex items-center">
-        {/* CTA Buttons - Base layer */}
+      <div className="flex items-center" ref={containerRef}>
         {!hideCtaButtons && !isSearchOpen && (
           <div className="flex items-center gap-2">
             <Button variant="secondary" size={32} asChild>
@@ -159,6 +246,7 @@ export function ActionButtons({
         className="flex items-center cursor-pointer justify-center min-w-10 w-10 h-10 rounded-full hover:bg-gray-100 transition-colors duration-200"
         aria-label="搜尋"
         onClick={() => setIsSearchOpen(!isSearchOpen)}
+        ref={buttonRef}
       >
         {isSearchOpen ? ClearIcon : SearchIcon}
       </button>
@@ -215,10 +303,7 @@ export function HamburgerButton({
 }) {
   return (
     <button
-      className={cn(
-        'flex items-center justify-center rounded-sm hover:bg-gray-100 transition-all duration-200',
-        hidden && 'opacity-0 w-0'
-      )}
+      className={hamburgerButtonVariants({ hidden })}
       onClick={onHamburgerOverlayOpen}
     >
       {HamburgerIcon}
