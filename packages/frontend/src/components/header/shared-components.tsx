@@ -81,21 +81,6 @@ const searchDropdownVariants = cva(
   }
 )
 
-const hamburgerButtonVariants = cva(
-  'cursor-pointer flex items-center justify-center rounded-sm hover:bg-gray-100 transition-all duration-200 hover:[&>svg>rect:nth-child(1)]:fill-blue-500 hover:[&>svg>rect:nth-child(3)]:fill-yellow-500 hover:[&>svg>rect:nth-child(2)]:fill-red-500',
-  {
-    variants: {
-      hidden: {
-        true: 'opacity-0 w-0',
-        false: '',
-      },
-    },
-    defaultVariants: {
-      hidden: false,
-    },
-  }
-)
-
 export function LogoLink() {
   return (
     <Link href="/" className="flex items-center" rel="home">
@@ -308,16 +293,14 @@ export function BottomNavigation({
 
 export function HamburgerButton({
   onHamburgerOverlayOpen,
-  hidden = false,
   small = false,
 }: {
   onHamburgerOverlayOpen: () => void
-  hidden?: boolean
   small?: boolean
 }) {
   return (
     <button
-      className={hamburgerButtonVariants({ hidden })}
+      className="cursor-pointer flex items-center justify-center rounded-sm transition-all duration-300 ease-in-out hover:bg-gray-100 hover:[&>svg>rect:nth-child(1)]:fill-blue-500 hover:[&>svg>rect:nth-child(3)]:fill-yellow-500 hover:[&>svg>rect:nth-child(2)]:fill-red-500"
       onClick={onHamburgerOverlayOpen}
     >
       {small ? HamburgerIconSmall : HamburgerIcon}

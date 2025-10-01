@@ -117,7 +117,7 @@ function MenuItem({
             <Link
               key={index}
               href={subItem.href}
-              className="block px-6 tablet:px-8 py-2 pl-12 prose-p2 font-medium hover:bg-neutral-black/5 active:bg-neutral-black/10 hover:text-neutral-900 transition-colors duration-200"
+              className="block px-6 tablet:px-12 py-2 pl-12 prose-p2 font-medium hover:bg-neutral-black/5 active:bg-neutral-black/10 hover:text-neutral-900 transition-colors duration-200"
               onClick={closeMenu}
             >
               {subItem.label}

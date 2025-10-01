@@ -12,10 +12,10 @@ enum ScrollDirection {
   DOWN = 'down',
 }
 
-const scrollDownDistance = 10
-const throttleThreshold = 200
-
-export const useScrollLevel = () => {
+export const useScrollLevel = ({
+  scrollDownDistance = 10,
+  throttleThreshold = 200,
+} = {}) => {
   const [scrollLevel, setScrollLevel] = useState<ScrollLevel>(ScrollLevel.UP)
 
   useEffect(() => {
@@ -41,12 +41,12 @@ export const useScrollLevel = () => {
     return () => {
       window.removeEventListener('scroll', updateScrollLevel)
     }
-  }, [scrollLevel])
+  }, [scrollLevel, scrollDownDistance, throttleThreshold])
 
   return scrollLevel
 }
 
-export const useIsAtTop = (threshold = 50) => {
+export const useIsAtTop = (threshold = 35) => {
   const [isAtTop, setIsAtTop] = useState(true)
 
   useEffect(() => {

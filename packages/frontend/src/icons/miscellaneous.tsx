@@ -6,33 +6,33 @@ export const CrossIcon = (
 
 export const HamburgerIcon = (
   <svg
-    width="30"
-    height="30"
-    viewBox="0 0 18 14"
-    aria-hidden="true"
-    data-type="type-1"
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
   >
     <rect
+      y="0.75"
+      width="24"
+      height="3.5"
+      rx="1.75"
       fill="var(--color-blue-400)"
-      y="0.00"
-      width="18"
-      height="3"
-      rx="1"
-    ></rect>
+    />
     <rect
+      y="10.25"
+      width="24"
+      height="3.5"
+      rx="1.75"
       fill="var(--color-red-400)"
-      y="6.15"
-      width="18"
-      height="3"
-      rx="1"
-    ></rect>
+    />
     <rect
+      y="19.75"
+      width="24"
+      height="3.5"
+      rx="1.75"
       fill="var(--color-yellow-400)"
-      y="12.3"
-      width="18"
-      height="3"
-      rx="1"
-    ></rect>
+    />
   </svg>
 )
 
