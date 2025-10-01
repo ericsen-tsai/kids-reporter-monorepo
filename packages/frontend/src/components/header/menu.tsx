@@ -65,9 +65,7 @@ function MenuItem({
     >
       <div className="flex items-center gap-2">
         {showIcon && icon && (
-          <div className={cn('w-4 h-4 flex items-center justify-center')}>
-            {icon}
-          </div>
+          <div className="w-4 h-4 flex items-center justify-center">{icon}</div>
         )}
         <span
           className={cn(
