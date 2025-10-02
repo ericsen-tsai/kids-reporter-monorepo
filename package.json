@@ -7,6 +7,7 @@
     "packages/draft-renderer",
     "packages/cms",
     "packages/frontend",
+    "packages/routing-ui",
     "packages/api-gateway",
     "packages/cronjob",
     "packages/image-resizer"
@@ -17,6 +18,7 @@
     "dev:cms": "cd packages/cms && dotenv -e .env.local -- yarn dev",
     "dev:frontend": "cd packages/frontend && yarn dev --port 3001",
     "dev:api-gateway": "cd packages/api-gateway && dotenv -e .env.local -- yarn dev",
+    "build:routing-ui": "cd packages/routing-ui && yarn build",
     "lint:check": "yarn workspaces run lint:check",
     "type-check": "yarn workspaces run type-check",
     "check:all": "yarn lint:check && yarn type-check"

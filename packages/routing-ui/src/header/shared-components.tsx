@@ -2,18 +2,17 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import {
+  HamburgerIconSmall,
   HamburgerIcon,
   SearchIcon,
   SettingsIcon,
   ClearIcon,
-  HamburgerIconSmall,
-} from '@/icons'
-import { SEARCH_PLACEHOLDER, SUBSCRIBE_URL, MENU_ITEMS } from '@/constants'
-import { cva } from 'class-variance-authority'
-import Input from '../input'
+} from '../icons'
 import Image from 'next/image'
-import Button from '../button'
-import { cn } from '@/utils/cn'
+import { cn } from '../utils/cn'
+import { Button, Input } from '../components'
+import type { MenuItem } from '../types'
+import { cva } from 'class-variance-authority'
 
 const searchFormVariants = cva(
   'h-full transition-all duration-300 ease-in-out',
@@ -110,10 +109,12 @@ type SearchInputSectionProps =
       mode: 'popover'
       isSearchOpen: boolean
       tags: string[]
+      searchPlaceholder: string
     }
   | {
       mode: 'inline'
       tags: string[]
+      searchPlaceholder: string
     }
 
 export function SearchInputSection(props: SearchInputSectionProps) {
@@ -124,6 +125,7 @@ export function SearchInputSection(props: SearchInputSectionProps) {
   const mode = props.mode
   const isSearchOpen = mode === 'popover' && props.isSearchOpen
   const tags = props.tags
+  const searchPlaceholder = props.searchPlaceholder
 
   useEffect(() => {
     if (mode === 'inline') {
@@ -155,7 +157,7 @@ export function SearchInputSection(props: SearchInputSectionProps) {
         })}
       >
         <Input
-          placeholder={SEARCH_PLACEHOLDER}
+          placeholder={searchPlaceholder}
           name="q"
           title="Search for..."
           aria-label="Search for..."
@@ -192,9 +194,13 @@ export function SearchInputSection(props: SearchInputSectionProps) {
 export function ActionButtons({
   hideCtaButtons = false,
   tags,
+  searchPlaceholder,
+  subscribeUrl,
 }: {
   hideCtaButtons?: boolean
   tags: string[]
+  searchPlaceholder: string
+  subscribeUrl: string
 }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
 
@@ -231,7 +237,7 @@ export function ActionButtons({
             </Button>
             <Button variant="primary" size={32} asChild>
               <Link
-                href={SUBSCRIBE_URL}
+                href={subscribeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -245,6 +251,7 @@ export function ActionButtons({
           isSearchOpen={isSearchOpen}
           mode="popover"
           tags={tags}
+          searchPlaceholder={searchPlaceholder}
         />
       </div>
 
@@ -268,14 +275,16 @@ export function ActionButtons({
 
 export function BottomNavigation({
   onHamburgerOverlayOpen,
+  menuItems,
 }: {
   onHamburgerOverlayOpen: () => void
+  menuItems: MenuItem[]
 }) {
   return (
     <div className="flex items-center justify-between w-full py-2 border-y border-neutral-border px-4">
       <HamburgerButton onHamburgerOverlayOpen={onHamburgerOverlayOpen} small />
 
-      {MENU_ITEMS.reduce((acc, item, index) => {
+      {menuItems.reduce((acc, item, index) => {
         return [
           ...acc,
           <div key={item.label} className="flex items-center">
@@ -286,7 +295,7 @@ export function BottomNavigation({
               {item.label}
             </Link>
           </div>,
-          ...(index < MENU_ITEMS.length - 1
+          ...(index < menuItems.length - 1
             ? [
                 <div
                   key={`separator-${index}`}

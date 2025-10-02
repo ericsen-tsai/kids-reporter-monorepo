@@ -2,8 +2,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useArticleContext } from './article-context'
-import { useScrollLevel, ScrollLevel } from '@/utils/custom-hook'
 import styles from './sidebar.module.css'
+import { useScrollLevel, ScrollLevel } from '@kids-reporter/routing-ui'
 
 const shareIcons = [
   {

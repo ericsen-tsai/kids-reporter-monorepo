@@ -1,13 +1,14 @@
 'use client'
 import Link from 'next/link'
-import { LoginIcon } from '@/icons'
+import { LoginIcon } from '../icons'
 import {
   LogoLink,
   ActionButtons,
   BottomNavigation,
   HamburgerButton,
 } from './shared-components'
-import { cn } from '@/utils/cn'
+import { cn } from '../utils/cn'
+import type { MenuItem } from '../types'
 
 type DesktopHeaderProps = {
   onHamburgerOverlayOpen: () => void
@@ -15,6 +16,9 @@ type DesktopHeaderProps = {
   compactMode: boolean
   postTitle?: string
   hide: boolean
+  searchPlaceholder: string
+  subscribeUrl: string
+  menuItems: MenuItem[]
 }
 
 export function DesktopHeader({
@@ -23,6 +27,9 @@ export function DesktopHeader({
   compactMode,
   postTitle,
   hide,
+  searchPlaceholder,
+  subscribeUrl,
+  menuItems,
 }: DesktopHeaderProps) {
   return (
     <>
@@ -84,7 +91,12 @@ export function DesktopHeader({
               </div>
 
               <div className="flex items-center gap-4">
-                <ActionButtons tags={keywords} hideCtaButtons={compactMode} />
+                <ActionButtons
+                  tags={keywords}
+                  hideCtaButtons={compactMode}
+                  searchPlaceholder={searchPlaceholder}
+                  subscribeUrl={subscribeUrl}
+                />
                 <Link
                   href="/login"
                   className="flex items-center justify-center w-8 h-8 text-red-400 hover:text-red-500 rounded-full transition-colors duration-200"
@@ -105,6 +117,7 @@ export function DesktopHeader({
             >
               <BottomNavigation
                 onHamburgerOverlayOpen={onHamburgerOverlayOpen}
+                menuItems={menuItems}
               />
             </div>
           </div>

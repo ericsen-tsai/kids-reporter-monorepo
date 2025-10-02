@@ -7,7 +7,7 @@ type PostTitleSetterProps = {
   postTitle?: string
 }
 
-export function PostTitleSetter({ postTitle }: PostTitleSetterProps) {
+function PostTitleSetter({ postTitle }: PostTitleSetterProps) {
   const context = useHeaderContext()
   const setPostTitle = context?.setPostTitle
   useEffect(() => {
@@ -17,3 +17,5 @@ export function PostTitleSetter({ postTitle }: PostTitleSetterProps) {
 
   return null
 }
+
+export default PostTitleSetter

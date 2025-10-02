@@ -1,8 +1,8 @@
 'use client'
 import Link from 'next/link'
-import { ClearIcon, LoginIcon } from '@/icons'
+import { ClearIcon, LoginIcon } from '../icons'
 import { LogoLink, HamburgerButton } from './shared-components'
-import { cn } from '@/utils/cn'
+import { cn } from '../utils/cn'
 
 type MobileHeaderProps = {
   onHamburgerOverlayOpen: () => void
@@ -21,7 +21,6 @@ export function MobileHeader({
 
   return (
     <>
-      {/** padding top for menu */}
       <div className="h-(--mobile-header-height) desktop:hidden"></div>
       <div
         className={cn(

@@ -10,12 +10,18 @@ import GoToMainSite from '@/home/go-to-main-site'
 import {
   FALLBACK_IMG,
   GENERAL_DESCRIPTION,
+  MENU_ITEMS,
+  ADDITIONAL_MENU_ITEMS,
   POST_CONTENT_GQL,
+  SEARCH_PLACEHOLDER,
+  SOCIAL_MEDIA_ITEMS,
+  SUBSCRIBE_URL,
+  DONATE_URL,
   Theme,
 } from '@/constants'
 import { getPostSummaries, sendGQLRequest } from '@/utils'
 import { Fragment } from 'react'
-import Header from '@/components/header'
+import { Header } from '@kids-reporter/routing-ui'
 
 export const dynamic = 'force-dynamic'
 
@@ -230,7 +236,14 @@ export default async function Home() {
 
   return (
     <main className="flex flex-col items-center w-screen">
-      <Header />
+      <Header
+        menuItems={MENU_ITEMS}
+        additionalMenuItems={ADDITIONAL_MENU_ITEMS}
+        socialMediaHrefs={SOCIAL_MEDIA_ITEMS.map((item) => item.href)}
+        searchPlaceholder={SEARCH_PLACEHOLDER}
+        subscribeUrl={SUBSCRIBE_URL}
+        donateUrl={DONATE_URL}
+      />
       {topics?.length > 0 && <MainSlider topics={topics} />}
       <PostSelection latestPosts={latestPosts} featuredPosts={featuredPosts} />
       {sections.map((sectionConfig, index) => {

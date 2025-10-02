@@ -18,7 +18,7 @@ import {
 } from '@/utils'
 import { Leading } from '../../_components/topic/leading'
 import { RelatedPosts } from '../../_components/topic/related-posts'
-import { PostTitleSetter } from '@/components/header/post-title-setter'
+import { HeaderPostTitleSetter } from '@kids-reporter/routing-ui'
 import { notFound } from 'next/navigation'
 
 const query = `
@@ -156,7 +156,7 @@ export default async function TopicPage({
   return (
     project && (
       <div>
-        <PostTitleSetter postTitle={project.title} />
+        <HeaderPostTitleSetter postTitle={project.title} />
         <Leading
           title={project.title}
           subtitle={project.subtitle ?? ''}

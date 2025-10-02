@@ -1,15 +1,16 @@
 import envVars from '@/environment-variables'
+import { MenuItem, SettingsIconSmall } from '@kids-reporter/routing-ui'
 
 export const INTERNAL_API_URL = envVars.internalGqlEndpoint
 export const API_URL = envVars.gqlEndpoint
 
 export const KIDS_URL_ORIGIN = 'https://kids.twreporter.org'
-export const SUBSCRIBE_URL = 'http://eepurl.com/idk8VH'
+export const SUBSCRIBE_URL = 'https://solink.soundon.fm/kidstwreporter'
 export const CONTRIBUTE_FORM = 'https://forms.gle/7Yh4iPjfq92NDaSm9'
 export const MAIN_SITE_URL = 'https://www.twreporter.org/'
 export const DONATE_URL = 'https://support.twreporter.org/'
 export const CREDIT_DONATE_URL = 'https://www.twreporter.org/a/credit-donate'
-export const PRIVACY_POLICY = 'https://www.twreporter.org/a/privacy-footer'
+export const PRIVACY_POLICY = 'https://www.twreporter.org/a/privacy-policy'
 export const EMAIL = 'kidsnews@twreporter.org'
 export const NEWSLETTER_SUBSCRIPTION =
   'https://twreporter.us14.list-manage.com/subscribe?u=4da5a7d3b98dbc9fdad009e7e&id=2154ac40c3'
@@ -142,7 +143,11 @@ export const DEBOUNCE_THRESHOLD = 100
 
 export const IS_LOGIN_ENABLED = true
 
-export const MENU_ITEMS = [
+export const STICKY_HEADER_HEIGHT = 130
+
+export const POPULAR_KEYWORDS = ['氣候變遷', '選舉', '教育', '環境保護']
+
+export const MENU_ITEMS: MenuItem[] = [
   {
     label: '最新',
     href: '/all',
@@ -212,11 +217,13 @@ export const MENU_ITEMS = [
   },
 ]
 
-export const ADDITIONAL_MENU_ITEMS = [
+export const ADDITIONAL_MENU_ITEMS: MenuItem[] = [
   {
     label: '閱讀探索設定',
     href: '/reading-settings',
     subItems: [],
+    showIcon: true,
+    icon: SettingsIconSmall,
   },
   {
     label: '關於我們',
@@ -284,14 +291,4 @@ export const SOCIAL_MEDIA_ITEMS = [
     label: 'RSS',
     href: 'https://kids-storage.twreporter.org/rss/rss.xml',
   },
-] as const
-
-export const POPULAR_KEYWORDS = [
-  '氣候變遷',
-  'AI人工智慧',
-  '選舉',
-  '教育',
-  '環境保護',
 ]
-
-export const STICKY_HEADER_HEIGHT = 130

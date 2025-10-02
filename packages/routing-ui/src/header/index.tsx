@@ -1,12 +1,33 @@
 'use client'
 import { MobileHeader } from './mobile-header'
 import { DesktopHeader } from './desktop-header'
-import { Menu } from './menu'
 import { useHeaderContext } from './header-context'
-import { ScrollLevel, useIsAtTop, useScrollLevel } from '@/utils/custom-hook'
-import { useMediaQuery } from '@/utils/hooks'
+import {
+  useIsAtTop,
+  useMediaQuery,
+  useScrollLevel,
+  ScrollLevel,
+} from '../hooks'
+import type { MenuItem, SocialMediaHrefs } from '../types'
+import Menu from './menu'
 
-function Header() {
+type HeaderProps = {
+  menuItems: MenuItem[]
+  additionalMenuItems: MenuItem[]
+  socialMediaHrefs: SocialMediaHrefs
+  searchPlaceholder: string
+  subscribeUrl: string
+  donateUrl: string
+}
+
+function Header({
+  menuItems,
+  additionalMenuItems,
+  socialMediaHrefs,
+  searchPlaceholder,
+  subscribeUrl,
+  donateUrl,
+}: HeaderProps) {
   const context = useHeaderContext()
   const postTitle = context?.postTitle
   const isMenuOpen = context?.isMenuOpen || false
@@ -39,6 +60,9 @@ function Header() {
         hide={isScrollingDown}
         compactMode={!isAtTop}
         postTitle={isAtTop ? undefined : postTitle}
+        searchPlaceholder={searchPlaceholder}
+        subscribeUrl={subscribeUrl}
+        menuItems={menuItems}
       />
       <MobileHeader
         onCloseMenu={onCloseMenu}
@@ -50,6 +74,12 @@ function Header() {
         isOpen={isMenuOpen}
         onClose={closeMenu || (() => undefined)}
         keywords={keywords}
+        menuItems={menuItems}
+        additionalMenuItems={additionalMenuItems}
+        socialMediaHrefs={socialMediaHrefs}
+        donateUrl={donateUrl}
+        subscribeUrl={subscribeUrl}
+        searchPlaceholder={searchPlaceholder}
       />
     </>
   )

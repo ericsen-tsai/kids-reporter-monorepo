@@ -14,8 +14,9 @@
   "dependencies": {
     "@googleapis/customsearch": "^1.0.4",
     "@kids-reporter/draft-renderer": "1.0.12",
+    "@kids-reporter/routing-ui": "0.1.0-alpha.1",
     "@radix-ui/react-slot": "^1.2.3",
-    "@tailwindcss/postcss": "^4.1.13",
+    "@tailwindcss/postcss": "^4.1.14",
     "@twreporter/errors": "^1.1.2",
     "@types/draft-js": "^0.11.10",
     "@types/node": "20.19.17",
@@ -39,7 +40,7 @@
     "styled-components": "5.3.5",
     "swiper": "^10.1.0",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^4.1.13",
+    "tailwindcss": "^4.1.14",
     "typescript": "5.9.2"
   },
   "devDependencies": {

@@ -1,11 +1,25 @@
-import Header from '@/components/header'
+import { Header, SearchIcon } from '@kids-reporter/routing-ui'
 import TopDetector from '@/components/top-detector'
-import { SearchIcon } from '@/icons'
+import {
+  MENU_ITEMS,
+  ADDITIONAL_MENU_ITEMS,
+  SOCIAL_MEDIA_ITEMS,
+  SEARCH_PLACEHOLDER,
+  SUBSCRIBE_URL,
+  DONATE_URL,
+} from '@/constants'
 
 export default function NotFound() {
   return (
     <>
-      <Header />
+      <Header
+        menuItems={MENU_ITEMS}
+        additionalMenuItems={ADDITIONAL_MENU_ITEMS}
+        socialMediaHrefs={SOCIAL_MEDIA_ITEMS.map((item) => item.href)}
+        searchPlaceholder={SEARCH_PLACEHOLDER}
+        subscribeUrl={SUBSCRIBE_URL}
+        donateUrl={DONATE_URL}
+      />
       <div
         style={{ width: '95vw' }}
         className="flex flex-col justify-center items-center mb-16"
