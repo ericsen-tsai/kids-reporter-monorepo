@@ -34,7 +34,7 @@ export const useScrollLevel = ({
             : ScrollLevel.DOWN_HIDDEN
       }
       level !== scrollLevel && setScrollLevel(level)
-      lastScrollY = scrollY > 0 ? scrollY : 0
+      lastScrollY = window.scrollY > 0 ? window.scrollY : 0
     }, throttleThreshold)
 
     window.addEventListener('scroll', updateScrollLevel, { passive: true })
