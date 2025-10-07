@@ -1,10 +1,9 @@
+import Script from 'next/script'
+import StyledComponentsRegistry from '@/components/registry'
 import '../globals.css'
 
 import { Footer, HeaderProvider } from '@kids-reporter/routing-ui'
-import Script from 'next/script'
 
-import BackToTop from '@/components/back-to-top'
-import StyledComponentsRegistry from '@/components/registry'
 import {
   ADDITIONAL_MENU_ITEMS,
   DONATE_URL,
@@ -38,7 +37,6 @@ export default async function RootLayout({
         <HeaderProvider keywords={keywords}>
           <body>
             {children}
-            <BackToTop />
             <Footer
               socialMediaHrefs={SOCIAL_MEDIA_ITEMS.map((item) => item.href)}
               additionalMenuItems={ADDITIONAL_MENU_ITEMS}

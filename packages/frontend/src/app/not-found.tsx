@@ -1,6 +1,5 @@
 import { Header, SearchIcon } from '@kids-reporter/routing-ui'
 
-import TopDetector from '@/components/top-detector'
 import {
   ADDITIONAL_MENU_ITEMS,
   DONATE_URL,
@@ -10,7 +9,7 @@ import {
   SUBSCRIBE_URL,
 } from '@/constants'
 
-export default function NotFound() {
+function NotFound() {
   return (
     <>
       <Header
@@ -25,7 +24,6 @@ export default function NotFound() {
         style={{ width: '95vw' }}
         className="mb-16 flex flex-col items-center justify-center"
       >
-        <TopDetector />
         <img
           className="w-full max-w-72 md:max-w-md lg:max-w-xl"
           src="/assets/images/404.png"
@@ -78,3 +76,5 @@ export default function NotFound() {
     </>
   )
 }
+
+export default NotFound

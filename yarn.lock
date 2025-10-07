@@ -3416,6 +3416,18 @@
   dependencies:
     "@radix-ui/react-compose-refs" "1.1.2"
 
+"@rive-app/react-webgl2@^4.23.4":
+  version "4.23.4"
+  resolved "https://registry.yarnpkg.com/@rive-app/react-webgl2/-/react-webgl2-4.23.4.tgz#4061b6f5ec7ce87eef4eae2f577c3aafecd3112f"
+  integrity sha512-0zDiZZtUzjltNhaUhe7IH2Y262SnEpGC9vH7A9Lt//xFRVuQRLx0YnWTyDBrLjww7k318EsPj+fk8al3lY6z9A==
+  dependencies:
+    "@rive-app/webgl2" "2.31.6"
+
+"@rive-app/webgl2@2.31.6":
+  version "2.31.6"
+  resolved "https://registry.yarnpkg.com/@rive-app/webgl2/-/webgl2-2.31.6.tgz#9ed46e9b9fafa2e6431a4ceb098d2a0555f9bea8"
+  integrity sha512-0RmZa/MXIbIz0FeLZslvEilxy0HzNxdonAX7qj1VqHjAPEZ0eRKN2BnyQcry66PuCfTUcnE1okX2NrnDLVk8qQ==
+
 "@sec-ant/readable-stream@^0.4.1":
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/@sec-ant/readable-stream/-/readable-stream-0.4.1.tgz#60de891bb126abfdc5410fdc6166aca065f10a0c"

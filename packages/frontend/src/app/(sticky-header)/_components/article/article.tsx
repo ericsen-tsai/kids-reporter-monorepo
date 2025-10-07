@@ -1,8 +1,8 @@
 'use client'
 import './article.css'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { useState } from 'react'
 
 import AuthorCard, { Author } from '@/components/author-card'
 import Divider from '@/components/divider'
@@ -28,6 +28,10 @@ import RelatedPosts from './related-posts'
 import { MobileSidebar, Sidebar } from './sidebar'
 import SubSubcategory from './subSubcategory'
 import Title from './title'
+import './article.css'
+import { BaodaozaiEventTrigger } from '@/services/call-baodaozai'
+
+import { useIsAtTop } from '@kids-reporter/routing-ui'
 
 const getPostContents = (post: any) => {
   // Assemble authors for brief
@@ -133,7 +137,7 @@ const getPostContents = (post: any) => {
   }
 }
 
-export const Article = ({ post }: { post: any }) => {
+const Article = ({ post }: { post: any }) => {
   const {
     theme,
     topicURL,
@@ -195,6 +199,15 @@ export const Article = ({ post }: { post: any }) => {
     </div>
   )
 
+  const isAtTop = useIsAtTop()
+  const [isFirstRenderAtTop, setIsFirstRenderAtTop] = useState(isAtTop)
+
+  useEffect(() => {
+    if (!isAtTop && isFirstRenderAtTop) {
+      setIsFirstRenderAtTop(false)
+    }
+  }, [isAtTop])
+
   return (
     <>
       <div className={`post${theme ? ` theme-${theme}` : ''}`}>
@@ -214,6 +227,20 @@ export const Article = ({ post }: { post: any }) => {
             imgProps={imgProps}
             handleImgModalClose={handleImgModalClose}
           />
+          <BaodaozaiEventTrigger
+            dialogState={{
+              isOpen: true,
+              confirmText: '開始閱讀',
+              hideCancelButton: true,
+              // TODO: get content from backend
+              // content: post?.intro
+            }}
+            baodaozaiState={{
+              isActive: true,
+              action: 'speak',
+            }}
+            disabled={!isFirstRenderAtTop}
+          />
           <HeroImage
             image={post?.heroImage}
             caption={post?.heroCaption}
@@ -223,6 +250,17 @@ export const Article = ({ post }: { post: any }) => {
           {post?.newsReadingGroup && (
             <NewsReading data={post.newsReadingGroup} />
           )}
+
+          <BaodaozaiEventTrigger
+            dialogState={{
+              isOpen: false,
+            }}
+            baodaozaiState={{
+              isActive: false,
+              action: 'none',
+            }}
+            once={false}
+          />
           <Brief content={post?.brief} authors={authorsInBrief} theme={theme} />
           <Divider />
           <PostRenderer post={post} theme={theme} />
