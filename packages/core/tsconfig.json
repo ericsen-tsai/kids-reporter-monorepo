@@ -1,16 +1,28 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "typeRoots": ["node_modules/@types", "src/local-types"],
-    "skipLibCheck": true
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "incremental": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": true,
+    "baseUrl": ".",
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "typeRoots": ["node_modules/@types", "src/local-types"]
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "../draft-editor/src/**/*.ts",
-    "../draft-editor/src/**/*.tsx",
-    "../draft-renderer/src/**/*.ts",
-    "../draft-renderer/src/**/*.tsx"
-  ],
-  "exclude": ["node_modules", "lib"]
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules", "lib", "dist", "build", ".next", "lib-temp"]
 }
