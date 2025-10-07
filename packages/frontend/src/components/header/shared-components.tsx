@@ -1,7 +1,13 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { HamburgerIcon, SearchIcon, SettingsIcon, ClearIcon } from '@/icons'
+import {
+  HamburgerIcon,
+  SearchIcon,
+  SettingsIcon,
+  ClearIcon,
+  HamburgerIconSmall,
+} from '@/icons'
 import { SEARCH_PLACEHOLDER, SUBSCRIBE_URL, MENU_ITEMS } from '@/constants'
 import { cva } from 'class-variance-authority'
 import Input from '../input'
@@ -14,7 +20,7 @@ const searchFormVariants = cva(
     variants: {
       mode: {
         inline: 'w-full h-11',
-        popover: 'absolute top-0 right-28 overflow-hidden w-0',
+        popover: 'absolute top-0 right-28 overflow-hidden w-66 opacity-0',
       },
       isSearchOpen: {
         true: '',
@@ -25,19 +31,24 @@ const searchFormVariants = cva(
       {
         mode: 'popover',
         isSearchOpen: true,
-        class: 'w-66',
+        class: 'opacity-100 w-66 pointer-events-auto',
+      },
+      {
+        mode: 'popover',
+        isSearchOpen: false,
+        class: 'pointer-events-none',
       },
     ],
   }
 )
 
 const searchDropdownVariants = cva(
-  'bg-neutral-white rounded-xl mt-2 w-66 transition-all duration-300 ease-in-out z-50 h-0 p-0 opacity-0',
+  'bg-neutral-white rounded-xl mt-2 w-66 transition-all duration-200 ease-in-out z-50 h-0 p-0 opacity-0',
   {
     variants: {
       mode: {
         inline: '',
-        popover: 'absolute top-12 right-28 shadow-custom',
+        popover: 'absolute top-12 right-28 shadow-custom p-4',
       },
       isSearchOpen: {
         true: '',
@@ -67,21 +78,6 @@ const searchDropdownVariants = cva(
         class: 'w-full -translate-y-10 pointer-events-none',
       },
     ],
-  }
-)
-
-const hamburgerButtonVariants = cva(
-  'flex items-center justify-center rounded-sm hover:bg-gray-100 transition-all duration-200',
-  {
-    variants: {
-      hidden: {
-        true: 'opacity-0 w-0',
-        false: '',
-      },
-    },
-    defaultVariants: {
-      hidden: false,
-    },
   }
 )
 
@@ -216,10 +212,11 @@ export function ActionButtons({
   }, [])
 
   return (
-    <div className="flex items-center gap-4 relative">
-      <div className="flex items-center" ref={containerRef}>
+    <div className="flex items-center relative">
+      <div className="flex items-center mr-6" ref={containerRef}>
+        {/* CTA Buttons - Base layer */}
         {!hideCtaButtons && !isSearchOpen && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <Button variant="secondary" size={32} asChild>
               <Link href="/about#post">投稿</Link>
             </Button>
@@ -243,7 +240,7 @@ export function ActionButtons({
       </div>
 
       <button
-        className="flex items-center cursor-pointer justify-center min-w-10 w-10 h-10 rounded-full hover:bg-gray-100 transition-colors duration-200"
+        className="flex items-center cursor-pointer justify-center min-w-10 w-10 h-10 rounded-full text-neutral-600 hover:text-neutral-800 transition-all duration-200 mr-4"
         aria-label="搜尋"
         onClick={() => setIsSearchOpen(!isSearchOpen)}
         ref={buttonRef}
@@ -251,7 +248,7 @@ export function ActionButtons({
         {isSearchOpen ? ClearIcon : SearchIcon}
       </button>
       <button
-        className="flex items-center cursor-pointer justify-center min-w-10 w-10 h-10 rounded-full hover:bg-gray-100 transition-colors duration-200"
+        className="flex items-center cursor-pointer justify-center min-w-10 w-10 h-10 rounded-full text-neutral-600 hover:text-neutral-800 transition-all duration-200"
         aria-label="設定"
       >
         {SettingsIcon}
@@ -267,7 +264,7 @@ export function BottomNavigation({
 }) {
   return (
     <div className="flex items-center justify-between w-full py-2 border-y border-neutral-border px-4">
-      <HamburgerButton onHamburgerOverlayOpen={onHamburgerOverlayOpen} />
+      <HamburgerButton onHamburgerOverlayOpen={onHamburgerOverlayOpen} small />
 
       {MENU_ITEMS.reduce((acc, item, index) => {
         return [
@@ -275,7 +272,7 @@ export function BottomNavigation({
           <div key={item.label} className="flex items-center">
             <Link
               href={item.href}
-              className="py-1 prose-p1 text-neutral-900 font-bold hover:text-red-400 transition-colors h-6 flex items-center"
+              className="py-1 prose-p1 text-neutral-900 font-bold! hover:text-red-400 transition-colors h-6 flex items-center"
             >
               {item.label}
             </Link>
@@ -296,17 +293,17 @@ export function BottomNavigation({
 
 export function HamburgerButton({
   onHamburgerOverlayOpen,
-  hidden = false,
+  small = false,
 }: {
   onHamburgerOverlayOpen: () => void
-  hidden?: boolean
+  small?: boolean
 }) {
   return (
     <button
-      className={hamburgerButtonVariants({ hidden })}
+      className="cursor-pointer flex items-center justify-center rounded-sm transition-all duration-300 ease-in-out hover:[&>svg>rect:nth-child(1)]:fill-blue-500 hover:[&>svg>rect:nth-child(3)]:fill-yellow-500 hover:[&>svg>rect:nth-child(2)]:fill-red-500 hover:[&>svg>path:nth-child(1)]:fill-blue-500 hover:[&>svg>path:nth-child(3)]:fill-yellow-500 hover:[&>svg>path:nth-child(2)]:fill-red-500"
       onClick={onHamburgerOverlayOpen}
     >
-      {HamburgerIcon}
+      {small ? HamburgerIconSmall : HamburgerIcon}
     </button>
   )
 }

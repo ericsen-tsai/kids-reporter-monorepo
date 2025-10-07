@@ -1,10 +1,9 @@
 'use client'
 import { MobileHeader } from './mobile-header'
 import { DesktopHeader } from './desktop-header'
-import { DesktopHeaderCompact } from './desktop-header-compact'
 import { Menu } from './menu'
 import { useHeaderContext } from './header-context'
-import { useIsAtTop } from '@/utils/custom-hook'
+import { ScrollLevel, useIsAtTop, useScrollLevel } from '@/utils/custom-hook'
 import { useMediaQuery } from '@/utils/hooks'
 
 function Header() {
@@ -25,24 +24,27 @@ function Header() {
   const isMobile = useMediaQuery('(max-width: 768px)')
 
   const isAtTop = useIsAtTop()
+  const scrollingLevel = useScrollLevel({
+    scrollDownDistance: 150,
+    throttleThreshold: 500,
+  })
+
+  const isScrollingDown = scrollingLevel === ScrollLevel.DOWN_HIDDEN
 
   return (
     <>
       <DesktopHeader
         onHamburgerOverlayOpen={onHamburgerOverlayOpen}
         keywords={keywords}
+        hide={isScrollingDown}
+        compactMode={!isAtTop}
+        postTitle={isAtTop ? undefined : postTitle}
       />
       <MobileHeader
         onCloseMenu={onCloseMenu}
         showCloseButtonWhenMenuOpen={isMobile}
         onHamburgerOverlayOpen={onHamburgerOverlayOpen}
         isMenuOpen={isMenuOpen}
-      />
-      <DesktopHeaderCompact
-        onHamburgerOverlayOpen={onHamburgerOverlayOpen}
-        postTitle={postTitle}
-        keywords={keywords}
-        hide={isAtTop}
       />
       <Menu
         isOpen={isMenuOpen}

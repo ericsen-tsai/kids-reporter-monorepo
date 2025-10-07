@@ -119,6 +119,7 @@
 
   /* Header */
   --mobile-header-height: 64px;
+  --desktop-header-height: 122px;
 
   /* Custom Shadows */
   --shadow-custom: 0 0 24px 0 rgba(0, 0, 0, 0.1);
