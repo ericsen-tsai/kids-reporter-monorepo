@@ -15,6 +15,8 @@ import SVG from './svg'
 import Tag from './tag'
 import User from './user'
 import { NewsReadingGroup, NewsReadingGroupItem } from './news-reading'
+import PostChoiceQuestion from './post-choice-question'
+import PostEssayQuestion from './post-essay-question'
 
 export const listDefinition = {
   User,
@@ -35,4 +37,6 @@ export const listDefinition = {
   CallBaodaozai,
   OnlineUser,
   Member,
+  PostChoiceQuestion,
+  PostEssayQuestion,
 }
