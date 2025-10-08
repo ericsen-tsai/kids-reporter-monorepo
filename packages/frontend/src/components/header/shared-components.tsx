@@ -68,6 +68,11 @@ const searchDropdownVariants = cva(
         class: 'p-4 h-min opacity-100',
       },
       {
+        mode: 'popover',
+        isSearchOpen: false,
+        class: 'pointer-events-none',
+      },
+      {
         mode: 'inline',
         isFocused: true,
         class:
