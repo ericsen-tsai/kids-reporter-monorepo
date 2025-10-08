@@ -26,7 +26,7 @@ function Header() {
   const isAtTop = useIsAtTop()
   const scrollingLevel = useScrollLevel({
     scrollDownDistance: 150,
-    throttleThreshold: 500,
+    throttleThreshold: 50,
   })
 
   const isScrollingDown = scrollingLevel === ScrollLevel.DOWN_HIDDEN

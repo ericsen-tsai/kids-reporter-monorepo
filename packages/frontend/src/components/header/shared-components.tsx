@@ -13,6 +13,7 @@ import { cva } from 'class-variance-authority'
 import Input from '../input'
 import Image from 'next/image'
 import Button from '../button'
+import { cn } from '@/utils/cn'
 
 const searchFormVariants = cva(
   'h-full transition-all duration-300 ease-in-out',
@@ -20,7 +21,7 @@ const searchFormVariants = cva(
     variants: {
       mode: {
         inline: 'w-full h-11',
-        popover: 'absolute top-0 right-28 overflow-hidden w-66 opacity-0',
+        popover: 'absolute top-0 -right-4 overflow-hidden w-66 opacity-0',
       },
       isSearchOpen: {
         true: '',
@@ -48,7 +49,7 @@ const searchDropdownVariants = cva(
     variants: {
       mode: {
         inline: '',
-        popover: 'absolute top-12 right-28 shadow-custom p-4',
+        popover: 'absolute top-12 -right-4 shadow-custom p-4',
       },
       isSearchOpen: {
         true: '',
@@ -75,20 +76,23 @@ const searchDropdownVariants = cva(
       {
         mode: 'inline',
         isFocused: false,
-        class: 'w-full -translate-y-10 pointer-events-none',
+        class: 'w-full -translate-y-3 pointer-events-none',
       },
     ],
   }
 )
 
-export function LogoLink() {
+export function LogoLink({ compactMode = false }: { compactMode?: boolean }) {
   return (
     <Link href="/" className="flex items-center" rel="home">
       <Image
         src="/assets/images/brand-icon.svg"
         alt="少年報導者 The Reporter for Kids"
         loading="eager"
-        className="h-5 w-auto tablet:h-6 desktop:h-[26px]"
+        className={cn(
+          'h-5 w-auto tablet:h-6 desktop:h-8 transition-all duration-500 ease-in-out',
+          compactMode && 'desktop:h-[26px]'
+        )}
         width={293}
         height={32}
       />
@@ -134,7 +138,7 @@ export function SearchInputSection(props: SearchInputSectionProps) {
     <div
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
-      className={mode === 'inline' ? 'w-full' : 'h-11'}
+      className={mode === 'inline' ? 'w-full relative' : 'h-11'}
     >
       <form
         role="search"
@@ -213,7 +217,7 @@ export function ActionButtons({
 
   return (
     <div className="flex items-center relative">
-      <div className="flex items-center mr-6" ref={containerRef}>
+      <div className="flex items-center mr-6 relative" ref={containerRef}>
         {/* CTA Buttons - Base layer */}
         {!hideCtaButtons && !isSearchOpen && (
           <div className="flex items-center gap-4">
@@ -240,7 +244,7 @@ export function ActionButtons({
       </div>
 
       <button
-        className="flex items-center cursor-pointer justify-center min-w-10 w-10 h-10 rounded-full text-neutral-600 hover:text-neutral-800 transition-all duration-200 mr-4"
+        className="flex items-center cursor-pointer justify-center w-8 h-8 rounded-full text-neutral-600 hover:text-neutral-800 transition-all duration-200 mr-4"
         aria-label="搜尋"
         onClick={() => setIsSearchOpen(!isSearchOpen)}
         ref={buttonRef}
@@ -248,7 +252,7 @@ export function ActionButtons({
         {isSearchOpen ? ClearIcon : SearchIcon}
       </button>
       <button
-        className="flex items-center cursor-pointer justify-center min-w-10 w-10 h-10 rounded-full text-neutral-600 hover:text-neutral-800 transition-all duration-200"
+        className="flex items-center cursor-pointer justify-center w-8 h-8 rounded-full text-neutral-600 hover:text-neutral-800 transition-all duration-200"
         aria-label="設定"
       >
         {SettingsIcon}
@@ -300,7 +304,10 @@ export function HamburgerButton({
 }) {
   return (
     <button
-      className="cursor-pointer flex items-center justify-center rounded-sm transition-all duration-300 ease-in-out hover:[&>svg>rect:nth-child(1)]:fill-blue-500 hover:[&>svg>rect:nth-child(3)]:fill-yellow-500 hover:[&>svg>rect:nth-child(2)]:fill-red-500 hover:[&>svg>path:nth-child(1)]:fill-blue-500 hover:[&>svg>path:nth-child(3)]:fill-yellow-500 hover:[&>svg>path:nth-child(2)]:fill-red-500"
+      className={cn(
+        'cursor-pointer flex items-center justify-center rounded-sm transition-all duration-300 ease-in-out hover:[&>svg>rect:nth-child(1)]:fill-blue-500 hover:[&>svg>rect:nth-child(3)]:fill-yellow-500 hover:[&>svg>rect:nth-child(2)]:fill-red-500 hover:[&>svg>path:nth-child(1)]:fill-blue-500 hover:[&>svg>path:nth-child(3)]:fill-yellow-500 hover:[&>svg>path:nth-child(2)]:fill-red-500',
+        small ? 'w-6 h-6' : 'w-8 h-8'
+      )}
       onClick={onHamburgerOverlayOpen}
     >
       {small ? HamburgerIconSmall : HamburgerIcon}

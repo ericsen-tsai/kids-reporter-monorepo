@@ -28,14 +28,16 @@ const CloseIcon = ({ className }: { className?: string }) => (
 
 const inputVariants = cva(
   // Base styles
-  'flex items-center bg-gray-100 desktop:bg-white rounded-full px-4 py-1.5 transition-colors duration-200 font-medium font-noto text-base h-11 border border-transparent focus:border-gray-600',
+  'flex items-center prose-p1 bg-neutral-100 desktop:bg-white! rounded-full px-4 py-1.5 transition-colors duration-200 h-11 border border-transparent hover:border-neutral-600',
   {
     variants: {
       state: {
-        default: 'border border-transparent',
-        focus: 'border border-gray-600',
-        active: 'border border-gray-600',
-        unfocus: 'border border-transparent',
+        default: 'border-transparent',
+        hover: 'border-neutral-600',
+        focus: 'border-neutral-600',
+        active: 'border-neutral-600',
+        unfocus: 'border-transparent',
+        error: 'border-red-600',
       },
     },
     defaultVariants: {
@@ -132,30 +134,32 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const inputClasses = cn(inputVariants({ state: currentState }), className)
 
     return (
-      <div className={inputClasses} ref={ref}>
-        {SearchIconSmall}
-        <input
-          type="text"
-          value={currentValue}
-          onChange={handleChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          placeholder={placeholder}
-          className="flex-1 bg-transparent text-gray-900 placeholder:text-gray-400 focus:outline-none ml-2 flex-shrink-1 max-w-[72%]"
-          ref={inputRef ?? innerInputRef}
-          {...props}
-        />
+      <div className="flex flex-col gap-2">
+        <div className={inputClasses} ref={ref}>
+          {SearchIconSmall}
+          <input
+            type="text"
+            value={currentValue}
+            onChange={handleChange}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            placeholder={placeholder}
+            className="flex-1 bg-transparent text-neutral-900 placeholder:text-neutral-400 placeholder:font-medium focus:outline-none ml-2 flex-shrink-1 max-w-[72%]"
+            ref={inputRef ?? innerInputRef}
+            {...props}
+          />
 
-        {showClearButton && hasValue && (
-          <button
-            type="button"
-            onClick={handleClear}
-            className="cursor-pointer text-gray-400 hover:text-gray-600 flex-shrink-0 transition-colors p-1/2 rounded-full active:bg-gray-200 ml-auto"
-            aria-label="Clear input"
-          >
-            <CloseIcon />
-          </button>
-        )}
+          {showClearButton && hasValue && (
+            <button
+              type="button"
+              onClick={handleClear}
+              className="cursor-pointer text-neutral-400 hover:text-neutral-600 flex-shrink-0 transition-colors p-1/2 rounded-full active:bg-neutral-200 ml-auto"
+              aria-label="Clear input"
+            >
+              <CloseIcon />
+            </button>
+          )}
+        </div>
       </div>
     )
   }
