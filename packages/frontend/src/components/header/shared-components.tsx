@@ -175,7 +175,7 @@ export function SearchInputSection(props: SearchInputSectionProps) {
               className="cursor-pointer transition-colors duration-200 rounded-full px-3 py-1 prose-p2 font-bold text-neutral-900 bg-neutral-200 hover:bg-red-500 hover:text-neutral-white"
               href={`/search?q=${encodeURIComponent(keyword)}`}
             >
-              # {keyword}
+              #{keyword}
             </a>
           ))}
         </div>

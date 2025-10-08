@@ -306,7 +306,7 @@ export function Menu({ isOpen, onClose, keywords }: MenuProps) {
             <Divider />
 
             {/* Social Media */}
-            <div className="px-6 tablet:px-8 pb-4">
+            <div className="px-6 tablet:px-8">
               <div className="flex items-center gap-4 justify-center tablet:justify-between tablet:gap-0 px-4">
                 {SOCIAL_MEDIA_ITEMS.map((item) => (
                   <Link

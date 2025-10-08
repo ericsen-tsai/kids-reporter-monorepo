@@ -6,15 +6,15 @@
 @theme {
   /* Colors - Neutral */
   --color-neutral-white: #ffffff;
-  --color-neutral-gray-100: #f8f8f8;
-  --color-neutral-gray-200: #eaeaea;
-  --color-neutral-gray-300: #d9d9d9;
-  --color-neutral-gray-400: #c6c6c6;
-  --color-neutral-gray-500: #a3a3a3;
-  --color-neutral-gray-600: #8e8e8e;
-  --color-neutral-gray-700: #575757;
-  --color-neutral-gray-800: #3b3b3b;
-  --color-neutral-gray-900: #232323;
+  --color-neutral-100: #f8f8f8;
+  --color-neutral-200: #eaeaea;
+  --color-neutral-300: #d9d9d9;
+  --color-neutral-400: #c6c6c6;
+  --color-neutral-500: #a3a3a3;
+  --color-neutral-600: #8e8e8e;
+  --color-neutral-700: #575757;
+  --color-neutral-800: #3b3b3b;
+  --color-neutral-900: #232323;
   --color-neutral-black: #000000;
 
   /* Colors - Border */
@@ -138,11 +138,11 @@
     /* Updated color palette using design system */
     --paletteColor1: var(--color-blue-400);
     --paletteColor2: var(--color-blue-600);
-    --paletteColor3: var(--color-neutral-gray-700);
-    --paletteColor4: var(--color-neutral-gray-900);
+    --paletteColor3: var(--color-neutral-700);
+    --paletteColor4: var(--color-neutral-900);
     --paletteColor5: var(--color-red-400);
     --paletteColor6: var(--color-yellow-400);
-    --paletteColor7: var(--color-neutral-gray-200);
+    --paletteColor7: var(--color-neutral-200);
     --paletteColor8: var(--color-neutral-white);
     --color: var(--paletteColor3);
 
@@ -466,91 +466,10 @@
     font-family: var(--font-family-swei);
   }
 
-  /* Color Utilities */
-  .text-neutral-900 {
-    color: var(--color-neutral-gray-900);
-  }
-  .text-neutral-800 {
-    color: var(--color-neutral-gray-800);
-  }
-  .text-neutral-700 {
-    color: var(--color-neutral-gray-700);
-  }
-  .text-neutral-600 {
-    color: var(--color-neutral-gray-600);
-  }
-  .text-neutral-500 {
-    color: var(--color-neutral-gray-500);
-  }
-  .text-neutral-400 {
-    color: var(--color-neutral-gray-400);
-  }
-  .text-neutral-300 {
-    color: var(--color-neutral-gray-300);
-  }
-  .text-neutral-200 {
-    color: var(--color-neutral-gray-200);
-  }
-  .text-neutral-100 {
-    color: var(--color-neutral-gray-100);
-  }
-  .text-neutral-white {
-    color: var(--color-neutral-white);
-  }
-  .text-neutral-black {
-    color: var(--color-neutral-black);
-  }
-
-  .text-red-400 {
-    color: var(--color-red-400);
-  }
-  .text-red-500 {
-    color: var(--color-red-500);
-  }
-  .text-red-600 {
-    color: var(--color-red-600);
-  }
-
-  .text-blue-400 {
-    color: var(--color-blue-400);
-  }
-  .text-blue-500 {
-    color: var(--color-blue-500);
-  }
-  .text-blue-600 {
-    color: var(--color-blue-600);
-  }
-
-  .text-yellow-400 {
-    color: var(--color-yellow-400);
-  }
-  .text-yellow-500 {
-    color: var(--color-yellow-500);
-  }
-  .text-yellow-600 {
-    color: var(--color-yellow-600);
-  }
-
-  .bg-red-400 {
-    background-color: var(--color-red-400);
-  }
-  .bg-blue-400 {
-    background-color: var(--color-blue-400);
-  }
-  .bg-yellow-400 {
-    background-color: var(--color-yellow-400);
-  }
-  .bg-neutral-100 {
-    background-color: var(--color-neutral-gray-100);
-  }
-  .bg-neutral-white {
-    background-color: var(--color-neutral-white);
-  }
-
   /* Custom Scrollbar Utilities */
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: var(--color-neutral-gray-300) transparent;
+    scrollbar-color: var(--color-neutral-300) transparent;
   }
 
   .scrollbar-thin::-webkit-scrollbar {
