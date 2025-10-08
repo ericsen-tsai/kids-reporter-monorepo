@@ -38,11 +38,16 @@ export function DesktopHeader({
       >
         <div className="w-full bg-transparent px-12 hidden desktop:block">
           <div className="max-w-300 mx-auto">
-            <div className="flex items-center justify-between px-4 py-[18px]">
+            <div
+              className={cn(
+                'flex items-center justify-between px-4 py-[18px]',
+                compactMode && 'py-2.5'
+              )}
+            >
               <div className={'flex items-center'}>
                 <div
                   className={cn(
-                    'transition-all duration-300 ease-in-out overflow-hidden',
+                    'transition-all duration-500 ease-in-out overflow-hidden',
                     compactMode
                       ? 'opacity-100 scale-100 translate-x-0 w-auto max-w-12 mr-4'
                       : 'opacity-0 scale-95 -translate-x-2 w-0 max-w-0 pointer-events-none'
@@ -54,7 +59,7 @@ export function DesktopHeader({
                   />
                 </div>
                 <div className={compactMode ? 'mr-12' : 'mr-8'}>
-                  <LogoLink />
+                  <LogoLink compactMode={compactMode} />
                 </div>
                 {postTitle && (
                   <div className="block pr-12">
@@ -67,11 +72,12 @@ export function DesktopHeader({
                   className={cn(
                     'overflow-hidden transition-all duration-500 ease-in-out',
                     compactMode
-                      ? 'opacity-0 max-h-0 -translate-y-2 scale-95'
-                      : 'opacity-100 max-h-20 translate-y-0 scale-100'
+                      ? 'opacity-0 max-h-0 -translate-x-8 scale-95'
+                      : 'opacity-100 max-h-20 max-w-auto scale-100',
+                    postTitle && compactMode && 'max-w-0'
                   )}
                 >
-                  <span className="prose-p2 text-neutral-900 font-medium tracking-[2.2px]! inline-block translate-y-0 opacity-100">
+                  <span className="prose-p2 text-nowrap text-neutral-900 font-medium tracking-[2.2px]! inline-block translate-y-0 opacity-100">
                     理解世界 × 參與未來
                   </span>
                 </div>

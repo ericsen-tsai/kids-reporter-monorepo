@@ -285,7 +285,7 @@ export function Menu({ isOpen, onClose, keywords }: MenuProps) {
               href="/reading-settings"
               showIcon
               icon={SettingsIconSmall}
-              contentClassName="text-neutral-600 [&_span]:text-(length:--font-size-p2) hover:text-neutral-900"
+              contentClassName="text-neutral-600 [&_span]:[font-family:var(--font-family-noto)] [&_span]:[font-size:var(--font-size-p2)] [&_span]:[font-weight:500] [&_span]:[line-height:var(--line-height-normal)] [&_span]:[letter-spacing:var(--letter-spacing-wide)] hover:text-neutral-900"
             />
 
             <Divider />
@@ -298,7 +298,7 @@ export function Menu({ isOpen, onClose, keywords }: MenuProps) {
                   label={item.label}
                   href={item.href}
                   external={item.external}
-                  contentClassName="text-neutral-600 [&_span]:text-(length:--font-size-p2) hover:text-neutral-900"
+                  contentClassName="text-neutral-600 [&_span]:[font-family:var(--font-family-noto)] [&_span]:[font-size:var(--font-size-p2)] [&_span]:[font-weight:500] [&_span]:[line-height:var(--line-height-normal)] [&_span]:[letter-spacing:var(--letter-spacing-wide)] hover:text-neutral-900"
                 />
               ))}
             </div>
@@ -306,13 +306,13 @@ export function Menu({ isOpen, onClose, keywords }: MenuProps) {
             <Divider />
 
             {/* Social Media */}
-            <div className="px-6 tablet:px-8 py-4">
+            <div className="px-6 tablet:px-8 pb-4">
               <div className="flex items-center gap-4 justify-center tablet:justify-between tablet:gap-0 px-4">
                 {SOCIAL_MEDIA_ITEMS.map((item) => (
                   <Link
                     key={item.label}
                     href={item.href}
-                    className="text-neutral-900 hover:text-red-400 transition-colors duration-200"
+                    className="text-neutral-900 hover:text-red-500 transition-colors duration-200"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={item.label}
@@ -328,7 +328,7 @@ export function Menu({ isOpen, onClose, keywords }: MenuProps) {
 
           {/* Action Buttons */}
           <div className="px-6 tablet:px-8 py-6 tablet:pt-6 tablet:pb-8">
-            <div className="flex flex-col gap-4 border-t border-neutral-200">
+            <div className="flex flex-col gap-4">
               <Button variant="secondary" size={44} asChild className="w-full">
                 <a
                   href={SUBSCRIBE_URL}
