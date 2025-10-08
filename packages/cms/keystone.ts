@@ -12,6 +12,7 @@ import { InMemoryLRUCache } from '@apollo/utils.keyvaluecache'
 import { createPreviewMiniApp } from './express-mini-apps/preview/app'
 import { twoFactorAuth } from './express-mini-apps/two-factor-auth'
 import type { KeystoneContext, SessionStrategy } from '@keystone-6/core/types'
+import { extendGraphqlSchema } from './graphql/extend-schema'
 
 const sessionDataQuery = 'id name role email twoFactorAuth'
 
@@ -305,6 +306,7 @@ const authConfig = withAuth(
           ttl: envVar.memoryCacheTtl,
         }),
       },
+      extendGraphqlSchema,
     },
     server: {
       extendExpressApp: (app, commonContext) => {

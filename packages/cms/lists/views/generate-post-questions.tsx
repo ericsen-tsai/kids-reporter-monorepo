@@ -13,7 +13,7 @@ const GENERATE_QUESTIONS = gql`
 `
 
 export const Field = ({ value }: FieldProps<typeof controller>) => {
-  const [message, setMessage] = useState<string | null>(null)
+  const [message, setMessage] = useState<string>('')
   const [mutate, { loading }] = useMutation(GENERATE_QUESTIONS)
 
   const handleClick = async () => {
@@ -21,14 +21,15 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
       return
     }
 
-    setMessage(null)
+    setMessage('')
 
     try {
       await mutate({ variables: { postId: value.postId } })
       setMessage('已完成檢查與生成（請重新整理頁面看最新的內容）。')
-    } catch (err) {
-      setMessage('發生錯誤，請稍後再試。')
-
+    } catch (_err) {
+      const err = _err instanceof Error ? _err : new Error(String(_err))
+      const errorMsg = '發生錯誤，請將以下錯誤訊息回報工程師：' + err.message
+      setMessage(errorMsg)
       console.error(err)
     }
   }
