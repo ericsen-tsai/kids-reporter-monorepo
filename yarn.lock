@@ -3151,6 +3151,13 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-14.2.33.tgz#f1a40062530c17c35a86d8c430b3ae465eb7cea1"
   integrity sha512-nOjfZMy8B94MdisuzZo9/57xuFVLHJaDj5e/xrduJp9CV2/HrfxTRH2fbyLe+K9QT41WBLUd4iXX3R7jBp0EUg==
 
+"@next/third-parties@^14.1.1":
+  version "14.2.33"
+  resolved "https://registry.yarnpkg.com/@next/third-parties/-/third-parties-14.2.33.tgz#44e87529f26271b8c7fc86c48e090cd28673a51e"
+  integrity sha512-hrHZXJYbgY2VCmRUEUcQt2PsxZ2yCB8IJyPy0qI3pz237i+eI2BlwMpAI7L4ZkUl5IRyO4/SBJIgulVDF2pRow==
+  dependencies:
+    third-party-capital "1.0.20"
+
 "@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3":
   version "2.1.8-no-fsevents.3"
   resolved "https://registry.yarnpkg.com/@nicolo-ribaudo/chokidar-2/-/chokidar-2-2.1.8-no-fsevents.3.tgz#323d72dd25103d0c4fbdce89dadf574a787b1f9b"
@@ -11390,6 +11397,11 @@ terser@^5.10.0, terser@^5.26.0:
     acorn "^8.8.2"
     commander "^2.20.0"
     source-map-support "~0.5.20"
+
+third-party-capital@1.0.20:
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/third-party-capital/-/third-party-capital-1.0.20.tgz#e218a929a35bf4d2245da9addb8ab978d2f41685"
+  integrity sha512-oB7yIimd8SuGptespDAZnNkzIz+NWaJCu2RMsbs4Wmp9zSDUM8Nhi3s2OOcqYuv3mN4hitXc8DVx+LyUmbUDiA==
 
 thirty-two@^1.0.2:
   version "1.0.2"
