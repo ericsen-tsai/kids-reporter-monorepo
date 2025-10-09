@@ -2,6 +2,7 @@ import baseConfig, {
   typescriptConfig,
   javascriptConfig,
 } from '../../eslint.base.config.mjs'
+import globals from 'globals'
 
 export default [
   ...baseConfig,
@@ -15,7 +16,7 @@ export default [
   },
   {
     ...javascriptConfig,
-    files: ['src/**/*.{js,jsx,cjs}'],
+    files: ['src/**/*.{js,jsx}'],
     rules: {
       ...javascriptConfig.rules,
       // Tailwind CSS classname sorting rules
@@ -32,6 +33,20 @@ export default [
             'CSS classes should be sorted. Consider using a class sorting tool.',
         },
       ],
+    },
+  },
+  {
+    files: ['**/*.config.{js,mjs,cjs}'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: {
+        ...globals.node,
+        ...globals.es2022,
+      },
+    },
+    rules: {
+      'no-undef': 'error',
     },
   },
   {
