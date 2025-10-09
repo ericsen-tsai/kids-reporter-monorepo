@@ -43,6 +43,7 @@ function Baodaozai() {
   const [dialogBoxHeight, setDialogBoxHeight] = useState(0)
 
   const isMobile = useMediaQuery('(max-width: 768px)')
+  const isTablet = useMediaQuery('(max-width: 1024px)')
 
   useEffect(() => {
     const container = refDialogBoxContainerRef.current
@@ -67,13 +68,13 @@ function Baodaozai() {
     if (isMobile && dialogProps.isOpen) {
       return `calc(${dialogBoxHeight}px - 30px)`
     }
-    return isMobile ? '24px' : '32px'
-  }, [isMobile, isActive, dialogProps.isOpen, dialogBoxHeight])
+    return isTablet ? '24px' : '32px'
+  }, [isMobile, isTablet, isActive, dialogProps.isOpen, dialogBoxHeight])
 
   return (
     <div className="fixed right-0 bottom-0 z-1000 w-full tablet:right-0 tablet:bottom-0">
       <div
-        className="absolute -right-0 -bottom-0 z-[11] w-full tablet:right-8 tablet:bottom-21 tablet:z-1 tablet:w-auto tablet:translate-x-0"
+        className="absolute -right-0 -bottom-0 z-[11] w-full tablet:right-6 tablet:bottom-21 tablet:z-1 tablet:w-auto tablet:translate-x-0 desktop:right-8"
         ref={refDialogBoxContainerRef}
       >
         <DialogBox
@@ -86,7 +87,7 @@ function Baodaozai() {
         className={cn(
           'absolute right-0 z-12 transition-all duration-1000 tablet:right-0',
           !dialogProps.isOpen && 'cursor-pointer',
-          isActive && 'right-6 tablet:right-8',
+          isActive && 'right-6 tablet:right-6 desktop:right-8',
           dialogProps.isOpen && 'right-9 z-10'
         )}
         onClick={dialogProps.isOpen ? undefined : handleOpenDialog}
