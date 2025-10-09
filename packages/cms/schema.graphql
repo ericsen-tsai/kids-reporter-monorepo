@@ -198,10 +198,12 @@ type Post {
   ogTitle: String
   ogDescription: String
   ogImage: Photo
-  aiSuggestion: JSON
-  multipleChoiceQuestionsJSON: JSON
-  aiEssaySuggestion: JSON
-  essayQuestionsJSON: JSON
+  aiDialog: JSON
+  opening: String
+  postChoiceQuestions(where: PostChoiceQuestionWhereInput! = {}, orderBy: [PostChoiceQuestionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostChoiceQuestionWhereUniqueInput): [PostChoiceQuestion!]
+  postChoiceQuestionsCount(where: PostChoiceQuestionWhereInput! = {}): Int
+  postEssayQuestions(where: PostEssayQuestionWhereInput! = {}, orderBy: [PostEssayQuestionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostEssayQuestionWhereUniqueInput): [PostEssayQuestion!]
+  postEssayQuestionsCount(where: PostEssayQuestionWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
   createdBy: User
@@ -211,7 +213,7 @@ type Post {
   preview: JSON
   listPreview: String
   onlineUsers: JSON
-  summary: JSON
+  generateQuestions: JSON
 }
 
 input PostWhereUniqueInput {
@@ -241,6 +243,9 @@ input PostWhereInput {
   ogTitle: StringFilter
   ogDescription: StringFilter
   ogImage: PhotoWhereInput
+  opening: StringFilter
+  postChoiceQuestions: PostChoiceQuestionManyRelationFilter
+  postEssayQuestions: PostEssayQuestionManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
   createdBy: UserWhereInput
@@ -277,6 +282,18 @@ input PostManyRelationFilter {
   none: PostWhereInput
 }
 
+input PostChoiceQuestionManyRelationFilter {
+  every: PostChoiceQuestionWhereInput
+  some: PostChoiceQuestionWhereInput
+  none: PostChoiceQuestionWhereInput
+}
+
+input PostEssayQuestionManyRelationFilter {
+  every: PostEssayQuestionWhereInput
+  some: PostEssayQuestionWhereInput
+  none: PostEssayQuestionWhereInput
+}
+
 input PostOrderByInput {
   id: OrderDirection
   slug: OrderDirection
@@ -287,6 +304,7 @@ input PostOrderByInput {
   heroCaption: OrderDirection
   ogTitle: OrderDirection
   ogDescription: OrderDirection
+  opening: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -316,8 +334,9 @@ input PostUpdateInput {
   ogTitle: String
   ogDescription: String
   ogImage: PhotoRelateToOneForUpdateInput
-  multipleChoiceQuestionsJSON: JSON
-  essayQuestionsJSON: JSON
+  opening: String
+  postChoiceQuestions: PostChoiceQuestionRelateToManyForUpdateInput
+  postEssayQuestions: PostEssayQuestionRelateToManyForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
   createdBy: UserRelateToOneForUpdateInput
@@ -377,6 +396,20 @@ input PostRelateToManyForUpdateInput {
   connect: [PostWhereUniqueInput!]
 }
 
+input PostChoiceQuestionRelateToManyForUpdateInput {
+  disconnect: [PostChoiceQuestionWhereUniqueInput!]
+  set: [PostChoiceQuestionWhereUniqueInput!]
+  create: [PostChoiceQuestionCreateInput!]
+  connect: [PostChoiceQuestionWhereUniqueInput!]
+}
+
+input PostEssayQuestionRelateToManyForUpdateInput {
+  disconnect: [PostEssayQuestionWhereUniqueInput!]
+  set: [PostEssayQuestionWhereUniqueInput!]
+  create: [PostEssayQuestionCreateInput!]
+  connect: [PostEssayQuestionWhereUniqueInput!]
+}
+
 input UserRelateToOneForUpdateInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
@@ -413,8 +446,9 @@ input PostCreateInput {
   ogTitle: String
   ogDescription: String
   ogImage: PhotoRelateToOneForCreateInput
-  multipleChoiceQuestionsJSON: JSON
-  essayQuestionsJSON: JSON
+  opening: String
+  postChoiceQuestions: PostChoiceQuestionRelateToManyForCreateInput
+  postEssayQuestions: PostEssayQuestionRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
   createdBy: UserRelateToOneForCreateInput
@@ -459,6 +493,16 @@ input TagRelateToManyForCreateInput {
 input PostRelateToManyForCreateInput {
   create: [PostCreateInput!]
   connect: [PostWhereUniqueInput!]
+}
+
+input PostChoiceQuestionRelateToManyForCreateInput {
+  create: [PostChoiceQuestionCreateInput!]
+  connect: [PostChoiceQuestionWhereUniqueInput!]
+}
+
+input PostEssayQuestionRelateToManyForCreateInput {
+  create: [PostEssayQuestionCreateInput!]
+  connect: [PostEssayQuestionWhereUniqueInput!]
 }
 
 input UserRelateToOneForCreateInput {
@@ -1691,6 +1735,128 @@ input MemberCreateInput {
   updatedAt: DateTime
 }
 
+type PostChoiceQuestion {
+  id: ID!
+  post: Post
+  title: String
+  options: JSON
+  reason: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostChoiceQuestionWhereUniqueInput {
+  id: ID
+}
+
+input PostChoiceQuestionWhereInput {
+  AND: [PostChoiceQuestionWhereInput!]
+  OR: [PostChoiceQuestionWhereInput!]
+  NOT: [PostChoiceQuestionWhereInput!]
+  id: IDFilter
+  post: PostWhereInput
+  title: StringFilter
+  reason: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input PostChoiceQuestionOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  reason: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input PostChoiceQuestionUpdateInput {
+  post: PostRelateToOneForUpdateInput
+  title: String
+  options: JSON
+  reason: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostRelateToOneForUpdateInput {
+  create: PostCreateInput
+  connect: PostWhereUniqueInput
+  disconnect: Boolean
+}
+
+input PostChoiceQuestionUpdateArgs {
+  where: PostChoiceQuestionWhereUniqueInput!
+  data: PostChoiceQuestionUpdateInput!
+}
+
+input PostChoiceQuestionCreateInput {
+  post: PostRelateToOneForCreateInput
+  title: String
+  options: JSON
+  reason: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostRelateToOneForCreateInput {
+  create: PostCreateInput
+  connect: PostWhereUniqueInput
+}
+
+type PostEssayQuestion {
+  id: ID!
+  post: Post
+  title: String
+  hint: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostEssayQuestionWhereUniqueInput {
+  id: ID
+}
+
+input PostEssayQuestionWhereInput {
+  AND: [PostEssayQuestionWhereInput!]
+  OR: [PostEssayQuestionWhereInput!]
+  NOT: [PostEssayQuestionWhereInput!]
+  id: IDFilter
+  post: PostWhereInput
+  title: StringFilter
+  hint: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input PostEssayQuestionOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  hint: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input PostEssayQuestionUpdateInput {
+  post: PostRelateToOneForUpdateInput
+  title: String
+  hint: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostEssayQuestionUpdateArgs {
+  where: PostEssayQuestionWhereUniqueInput!
+  data: PostEssayQuestionUpdateInput!
+}
+
+input PostEssayQuestionCreateInput {
+  post: PostRelateToOneForCreateInput
+  title: String
+  hint: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -1805,9 +1971,22 @@ type Mutation {
   updateMembers(data: [MemberUpdateArgs!]!): [Member]
   deleteMember(where: MemberWhereUniqueInput!): Member
   deleteMembers(where: [MemberWhereUniqueInput!]!): [Member]
+  createPostChoiceQuestion(data: PostChoiceQuestionCreateInput!): PostChoiceQuestion
+  createPostChoiceQuestions(data: [PostChoiceQuestionCreateInput!]!): [PostChoiceQuestion]
+  updatePostChoiceQuestion(where: PostChoiceQuestionWhereUniqueInput!, data: PostChoiceQuestionUpdateInput!): PostChoiceQuestion
+  updatePostChoiceQuestions(data: [PostChoiceQuestionUpdateArgs!]!): [PostChoiceQuestion]
+  deletePostChoiceQuestion(where: PostChoiceQuestionWhereUniqueInput!): PostChoiceQuestion
+  deletePostChoiceQuestions(where: [PostChoiceQuestionWhereUniqueInput!]!): [PostChoiceQuestion]
+  createPostEssayQuestion(data: PostEssayQuestionCreateInput!): PostEssayQuestion
+  createPostEssayQuestions(data: [PostEssayQuestionCreateInput!]!): [PostEssayQuestion]
+  updatePostEssayQuestion(where: PostEssayQuestionWhereUniqueInput!, data: PostEssayQuestionUpdateInput!): PostEssayQuestion
+  updatePostEssayQuestions(data: [PostEssayQuestionUpdateArgs!]!): [PostEssayQuestion]
+  deletePostEssayQuestion(where: PostEssayQuestionWhereUniqueInput!): PostEssayQuestion
+  deletePostEssayQuestions(where: [PostEssayQuestionWhereUniqueInput!]!): [PostEssayQuestion]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
+  generatePostQuestions(postId: ID!): Boolean!
 }
 
 union UserAuthenticationWithPasswordResult = UserAuthenticationWithPasswordSuccess | UserAuthenticationWithPasswordFailure
@@ -1883,6 +2062,12 @@ type Query {
   member(where: MemberWhereUniqueInput!): Member
   members(where: MemberWhereInput! = {}, orderBy: [MemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberWhereUniqueInput): [Member!]
   membersCount(where: MemberWhereInput! = {}): Int
+  postChoiceQuestion(where: PostChoiceQuestionWhereUniqueInput!): PostChoiceQuestion
+  postChoiceQuestions(where: PostChoiceQuestionWhereInput! = {}, orderBy: [PostChoiceQuestionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostChoiceQuestionWhereUniqueInput): [PostChoiceQuestion!]
+  postChoiceQuestionsCount(where: PostChoiceQuestionWhereInput! = {}): Int
+  postEssayQuestion(where: PostEssayQuestionWhereUniqueInput!): PostEssayQuestion
+  postEssayQuestions(where: PostEssayQuestionWhereInput! = {}, orderBy: [PostEssayQuestionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostEssayQuestionWhereUniqueInput): [PostEssayQuestion!]
+  postEssayQuestionsCount(where: PostEssayQuestionWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }
