@@ -13,7 +13,7 @@ import { SocialMediaHrefs } from '../types'
 export type SocialMediaConfig = {
   label: string
   href: string
-  icon: JSX.Element | null
+  icon: (() => JSX.Element) | null
 }
 
 export function generateSocialMediaConfig(

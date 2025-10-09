@@ -1,5 +1,3 @@
-import Link from 'next/link'
-
 import { MenuItem } from '../../types'
 import { cn } from '../../utils/cn'
 import { useHeaderContext } from '../header-context'
@@ -34,7 +32,7 @@ function HeaderMenuItem({
   const content = (
     <div
       className={cn(
-        'group text-neutral-900 group-hover:text-neutral-900 flex w-full items-center justify-between transition-colors duration-100',
+        'group flex w-full items-center justify-between text-neutral-900 transition-colors duration-100 group-hover:text-neutral-900',
         contentClassName
       )}
     >
@@ -89,14 +87,14 @@ function HeaderMenuItem({
           )}
         >
           {subItems.map((subItem, index) => (
-            <Link
+            <a
               key={index}
               href={subItem.href}
-              className="px-6 tablet:px-12 py-2 pl-12 prose-p2 font-medium hover:text-neutral-900 block transition-colors duration-200 hover:bg-neutral-black/5 active:bg-neutral-black/10"
+              className="px-6 tablet:px-12 py-2 pl-12 prose-p2 font-medium block transition-colors duration-200 hover:bg-neutral-black/5 hover:text-neutral-900 active:bg-neutral-black/10"
               onClick={closeMenu}
             >
               {subItem.label}
-            </Link>
+            </a>
           ))}
         </div>
       </div>
@@ -119,7 +117,7 @@ function HeaderMenuItem({
   }
 
   return (
-    <Link
+    <a
       href={href}
       className={
         'px-6 tablet:px-8 py-2 block transition-colors duration-200 hover:bg-neutral-black/5 active:bg-neutral-black/10'
@@ -127,7 +125,7 @@ function HeaderMenuItem({
       onClick={closeMenu}
     >
       {content}
-    </Link>
+    </a>
   )
 }
 

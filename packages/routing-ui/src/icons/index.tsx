@@ -1,6 +1,4 @@
-'use client'
-
-export const HamburgerIcon = (
+export const HamburgerIcon = () => (
   <svg
     width="30"
     height="30"
@@ -14,7 +12,7 @@ export const HamburgerIcon = (
   </svg>
 )
 
-export const SearchIcon = (
+export const SearchIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="26"
@@ -36,7 +34,7 @@ export const SearchIcon = (
   </svg>
 )
 
-export const SearchIconSmall = (
+export const SearchIconSmall = () => (
   <svg
     width="24"
     height="24"
@@ -58,7 +56,7 @@ export const SearchIconSmall = (
   </svg>
 )
 
-export const ClearIcon = (
+export const ClearIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="32"
@@ -73,7 +71,7 @@ export const ClearIcon = (
   </svg>
 )
 
-export const LoginIcon = (
+export const LoginIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="28"
@@ -101,7 +99,7 @@ export const LoginIcon = (
   </svg>
 )
 
-export const SettingsIcon = (
+export const SettingsIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="32"
@@ -116,7 +114,7 @@ export const SettingsIcon = (
   </svg>
 )
 
-export const SettingsIconSmall = (
+export const SettingsIconSmall = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
@@ -131,7 +129,7 @@ export const SettingsIconSmall = (
   </svg>
 )
 
-export const FBIcon = (
+export const FBIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
@@ -146,7 +144,7 @@ export const FBIcon = (
   </svg>
 )
 
-export const IGIcon = (
+export const IGIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
@@ -176,7 +174,7 @@ export const IGIcon = (
   </svg>
 )
 
-export const YouTubeIcon = (
+export const YouTubeIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
@@ -198,7 +196,7 @@ export const YouTubeIcon = (
   </svg>
 )
 
-export const ThreadsIcon = (
+export const ThreadsIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
@@ -220,7 +218,7 @@ export const ThreadsIcon = (
   </svg>
 )
 
-export const MediumIcon = (
+export const MediumIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
@@ -242,7 +240,7 @@ export const MediumIcon = (
   </svg>
 )
 
-export const TwitterIcon = (
+export const TwitterIcon = () => (
   <svg
     width="28"
     height="28"
@@ -270,7 +268,7 @@ export const TwitterIcon = (
   </svg>
 )
 
-export const GithubIcon = (
+export const GithubIcon = () => (
   <svg
     width="28"
     height="28"
@@ -296,7 +294,7 @@ export const GithubIcon = (
   </svg>
 )
 
-export const RSSIcon = (
+export const RSSIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
@@ -318,7 +316,7 @@ export const RSSIcon = (
   </svg>
 )
 
-export const HamburgerIconSmall = (
+export const HamburgerIconSmall = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"

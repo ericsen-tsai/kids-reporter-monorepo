@@ -224,7 +224,7 @@ export const ADDITIONAL_MENU_ITEMS: MenuItem[] = [
     href: '/reading-settings',
     subItems: [],
     showIcon: true,
-    icon: SettingsIconSmall,
+    icon: <SettingsIconSmall />,
   },
   {
     label: '關於我們',

@@ -1,5 +1,3 @@
-@source './src/**/*.{js,ts,jsx,tsx}';
-
 /* Tailwind v4 Theme Configuration */
 @theme {
   /* Colors - Neutral */
@@ -469,5 +467,9 @@
 
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
     background: transparent;
+  }
+
+  body.no-scroll {
+    overflow: hidden;
   }
 }

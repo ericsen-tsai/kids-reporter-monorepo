@@ -137,7 +137,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="gap-2 flex flex-col">
         <div className={inputClasses} ref={ref}>
-          <div className="text-neutral-600">{SearchIconSmall}</div>
+          <div className="text-neutral-600">
+            <SearchIconSmall />
+          </div>
           <input
             type="text"
             value={currentValue}

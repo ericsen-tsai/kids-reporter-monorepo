@@ -15,7 +15,7 @@ export default [
   },
   {
     ...javascriptConfig,
-    files: ['src/**/*.{js,jsx}'],
+    files: ['src/**/*.{js,jsx,cjs}'],
     rules: {
       ...javascriptConfig.rules,
       // Tailwind CSS classname sorting rules

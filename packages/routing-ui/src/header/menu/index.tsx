@@ -1,11 +1,10 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
 import { useEffect } from 'react'
 
 import Button from '../../components/button'
-import { ClearIcon } from '../../icons/index'
+import { ClearIcon } from '../../icons'
 import type { MenuItem, SocialMediaHrefs } from '../../types'
 import { cn } from '../../utils/cn'
 import { generateSocialMediaConfig } from '../../utils/generate-social-media-config'
@@ -28,7 +27,7 @@ type MenuProps = {
 function Divider() {
   return (
     <div className="px-6 tablet:px-8 py-4 w-full">
-      <div className="bg-neutral-300 h-px w-full"></div>
+      <div className="h-px w-full bg-neutral-300"></div>
     </div>
   )
 }
@@ -79,7 +78,7 @@ function Menu({
       {/* Overlay */}
       <div
         className={cn(
-          'inset-0 bg-neutral-500/50 fixed z-1001 transition-opacity duration-300',
+          'inset-0 fixed z-1001 bg-neutral-500/50 transition-opacity duration-300',
           isOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
         )}
         onClick={onClose}
@@ -95,7 +94,7 @@ function Menu({
         <div className="flex h-full flex-col overflow-y-auto">
           <div className="px-6 tablet:px-8 py-4 mt-4 hidden items-center justify-between tablet:flex">
             <div className="flex items-center">
-              <Link href="/">
+              <a href="/">
                 <Image
                   src="/assets/images/brand-icon.svg"
                   alt="少年報導者 The Reporter for Kids"
@@ -104,14 +103,14 @@ function Menu({
                   width={183}
                   loading="eager"
                 />
-              </Link>
+              </a>
             </div>
             <button
               onClick={onClose}
-              className="w-8 h-8 text-neutral-600 hover:text-neutral-800 flex cursor-pointer items-center justify-center rounded-full transition-colors duration-200"
+              className="w-8 h-8 flex cursor-pointer items-center justify-center rounded-full text-neutral-600 transition-colors duration-200 hover:text-neutral-800"
               aria-label="關閉選單"
             >
-              {ClearIcon}
+              <ClearIcon />
             </button>
           </div>
 
@@ -162,7 +161,7 @@ function Menu({
             <div className="px-6 tablet:px-8">
               <div className="gap-4 tablet:gap-0 px-4 flex items-center justify-center tablet:justify-between">
                 {socialMediaConfig.map((item) => (
-                  <Link
+                  <a
                     key={item.label}
                     href={item.href}
                     className="text-neutral-900 transition-colors duration-200 hover:text-red-500"
@@ -171,9 +170,9 @@ function Menu({
                     aria-label={item.label}
                   >
                     <div className="w-6 h-6 flex items-center justify-center">
-                      {item.icon}
+                      {item.icon && <item.icon />}
                     </div>
-                  </Link>
+                  </a>
                 ))}
               </div>
             </div>

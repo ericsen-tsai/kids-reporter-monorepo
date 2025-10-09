@@ -4,19 +4,18 @@
   "version": "0.1.0-alpha.1",
   "description": "Routing UI for Kids Reporter",
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
+      "import": "./dist/index.js",
       "require": "./dist/index.js"
     },
-    "./styles.css": "./src/styles.css"
+    "./styles.css": "./dist/styles.css"
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "build": "./scripts/build.sh",
     "lint": "eslint . --config ../../eslint.config.mjs",
     "lint:check": "eslint . --config ../../eslint.config.mjs",
     "type-check": "tsc --noEmit",
@@ -30,18 +29,23 @@
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.25.0",
+    "@babel/core": "^7.25.0",
+    "@babel/plugin-transform-runtime": "^7.25.0",
+    "@babel/preset-env": "^7.25.0",
+    "@babel/preset-react": "^7.25.0",
+    "@babel/preset-typescript": "^7.25.0",
+    "@babel/runtime": "^7.25.0",
     "@types/lodash": "^4.17.7",
     "@types/react": "^18.3.7",
     "@types/react-dom": "18.3.7",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
-    "tsup": "^8.5.0",
     "typescript": "^5.9.2"
   },
   "peerDependencies": {
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "next": "^14.2.33",
     "tailwindcss": "^4.1.14"
   }
 }

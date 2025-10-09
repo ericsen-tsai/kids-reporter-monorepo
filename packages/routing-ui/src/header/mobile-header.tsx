@@ -1,5 +1,4 @@
 'use client'
-import Link from 'next/link'
 
 import { ClearIcon, LoginIcon } from '../icons'
 import { cn } from '../utils/cn'
@@ -33,21 +32,21 @@ export function MobileHeader({
 
           <div className="gap-4 flex items-center">
             {!showCloseButton && (
-              <Link
+              <a
                 href="/login"
                 className="w-8 h-8 flex items-center justify-center rounded-full text-red-400 transition-colors duration-200 hover:text-red-500"
                 aria-label="登入"
               >
-                {LoginIcon}
-              </Link>
+                <LoginIcon />
+              </a>
             )}
             {showCloseButton ? (
               <button
                 onClick={onCloseMenu}
-                className="w-8 h-8 text-neutral-600 hover:text-neutral-800 flex cursor-pointer items-center justify-center rounded-full transition-colors duration-200"
+                className="w-8 h-8 flex cursor-pointer items-center justify-center rounded-full text-neutral-600 transition-colors duration-200 hover:text-neutral-800"
                 aria-label="關閉選單"
               >
-                {ClearIcon}
+                <ClearIcon />
               </button>
             ) : (
               <HamburgerButton

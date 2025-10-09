@@ -49,13 +49,13 @@ export default function NotFound() {
         <form
           role="search"
           method="get"
-          className="relative mt-6 mb-12 flex h-10 w-full max-w-sm flex-row items-center"
+          className="relative mb-12 mt-6 flex h-10 w-full max-w-sm flex-row items-center"
           action="/search"
           aria-haspopup="listbox"
           data-live-results="thumbs"
         >
           <input
-            className="h-full w-full rounded-full border-2 border-solid bg-white pr-10 pl-3 text-base focus:outline-hidden"
+            className="focus:outline-hidden h-full w-full rounded-full border-2 border-solid bg-white pl-3 pr-10 text-base"
             style={{
               color: 'var(#A3A3A3, var(--color))',
               borderColor: 'var(--paletteColor1)',
@@ -71,7 +71,7 @@ export default function NotFound() {
             className="absolute right-2.5 h-4 w-4 cursor-pointer border-0 bg-transparent"
             aria-label="搜尋按鈕"
           >
-            {SearchIcon}
+            <SearchIcon />
           </button>
         </form>
       </div>

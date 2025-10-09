@@ -1,5 +1,4 @@
 'use client'
-import Link from 'next/link'
 
 import { LoginIcon } from '../icons'
 import type { MenuItem } from '../types'
@@ -71,7 +70,7 @@ export function DesktopHeader({
                 </div>
                 {postTitle && (
                   <div className="pr-12 block">
-                    <p className="prose-p2 text-neutral-900 font-medium tracking-wide max-w-124 overflow-hidden text-ellipsis whitespace-nowrap">
+                    <p className="prose-p2 font-medium tracking-wide max-w-124 overflow-hidden text-ellipsis whitespace-nowrap text-neutral-900">
                       {postTitle}
                     </p>
                   </div>
@@ -85,7 +84,7 @@ export function DesktopHeader({
                     postTitle && compactMode && 'max-w-0'
                   )}
                 >
-                  <span className="prose-p2 text-neutral-900 font-medium translate-y-0 inline-block tracking-[2.2px]! text-nowrap opacity-100">
+                  <span className="prose-p2 font-medium translate-y-0 inline-block tracking-[2.2px]! text-nowrap text-neutral-900 opacity-100">
                     理解世界 × 參與未來
                   </span>
                 </div>
@@ -98,13 +97,13 @@ export function DesktopHeader({
                   searchPlaceholder={searchPlaceholder}
                   subscribeUrl={subscribeUrl}
                 />
-                <Link
+                <a
                   href="/login"
                   className="w-8 h-8 flex items-center justify-center rounded-full text-red-400 transition-colors duration-200 hover:text-red-500"
                   aria-label="登入"
                 >
-                  {LoginIcon}
-                </Link>
+                  <LoginIcon />
+                </a>
               </div>
             </div>
 

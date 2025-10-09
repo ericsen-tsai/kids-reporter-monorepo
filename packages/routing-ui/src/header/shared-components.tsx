@@ -1,7 +1,6 @@
 'use client'
 import { cva } from 'class-variance-authority'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
 import { Button, Input } from '../components'
@@ -89,7 +88,7 @@ const searchDropdownVariants = cva(
 
 export function LogoLink({ compactMode = false }: { compactMode?: boolean }) {
   return (
-    <Link href="/" className="flex items-center" rel="home">
+    <a href="/" className="flex items-center" rel="home">
       <Image
         src="/assets/images/brand-icon.svg"
         alt="少年報導者 The Reporter for Kids"
@@ -101,7 +100,7 @@ export function LogoLink({ compactMode = false }: { compactMode?: boolean }) {
         width={293}
         height={32}
       />
-    </Link>
+    </a>
   )
 }
 
@@ -175,12 +174,12 @@ export function SearchInputSection(props: SearchInputSectionProps) {
           isFocused,
         })}
       >
-        <h3 className="prose-p3 font-bold text-neutral-700 mb-3">熱門搜尋</h3>
+        <h3 className="prose-p3 font-bold mb-3 text-neutral-700">熱門搜尋</h3>
         <div className="gap-2.5 flex flex-wrap">
           {tags.map((keyword) => (
             <a
               key={keyword}
-              className="px-3 py-1 prose-p2 font-bold text-neutral-900 bg-neutral-200 cursor-pointer rounded-full transition-colors duration-200 hover:bg-red-500 hover:text-neutral-white"
+              className="px-3 py-1 prose-p2 font-bold cursor-pointer rounded-full bg-neutral-200 text-neutral-900 transition-colors duration-200 hover:bg-red-500 hover:text-neutral-white"
               href={`/search?q=${encodeURIComponent(keyword)}`}
             >
               #{keyword}
@@ -234,16 +233,12 @@ export function ActionButtons({
         {!hideCtaButtons && !isSearchOpen && (
           <div className="gap-4 flex items-center">
             <Button variant="secondary" size={32} asChild>
-              <Link href="/about#post">投稿</Link>
+              <a href="/about#post">投稿</a>
             </Button>
             <Button variant="primary" size={32} asChild>
-              <Link
-                href={subscribeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={subscribeUrl} target="_blank" rel="noopener noreferrer">
                 訂閱
-              </Link>
+              </a>
             </Button>
           </div>
         )}
@@ -257,18 +252,18 @@ export function ActionButtons({
       </div>
 
       <button
-        className="w-8 h-8 text-neutral-600 hover:text-neutral-800 mr-4 flex cursor-pointer items-center justify-center rounded-full transition-all duration-200"
+        className="w-8 h-8 mr-4 flex cursor-pointer items-center justify-center rounded-full text-neutral-600 transition-all duration-200 hover:text-neutral-800"
         aria-label="搜尋"
         onClick={() => setIsSearchOpen(!isSearchOpen)}
         ref={buttonRef}
       >
-        {isSearchOpen ? ClearIcon : SearchIcon}
+        {isSearchOpen ? <ClearIcon /> : <SearchIcon />}
       </button>
       <button
-        className="w-8 h-8 text-neutral-600 hover:text-neutral-800 flex cursor-pointer items-center justify-center rounded-full transition-all duration-200"
+        className="w-8 h-8 flex cursor-pointer items-center justify-center rounded-full text-neutral-600 transition-all duration-200 hover:text-neutral-800"
         aria-label="設定"
       >
-        {SettingsIcon}
+        <SettingsIcon />
       </button>
     </div>
   )
@@ -289,12 +284,12 @@ export function BottomNavigation({
         return [
           ...acc,
           <div key={item.label} className="flex items-center">
-            <Link
+            <a
               href={item.href}
-              className="py-1 prose-p1 text-neutral-900 font-bold! h-6 flex items-center transition-colors hover:text-red-400"
+              className="py-1 prose-p1 font-bold! h-6 flex items-center text-neutral-900 transition-colors hover:text-red-400"
             >
               {item.label}
-            </Link>
+            </a>
           </div>,
           ...(index < menuItems.length - 1
             ? [
@@ -325,7 +320,7 @@ export function HamburgerButton({
       )}
       onClick={onHamburgerOverlayOpen}
     >
-      {small ? HamburgerIconSmall : HamburgerIcon}
+      {small ? <HamburgerIconSmall /> : <HamburgerIcon />}
     </button>
   )
 }
