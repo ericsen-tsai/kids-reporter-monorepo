@@ -1,6 +1,7 @@
 /* global process */
 const isProduction = process.env.NODE_ENV === 'production'
 
+/** @type {import('@babel/core').TransformOptions} */
 module.exports = {
   babelrcRoots: [',', 'packages/*'],
   presets: [
@@ -17,6 +18,7 @@ module.exports = {
       '@babel/preset-react',
       {
         development: !isProduction,
+        runtime: 'automatic',
       },
     ],
     '@babel/preset-typescript',

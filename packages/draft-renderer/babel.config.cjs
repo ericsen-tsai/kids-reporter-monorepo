@@ -5,8 +5,12 @@ const pkg = require('./package.json')
 const pkgName = pkg.name
 const pkgVersion = pkg.version
 
+/**
+ * @param {import('@babel/core').ConfigAPI} api
+ * @returns {import('@babel/core').TransformOptions}
+ */
 module.exports = function (api) {
-  api.cache(true)
+  api.cache.forever()
   const plugins = [
     [
       'file-loader',
@@ -49,6 +53,7 @@ module.exports = function (api) {
         '@babel/preset-react',
         {
           development: process.env.NODE_ENV !== 'production',
+          runtime: 'automatic',
         },
       ],
       '@babel/preset-typescript',
