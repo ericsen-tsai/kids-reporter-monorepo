@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { FieldProps } from '@keystone-6/core/types'
 import { Button } from '@keystone-ui/button'
 import { FieldLabel, FieldContainer } from '@keystone-ui/fields'

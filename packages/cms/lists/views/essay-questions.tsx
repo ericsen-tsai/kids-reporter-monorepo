@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 import { FieldProps } from '@keystone-6/core/types'
 import { Button } from '@keystone-ui/button'
@@ -45,7 +45,7 @@ const QARow = styled.div`
   gap: 5px;
 `
 
-const IconButton = styled(Button)`
+const IconButton = styled(Button as any)`
   background-color: transparent;
   margin: 0 0 0 0.5rem;
 `

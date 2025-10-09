@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useServerInsertedHTML } from 'next/navigation'
 import { ServerStyleSheet, StyleSheetManager } from 'styled-components'
 
@@ -15,7 +15,6 @@ export default function StyledComponentsRegistry({
 
   useServerInsertedHTML(() => {
     const styles = styledComponentsStyleSheet.getStyleElement()
-    // @ts-ignore `@types/styled-components` does not introduce `instance.clearTag` yet.
     styledComponentsStyleSheet.instance.clearTag()
     return <>{styles}</>
   })

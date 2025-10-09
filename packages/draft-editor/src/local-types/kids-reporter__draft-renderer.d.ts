@@ -12,18 +12,20 @@ declare module '@kids-reporter/draft-renderer' {
   export const findEntitiesByType: any
   export const linkDecorator: any
 
-  export default {
-    ArticleBodyDraftRenderer: any,
-    ArticleIntroductionDraftRenderer: any,
-    DraftRenderer: any,
-    ProjectContentDraftRenderer: any,
-    atomicBlockRenderer: any,
-    blockRenderMap: any,
-    blockRenderers: any,
-    customStyleFn: any,
-    annotationDecorator: any,
-    linkDecorator: any,
-    ENTITY: any,
-    findEntitiesByType: any,
+  const defaultExport: {
+    ArticleBodyDraftRenderer: any
+    ArticleIntroductionDraftRenderer: any
+    DraftRenderer: any
+    ProjectContentDraftRenderer: any
+    atomicBlockRenderer: any
+    blockRenderMap: any
+    blockRenderers: any
+    customStyleFn: any
+    annotationDecorator: any
+    linkDecorator: any
+    ENTITY: any
+    findEntitiesByType: any
   }
+
+  export default defaultExport
 }

@@ -12,8 +12,8 @@ import {
   allowRoles,
   RoleEnum,
 } from './utils/access-control-list'
-
-const listConfigurations = list({
+import type { ListConfig } from '@keystone-6/core/types'
+const listConfigurations: ListConfig<any> = list({
   fields: {
     name: text({
       label: '標題',
@@ -89,14 +89,12 @@ const listConfigurations = list({
           }
 
           Object.entries(resizedTargets).forEach(([key, value]) => {
-            rtn[
-              key
-            ] = `${config.googleCloudStorage.origin}/resized/${filename}-${value}.webp`
+            rtn[key] =
+              `${config.googleCloudStorage.origin}/resized/${filename}-${value}.webp`
           })
 
-          rtn[
-            'original'
-          ] = `${config.googleCloudStorage.origin}/images/${filename}${extension}`
+          rtn['original'] =
+            `${config.googleCloudStorage.origin}/images/${filename}${extension}`
           return Object.assign(empty, rtn)
         },
       }),

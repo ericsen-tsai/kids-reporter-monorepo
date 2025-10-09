@@ -5,6 +5,7 @@ import {
 } from './utils/access-control-list'
 import { list, group } from '@keystone-6/core'
 import { relationship, text, timestamp } from '@keystone-6/core/fields'
+import type { ListConfig } from '@keystone-6/core/types'
 import relationshipUtil, {
   OrderedRelationshipConfig,
 } from './utils/manual-order-relationship'
@@ -19,7 +20,7 @@ const editorPicksOfPosts: OrderedRelationshipConfig = {
   refLabelField: 'title',
 }
 
-const listConfigurations = list({
+const listConfigurations: ListConfig<any> = list({
   fields: {
     name: text({
       isIndexed: 'unique',

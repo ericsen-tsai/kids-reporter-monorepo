@@ -2,8 +2,10 @@ declare module '@kids-reporter/draft-editor' {
   export const RichTextEditor: any
   export const buttonNames: any
 
-  export default {
-    RichTextEditor: any,
-    buttonNames: any,
+  const defaultExport: {
+    RichTextEditor: any
+    buttonNames: any
   }
+
+  export default defaultExport
 }

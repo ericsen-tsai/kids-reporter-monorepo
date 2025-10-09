@@ -12,8 +12,8 @@ import {
   allowRoles,
   RoleEnum,
 } from './utils/access-control-list'
-
-const listConfigurations = list({
+import type { ListConfig } from '@keystone-6/core/types'
+const listConfigurations: ListConfig<any> = list({
   fields: {
     name: text({
       label: '姓名',

@@ -92,7 +92,8 @@ export const AccountTabs = (props: { accoutSettings: AccountSettings }) => {
       >
         個人資料
       </button>
-      {false && (
+      {/* Temporarily disabled features */}
+      {/* {false && (
         <button
           className="w-full text-left text-base hover:bg-gray-200 active:bg-gray-300 px-4 py-1.5"
           style={{
@@ -117,7 +118,7 @@ export const AccountTabs = (props: { accoutSettings: AccountSettings }) => {
         >
           閱讀設定
         </button>
-      )}
+      )} */}
       <button
         className="w-full text-left text-base hover:bg-gray-200 active:bg-gray-300 px-4 py-1.5"
         style={{

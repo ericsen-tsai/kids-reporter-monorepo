@@ -5,8 +5,8 @@ import {
   allowRoles,
   RoleEnum,
 } from './utils/access-control-list'
-
-const NewsReadingGroupItem = list({
+import type { ListConfig } from '@keystone-6/core/types'
+const NewsReadingGroupItem: ListConfig<any> = list({
   fields: {
     name: text({
       label: '語言類別',
@@ -83,7 +83,7 @@ const NewsReadingGroupItem = list({
   },
 })
 
-const NewsReadingGroup = list({
+const NewsReadingGroup: ListConfig<any> = list({
   fields: {
     name: text({
       isIndexed: true,

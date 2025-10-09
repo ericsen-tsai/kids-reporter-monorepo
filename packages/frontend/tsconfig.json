@@ -1,48 +1,37 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "noEmit": true,
+    "jsx": "preserve",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
     "incremental": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@kids-reporter/draft-renderer": [
-        "./src/local-types/kids-reporter__draft-renderer"
-      ]
-    },
-    "typeRoots": [
-      "node_modules/@types",
-      "src/local-types"
-    ]
+    "typeRoots": ["node_modules/@types", "src/local-types"]
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", "dist", "build", ".next", "lib", "lib-temp"]
 }

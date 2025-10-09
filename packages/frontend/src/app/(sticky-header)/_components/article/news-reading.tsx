@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import styled from 'styled-components'
 import { mediaQuery } from '@/utils/media-query'
 import { Color } from '@/constants'

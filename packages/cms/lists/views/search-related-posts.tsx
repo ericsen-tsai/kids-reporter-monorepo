@@ -150,6 +150,7 @@ export const Field = ({ field, value }: FieldProps<typeof controller>) => {
               }}
               href={post.src}
               target="_blank"
+              rel="noreferrer"
             >
               <img width="100px" src={post.ogImgSrc} />
               {post.ogTitle}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import styled from 'styled-components'
 import { ContentState } from 'draft-js'
 import { AlertDialog } from '@keystone-ui/modals'
@@ -118,7 +118,7 @@ const EditableAnchor = (props: {
   }
 
   return (
-    <React.Fragment>
+    <Fragment>
       {isModalOpen && (
         <AnchorIDEditor
           isOpen={isModalOpen}
@@ -143,7 +143,7 @@ const EditableAnchor = (props: {
         </AnchorEditButton>
         <span>{children}</span>
       </AnchorWrapper>
-    </React.Fragment>
+    </Fragment>
   )
 }
 

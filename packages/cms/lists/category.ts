@@ -12,8 +12,9 @@ import {
   select,
 } from '@keystone-6/core/fields'
 import { slugConfig } from './config'
+import type { ListConfig } from '@keystone-6/core/types'
 
-const listConfigurations = list({
+const listConfigurations: ListConfig<any> = list({
   fields: {
     slug: slugConfig,
     name: text({

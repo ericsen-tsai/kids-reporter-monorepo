@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { AtomicBlockUtils, EditorState, RawDraftContentState } from 'draft-js'
 import { ImageLinkEditor } from '../block-renderers/image-link'
 import { ImageAlignment } from '../buttons/selector/image-selector'

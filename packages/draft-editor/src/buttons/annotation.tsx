@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { EditorState, RichUtils, convertToRaw } from 'draft-js'
 import { ENTITY } from '@kids-reporter/draft-renderer'
 import { AnnotationEditor } from '../entity-decorators/annotation'

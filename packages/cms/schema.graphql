@@ -1829,59 +1829,59 @@ input CreateInitialUserInput {
 }
 
 type Query {
-  users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   user(where: UserWhereUniqueInput!): User
+  users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   usersCount(where: UserWhereInput! = {}): Int
-  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   post(where: PostWhereUniqueInput!): Post
+  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   postsCount(where: PostWhereInput! = {}): Int
-  photos(where: PhotoWhereInput! = {}, orderBy: [PhotoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PhotoWhereUniqueInput): [Photo!]
   photo(where: PhotoWhereUniqueInput!): Photo
+  photos(where: PhotoWhereInput! = {}, orderBy: [PhotoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PhotoWhereUniqueInput): [Photo!]
   photosCount(where: PhotoWhereInput! = {}): Int
-  authors(where: AuthorWhereInput! = {}, orderBy: [AuthorOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AuthorWhereUniqueInput): [Author!]
   author(where: AuthorWhereUniqueInput!): Author
+  authors(where: AuthorWhereInput! = {}, orderBy: [AuthorOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AuthorWhereUniqueInput): [Author!]
   authorsCount(where: AuthorWhereInput! = {}): Int
-  projects(where: ProjectWhereInput! = {}, orderBy: [ProjectOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProjectWhereUniqueInput): [Project!]
   project(where: ProjectWhereUniqueInput!): Project
+  projects(where: ProjectWhereInput! = {}, orderBy: [ProjectOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProjectWhereUniqueInput): [Project!]
   projectsCount(where: ProjectWhereInput! = {}): Int
-  projectCategories(where: ProjectCategoryWhereInput! = {}, orderBy: [ProjectCategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProjectCategoryWhereUniqueInput): [ProjectCategory!]
   projectCategory(where: ProjectCategoryWhereUniqueInput!): ProjectCategory
+  projectCategories(where: ProjectCategoryWhereInput! = {}, orderBy: [ProjectCategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProjectCategoryWhereUniqueInput): [ProjectCategory!]
   projectCategoriesCount(where: ProjectCategoryWhereInput! = {}): Int
-  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
   category(where: CategoryWhereUniqueInput!): Category
+  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
   categoriesCount(where: CategoryWhereInput! = {}): Int
-  subcategories(where: SubcategoryWhereInput! = {}, orderBy: [SubcategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubcategoryWhereUniqueInput): [Subcategory!]
   subcategory(where: SubcategoryWhereUniqueInput!): Subcategory
+  subcategories(where: SubcategoryWhereInput! = {}, orderBy: [SubcategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubcategoryWhereUniqueInput): [Subcategory!]
   subcategoriesCount(where: SubcategoryWhereInput! = {}): Int
-  subSubcategories(where: SubSubcategoryWhereInput! = {}, orderBy: [SubSubcategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubSubcategoryWhereUniqueInput): [SubSubcategory!]
   subSubcategory(where: SubSubcategoryWhereUniqueInput!): SubSubcategory
+  subSubcategories(where: SubSubcategoryWhereInput! = {}, orderBy: [SubSubcategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubSubcategoryWhereUniqueInput): [SubSubcategory!]
   subSubcategoriesCount(where: SubSubcategoryWhereInput! = {}): Int
-  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tag(where: TagWhereUniqueInput!): Tag
+  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
-  newsReadingGroups(where: NewsReadingGroupWhereInput! = {}, orderBy: [NewsReadingGroupOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: NewsReadingGroupWhereUniqueInput): [NewsReadingGroup!]
   newsReadingGroup(where: NewsReadingGroupWhereUniqueInput!): NewsReadingGroup
+  newsReadingGroups(where: NewsReadingGroupWhereInput! = {}, orderBy: [NewsReadingGroupOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: NewsReadingGroupWhereUniqueInput): [NewsReadingGroup!]
   newsReadingGroupsCount(where: NewsReadingGroupWhereInput! = {}): Int
-  newsReadingGroupItems(where: NewsReadingGroupItemWhereInput! = {}, orderBy: [NewsReadingGroupItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: NewsReadingGroupItemWhereUniqueInput): [NewsReadingGroupItem!]
   newsReadingGroupItem(where: NewsReadingGroupItemWhereUniqueInput!): NewsReadingGroupItem
+  newsReadingGroupItems(where: NewsReadingGroupItemWhereInput! = {}, orderBy: [NewsReadingGroupItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: NewsReadingGroupItemWhereUniqueInput): [NewsReadingGroupItem!]
   newsReadingGroupItemsCount(where: NewsReadingGroupItemWhereInput! = {}): Int
-  editorPicksSettings(where: EditorPicksSettingWhereInput! = {}, orderBy: [EditorPicksSettingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EditorPicksSettingWhereUniqueInput): [EditorPicksSetting!]
   editorPicksSetting(where: EditorPicksSettingWhereUniqueInput!): EditorPicksSetting
+  editorPicksSettings(where: EditorPicksSettingWhereInput! = {}, orderBy: [EditorPicksSettingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EditorPicksSettingWhereUniqueInput): [EditorPicksSetting!]
   editorPicksSettingsCount(where: EditorPicksSettingWhereInput! = {}): Int
-  pDFS(where: PDFWhereInput! = {}, orderBy: [PDFOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PDFWhereUniqueInput): [PDF!]
   pDF(where: PDFWhereUniqueInput!): PDF
+  pDFS(where: PDFWhereInput! = {}, orderBy: [PDFOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PDFWhereUniqueInput): [PDF!]
   pDFSCount(where: PDFWhereInput! = {}): Int
-  sVGS(where: SVGWhereInput! = {}, orderBy: [SVGOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SVGWhereUniqueInput): [SVG!]
   sVG(where: SVGWhereUniqueInput!): SVG
+  sVGS(where: SVGWhereInput! = {}, orderBy: [SVGOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SVGWhereUniqueInput): [SVG!]
   sVGSCount(where: SVGWhereInput! = {}): Int
-  callBaodaozais(where: CallBaodaozaiWhereInput! = {}, orderBy: [CallBaodaozaiOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CallBaodaozaiWhereUniqueInput): [CallBaodaozai!]
   callBaodaozai(where: CallBaodaozaiWhereUniqueInput!): CallBaodaozai
+  callBaodaozais(where: CallBaodaozaiWhereInput! = {}, orderBy: [CallBaodaozaiOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CallBaodaozaiWhereUniqueInput): [CallBaodaozai!]
   callBaodaozaisCount(where: CallBaodaozaiWhereInput! = {}): Int
-  onlineUsers(where: OnlineUserWhereInput! = {}, orderBy: [OnlineUserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OnlineUserWhereUniqueInput): [OnlineUser!]
   onlineUser(where: OnlineUserWhereUniqueInput!): OnlineUser
+  onlineUsers(where: OnlineUserWhereInput! = {}, orderBy: [OnlineUserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OnlineUserWhereUniqueInput): [OnlineUser!]
   onlineUsersCount(where: OnlineUserWhereInput! = {}): Int
-  members(where: MemberWhereInput! = {}, orderBy: [MemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberWhereUniqueInput): [Member!]
   member(where: MemberWhereUniqueInput!): Member
+  members(where: MemberWhereInput! = {}, orderBy: [MemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberWhereUniqueInput): [Member!]
   membersCount(where: MemberWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
@@ -1900,23 +1900,25 @@ type KeystoneAdminMeta {
 
 type KeystoneAdminUIListMeta {
   key: String!
-  itemQueryName: String!
-  listQueryName: String!
-  hideCreate: Boolean!
-  hideDelete: Boolean!
   path: String!
   label: String!
   singular: String!
   plural: String!
   description: String
-  initialColumns: [String!]!
   pageSize: Int!
   labelField: String!
   fields: [KeystoneAdminUIFieldMeta!]!
   groups: [KeystoneAdminUIFieldGroupMeta!]!
+  graphql: KeystoneAdminUIGraphQL!
+  initialColumns: [String!]!
+  initialSearchFields: [String!]!
   initialSort: KeystoneAdminUISort
-  isHidden: Boolean!
   isSingleton: Boolean!
+  hideCreate: Boolean!
+  hideDelete: Boolean!
+  isHidden: Boolean!
+  itemQueryName: String!
+  listQueryName: String!
 }
 
 type KeystoneAdminUIFieldMeta {
@@ -1979,6 +1981,33 @@ type KeystoneAdminUIFieldGroupMeta {
   label: String!
   description: String
   fields: [KeystoneAdminUIFieldMeta!]!
+}
+
+type KeystoneAdminUIGraphQL {
+  names: KeystoneAdminUIGraphQLNames!
+}
+
+type KeystoneAdminUIGraphQLNames {
+  outputTypeName: String!
+  whereInputName: String!
+  whereUniqueInputName: String!
+  createInputName: String!
+  createMutationName: String!
+  createManyMutationName: String!
+  relateToOneForCreateInputName: String!
+  relateToManyForCreateInputName: String!
+  itemQueryName: String!
+  listOrderName: String!
+  listQueryCountName: String!
+  listQueryName: String!
+  updateInputName: String!
+  updateMutationName: String!
+  updateManyInputName: String!
+  updateManyMutationName: String!
+  relateToOneForUpdateInputName: String!
+  relateToManyForUpdateInputName: String!
+  deleteMutationName: String!
+  deleteManyMutationName: String!
 }
 
 type KeystoneAdminUISort {

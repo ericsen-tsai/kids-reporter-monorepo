@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { FieldProps } from '@keystone-6/core/types'
@@ -36,7 +36,7 @@ const Role = styled.div`
   width: 25%;
 `
 
-const IconButton = styled(Button)`
+const IconButton = styled(Button as any)`
   background-color: transparent;
   margin: 0 0 0 0.5rem;
 `

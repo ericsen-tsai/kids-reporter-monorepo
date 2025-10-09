@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 import debounce from 'lodash/debounce'
 import { breakpoints, mediaQuery } from '../utils/media-query'
@@ -145,6 +145,8 @@ const ArticleBodyContainer = styled.div<{ $alignment?: string }>`
             margin: 5px 27px 5px 0px;
           }
         `
+      default:
+        return ''
     }
   }}
 `

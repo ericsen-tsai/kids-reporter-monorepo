@@ -1,4 +1,4 @@
-/* global process, module */
+/* global process */
 const isProduction = process.env.NODE_ENV === 'production'
 
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
       {
         modules: 'auto',
         targets: {
-          node: '14',
+          node: '20',
         },
       },
     ],

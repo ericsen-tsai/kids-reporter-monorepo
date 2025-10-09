@@ -70,11 +70,15 @@ export const ImageModal = (props: {
   }
 
   const handleWindowResize = debounce(() => {
-    window.innerWidth <= breakpoints.desktop && handleImgModalClose?.()
+    if (window.innerWidth <= breakpoints.desktop) {
+      handleImgModalClose?.()
+    }
   }, DEBOUNCE_THRESHOLD)
 
   const handleESCPress = debounce((e) => {
-    e.key === 'Escape' && handleImgModalClose?.()
+    if (e.key === 'Escape') {
+      handleImgModalClose?.()
+    }
   }, DEBOUNCE_THRESHOLD)
 
   useEffect(() => {
@@ -87,7 +91,9 @@ export const ImageModal = (props: {
   }, [])
 
   useEffect(() => {
-    isOpen && checkFullScreenImageSize()
+    if (isOpen) {
+      checkFullScreenImageSize()
+    }
   }, [isOpen])
 
   const closeBtn = (
