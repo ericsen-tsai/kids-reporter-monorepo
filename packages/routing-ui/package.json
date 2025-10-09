@@ -3,7 +3,6 @@
   "license": "MIT",
   "version": "0.1.0-alpha.1",
   "description": "Routing UI for Kids Reporter",
-  "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",

@@ -18,4 +18,5 @@ export default defineConfig({
   treeshake: true,
   minify: true,
   target: 'es2020',
+  onSuccess: './scripts/post-build.sh',
 })

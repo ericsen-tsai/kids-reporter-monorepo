@@ -4,15 +4,15 @@
 @theme {
   /* Colors - Neutral */
   --color-neutral-white: #ffffff;
-  --color-neutral-gray-100: #f8f8f8;
-  --color-neutral-gray-200: #eaeaea;
-  --color-neutral-gray-300: #d9d9d9;
-  --color-neutral-gray-400: #c6c6c6;
-  --color-neutral-gray-500: #a3a3a3;
-  --color-neutral-gray-600: #8e8e8e;
-  --color-neutral-gray-700: #575757;
-  --color-neutral-gray-800: #3b3b3b;
-  --color-neutral-gray-900: #232323;
+  --color-neutral-100: #f8f8f8;
+  --color-neutral-200: #eaeaea;
+  --color-neutral-300: #d9d9d9;
+  --color-neutral-400: #c6c6c6;
+  --color-neutral-500: #a3a3a3;
+  --color-neutral-600: #8e8e8e;
+  --color-neutral-700: #575757;
+  --color-neutral-800: #3b3b3b;
+  --color-neutral-900: #232323;
   --color-neutral-black: #000000;
   --color-neutral-border: #00000026;
 

@@ -29,7 +29,7 @@ const CloseIcon = ({ className }: { className?: string }) => (
 
 const inputVariants = cva(
   // Base styles
-  'prose-p1 bg-neutral-100 desktop:bg-white! px-4 py-1.5 h-11 hover:border-neutral-600 flex items-center rounded-full border border-transparent transition-colors duration-200',
+  'prose-p1 desktop:bg-white! px-4 py-1.5 h-11 flex items-center rounded-full border border-transparent bg-neutral-100 transition-colors duration-200 hover:border-neutral-600',
   {
     variants: {
       state: {
@@ -137,7 +137,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="gap-2 flex flex-col">
         <div className={inputClasses} ref={ref}>
-          {SearchIconSmall}
+          <div className="text-neutral-600">{SearchIconSmall}</div>
           <input
             type="text"
             value={currentValue}
@@ -145,7 +145,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             onFocus={handleFocus}
             onBlur={handleBlur}
             placeholder={placeholder}
-            className="text-neutral-900 placeholder:text-neutral-400 placeholder:font-medium ml-2 max-w-[72%] flex-1 flex-shrink-1 bg-transparent focus:outline-none"
+            className="placeholder:font-medium ml-2 max-w-[72%] flex-1 flex-shrink-1 bg-transparent text-neutral-900 placeholder:text-neutral-400 focus:outline-none"
             ref={inputRef ?? innerInputRef}
             {...props}
           />
@@ -154,7 +154,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             <button
               type="button"
               onClick={handleClear}
-              className="text-neutral-400 hover:text-neutral-600 p-1/2 active:bg-neutral-200 ml-auto flex-shrink-0 cursor-pointer rounded-full transition-colors"
+              className="p-1/2 ml-auto flex-shrink-0 cursor-pointer rounded-full text-neutral-400 transition-colors hover:text-neutral-600 active:bg-neutral-200"
               aria-label="Clear input"
             >
               <CloseIcon />
