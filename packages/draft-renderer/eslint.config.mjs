@@ -23,7 +23,7 @@ export default [
     files: ['src/**/*.{js,jsx}'],
   },
   {
-    files: ['**/*.config.{js,mjs}', '**/.babelrc.js'],
+    files: ['**/*.config.{js,mjs,cjs}'],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
