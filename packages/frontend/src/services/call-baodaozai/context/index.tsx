@@ -48,7 +48,7 @@ export type CallBaodaozaiState = {
 
 const CallBaodaozaiContext = createContext<CallBaodaozaiState | null>(null)
 
-const BAODAOZAI_SRC = '../baodaozai-db.riv'
+const BAODAOZAI_SRC = '/baodaozai-db.riv'
 
 export function CallBaodaozaiProvider({
   children,
@@ -85,12 +85,8 @@ export function CallBaodaozaiProvider({
     cancelText: DIALOG_DEFAULT_CANCEL_TEXT,
     hideCancelButton: false,
     isOpen: false,
-    confirmAction: () => {
-      console.log('onConfirm')
-    },
-    cancelAction: () => {
-      console.log('onCancel')
-    },
+    confirmAction: () => {},
+    cancelAction: () => {},
   })
 
   const onDialogPropsChange = useCallback(

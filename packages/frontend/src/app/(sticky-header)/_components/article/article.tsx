@@ -206,7 +206,7 @@ const Article = ({ post }: { post: any }) => {
     if (!isAtTop && isFirstRenderAtTop) {
       setIsFirstRenderAtTop(false)
     }
-  }, [isAtTop])
+  }, [isAtTop, isFirstRenderAtTop])
 
   return (
     <>

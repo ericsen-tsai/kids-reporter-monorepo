@@ -69,7 +69,7 @@ function Baodaozai() {
       return `calc(${dialogBoxHeight}px - 30px)`
     }
     return isTablet ? '24px' : '32px'
-  }, [isMobile, isTablet, isActive, dialogProps.isOpen, dialogBoxHeight])
+  }, [isActive, isMobile, dialogProps.isOpen, isTablet, dialogBoxHeight])
 
   return (
     <div className="fixed right-0 bottom-0 z-1000 w-full tablet:right-0 tablet:bottom-0">
