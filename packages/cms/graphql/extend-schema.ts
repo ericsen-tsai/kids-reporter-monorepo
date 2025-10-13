@@ -51,9 +51,9 @@ export const extendGraphqlSchema = graphql.extend(() => {
               baseURL: 'https://api.openai.com/v1/chat',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${envVar.openAIKey}`,
-                'OpenAI-Organization': 'org-AFIRbr9PIQpDnVRPSuxABZJO',
-                'OpenAI-Project': 'proj_8OZHy9Z26Vr3p8mDUcXE7Oby',
+                Authorization: `Bearer ${envVar.openAI.key}`,
+                'OpenAI-Organization': envVar.openAI.organization,
+                'OpenAI-Project': envVar.openAI.project,
               },
             })
 

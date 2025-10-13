@@ -76,8 +76,8 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${value.openAIKey}`,
-        'OpenAI-Organization': 'org-AFIRbr9PIQpDnVRPSuxABZJO',
-        'OpenAI-Project': 'proj_8OZHy9Z26Vr3p8mDUcXE7Oby',
+        'OpenAI-Organization': value.openAIOrganization,
+        'OpenAI-Project': value.openAIProject,
       },
     })
 

@@ -118,7 +118,9 @@ const aiDialog = virtual({
         return {
           label: '生成內容',
           content: item.content,
-          openAIKey: envVars.openAIKey,
+          openAIKey: envVars.openAI.key,
+          openAIOrganization: envVars.openAI.organization,
+          openAIProject: envVars.openAI.project,
         }
       },
     }),
