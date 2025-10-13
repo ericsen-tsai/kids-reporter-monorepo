@@ -1,3 +1,5 @@
+/* global process */
+
 const {
   IS_UI_DISABLED,
   ACCESS_CONTROL_STRATEGY,
