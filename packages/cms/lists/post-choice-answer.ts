@@ -7,23 +7,15 @@ import {
   checkbox,
 } from '@keystone-6/core/fields'
 import { allowRoles, RoleEnum } from './utils/access-control-list'
+import {
+  memberOwnedOperationAccess,
+  makeMemberOwnedFilter,
+} from './utils/member-owned-access'
 
-const operationAccessControl = allowRoles([
-  RoleEnum.Admin,
-  RoleEnum.Member,
-])
+const memberFieldName = 'member'
 
-const filterAccessControl = ({ session }: { session?: any }) => {
-  const role = session?.data?.role
-  if (role === RoleEnum.Admin || role === RoleEnum.Owner) {
-    return true
-  }
-  const memberID = session?.data?.member?.id
-  if (memberID) {
-    return { member: { id: { equals: memberID } } }
-  }
-  return false
-}
+const operationAccessControl = memberOwnedOperationAccess
+const filterAccessControl = makeMemberOwnedFilter(memberFieldName)
 
 export default list({
   fields: {
@@ -35,7 +27,7 @@ export default list({
         hideCreate: true,
       },
     }),
-    member: relationship({
+    [memberFieldName]: relationship({
       label: '會員',
       ref: 'Member',
       many: false,
