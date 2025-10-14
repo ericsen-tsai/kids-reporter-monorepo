@@ -22,6 +22,7 @@ import PostChoiceAnswer from './post-choice-answer'
 import PostChoiceQuestion from './post-choice-question'
 import PostEssayAnswer from './post-essay-answer'
 import PostEssayQuestion from './post-essay-question'
+import PostEssayAnswerLike from './post-essay-answer-like'
 
 export const listDefinition = {
   User,
@@ -46,4 +47,5 @@ export const listDefinition = {
   PostChoiceQuestion,
   PostEssayAnswer,
   PostEssayQuestion,
+  PostEssayAnswerLike,
 }
