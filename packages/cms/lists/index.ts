@@ -20,6 +20,7 @@ import User from './user'
 import { NewsReadingGroup, NewsReadingGroupItem } from './news-reading'
 import PostChoiceAnswer from './post-choice-answer'
 import PostChoiceQuestion from './post-choice-question'
+import PostEssayAnswer from './post-essay-answer'
 import PostEssayQuestion from './post-essay-question'
 
 export const listDefinition = {
@@ -43,5 +44,6 @@ export const listDefinition = {
   Member,
   PostChoiceAnswer,
   PostChoiceQuestion,
+  PostEssayAnswer,
   PostEssayQuestion,
 }
