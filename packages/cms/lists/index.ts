@@ -17,6 +17,10 @@ import Subcategory from './subcatgory'
 import SVG from './svg'
 import Tag from './tag'
 import User from './user'
+import { NewsReadingGroup, NewsReadingGroupItem } from './news-reading'
+import PostChoiceAnswer from './post-choice-answer'
+import PostChoiceQuestion from './post-choice-question'
+import PostEssayQuestion from './post-essay-question'
 
 export const listDefinition = {
   User,
@@ -37,6 +41,7 @@ export const listDefinition = {
   CallBaodaozai,
   OnlineUser,
   Member,
+  PostChoiceAnswer,
   PostChoiceQuestion,
   PostEssayQuestion,
 }
