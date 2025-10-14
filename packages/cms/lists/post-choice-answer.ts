@@ -6,7 +6,6 @@ import {
   timestamp,
   checkbox,
 } from '@keystone-6/core/fields'
-import { allowRoles, RoleEnum } from './utils/access-control-list'
 import {
   memberOwnedOperationAccess,
   makeMemberOwnedFilter,

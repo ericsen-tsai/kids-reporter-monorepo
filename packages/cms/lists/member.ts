@@ -1,29 +1,13 @@
 import { graphql, list } from '@keystone-6/core'
 import { text, timestamp, virtual } from '@keystone-6/core/fields'
+import {
+  makeMemberOwnedFilter,
+  memberOwnedOperationAccess,
+} from './utils/member-owned-access'
 import type { ListConfig } from '@keystone-6/core/types'
 
-import { allowRoles, RoleEnum } from './utils/access-control-list'
-
-const operationAccessControl = allowRoles([
-  RoleEnum.FrontendHeadlessAccount,
-  RoleEnum.Admin,
-  RoleEnum.Owner,
-])
-
-const filterAccessControl = ({ session }: { session?: any }) => {
-  const userRole = session.data.role
-
-  if (userRole === RoleEnum.Admin || userRole === RoleEnum.Owner) {
-    return true
-  }
-
-  const memberID = session.data?.member?.id
-  if (memberID) {
-    return { id: { equals: memberID } }
-  }
-
-  return false
-}
+const operationAccessControl = memberOwnedOperationAccess
+const filterAccessControl = makeMemberOwnedFilter('self')
 
 const listConfigurations: ListConfig<any> = list({
   fields: {
@@ -38,8 +22,18 @@ const listConfigurations: ListConfig<any> = list({
       label: 'membership_user.users.id',
       validation: { isRequired: true },
       isIndexed: 'unique',
+      ui: {
+        createView: {
+          fieldMode: 'hidden',
+        },
+        itemView: {
+          fieldMode: 'read',
+        },
+        listView: {
+          fieldMode: 'hidden',
+        },
+      },
       access: {
-        read: allowRoles([RoleEnum.Admin, RoleEnum.Owner]),
         create: () => false,
         update: () => false,
       },
@@ -51,14 +45,13 @@ const listConfigurations: ListConfig<any> = list({
           fieldMode: 'hidden',
         },
         itemView: {
-          fieldMode: 'hidden',
+          fieldMode: 'read',
         },
         listView: {
           fieldMode: 'hidden',
         },
       },
       access: {
-        read: allowRoles([RoleEnum.Admin, RoleEnum.Owner]),
         create: () => false,
         update: () => false,
       },
@@ -82,11 +75,6 @@ const listConfigurations: ListConfig<any> = list({
         listView: {
           fieldMode: 'hidden',
         },
-      },
-      access: {
-        read: allowRoles([RoleEnum.Admin, RoleEnum.Owner]),
-        create: () => false,
-        update: () => false,
       },
     }),
     createdAt: timestamp({
