@@ -254,6 +254,7 @@ const Article = ({ post }: { post: any }) => {
           <BaodaozaiEventTrigger
             dialogState={{
               isOpen: false,
+              hideCancelButton: true,
             }}
             baodaozaiState={{
               isActive: false,
@@ -263,7 +264,24 @@ const Article = ({ post }: { post: any }) => {
           />
           <Brief content={post?.brief} authors={authorsInBrief} theme={theme} />
           <Divider />
-          <PostRenderer post={post} theme={theme} />
+          <div className="relative">
+            <PostRenderer post={post} theme={theme} />
+            <div className="absolute top-[calc(50%+50vh)]">
+              <BaodaozaiEventTrigger
+                dialogState={{
+                  isOpen: false,
+                  content:
+                    '你好棒！已經把文章讀完了！接下來讓我問問你幾個和文章有關的問題⋯⋯',
+                  hideCancelButton: false,
+                  confirmText: '好！出招吧',
+                }}
+                baodaozaiState={{
+                  isActive: false,
+                  action: 'none',
+                }}
+              />
+            </div>
+          </div>
           {post?.tagsOrdered && (
             <Tags title={'常用關鍵字'} tags={post.tagsOrdered} />
           )}
