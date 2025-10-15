@@ -50,14 +50,14 @@ const typescriptRules = {
     },
   ],
   '@typescript-eslint/no-unused-expressions': 'off',
-  'react-hooks/exhaustive-deps': 'off',
+  'react-hooks/exhaustive-deps': 'warn',
 }
 
 // React rules
 const reactRules = {
   ...commonRules,
   'no-html-link-for-pages': 'off',
-  'react-hooks/exhaustive-deps': 'off',
+  'react-hooks/exhaustive-deps': 'warn',
 }
 
 // Common settings
@@ -141,6 +141,30 @@ export const nodeConfig = {
   },
 }
 
+// Base configuration for config files (prettier.config.mjs, eslint.config.mjs, etc.)
+export const configFileConfig = {
+  files: [
+    '**/*.config.{js,mjs,cjs}',
+    '**/eslint.config.{js,mjs}',
+    '**/prettier.config.{js,mjs}',
+  ],
+  languageOptions: {
+    ecmaVersion: 2022,
+    sourceType: 'module',
+    globals: nodeGlobals,
+  },
+  plugins: {
+    '@typescript-eslint': typescript,
+    prettier,
+  },
+  rules: {
+    ...typescript.configs.recommended.rules,
+    ...prettierConfig.rules,
+    ...typescriptRules,
+    'no-undef': 'error',
+  },
+}
+
 // Common ignore patterns
 export const ignorePatterns = [
   'node_modules/**',
@@ -158,6 +182,8 @@ export default [
   js.configs.recommended,
   typescriptConfig,
   javascriptConfig,
+  nodeConfig,
+  configFileConfig,
   {
     ignores: ignorePatterns,
   },

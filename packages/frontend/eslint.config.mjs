@@ -31,6 +31,7 @@ const config = [
       'react/display-name': 'off',
     },
   },
+  // Node.js configuration for config files
   {
     ...nodeConfig,
     files: ['**/*.config.{js,mjs}', '**/environment-variables.ts'],

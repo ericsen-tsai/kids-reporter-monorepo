@@ -14,7 +14,7 @@ export default [
       ...typescriptConfig.rules,
       // Suppress warnings for draft-renderer components
       '@typescript-eslint/no-explicit-any': 'off',
-      'react-hooks/exhaustive-deps': 'off',
+      'react-hooks/exhaustive-deps': 'warn',
       '@typescript-eslint/no-unused-expressions': 'off',
     },
   },

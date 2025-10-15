@@ -6,9 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --config eslint.config.mjs",
     "analyze": "ANALYZE=true yarn build",
-    "lint:check": "eslint . --config eslint.config.mjs",
+    "lint:check": "eslint src --ext .ts,.tsx,.js,.jsx",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
@@ -41,8 +40,7 @@
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.14",
     "typescript": "5.9.2",
-    "@rive-app/react-webgl2": "^4.23.4",
-    "@next/third-parties": "^14.1.1"
+    "@rive-app/react-webgl2": "^4.23.4"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^14.2.33",
