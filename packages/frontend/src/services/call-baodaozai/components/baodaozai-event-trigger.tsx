@@ -1,15 +1,15 @@
 'use client'
 
 import { useCallback, useEffect, useRef } from 'react'
-import { BaodaozaiAction } from '../types'
+import { BaodaozaiAction, BaodaozaiActionSetter } from '../types'
 import { DialogBoxProps } from './dialog-box'
 import { useCallBaodaozaiContext } from '../context'
 
 export type BaodaozaiEventTriggerProps = {
   dialogState?: Partial<
     Omit<DialogBoxProps, 'onConfirm' | 'onCancel'> & {
-      confirmAction: () => void
-      cancelAction: () => void
+      confirmAction: BaodaozaiActionSetter
+      cancelAction: BaodaozaiActionSetter
     }
   >
   baodaozaiState?: Partial<{

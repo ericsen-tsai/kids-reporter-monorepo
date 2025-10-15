@@ -12,8 +12,15 @@ import {
 import StyledComponentsRegistry from '@/components/registry'
 import '../globals.css'
 import { GoogleTagManager } from '@next/third-parties/google'
+import { Noto_Sans_TC } from 'next/font/google'
 
 const GTM_ID = 'GTM-T37WZJ44'
+
+const notoSansTC = Noto_Sans_TC({
+  subsets: ['latin'],
+  weight: ['500', '700'],
+  variable: '--font-noto-sans-tc',
+})
 
 export default async function RootLayout({
   children,
@@ -24,7 +31,7 @@ export default async function RootLayout({
   const keywords = POPULAR_KEYWORDS
 
   return (
-    <html>
+    <html className={notoSansTC.variable}>
       <GoogleTagManager gtmId={GTM_ID} />
       <StyledComponentsRegistry>
         <HeaderProvider keywords={keywords}>

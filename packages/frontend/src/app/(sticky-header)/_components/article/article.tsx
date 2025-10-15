@@ -1,7 +1,7 @@
 'use client'
 import './article.css'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 
 import AuthorCard, { Author } from '@/components/author-card'
@@ -29,7 +29,14 @@ import { MobileSidebar, Sidebar } from './sidebar'
 import SubSubcategory from './subSubcategory'
 import Title from './title'
 import './article.css'
-import { BaodaozaiEventTrigger } from '@/services/call-baodaozai'
+import {
+  BaodaozaiActionSetter,
+  BaodaozaiEventTrigger,
+  BaodaozaiQAModal,
+} from '@/services/call-baodaozai'
+import { QAModalEvent } from '@/services/call-baodaozai/components/qa-modal'
+import { useRouter } from 'next/navigation'
+import { IS_LOGIN, QUESTIONS } from './mock'
 
 import { useIsAtTop } from '@kids-reporter/routing-ui'
 
@@ -208,6 +215,50 @@ const Article = ({ post }: { post: any }) => {
     }
   }, [isAtTop, isFirstRenderAtTop])
 
+  const [isQAModalOpen, setIsQAModalOpen] = useState(false)
+
+  const handleBaodaozaiConfirmation = useCallback(
+    ({
+      setHide,
+      setIsActive,
+      setAction,
+    }: Parameters<BaodaozaiActionSetter>[0]) => {
+      setIsQAModalOpen(true)
+      setHide(true)
+      setIsActive(false)
+      setAction('none')
+    },
+    []
+  )
+
+  const router = useRouter()
+
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
+  const handleQAModalSubmit = useCallback(
+    (answers: Record<number, string>, events: QAModalEvent) => {
+      // TODO: send answers to backend
+      setIsQAModalOpen(false)
+      events.setHide(false)
+      events.setIsActive(true)
+      events.setAction('speak')
+      events.onDialogPropsChange({
+        isOpen: true,
+        content: IS_LOGIN
+          ? `想知道其他讀者的答案嗎？
+      大家送出的思辨題答案都會顯示在這裡喔～`
+          : '登入帳號完成閱讀設定，還可以挑戰更多隱藏版的思辨題唷！',
+        cancelText: '跳過',
+        confirmText: IS_LOGIN ? '完成閱讀設定' : '立即登入',
+        confirmAction: () => {
+          router.push(IS_LOGIN ? '/idea-hub' : '/login')
+        },
+      })
+      setIsSubmitted(true)
+    },
+    []
+  )
+
   return (
     <>
       <div className={`post${theme ? ` theme-${theme}` : ''}`}>
@@ -239,7 +290,7 @@ const Article = ({ post }: { post: any }) => {
               isActive: true,
               action: 'speak',
             }}
-            disabled={!isFirstRenderAtTop}
+            disabled={!isFirstRenderAtTop || isSubmitted}
           />
           <HeroImage
             image={post?.heroImage}
@@ -260,7 +311,7 @@ const Article = ({ post }: { post: any }) => {
               isActive: false,
               action: 'none',
             }}
-            once={false}
+            disabled={isSubmitted}
           />
           <Brief content={post?.brief} authors={authorsInBrief} theme={theme} />
           <Divider />
@@ -274,22 +325,43 @@ const Article = ({ post }: { post: any }) => {
                     '你好棒！已經把文章讀完了！接下來讓我問問你幾個和文章有關的問題⋯⋯',
                   hideCancelButton: false,
                   confirmText: '好！出招吧',
+                  confirmAction: handleBaodaozaiConfirmation,
                 }}
                 baodaozaiState={{
                   isActive: false,
                   action: 'none',
                 }}
+                disabled={isSubmitted}
               />
             </div>
           </div>
+
           {post?.tagsOrdered && (
             <Tags title={'常用關鍵字'} tags={post.tagsOrdered} />
           )}
+          <BaodaozaiEventTrigger
+            dialogState={{
+              isOpen: true,
+            }}
+            baodaozaiState={{
+              isActive: true,
+              action: 'speak',
+            }}
+            disabled={isSubmitted}
+          />
           <AuthorCard title="誰幫我們完成這篇文章" authors={orderedAuthors} />
         </ArticleContext.Provider>
       </div>
       <CallToAction />
       <RelatedPosts posts={relatedPosts ?? []} sliderTheme={theme} />
+      <BaodaozaiQAModal
+        questions={QUESTIONS}
+        onClose={() => {
+          setIsQAModalOpen(false)
+        }}
+        onSubmit={handleQAModalSubmit}
+        isOpen={isQAModalOpen}
+      />
     </>
   )
 }

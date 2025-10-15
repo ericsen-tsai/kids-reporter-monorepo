@@ -54,7 +54,7 @@
   --color-yellow-800: #705207;
 
   /* Typography - Font Families */
-  --font-family-noto: 'Noto Sans TC', sans-serif;
+  --font-family-noto: var(--font-noto-sans-tc), sans-serif;
   --font-family-swei: 'SweiMarkerSansCJKtc-Regular', sans-serif;
 
   /* Typography - Font Sizes */
