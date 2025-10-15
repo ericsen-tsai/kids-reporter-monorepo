@@ -7,8 +7,7 @@
 */
 -- AlterTable
 ALTER TABLE "Post" DROP COLUMN "essayQuestionsJSON",
-DROP COLUMN "multipleChoiceQuestionsJSON",
-ADD COLUMN     "opening" TEXT NOT NULL DEFAULT '';
+DROP COLUMN "multipleChoiceQuestionsJSON";
 
 -- CreateTable
 CREATE TABLE "PostChoiceQuestion" (
