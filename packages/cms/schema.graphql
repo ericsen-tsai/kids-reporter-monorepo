@@ -1741,6 +1741,103 @@ input MemberCreateInput {
   updatedAt: DateTime
 }
 
+type PostChoiceAnswer {
+  id: ID!
+  question: PostChoiceQuestion
+  member: Member
+  choiceIndex: Int
+  correct: Boolean
+  compositeKey: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostChoiceAnswerWhereUniqueInput {
+  id: ID
+  compositeKey: String
+}
+
+input PostChoiceAnswerWhereInput {
+  AND: [PostChoiceAnswerWhereInput!]
+  OR: [PostChoiceAnswerWhereInput!]
+  NOT: [PostChoiceAnswerWhereInput!]
+  id: IDFilter
+  question: PostChoiceQuestionWhereInput
+  member: MemberWhereInput
+  choiceIndex: IntFilter
+  correct: BooleanFilter
+  compositeKey: StringNullableFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntFilter
+}
+
+input PostChoiceAnswerOrderByInput {
+  id: OrderDirection
+  choiceIndex: OrderDirection
+  correct: OrderDirection
+  compositeKey: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input PostChoiceAnswerUpdateInput {
+  question: PostChoiceQuestionRelateToOneForUpdateInput
+  member: MemberRelateToOneForUpdateInput
+  choiceIndex: Int
+  correct: Boolean
+  compositeKey: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostChoiceQuestionRelateToOneForUpdateInput {
+  create: PostChoiceQuestionCreateInput
+  connect: PostChoiceQuestionWhereUniqueInput
+  disconnect: Boolean
+}
+
+input MemberRelateToOneForUpdateInput {
+  create: MemberCreateInput
+  connect: MemberWhereUniqueInput
+  disconnect: Boolean
+}
+
+input PostChoiceAnswerUpdateArgs {
+  where: PostChoiceAnswerWhereUniqueInput!
+  data: PostChoiceAnswerUpdateInput!
+}
+
+input PostChoiceAnswerCreateInput {
+  question: PostChoiceQuestionRelateToOneForCreateInput
+  member: MemberRelateToOneForCreateInput
+  choiceIndex: Int
+  correct: Boolean
+  compositeKey: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostChoiceQuestionRelateToOneForCreateInput {
+  create: PostChoiceQuestionCreateInput
+  connect: PostChoiceQuestionWhereUniqueInput
+}
+
+input MemberRelateToOneForCreateInput {
+  create: MemberCreateInput
+  connect: MemberWhereUniqueInput
+}
+
 type PostChoiceQuestion {
   id: ID!
   post: Post
@@ -1809,6 +1906,77 @@ input PostRelateToOneForCreateInput {
   connect: PostWhereUniqueInput
 }
 
+type PostEssayAnswer {
+  id: ID!
+  question: PostEssayQuestion
+  member: Member
+  content: String
+  likesCount: Int
+  compositeKey: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostEssayAnswerWhereUniqueInput {
+  id: ID
+  compositeKey: String
+}
+
+input PostEssayAnswerWhereInput {
+  AND: [PostEssayAnswerWhereInput!]
+  OR: [PostEssayAnswerWhereInput!]
+  NOT: [PostEssayAnswerWhereInput!]
+  id: IDFilter
+  question: PostEssayQuestionWhereInput
+  member: MemberWhereInput
+  content: StringFilter
+  compositeKey: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input PostEssayAnswerOrderByInput {
+  id: OrderDirection
+  content: OrderDirection
+  compositeKey: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input PostEssayAnswerUpdateInput {
+  question: PostEssayQuestionRelateToOneForUpdateInput
+  member: MemberRelateToOneForUpdateInput
+  content: String
+  compositeKey: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostEssayQuestionRelateToOneForUpdateInput {
+  create: PostEssayQuestionCreateInput
+  connect: PostEssayQuestionWhereUniqueInput
+  disconnect: Boolean
+}
+
+input PostEssayAnswerUpdateArgs {
+  where: PostEssayAnswerWhereUniqueInput!
+  data: PostEssayAnswerUpdateInput!
+}
+
+input PostEssayAnswerCreateInput {
+  question: PostEssayQuestionRelateToOneForCreateInput
+  member: MemberRelateToOneForCreateInput
+  content: String
+  compositeKey: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostEssayQuestionRelateToOneForCreateInput {
+  create: PostEssayQuestionCreateInput
+  connect: PostEssayQuestionWhereUniqueInput
+}
+
 type PostEssayQuestion {
   id: ID!
   post: Post
@@ -1861,6 +2029,71 @@ input PostEssayQuestionCreateInput {
   hint: String
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+type PostEssayAnswerLike {
+  id: ID!
+  answer: PostEssayAnswer
+  member: Member
+  compositeKey: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostEssayAnswerLikeWhereUniqueInput {
+  id: ID
+  compositeKey: String
+}
+
+input PostEssayAnswerLikeWhereInput {
+  AND: [PostEssayAnswerLikeWhereInput!]
+  OR: [PostEssayAnswerLikeWhereInput!]
+  NOT: [PostEssayAnswerLikeWhereInput!]
+  id: IDFilter
+  answer: PostEssayAnswerWhereInput
+  member: MemberWhereInput
+  compositeKey: StringNullableFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input PostEssayAnswerLikeOrderByInput {
+  id: OrderDirection
+  compositeKey: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input PostEssayAnswerLikeUpdateInput {
+  answer: PostEssayAnswerRelateToOneForUpdateInput
+  member: MemberRelateToOneForUpdateInput
+  compositeKey: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostEssayAnswerRelateToOneForUpdateInput {
+  create: PostEssayAnswerCreateInput
+  connect: PostEssayAnswerWhereUniqueInput
+  disconnect: Boolean
+}
+
+input PostEssayAnswerLikeUpdateArgs {
+  where: PostEssayAnswerLikeWhereUniqueInput!
+  data: PostEssayAnswerLikeUpdateInput!
+}
+
+input PostEssayAnswerLikeCreateInput {
+  answer: PostEssayAnswerRelateToOneForCreateInput
+  member: MemberRelateToOneForCreateInput
+  compositeKey: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostEssayAnswerRelateToOneForCreateInput {
+  create: PostEssayAnswerCreateInput
+  connect: PostEssayAnswerWhereUniqueInput
 }
 
 """
@@ -1977,18 +2210,36 @@ type Mutation {
   updateMembers(data: [MemberUpdateArgs!]!): [Member]
   deleteMember(where: MemberWhereUniqueInput!): Member
   deleteMembers(where: [MemberWhereUniqueInput!]!): [Member]
+  createPostChoiceAnswer(data: PostChoiceAnswerCreateInput!): PostChoiceAnswer
+  createPostChoiceAnswers(data: [PostChoiceAnswerCreateInput!]!): [PostChoiceAnswer]
+  updatePostChoiceAnswer(where: PostChoiceAnswerWhereUniqueInput!, data: PostChoiceAnswerUpdateInput!): PostChoiceAnswer
+  updatePostChoiceAnswers(data: [PostChoiceAnswerUpdateArgs!]!): [PostChoiceAnswer]
+  deletePostChoiceAnswer(where: PostChoiceAnswerWhereUniqueInput!): PostChoiceAnswer
+  deletePostChoiceAnswers(where: [PostChoiceAnswerWhereUniqueInput!]!): [PostChoiceAnswer]
   createPostChoiceQuestion(data: PostChoiceQuestionCreateInput!): PostChoiceQuestion
   createPostChoiceQuestions(data: [PostChoiceQuestionCreateInput!]!): [PostChoiceQuestion]
   updatePostChoiceQuestion(where: PostChoiceQuestionWhereUniqueInput!, data: PostChoiceQuestionUpdateInput!): PostChoiceQuestion
   updatePostChoiceQuestions(data: [PostChoiceQuestionUpdateArgs!]!): [PostChoiceQuestion]
   deletePostChoiceQuestion(where: PostChoiceQuestionWhereUniqueInput!): PostChoiceQuestion
   deletePostChoiceQuestions(where: [PostChoiceQuestionWhereUniqueInput!]!): [PostChoiceQuestion]
+  createPostEssayAnswer(data: PostEssayAnswerCreateInput!): PostEssayAnswer
+  createPostEssayAnswers(data: [PostEssayAnswerCreateInput!]!): [PostEssayAnswer]
+  updatePostEssayAnswer(where: PostEssayAnswerWhereUniqueInput!, data: PostEssayAnswerUpdateInput!): PostEssayAnswer
+  updatePostEssayAnswers(data: [PostEssayAnswerUpdateArgs!]!): [PostEssayAnswer]
+  deletePostEssayAnswer(where: PostEssayAnswerWhereUniqueInput!): PostEssayAnswer
+  deletePostEssayAnswers(where: [PostEssayAnswerWhereUniqueInput!]!): [PostEssayAnswer]
   createPostEssayQuestion(data: PostEssayQuestionCreateInput!): PostEssayQuestion
   createPostEssayQuestions(data: [PostEssayQuestionCreateInput!]!): [PostEssayQuestion]
   updatePostEssayQuestion(where: PostEssayQuestionWhereUniqueInput!, data: PostEssayQuestionUpdateInput!): PostEssayQuestion
   updatePostEssayQuestions(data: [PostEssayQuestionUpdateArgs!]!): [PostEssayQuestion]
   deletePostEssayQuestion(where: PostEssayQuestionWhereUniqueInput!): PostEssayQuestion
   deletePostEssayQuestions(where: [PostEssayQuestionWhereUniqueInput!]!): [PostEssayQuestion]
+  createPostEssayAnswerLike(data: PostEssayAnswerLikeCreateInput!): PostEssayAnswerLike
+  createPostEssayAnswerLikes(data: [PostEssayAnswerLikeCreateInput!]!): [PostEssayAnswerLike]
+  updatePostEssayAnswerLike(where: PostEssayAnswerLikeWhereUniqueInput!, data: PostEssayAnswerLikeUpdateInput!): PostEssayAnswerLike
+  updatePostEssayAnswerLikes(data: [PostEssayAnswerLikeUpdateArgs!]!): [PostEssayAnswerLike]
+  deletePostEssayAnswerLike(where: PostEssayAnswerLikeWhereUniqueInput!): PostEssayAnswerLike
+  deletePostEssayAnswerLikes(where: [PostEssayAnswerLikeWhereUniqueInput!]!): [PostEssayAnswerLike]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -2068,12 +2319,21 @@ type Query {
   member(where: MemberWhereUniqueInput!): Member
   members(where: MemberWhereInput! = {}, orderBy: [MemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberWhereUniqueInput): [Member!]
   membersCount(where: MemberWhereInput! = {}): Int
+  postChoiceAnswer(where: PostChoiceAnswerWhereUniqueInput!): PostChoiceAnswer
+  postChoiceAnswers(where: PostChoiceAnswerWhereInput! = {}, orderBy: [PostChoiceAnswerOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostChoiceAnswerWhereUniqueInput): [PostChoiceAnswer!]
+  postChoiceAnswersCount(where: PostChoiceAnswerWhereInput! = {}): Int
   postChoiceQuestion(where: PostChoiceQuestionWhereUniqueInput!): PostChoiceQuestion
   postChoiceQuestions(where: PostChoiceQuestionWhereInput! = {}, orderBy: [PostChoiceQuestionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostChoiceQuestionWhereUniqueInput): [PostChoiceQuestion!]
   postChoiceQuestionsCount(where: PostChoiceQuestionWhereInput! = {}): Int
+  postEssayAnswer(where: PostEssayAnswerWhereUniqueInput!): PostEssayAnswer
+  postEssayAnswers(where: PostEssayAnswerWhereInput! = {}, orderBy: [PostEssayAnswerOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostEssayAnswerWhereUniqueInput): [PostEssayAnswer!]
+  postEssayAnswersCount(where: PostEssayAnswerWhereInput! = {}): Int
   postEssayQuestion(where: PostEssayQuestionWhereUniqueInput!): PostEssayQuestion
   postEssayQuestions(where: PostEssayQuestionWhereInput! = {}, orderBy: [PostEssayQuestionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostEssayQuestionWhereUniqueInput): [PostEssayQuestion!]
   postEssayQuestionsCount(where: PostEssayQuestionWhereInput! = {}): Int
+  postEssayAnswerLike(where: PostEssayAnswerLikeWhereUniqueInput!): PostEssayAnswerLike
+  postEssayAnswerLikes(where: PostEssayAnswerLikeWhereInput! = {}, orderBy: [PostEssayAnswerLikeOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostEssayAnswerLikeWhereUniqueInput): [PostEssayAnswerLike!]
+  postEssayAnswerLikesCount(where: PostEssayAnswerLikeWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }
