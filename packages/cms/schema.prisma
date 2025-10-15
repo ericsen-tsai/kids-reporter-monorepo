@@ -57,8 +57,9 @@ model Post {
   ogDescription                              String               @default("")
   ogImage                                    Photo?               @relation("Post_ogImage", fields: [ogImageId], references: [id])
   ogImageId                                  Int?                 @map("ogImage")
-  multipleChoiceQuestionsJSON                Json?                @default("[]")
-  essayQuestionsJSON                         Json?                @default("[]")
+  opening                                    String               @default("")
+  postChoiceQuestions                        PostChoiceQuestion[] @relation("PostChoiceQuestion_post")
+  postEssayQuestions                         PostEssayQuestion[]  @relation("PostEssayQuestion_post")
   createdAt                                  DateTime?            @default(now())
   updatedAt                                  DateTime?            @updatedAt
   createdBy                                  User?                @relation("Post_createdBy", fields: [createdById], references: [id])
@@ -342,4 +343,29 @@ model Member {
   updatedAt          DateTime? @updatedAt
 
   @@index([email])
+}
+
+model PostChoiceQuestion {
+  id        Int       @id @default(autoincrement())
+  post      Post?     @relation("PostChoiceQuestion_post", fields: [postId], references: [id])
+  postId    Int?      @map("post")
+  title     String    @default("")
+  options   Json?     @default("[]")
+  reason    String    @default("")
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@index([postId])
+}
+
+model PostEssayQuestion {
+  id        Int       @id @default(autoincrement())
+  post      Post?     @relation("PostEssayQuestion_post", fields: [postId], references: [id])
+  postId    Int?      @map("post")
+  title     String    @default("")
+  hint      String    @default("")
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@index([postId])
 }

@@ -23,6 +23,7 @@ import relationshipUtil, {
 } from './utils/manual-order-relationship'
 import { slugConfig } from './config'
 import type { ListConfig } from '@keystone-6/core/types'
+
 const subSubcategories: OrderedRelationshipConfig = {
   fieldName: 'subSubcategories',
   relationshipConfig: {
@@ -109,135 +110,33 @@ const TWReporterRelatedPostsConfig = isTWReporterRelatedPostsEnabled
     })
   : {}
 
-const isChatGPTSummaryEnabled = true
-const summaryFieldConfig = isChatGPTSummaryEnabled
-  ? {
-      summary: virtual({
-        field: () =>
-          graphql.field({
-            type: graphql.JSON,
-            async resolve(item: Record<string, any>, args, context) {
-              const postID = item?.id
-              const post = await context.query.Post.findOne({
-                where: { id: postID },
-                query: 'id, content',
-              })
-              return {
-                label: '生成內容',
-                content: post.content,
-                openAIKey: envVars.openAIKey,
-              }
-            },
-          }),
-        ui: {
-          views: './lists/views/ai-dialog',
-          createView: {
-            fieldMode: 'hidden',
-          },
-          itemView: {
-            fieldPosition: 'sidebar',
-          },
-          listView: {
-            fieldMode: 'hidden',
-          },
-        },
-      }),
-    }
-  : {}
-const multipleChoiceQuestionsFieldConfig = isChatGPTSummaryEnabled
-  ? group({
-      label: '選擇題組',
-      fields: {
-        aiSuggestion: virtual({
-          field: () =>
-            graphql.field({
-              type: graphql.JSON,
-              async resolve(item: Record<string, any>, args, context) {
-                const postID = item?.id
-                const post = await context.query.Post.findOne({
-                  where: { id: postID },
-                  query: 'id, content',
-                })
-                return {
-                  label: 'AI助理生成',
-                  content: post.content,
-                  openAIKey: envVars.openAIKey,
-                }
-              },
-            }),
-          ui: {
-            views: './lists/views/ai-suggestion-multiple-choice',
-            createView: {
-              fieldMode: 'hidden',
-            },
-            itemView: {
-              fieldMode: 'edit',
-            },
-            listView: {
-              fieldMode: 'hidden',
-            },
-          },
-        }),
-        multipleChoiceQuestionsJSON: json({
-          label: '選擇題',
-          defaultValue: [],
-          ui: {
-            views: './lists/views/multiple-choice-questions',
-            createView: { fieldMode: 'hidden' },
-            itemView: { fieldMode: 'edit' },
-            listView: { fieldMode: 'hidden' },
-          },
-        }),
+const aiDialog = virtual({
+  field: () =>
+    graphql.field({
+      type: graphql.JSON,
+      async resolve(item: Record<string, any>) {
+        return {
+          label: '生成內容',
+          content: item.content,
+          openAIKey: envVars.openAI.key,
+          openAIOrganization: envVars.openAI.organization,
+          openAIProject: envVars.openAI.project,
+        }
       },
-    })
-  : {}
-const essayQuestionsFieldConfig = isChatGPTSummaryEnabled
-  ? group({
-      label: '思辨題組',
-      fields: {
-        aiEssaySuggestion: virtual({
-          field: () =>
-            graphql.field({
-              type: graphql.JSON,
-              async resolve(item: Record<string, any>, args, context) {
-                const postID = item?.id
-                const post = await context.query.Post.findOne({
-                  where: { id: postID },
-                  query: 'id, content',
-                })
-                return {
-                  label: 'AI助理生成',
-                  content: post.content,
-                  openAIKey: envVars.openAIKey,
-                }
-              },
-            }),
-          ui: {
-            views: './lists/views/ai-suggestion-essay',
-            createView: {
-              fieldMode: 'hidden',
-            },
-            itemView: {
-              fieldMode: 'edit',
-            },
-            listView: {
-              fieldMode: 'hidden',
-            },
-          },
-        }),
-        essayQuestionsJSON: json({
-          label: '思辨題',
-          defaultValue: [],
-          ui: {
-            views: './lists/views/essay-questions',
-            createView: { fieldMode: 'hidden' },
-            itemView: { fieldMode: 'edit' },
-            listView: { fieldMode: 'hidden' },
-          },
-        }),
-      },
-    })
-  : {}
+    }),
+  ui: {
+    views: './lists/views/ai-dialog',
+    createView: {
+      fieldMode: 'hidden',
+    },
+    itemView: {
+      fieldPosition: 'sidebar',
+    },
+    listView: {
+      fieldMode: 'hidden',
+    },
+  },
+})
 
 const listConfigurations: ListConfig<any> = list({
   fields: {
@@ -384,8 +283,52 @@ const listConfigurations: ListConfig<any> = list({
       label: 'og:image',
       ref: 'Photo',
     }),
-    ...multipleChoiceQuestionsFieldConfig,
-    ...essayQuestionsFieldConfig,
+    aiDialog,
+    opening: text({
+      label: '開場白',
+      ui: {
+        displayMode: 'textarea',
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'edit' },
+        listView: { fieldMode: 'hidden' },
+      },
+    }),
+    postChoiceQuestions: relationship({
+      label: '單選題（新）',
+      ref: 'PostChoiceQuestion.post',
+      many: true,
+      ui: {
+        hideCreate: true,
+        displayMode: 'cards',
+        cardFields: ['title'],
+        linkToItem: true,
+        inlineCreate: {
+          fields: ['title', 'options', 'reason'],
+        },
+        inlineEdit: {
+          fields: ['title', 'options', 'reason'],
+        },
+        inlineConnect: true,
+      },
+    }),
+    postEssayQuestions: relationship({
+      label: '思辨題（新）',
+      ref: 'PostEssayQuestion.post',
+      many: true,
+      ui: {
+        hideCreate: true,
+        displayMode: 'cards',
+        cardFields: ['title'],
+        linkToItem: true,
+        inlineCreate: {
+          fields: ['title', 'hint'],
+        },
+        inlineEdit: {
+          fields: ['title', 'hint'],
+        },
+        inlineConnect: true,
+      },
+    }),
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
       ui: {
@@ -568,7 +511,21 @@ const listConfigurations: ListConfig<any> = list({
         listView: { fieldMode: 'hidden' },
       },
     }),
-    ...((isChatGPTSummaryEnabled ? summaryFieldConfig : {}) as any),
+    generateQuestions: virtual({
+      field: () =>
+        graphql.field({
+          type: graphql.JSON,
+          async resolve(item: Record<string, any>) {
+            return { postId: item.id }
+          },
+        }),
+      ui: {
+        views: './lists/views/generate-post-questions',
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldPosition: 'sidebar' },
+        listView: { fieldMode: 'hidden' },
+      },
+    }),
   },
   ui: {
     label: 'Posts',
