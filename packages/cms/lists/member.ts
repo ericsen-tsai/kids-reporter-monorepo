@@ -1,15 +1,16 @@
 import { graphql, list } from '@keystone-6/core'
 import { text, timestamp, virtual } from '@keystone-6/core/fields'
+
+import type { ListType } from '../types/keystone-list-types'
 import {
   makeMemberOwnedFilter,
   memberOwnedOperationAccess,
 } from './utils/member-owned-access'
-import type { ListConfig } from '@keystone-6/core/types'
 
 const operationAccessControl = memberOwnedOperationAccess
 const filterAccessControl = makeMemberOwnedFilter('self')
 
-const listConfigurations: ListConfig<any> = list({
+export default list<ListType<'Member'>>({
   fields: {
     name: text({
       label: '稱呼',
@@ -111,5 +112,3 @@ const listConfigurations: ListConfig<any> = list({
   },
   hooks: {},
 })
-
-export default listConfigurations

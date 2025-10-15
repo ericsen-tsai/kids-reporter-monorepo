@@ -10,13 +10,14 @@ import {
   memberOwnedOperationAccess,
   makeMemberOwnedFilter,
 } from './utils/member-owned-access'
+import type { ListType } from '../types/keystone-list-types'
 
 const memberFieldName = 'member'
 
 const operationAccessControl = memberOwnedOperationAccess
 const filterAccessControl = makeMemberOwnedFilter(memberFieldName)
 
-export default list({
+export default list<ListType<'PostChoiceAnswer'>>({
   fields: {
     question: relationship({
       label: '單選題',
@@ -129,7 +130,7 @@ export default list({
       if (typeof choiceIndex === 'number' && choiceIndex >= 0) {
         // find out the choice is correct or not
         const q = await context.query.PostChoiceQuestion.findOne({
-          where: { id: questionId },
+          where: { id: questionId?.toString() },
           query: 'id options',
         })
         const correctIndex = q?.options?.findIndex(

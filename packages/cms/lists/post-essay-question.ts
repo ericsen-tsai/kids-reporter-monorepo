@@ -6,6 +6,7 @@ import {
   allowRoles,
   RoleEnum,
 } from './utils/access-control-list'
+import type { ListType } from '../types/keystone-list-types'
 
 const operationAccessControl = allowRoles([
   RoleEnum.FrontendHeadlessAccount,
@@ -13,7 +14,7 @@ const operationAccessControl = allowRoles([
   RoleEnum.Owner,
 ])
 
-export default list({
+export default list<ListType<'PostEssayQuestion'>>({
   fields: {
     post: relationship({
       label: '文章',

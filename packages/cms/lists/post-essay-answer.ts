@@ -5,13 +5,14 @@ import {
   memberOwnedOperationAccess,
   makeMemberOwnedFilter,
 } from './utils/member-owned-access'
+import type { ListType } from '../types/keystone-list-types'
 
 const memberFieldName = 'member'
 
 const operationAccessControl = memberOwnedOperationAccess
 const filterAccessControl = makeMemberOwnedFilter(memberFieldName)
 
-export default list({
+export default list<ListType<'PostEssayAnswer'>>({
   fields: {
     question: relationship({
       label: '思辨題',
@@ -36,13 +37,13 @@ export default list({
     likesCount: virtual({
       field: graphql.field({
         type: graphql.Int,
-        async resolve(item: Record<string, unknown>, args, context) {
+        async resolve(item, args, context) {
           const answerId = item.id
 
           // Intentionally bypasses PostEssayAnswerLike list ACL via Prisma.
           // Make sure this resolver already enforced authorization.
           const count = await context.sudo().db.PostEssayAnswerLike.count({
-            where: { answer: { id: { equals: answerId } } },
+            where: { answer: { id: { equals: answerId.toString() } } },
           })
 
           return count ?? 0

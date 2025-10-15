@@ -4,8 +4,9 @@ import {
   makeMemberOwnedFilter,
   memberOwnedOperationAccess,
 } from './utils/member-owned-access'
+import type { ListType } from '../types/keystone-list-types'
 
-export default list({
+export default list<ListType<'PostEssayAnswerLike'>>({
   fields: {
     answer: relationship({
       label: '思辨題答案',
