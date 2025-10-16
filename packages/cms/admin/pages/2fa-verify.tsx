@@ -1,8 +1,5 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-/** @jsxFrag */
 import { Button } from '@keystone-ui/button'
-import { H1, jsx, Stack } from '@keystone-ui/core'
+import { H1, Stack } from '@keystone-ui/core'
 import { TextInput } from '@keystone-ui/fields'
 import { Notice } from '@keystone-ui/notice'
 import axios from 'axios'

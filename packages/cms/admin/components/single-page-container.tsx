@@ -1,8 +1,5 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
 import { Head } from '@keystone-6/core/admin-ui/router'
-import { Box, Center, jsx, useTheme } from '@keystone-ui/core'
+import { Box, Center, useTheme } from '@keystone-ui/core'
 import { ReactNode } from 'react'
 
 type SinglePageContainerProps = {

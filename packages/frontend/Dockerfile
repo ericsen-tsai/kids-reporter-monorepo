@@ -6,7 +6,7 @@ WORKDIR /build
 
 COPY package.json yarn.lock /build/
 
-RUN yarn install
+RUN yarn install --ignore-scripts
 
 COPY . /build/
 

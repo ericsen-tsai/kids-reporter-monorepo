@@ -1,10 +1,5 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-/** @jsxFrag */
-
 import { gql, useMutation, useQuery } from '@keystone-6/core/admin-ui/apollo'
 import { Button } from '@keystone-ui/button'
-import { jsx } from '@keystone-ui/core'
 import { ReactNode, useEffect } from 'react'
 
 const GET_USER = gql`
