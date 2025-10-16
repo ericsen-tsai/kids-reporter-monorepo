@@ -3,21 +3,27 @@
 import Image from 'next/image'
 
 import Button from './components/button'
+import {
+  ADDITIONAL_MENU_ITEMS,
+  DONATE_URL,
+  PRIVACY_POLICY,
+  SOCIAL_MEDIA_ITEMS,
+} from './constants/default-values'
 import { MenuItem, SocialMediaHrefs } from './types'
 import { generateSocialMediaConfig } from './utils/generate-social-media-config'
 
 type FooterProps = {
-  socialMediaHrefs: SocialMediaHrefs
-  additionalMenuItems: MenuItem[]
-  donateUrl: string
-  privacyPolicyUrl: string
+  socialMediaHrefs?: SocialMediaHrefs
+  additionalMenuItems?: MenuItem[]
+  donateUrl?: string
+  privacyPolicyUrl?: string
 }
 
 const Footer = ({
-  socialMediaHrefs,
-  additionalMenuItems,
-  donateUrl,
-  privacyPolicyUrl,
+  socialMediaHrefs = SOCIAL_MEDIA_ITEMS.map((item) => item.href),
+  additionalMenuItems = ADDITIONAL_MENU_ITEMS,
+  donateUrl = DONATE_URL,
+  privacyPolicyUrl = PRIVACY_POLICY,
 }: FooterProps) => {
   const socialMediaConfig = generateSocialMediaConfig(socialMediaHrefs)
 

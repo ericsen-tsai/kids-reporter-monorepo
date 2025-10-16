@@ -1,5 +1,13 @@
 'use client'
 import {
+  ADDITIONAL_MENU_ITEMS,
+  DONATE_URL,
+  MENU_ITEMS,
+  SEARCH_PLACEHOLDER,
+  SOCIAL_MEDIA_ITEMS,
+  SUBSCRIBE_URL,
+} from '../constants/default-values'
+import {
   ScrollLevel,
   useIsAtTop,
   useMediaQuery,
@@ -12,21 +20,21 @@ import Menu from './menu'
 import { MobileHeader } from './mobile-header'
 
 type HeaderProps = {
-  menuItems: MenuItem[]
-  additionalMenuItems: MenuItem[]
-  socialMediaHrefs: SocialMediaHrefs
-  searchPlaceholder: string
-  subscribeUrl: string
-  donateUrl: string
+  menuItems?: MenuItem[]
+  additionalMenuItems?: MenuItem[]
+  socialMediaHrefs?: SocialMediaHrefs
+  searchPlaceholder?: string
+  subscribeUrl?: string
+  donateUrl?: string
 }
 
 function Header({
-  menuItems,
-  additionalMenuItems,
-  socialMediaHrefs,
-  searchPlaceholder,
-  subscribeUrl,
-  donateUrl,
+  menuItems = MENU_ITEMS,
+  additionalMenuItems = ADDITIONAL_MENU_ITEMS,
+  socialMediaHrefs = SOCIAL_MEDIA_ITEMS.map((item) => item.href),
+  searchPlaceholder = SEARCH_PLACEHOLDER,
+  subscribeUrl = SUBSCRIBE_URL,
+  donateUrl = DONATE_URL,
 }: HeaderProps) {
   const context = useHeaderContext()
   const postTitle = context?.postTitle
