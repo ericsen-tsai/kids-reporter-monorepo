@@ -95,13 +95,14 @@ export default list<ListType<'PostEssayAnswer'>>({
   },
   ui: {
     labelField: 'id',
-    hideCreate: true,
-    createView: {
-      defaultFieldMode: 'hidden',
-    },
-    itemView: {
-      defaultFieldMode: 'read',
-    },
+    // @TODO: uncomment after testing ok
+    //hideCreate: true,
+    //createView: {
+    //  defaultFieldMode: 'hidden',
+    //},
+    //itemView: {
+    //  defaultFieldMode: 'read',
+    //},
     listView: {
       initialColumns: ['id', 'question', 'member'],
     },

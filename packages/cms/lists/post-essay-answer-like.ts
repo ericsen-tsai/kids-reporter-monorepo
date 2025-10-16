@@ -61,7 +61,14 @@ export default list<ListType<'PostEssayAnswerLike'>>({
   },
   ui: {
     labelField: 'id',
-    hideCreate: true,
+    // @TODO: uncomment after testing ok
+    //hideCreate: true,
+    //createView: {
+    //  defaultFieldMode: 'hidden',
+    //},
+    //itemView: {
+    //  defaultFieldMode: 'read',
+    //},
     listView: {
       initialColumns: ['id', 'answer', 'member'],
     },
