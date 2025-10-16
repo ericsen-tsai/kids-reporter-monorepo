@@ -1795,8 +1795,6 @@ input PostChoiceAnswerUpdateInput {
   question: PostChoiceQuestionRelateToOneForUpdateInput
   member: MemberRelateToOneForUpdateInput
   choiceIndex: Int
-  correct: Boolean
-  compositeKey: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1822,8 +1820,6 @@ input PostChoiceAnswerCreateInput {
   question: PostChoiceQuestionRelateToOneForCreateInput
   member: MemberRelateToOneForCreateInput
   choiceIndex: Int
-  correct: Boolean
-  compositeKey: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1947,7 +1943,6 @@ input PostEssayAnswerUpdateInput {
   question: PostEssayQuestionRelateToOneForUpdateInput
   member: MemberRelateToOneForUpdateInput
   content: String
-  compositeKey: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1967,7 +1962,6 @@ input PostEssayAnswerCreateInput {
   question: PostEssayQuestionRelateToOneForCreateInput
   member: MemberRelateToOneForCreateInput
   content: String
-  compositeKey: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -2067,7 +2061,6 @@ input PostEssayAnswerLikeOrderByInput {
 input PostEssayAnswerLikeUpdateInput {
   answer: PostEssayAnswerRelateToOneForUpdateInput
   member: MemberRelateToOneForUpdateInput
-  compositeKey: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -2086,7 +2079,6 @@ input PostEssayAnswerLikeUpdateArgs {
 input PostEssayAnswerLikeCreateInput {
   answer: PostEssayAnswerRelateToOneForCreateInput
   member: MemberRelateToOneForCreateInput
-  compositeKey: String
   createdAt: DateTime
   updatedAt: DateTime
 }
