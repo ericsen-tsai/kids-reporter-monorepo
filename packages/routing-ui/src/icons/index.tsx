@@ -6,9 +6,27 @@ export const HamburgerIcon = () => (
     aria-hidden="true"
     data-type="type-1"
   >
-    <rect fill="#27B5F7" y="0.00" width="18" height="3" rx="1"></rect>
-    <rect fill="#F76977" y="6.15" width="18" height="3" rx="1"></rect>
-    <rect fill="#F8C341" y="12.3" width="18" height="3" rx="1"></rect>
+    <rect
+      fill="var(--color-blue-400)"
+      y="0.00"
+      width="18"
+      height="3"
+      rx="1"
+    ></rect>
+    <rect
+      fill="var(--color-red-400)"
+      y="6.15"
+      width="18"
+      height="3"
+      rx="1"
+    ></rect>
+    <rect
+      fill="var(--color-yellow-400)"
+      y="12.3"
+      width="18"
+      height="3"
+      rx="1"
+    ></rect>
   </svg>
 )
 
