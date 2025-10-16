@@ -1,12 +1,12 @@
 'use client'
 
+import { Button, cn } from '@kids-reporter/routing-ui'
+import Image from 'next/image'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { cn } from '@/utils/cn'
-import Button from '@/components/button'
+
+import { CallBaodaozaiProps, useCallBaodaozaiContext } from '../../context'
 import { BaodaozaiAction, BaodaozaiQuestions } from '../../types'
 import { getModalStepsFromQuestions, ModalStep } from './utils'
-import Image from 'next/image'
-import { CallBaodaozaiProps, useCallBaodaozaiContext } from '../../context'
 
 export type QAModalEvent = {
   setHide: (hide: boolean) => void
@@ -135,8 +135,8 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
   const renderModalContent = useMemo(() => {
     if (isLeaving) {
       return (
-        <div className="p-6 flex flex-col items-start w-full mb-4 tablet:mb-0">
-          <h2 className="prose-h6-large text-neutral-900 mb-3">
+        <div className="mb-4 flex w-full flex-col items-start p-6 tablet:mb-0">
+          <h2 className="prose-h6-large mb-3 text-neutral-900">
             確定要放棄作答嗎？
           </h2>
           <p className="prose-p1 text-neutral-700">
@@ -150,14 +150,14 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
     switch (currentModalStep?.type) {
       case 'choice':
         return (
-          <div className="p-6 w-full flex flex-col pb-10 tablet:pb-6">
-            <div className="w-full mb-6">
+          <div className="flex w-full flex-col p-6 pb-10 tablet:pb-6">
+            <div className="mb-6 w-full">
               <h2 className="prose-h6-large text-neutral-900">
                 {currentModalStep.title}
               </h2>
             </div>
 
-            <div className="w-full flex flex-col gap-4 mb-6">
+            <div className="mb-6 flex w-full flex-col gap-4">
               {currentModalStep.options.map((option, index) => (
                 <button
                   key={option.content}
@@ -168,13 +168,13 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
                     )
                   }
                   className={cn(
-                    'w-full px-5 py-4 text-left rounded-2xl border-2 transition-all bg-white cursor-pointer',
+                    'w-full cursor-pointer rounded-2xl border-2 bg-white px-5 py-4 text-left transition-all',
                     answers[currentModalStep.questionIndex] === option.content
                       ? 'border-neutral-600'
                       : 'border-neutral-200 hover:border-neutral-300 hover:bg-neutral-100'
                   )}
                 >
-                  <span className={'text-neutral-900 prose-p1'}>
+                  <span className={'prose-p1 text-neutral-900'}>
                     {index + 1}. {option.content}
                   </span>
                 </button>
@@ -184,8 +184,8 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
         )
       case 'essay':
         return (
-          <div className="p-6 w-full flex flex-col h-full pb-10 tablet:pb-6">
-            <div className="w-full mb-6">
+          <div className="flex h-full w-full flex-col p-6 pb-10 tablet:pb-6">
+            <div className="mb-6 w-full">
               <h2 className="prose-h6-large mb-3 text-neutral-900">
                 {currentModalStep.title}
               </h2>
@@ -196,7 +196,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
 
             <textarea
               className={cn(
-                'w-full h-72 flex-1 px-5 py-4 border-2 rounded-2xl resize-none focus:outline-none transition-all prose-p1 bg-white text-neutral-900',
+                'prose-p1 h-72 w-full flex-1 resize-none rounded-2xl border-2 bg-white px-5 py-4 text-neutral-900 transition-all focus:outline-none',
                 (answers[currentModalStep.questionIndex] || '').trim()
                   ? 'border-neutral-600'
                   : 'border-neutral-200 hover:border-neutral-600 focus:border-neutral-600'
@@ -214,10 +214,10 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
         )
       case 'choice-result':
         return (
-          <div className="flex flex-col h-full bg-neutral-100">
+          <div className="flex h-full flex-col bg-neutral-100">
             <div className="flex flex-col bg-neutral-white">
-              <div className="w-full mb-6 px-6 pt-6">
-                <h2 className="prose-h6-large text-neutral-900 text-center">
+              <div className="mb-6 w-full px-6 pt-6">
+                <h2 className="prose-h6-large text-center text-neutral-900">
                   {answers[currentModalStep.questionIndex] ===
                   currentModalStep.correctAnswerContent
                     ? '答對了～'
@@ -225,9 +225,9 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
                 </h2>
               </div>
 
-              <div className="w-full mb-6 flex justify-center px-6">
-                <div className="w-[300px] h-[120px] flex items-center justify-center">
-                  <div className="w-full h-full flex items-center justify-center">
+              <div className="mb-6 flex w-full justify-center px-6">
+                <div className="flex h-[120px] w-[300px] items-center justify-center">
+                  <div className="flex h-full w-full items-center justify-center">
                     {answers[currentModalStep.questionIndex] ===
                     currentModalStep.correctAnswerContent ? (
                       <Image
@@ -252,8 +252,8 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
             {/* Answer Section */}
             <div className="w-full bg-neutral-100 p-6 pb-10 tablet:pb-6">
               <div className="mb-4">
-                <p className="prose-p1 text-neutral-700 mb-4">正確解答：</p>
-                <div className="w-full p-4 bg-white border-2 border-neutral-200 rounded-2xl">
+                <p className="prose-p1 mb-4 text-neutral-700">正確解答：</p>
+                <div className="w-full rounded-2xl border-2 border-neutral-200 bg-white p-4">
                   <span className="prose-p1-bold text-neutral-900">
                     {currentModalStep.correctAnswerIndex + 1}.{' '}
                     {currentModalStep.correctAnswerContent}
@@ -268,18 +268,18 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
         )
       case 'essay-result':
         return (
-          <div className="flex flex-col h-full bg-neutral-100 w-full">
+          <div className="flex h-full w-full flex-col bg-neutral-100">
             <div className="flex flex-col bg-neutral-white">
-              <div className="w-full mb-6 px-6 pt-6">
-                <h2 className="prose-h6-large text-neutral-900 text-center">
+              <div className="mb-6 w-full px-6 pt-6">
+                <h2 className="prose-h6-large text-center text-neutral-900">
                   已送出
                 </h2>
               </div>
 
-              <div className="w-full mb-6 flex justify-center px-6">
-                <div className="w-[300px] h-[120px] flex items-center justify-center">
+              <div className="mb-6 flex w-full justify-center px-6">
+                <div className="flex h-[120px] w-[300px] items-center justify-center">
                   {/* Placeholder for result image - would be replaced with actual image component */}
-                  <div className="w-full h-full flex items-center justify-center">
+                  <div className="flex h-full w-full items-center justify-center">
                     <Image
                       src="/assets/images/baodaozai/send.svg"
                       alt="Correct Answer"
@@ -293,9 +293,9 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
 
             <div className="w-full bg-neutral-100 p-6 pb-10 tablet:pb-6">
               <div className="mb-4">
-                <p className="prose-p1 text-neutral-700 mb-4">你的回答：</p>
-                <div className="w-full p-4 bg-white border-2 border-neutral-200 rounded-2xl">
-                  <span className="prose-p1-bold text-neutral-900 text-wrap break-words">
+                <p className="prose-p1 mb-4 text-neutral-700">你的回答：</p>
+                <div className="w-full rounded-2xl border-2 border-neutral-200 bg-white p-4">
+                  <span className="prose-p1-bold text-wrap break-words text-neutral-900">
                     {currentAnswer}
                   </span>
                 </div>
@@ -309,7 +309,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
   const renderModalButtons = useMemo(() => {
     if (isLeaving) {
       return (
-        <div className="w-full flex gap-4">
+        <div className="flex w-full gap-4">
           <Button
             onClick={handleCancelLeaving}
             variant="secondary"
@@ -345,7 +345,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
         )
       case 'essay':
         return (
-          <div className="w-full flex gap-4">
+          <div className="flex w-full gap-4">
             <Button
               onClick={currentModalStep.onPass}
               variant="secondary"
@@ -406,7 +406,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
       case 'choice':
       case 'essay':
         return (
-          <div className="absolute left-[37.5px] -z-1 -top-18 tablet:z-4 tablet:left-0 tablet:-top-12 pointer-events-none">
+          <div className="pointer-events-none absolute -top-18 left-[37.5px] -z-1 tablet:-top-12 tablet:left-0 tablet:z-4">
             <Image
               src="/assets/images/baodaozai/answering_mobile.svg"
               alt="Baodaozai"
@@ -434,22 +434,22 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-1002 flex items-end tablet:items-center justify-center scrollbar-thin">
-      <div className="absolute inset-0 bg-neutral-600/50 z-0" />
+    <div className="scrollbar-thin fixed inset-0 z-1002 flex items-end justify-center tablet:items-center">
+      <div className="absolute inset-0 z-0 bg-neutral-600/50" />
       <div
         className={cn(
-          'relative z-1 w-full h-[calc(100vh-156px)] tablet:w-120 tablet:h-144 flex flex-col rounded-t-[30px] tablet:rounded-[30px] shadow-[0px_2px_16px_0px_rgba(0,0,0,0.15)]',
+          'relative z-1 flex h-[calc(100vh-156px)] w-full flex-col rounded-t-[30px] shadow-[0px_2px_16px_0px_rgba(0,0,0,0.15)] tablet:h-144 tablet:w-120 tablet:rounded-[30px]',
           isLeaving && 'h-auto tablet:h-auto'
         )}
       >
-        <div className="px-6 py-5 tablet:px-6 tablet:py-5 border-b-2 border-neutral-200 relative flex flex-col items-center bg-neutral-white rounded-t-[30px] tablet:rounded-t-[30px]">
+        <div className="relative flex flex-col items-center rounded-t-[30px] border-b-2 border-neutral-200 bg-neutral-white px-6 py-5 tablet:rounded-t-[30px] tablet:px-6 tablet:py-5">
           <span className="prose-h6-large text-neutral-900">
             {renderModalTitle}
           </span>
           {!isLeaving && (
             <button
               onClick={handleShowLeaving}
-              className="w-8 h-8 flex items-center justify-center transition-colors text-neutral-600 hover:text-neutral-800 cursor-pointer absolute right-6 top-5"
+              className="absolute top-5 right-6 flex h-8 w-8 cursor-pointer items-center justify-center text-neutral-600 transition-colors hover:text-neutral-800"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -470,15 +470,15 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
 
         <div
           className={
-            'flex-1 flex flex-col bg-neutral-white tablet:rounded-b-[30px] overflow-hidden'
+            'flex flex-1 flex-col overflow-hidden bg-neutral-white tablet:rounded-b-[30px]'
           }
         >
-          <div className="flex flex-col items-center overflow-y-auto flex-1">
+          <div className="flex flex-1 flex-col items-center overflow-y-auto">
             {renderModalContent}
           </div>
           <div
             className={cn(
-              'w-full px-6 pb-6 flex flex-col justify-end',
+              'flex w-full flex-col justify-end px-6 pb-6',
               (isLeaving ||
                 currentModalStep?.type === 'choice-result' ||
                 currentModalStep?.type === 'essay-result') &&
