@@ -1,9 +1,6 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-/** @jsxFrag */
 import { gql, useQuery } from '@keystone-6/core/admin-ui/apollo'
 import { Button } from '@keystone-ui/button'
-import { H1, jsx, Stack } from '@keystone-ui/core'
+import { H1, Stack } from '@keystone-ui/core'
 import { TextInput } from '@keystone-ui/fields'
 import { Notice } from '@keystone-ui/notice'
 import axios from 'axios'
