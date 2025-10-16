@@ -1930,7 +1930,7 @@ input PostEssayAnswerWhereInput {
   question: PostEssayQuestionWhereInput
   member: MemberWhereInput
   content: StringFilter
-  compositeKey: StringFilter
+  compositeKey: StringNullableFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
