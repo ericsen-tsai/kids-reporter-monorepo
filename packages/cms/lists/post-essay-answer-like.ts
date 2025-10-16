@@ -31,6 +31,16 @@ export default list<ListType<'PostEssayAnswerLike'>>({
       db: {
         isNullable: true,
       },
+      graphql: {
+        omit: {
+          create: true,
+          update: true,
+        },
+      },
+      access: {
+        create: () => false,
+        update: () => false,
+      },
     }),
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
