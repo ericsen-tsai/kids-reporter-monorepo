@@ -21,14 +21,14 @@ function Baodaozai() {
     setAction('none')
     setIsActive(false)
     onDialogPropsChange({ isOpen: false })
-  }, [confirmAction, setAction, setIsActive, onDialogPropsChange])
+  }, [confirmAction, setHide, setIsActive, setAction, onDialogPropsChange])
 
   const handleCancel = useCallback(() => {
     cancelAction({ setHide, setIsActive, setAction })
     setAction('none')
     setIsActive(false)
     onDialogPropsChange({ isOpen: false })
-  }, [cancelAction, setAction, setIsActive, onDialogPropsChange])
+  }, [cancelAction, setHide, setIsActive, setAction, onDialogPropsChange])
 
   const handleOpenDialog = useCallback(() => {
     onDialogPropsChange({ isOpen: true })

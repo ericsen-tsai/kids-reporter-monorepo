@@ -256,7 +256,7 @@ const Article = ({ post }: { post: any }) => {
       })
       setIsSubmitted(true)
     },
-    []
+    [router]
   )
 
   return (

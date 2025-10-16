@@ -76,7 +76,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
       onPass: handlePass,
       onSubmit: handleSubmit,
     })
-  }, [handleNext, handlePass, questions, onSubmit, answers, handleSubmit])
+  }, [handleNext, handlePass, questions, handleSubmit])
 
   const handleAnswerChange = useCallback(
     (questionIndex: number, answer: string) => {
@@ -99,7 +99,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
       document.body.classList.remove('no-scroll')
     }
     return () => {
-      handleReset
+      handleReset()
       document.body.classList.remove('no-scroll')
     }
   }, [isOpen, handleReset])
