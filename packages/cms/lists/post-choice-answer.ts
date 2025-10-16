@@ -129,7 +129,7 @@ export default list<ListType<'PostChoiceAnswer'>>({
       const choiceIndex = resolvedData.choiceIndex
       if (typeof choiceIndex === 'number' && choiceIndex >= 0) {
         // find out the choice is correct or not
-        const q = await context.query.PostChoiceQuestion.findOne({
+        const q = await context.sudo().query.PostChoiceQuestion.findOne({
           where: { id: questionId?.toString() },
           query: 'id options',
         })
