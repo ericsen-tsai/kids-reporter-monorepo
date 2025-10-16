@@ -1,6 +1,7 @@
+import { ContentState } from 'draft-js'
 import React from 'react'
 import styled, { useTheme } from 'styled-components'
-import { ContentState } from 'draft-js'
+
 import { ENTITY, findEntitiesByType } from '../utils/entity'
 
 const LinkWrapper = styled.a`

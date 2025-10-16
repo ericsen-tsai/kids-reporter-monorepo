@@ -1,12 +1,15 @@
 'use client'
-import { useEffect, useState, useRef } from 'react'
-import { useArticleContext } from './article-context'
-import styled from 'styled-components'
-import Skeleton from 'react-loading-skeleton'
-import { ArticleBodyDraftRenderer } from '@kids-reporter/draft-renderer'
-import { STICKY_HEADER_HEIGHT, Theme } from '@/constants'
-import { tocAnchorPrefix, tocIndexPrefix } from './table-of-content'
 import 'react-loading-skeleton/dist/skeleton.css'
+
+import { ArticleBodyDraftRenderer } from '@kids-reporter/draft-renderer'
+import { useEffect, useRef, useState } from 'react'
+import Skeleton from 'react-loading-skeleton'
+import styled from 'styled-components'
+
+import { STICKY_HEADER_HEIGHT, Theme } from '@/constants'
+
+import { useArticleContext } from './article-context'
+import { tocAnchorPrefix, tocIndexPrefix } from './table-of-content'
 
 type PostProp = {
   post: any

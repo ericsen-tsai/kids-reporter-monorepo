@@ -1,8 +1,10 @@
 'use client'
 import styled from 'styled-components'
+
 import { Divider } from '@/components/divider'
-import { DraftRenderer, DraftRendererProp } from './draft-renderer'
 import { mediaQuery } from '@/utils/media-query'
+
+import { DraftRenderer, DraftRendererProp } from './draft-renderer'
 
 const Container = styled.div`
   margin-bottom: 120px;

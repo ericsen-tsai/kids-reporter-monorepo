@@ -1,8 +1,9 @@
-import Multimedia from './multimedia'
-import { useState, useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
+
 import { getColorHex } from '../utils/index'
 import { mediaQuery } from '../utils/media-query'
+import Multimedia from './multimedia'
 
 const mockup = {
   mobile: {

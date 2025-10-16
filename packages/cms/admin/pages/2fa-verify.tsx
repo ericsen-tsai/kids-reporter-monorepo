@@ -1,17 +1,15 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 /** @jsxFrag */
-import { useEffect, useState, FormEvent } from 'react'
-
-import { jsx, H1, Stack } from '@keystone-ui/core'
 import { Button } from '@keystone-ui/button'
+import { H1, jsx, Stack } from '@keystone-ui/core'
 import { TextInput } from '@keystone-ui/fields'
 import { Notice } from '@keystone-ui/notice'
+import axios from 'axios'
+import { FormEvent, useEffect, useState } from 'react'
 
 import { ChangeUserButton } from '../components/change-user-button'
 import { SinglePageContainer } from '../components/single-page-container'
-
-import axios from 'axios'
 
 export default function TwoFactorAuthVerify() {
   const [token, setToken] = useState('')

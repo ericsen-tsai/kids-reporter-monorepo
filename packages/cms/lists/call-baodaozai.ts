@@ -1,8 +1,3 @@
-import {
-  allowAllRoles,
-  allowRoles,
-  RoleEnum,
-} from './utils/access-control-list'
 import { list } from '@keystone-6/core'
 import { timestamp } from '@keystone-6/core/fields'
 import type { ListConfig } from '@keystone-6/core/types'
@@ -10,6 +5,12 @@ import {
   customFields,
   richTextEditorButtonNames,
 } from '@kids-reporter/cms-core'
+
+import {
+  allowAllRoles,
+  allowRoles,
+  RoleEnum,
+} from './utils/access-control-list'
 
 const genRichTextEditorConfig = (label: string) => {
   return customFields.richTextEditor({

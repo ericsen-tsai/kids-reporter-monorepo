@@ -9,13 +9,23 @@
 }
 
 @keyframes slideIn {
-  from { transform: translateY(40px); opacity: 0;}
-  to { display: block; }
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    display: block;
+  }
 }
 
 @keyframes slideAway {
-  from { display: block; }
-  to { transform: translateY(40px); opacity: 0;}
+  from {
+    display: block;
+  }
+  to {
+    transform: translateY(40px);
+    opacity: 0;
+  }
 }
 
 @media screen and (min-width: 1024px) {

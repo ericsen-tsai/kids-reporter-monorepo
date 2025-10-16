@@ -1,8 +1,9 @@
 'use client'
-import { useState } from 'react'
+import { ScrollLevel, useScrollLevel } from '@kids-reporter/routing-ui'
 import Link from 'next/link'
+import { useState } from 'react'
+
 import { useArticleContext } from './article-context'
-import { useScrollLevel, ScrollLevel } from '@/utils/custom-hook'
 import styles from './sidebar.module.css'
 
 const shareIcons = [
@@ -59,9 +60,9 @@ export const Sidebar = ({ topicURL }: SidebarProp) => {
   return (
     <div
       style={{ zIndex: '900', marginTop: '-430px' }}
-      className="hidden lg:block sticky w-16 left-0 top-44"
+      className="sticky top-44 left-0 hidden w-16 lg:block"
     >
-      <div className="relative flex justify-center flex-col items-center gap-4">
+      <div className="relative flex flex-col items-center justify-center gap-4">
         {topicURL && (
           <div>
             <Link href={topicURL}>
@@ -72,10 +73,10 @@ export const Sidebar = ({ topicURL }: SidebarProp) => {
             </Link>
           </div>
         )}
-        <div className="flex flex-col justify-center items-center text-center p-2 bg-gray-100 rounded-3xl">
+        <div className="flex flex-col items-center justify-center rounded-3xl bg-gray-100 p-2 text-center">
           <span
             style={{ lineHeight: '160%', letterSpacing: '0.16em' }}
-            className="flex font-normal text-sm text-gray-900"
+            className="flex text-sm font-normal text-gray-900"
           >
             分享
           </span>
@@ -83,7 +84,7 @@ export const Sidebar = ({ topicURL }: SidebarProp) => {
             return (
               <button
                 style={{ aspectRatio: '1/1' }}
-                className="w-12 flex flex-col justify-center items-center appearance-none bg-transparent border-none cursor-pointer"
+                className="flex w-12 cursor-pointer appearance-none flex-col items-center justify-center border-none bg-transparent"
                 key={`share-icon-${index}`}
                 onClick={icon.onClick}
               >
@@ -92,10 +93,10 @@ export const Sidebar = ({ topicURL }: SidebarProp) => {
             )
           })}
         </div>
-        <div className="flex flex-col justify-center text-center p-2 bg-gray-100 rounded-3xl">
+        <div className="flex flex-col justify-center rounded-3xl bg-gray-100 p-2 text-center">
           <button
             style={{ aspectRatio: '1/1' }}
-            className="w-12 flex flex-col justify-center items-center appearance-none bg-transparent border-none cursor-pointer"
+            className="flex w-12 cursor-pointer appearance-none flex-col items-center justify-center border-none bg-transparent"
             onClick={onFontSizeChange}
           >
             <img
@@ -105,7 +106,7 @@ export const Sidebar = ({ topicURL }: SidebarProp) => {
           </button>
           <button
             style={{ aspectRatio: '1/1' }}
-            className="w-12 flex flex-col justify-center items-center appearance-none bg-transparent border-none cursor-pointer"
+            className="flex w-12 cursor-pointer appearance-none flex-col items-center justify-center border-none bg-transparent"
             onClick={() => window.print()}
           >
             <img
@@ -129,12 +130,12 @@ export const MobileSidebar = ({ topicURL }: SidebarProp) => {
   }
 
   const shareBtnList = isShareClicked && (
-    <div className="flex flex-row items-center pt-2.5 pb-4 gap-2">
+    <div className="flex flex-row items-center gap-2 pt-2.5 pb-4">
       {shareIcons.map((icon, index) => {
         return (
           <button
             style={{ aspectRatio: '1/1' }}
-            className="block appearance-none bg-transparent w-12 cursor-pointer border-none"
+            className="block w-12 cursor-pointer appearance-none border-none bg-transparent"
             key={`share-icon-${index}`}
             onClick={icon.onClick}
           >
@@ -146,10 +147,10 @@ export const MobileSidebar = ({ topicURL }: SidebarProp) => {
   )
 
   const topicBtn = topicURL && (
-    <div className="h-full flex flex-col items-center justify-between">
+    <div className="flex h-full flex-col items-center justify-between">
       <Link
         style={{ aspectRatio: '1/1' }}
-        className="flex flex-col justify-center items-center appearance-none bg-transparent w-10 cursor-pointer border-none"
+        className="flex w-10 cursor-pointer appearance-none flex-col items-center justify-center border-none bg-transparent"
         href={topicURL}
       >
         <img
@@ -160,7 +161,7 @@ export const MobileSidebar = ({ topicURL }: SidebarProp) => {
       {scrollLevel === ScrollLevel.UP && (
         <span
           style={{ lineHeight: '160%', letterSpacing: '0.08em' }}
-          className="font-medium whitespace-no-wrap text-center text-gray-900 opacity-100 text-xs"
+          className="text-center text-xs font-medium whitespace-nowrap text-gray-900 opacity-100"
         >
           前往專題
         </span>
@@ -169,10 +170,10 @@ export const MobileSidebar = ({ topicURL }: SidebarProp) => {
   )
 
   const shareBtn = (
-    <div className="h-full flex flex-col items-center justify-between">
+    <div className="flex h-full flex-col items-center justify-between">
       <button
         style={{ aspectRatio: '1/1' }}
-        className="flex flex-col justify-center items-center appearance-none bg-transparent w-10 cursor-pointer border-none"
+        className="flex w-10 cursor-pointer appearance-none flex-col items-center justify-center border-none bg-transparent"
         onClick={onShareClick}
       >
         <img src="/assets/images/mobile-sidebar-share.svg" loading="lazy" />
@@ -180,7 +181,7 @@ export const MobileSidebar = ({ topicURL }: SidebarProp) => {
       {scrollLevel === ScrollLevel.UP && (
         <span
           style={{ lineHeight: '160%', letterSpacing: '0.08em' }}
-          className="font-medium whitespace-no-wrap text-center text-gray-900 opacity-100 text-xs"
+          className="text-center text-xs font-medium whitespace-nowrap text-gray-900 opacity-100"
         >
           分享文章
         </span>
@@ -189,10 +190,10 @@ export const MobileSidebar = ({ topicURL }: SidebarProp) => {
   )
 
   const fontBtn = (
-    <div className="h-full flex flex-col items-center justify-between">
+    <div className="flex h-full flex-col items-center justify-between">
       <button
         style={{ aspectRatio: '1/1' }}
-        className="flex flex-col justify-center items-center appearance-none bg-transparent w-10 cursor-pointer border-none"
+        className="flex w-10 cursor-pointer appearance-none flex-col items-center justify-center border-none bg-transparent"
         onClick={onFontSizeChange}
       >
         <img
@@ -203,7 +204,7 @@ export const MobileSidebar = ({ topicURL }: SidebarProp) => {
       {scrollLevel === ScrollLevel.UP && (
         <span
           style={{ lineHeight: '160%', letterSpacing: '0.08em' }}
-          className="font-medium whitespace-no-wrap text-center text-gray-900 opacity-100 text-xs"
+          className="text-center text-xs font-medium whitespace-nowrap text-gray-900 opacity-100"
         >
           文字大小
         </span>
@@ -216,13 +217,13 @@ export const MobileSidebar = ({ topicURL }: SidebarProp) => {
       style={{ zIndex: '900', width: 'inherit' }}
       className={`${
         scrollLevel === ScrollLevel.DOWN_HIDDEN ? styles.hidden : styles.sidebar
-      } flex-col items-center fixed bottom-2.5`}
+      } fixed bottom-2.5 flex-col items-center`}
     >
-      <div className="relative flex justify-center flex-col items-center">
+      <div className="relative flex flex-col items-center justify-center">
         {shareBtnList}
         <div
           style={{ boxShadow: 'rgba(35, 35, 35, 0.2) 0px 1px 8px 0px' }}
-          className="max-h-16 flex flex-row justify-around items-center text-center bg-white px-7 pb-2 gap-10 rounded-full"
+          className="flex max-h-16 flex-row items-center justify-around gap-10 rounded-full bg-white px-7 pb-2 text-center"
         >
           {topicBtn}
           {shareBtn}

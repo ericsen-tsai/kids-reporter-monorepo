@@ -1,21 +1,28 @@
+import { Header } from '@kids-reporter/routing-ui'
 import { Metadata } from 'next'
-import MainSlider from '@/home/main-slider'
-import PostSelection from '@/home/post-selection'
-import Section from '@/home/section'
-import Divider from '@/home/divider'
-import SearchAndTags from '@/home/search-and-tags'
-import MakeFriends from '@/home/make-friend'
-import CallToAction from '@/home/call-to-action'
-import GoToMainSite from '@/home/go-to-main-site'
+import { Fragment } from 'react'
+
 import {
+  ADDITIONAL_MENU_ITEMS,
+  DONATE_URL,
   FALLBACK_IMG,
   GENERAL_DESCRIPTION,
+  MENU_ITEMS,
   POST_CONTENT_GQL,
+  SEARCH_PLACEHOLDER,
+  SOCIAL_MEDIA_ITEMS,
+  SUBSCRIBE_URL,
   Theme,
 } from '@/constants'
+import CallToAction from '@/home/call-to-action'
+import Divider from '@/home/divider'
+import GoToMainSite from '@/home/go-to-main-site'
+import MainSlider from '@/home/main-slider'
+import MakeFriends from '@/home/make-friend'
+import PostSelection from '@/home/post-selection'
+import SearchAndTags from '@/home/search-and-tags'
+import Section from '@/home/section'
 import { getPostSummaries, sendGQLRequest } from '@/utils'
-import { Fragment } from 'react'
-import Header from '@/components/header'
 
 export const dynamic = 'force-dynamic'
 
@@ -229,8 +236,15 @@ export default async function Home() {
     )) ?? []
 
   return (
-    <main className="flex flex-col items-center w-screen">
-      <Header />
+    <main className="flex w-screen flex-col items-center">
+      <Header
+        menuItems={MENU_ITEMS}
+        additionalMenuItems={ADDITIONAL_MENU_ITEMS}
+        socialMediaHrefs={SOCIAL_MEDIA_ITEMS.map((item) => item.href)}
+        searchPlaceholder={SEARCH_PLACEHOLDER}
+        subscribeUrl={SUBSCRIBE_URL}
+        donateUrl={DONATE_URL}
+      />
       {topics?.length > 0 && <MainSlider topics={topics} />}
       <PostSelection latestPosts={latestPosts} featuredPosts={featuredPosts} />
       {sections.map((sectionConfig, index) => {

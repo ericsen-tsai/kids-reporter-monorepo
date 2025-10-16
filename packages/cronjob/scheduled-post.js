@@ -1,6 +1,7 @@
-import { config } from './configs.js'
-import { TokenManager, errorHandling, errors } from './utils.js'
 import axios from 'axios'
+
+import { config } from './configs.js'
+import { errorHandling, errors, TokenManager } from './utils.js'
 
 // fetch keystone session cookie token
 const tokenManager = new TokenManager(

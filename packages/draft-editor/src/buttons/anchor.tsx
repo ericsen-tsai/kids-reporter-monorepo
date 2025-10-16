@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { EditorState, RichUtils } from 'draft-js'
 import { ENTITY } from '@kids-reporter/draft-renderer'
+import { EditorState, RichUtils } from 'draft-js'
+import { useState } from 'react'
+
 import { AnchorIDEditor } from '../entity-decorators/anchor'
 
 type AnchorButtonProps = {

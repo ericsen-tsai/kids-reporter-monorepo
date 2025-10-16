@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
-import { AtomicBlockUtils, EditorState } from 'draft-js'
-import { Drawer, DrawerController } from '@keystone-ui/modals'
-import { Select } from './form/select'
 import { TextArea } from '@keystone-ui/fields'
+import { Drawer, DrawerController } from '@keystone-ui/modals'
+import { AtomicBlockUtils, EditorState } from 'draft-js'
+import React, { useState } from 'react'
+
+import { Select } from './form/select'
 
 enum BlockquoteTypeEnum {
   borderLeft = 'border_left',

@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { EditorState, RichUtils, convertToRaw } from 'draft-js'
 import { ENTITY } from '@kids-reporter/draft-renderer'
+import { convertToRaw, EditorState, RichUtils } from 'draft-js'
+import { useState } from 'react'
+
 import { AnnotationEditor } from '../entity-decorators/annotation'
 
 type AnnotationButtonProps = {

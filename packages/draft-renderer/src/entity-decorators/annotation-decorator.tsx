@@ -1,17 +1,18 @@
-import { Fragment, useState } from 'react'
-import styled from 'styled-components'
 import {
   CompositeDecorator,
   ContentState,
+  convertFromRaw,
   Editor,
   EditorState,
-  convertFromRaw,
 } from 'draft-js'
+import { Fragment, useState } from 'react'
+import styled from 'styled-components'
+
 import blockRenderMaps from '../block-render-maps'
+import { ENTITY, findEntitiesByType } from '../utils/entity'
+import { anchorDecorator } from './anchor'
 import { linkDecorator } from './link-decorator'
 import { tocAnchorDecorator } from './toc-anchor'
-import { anchorDecorator } from './anchor'
-import { ENTITY, findEntitiesByType } from '../utils/entity'
 
 const AnnotationWrapper = styled.span`
   display: inline-block;

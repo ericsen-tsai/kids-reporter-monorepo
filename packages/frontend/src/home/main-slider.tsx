@@ -1,23 +1,24 @@
 'use client'
-import { useRef } from 'react'
+import 'swiper/css'
+import 'swiper/css/effect-coverflow'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import './main-slider.css'
+
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Swiper as SwiperCore } from 'swiper/types'
+import { useRef } from 'react'
 import {
   Autoplay,
   EffectCoverflow,
   Navigation,
   Pagination,
 } from 'swiper/modules'
-import { ArrowLeft, ArrowRight } from '@/icons/arrow'
-import { Theme, DEFAULT_THEME_COLOR } from '@/constants'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Swiper as SwiperCore } from 'swiper/types'
 
-import 'swiper/css'
-import 'swiper/css/effect-coverflow'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
-import './main-slider.css'
+import { DEFAULT_THEME_COLOR, Theme } from '@/constants'
+import { ArrowLeft, ArrowRight } from '@/icons/arrow'
 
 const ImageWithFallback = dynamic(
   () => import('@/components/image-with-fallback'),
@@ -40,9 +41,9 @@ export const MainSlider = (props: SliderProp) => {
         backgroundPosition: 'bottom right 15%',
         backgroundSize: '317px',
       }}
-      className={`main-slider max-w-7xl w-screen flex items-center justify-center flex-col ml-auto mr-auto mb-5 lg:pt-10 bg-no-repeat theme-${Theme.YELLOW}`}
+      className={`main-slider mr-auto mb-5 ml-auto flex w-screen max-w-7xl flex-col items-center justify-center bg-no-repeat lg:pt-10 theme-${Theme.YELLOW}`}
     >
-      <div className="w-full flex items-center justify-center flex-row relative">
+      <div className="relative flex w-full flex-row items-center justify-center">
         <Swiper
           autoplay={{ delay: autoPlayInterval }}
           onBeforeInit={(swiper) => {
@@ -73,7 +74,7 @@ export const MainSlider = (props: SliderProp) => {
               <SwiperSlide key={`swiper-main-slide-${index}`}>
                 <Link
                   key={`topic-${index}`}
-                  className="max-w-3xl mb-0 md:mb-16 flex relative justify-center flex-col cursor-pointer"
+                  className="relative mb-0 flex max-w-3xl cursor-pointer flex-col justify-center md:mb-16"
                   href={topic.url}
                 >
                   <div
@@ -82,7 +83,7 @@ export const MainSlider = (props: SliderProp) => {
                       height: 'fit-content',
                       zIndex: '2',
                     }}
-                    className="absolute top-5 left-5 flex flex-row items-center bg-white rounded-3xl px-3 md:px-4 py-1 gap-1"
+                    className="absolute top-5 left-5 flex flex-row items-center gap-1 rounded-3xl bg-white px-3 py-1 md:px-4"
                   >
                     <img
                       className="w-8 md:w-10"
@@ -91,7 +92,7 @@ export const MainSlider = (props: SliderProp) => {
                     />
                     <span
                       style={{ lineHeight: '160%', letterSpacing: '0.08em' }}
-                      className="font-bold text-base md:text-xl"
+                      className="text-base font-bold md:text-xl"
                     >
                       專題
                     </span>
@@ -105,7 +106,7 @@ export const MainSlider = (props: SliderProp) => {
                       className="max-w-full"
                     >
                       <ImageWithFallback
-                        className="w-full h-full object-cover rounded-none md:rounded-2xl"
+                        className="h-full w-full rounded-none object-cover md:rounded-2xl"
                         src={topic.image}
                         loading="eager"
                         fetchPriority="high"
@@ -118,7 +119,7 @@ export const MainSlider = (props: SliderProp) => {
                         lineHeight: '160%',
                         letterSpacing: '.08em',
                       }}
-                      className="w-full not-italic font-bold text-xl md:text-3xl p-8 text-gray-900 text-center"
+                      className="w-full p-8 text-center text-xl font-bold text-gray-900 not-italic md:text-3xl"
                     >
                       {topic.title}
                       <br />
@@ -131,13 +132,13 @@ export const MainSlider = (props: SliderProp) => {
           })}
         </Swiper>
         <button
-          className="prev-btn w-14 bg-transparent cursor-pointer absolute top-1/4 border-none"
+          className="prev-btn absolute top-1/4 w-14 cursor-pointer border-none bg-transparent"
           onClick={() => swiperRef.current?.slidePrev()}
         >
           <ArrowLeft color={DEFAULT_THEME_COLOR} />
         </button>
         <button
-          className="next-btn w-14 bg-transparent cursor-pointer absolute top-1/4 border-none"
+          className="next-btn absolute top-1/4 w-14 cursor-pointer border-none bg-transparent"
           onClick={() => swiperRef.current?.slideNext()}
         >
           <ArrowRight color={DEFAULT_THEME_COLOR} />

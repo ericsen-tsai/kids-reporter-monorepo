@@ -1,8 +1,10 @@
 'use client'
 import Link from 'next/link'
 import styled from 'styled-components'
-import { mediaQuery } from '@/utils/media-query'
+
 import { AngleLeft, AngleRight } from '@/icons'
+import { mediaQuery } from '@/utils/media-query'
+
 import styles from './pagination.module.css'
 
 type PaginationProp = {
@@ -71,7 +73,7 @@ export const Pagination = (props: PaginationProp) => {
           }}
           className={`${
             styles.index
-          } w-10 h-10 flex flex-row justify-center items-center text-xl font-bold text-gray-900 bg-gray-200 m-1 rounded-full border-2 border-transparent cursor-pointer ${
+          } m-1 flex h-10 w-10 cursor-pointer flex-row items-center justify-center rounded-full border-2 border-transparent bg-gray-200 text-xl font-bold text-gray-900 ${
             pageIndex === currentPage ? styles.active : ''
           }`}
           href={`${routingPrefix}/${pageIndex}`}
@@ -171,10 +173,10 @@ export const Pagination = (props: PaginationProp) => {
 
   return (
     totalPages > 0 && (
-      <div className="w-full flex flex-row justify-center items-center flex-wrap">
+      <div className="flex w-full flex-row flex-wrap items-center justify-center">
         {belowFirstPage ? null : (
           <Link
-            className="flex items-center justify-center cursor-pointer mx-5"
+            className="mx-5 flex cursor-pointer items-center justify-center"
             href={`${routingPrefix}/${currentPage - 1}`}
           >
             {AngleLeft}
@@ -183,7 +185,7 @@ export const Pagination = (props: PaginationProp) => {
         {pagesArrayJSX}
         {aboveFinalPage ? null : (
           <Link
-            className="flex items-center justify-center cursor-pointer mx-5"
+            className="mx-5 flex cursor-pointer items-center justify-center"
             href={`${routingPrefix}/${currentPage + 1}`}
           >
             {AngleRight}

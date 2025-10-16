@@ -1,15 +1,17 @@
 'use client'
-import { useState, useRef } from 'react'
-import styled from 'styled-components'
 import Link from 'next/link'
+import { useRef, useState } from 'react'
+import styled from 'styled-components'
+
 import {
-  ThemeColor,
   Color,
   KIDS_URL_ORIGIN,
-  NEWSLETTER_SUBSCRIPTION,
   NEWSLETTER_PREVIEW,
+  NEWSLETTER_SUBSCRIPTION,
+  ThemeColor,
 } from '@/constants'
-import { ToggleButton, Checkbox } from './basic-component'
+
+import { Checkbox, ToggleButton } from './basic-component'
 
 enum Tab {
   INFO,
@@ -80,9 +82,9 @@ export const AccountTabs = (props: { accoutSettings: AccountSettings }) => {
   }
 
   const panelBtns = (
-    <div className="w-full md:w-48 flex flex-col items-start">
+    <div className="flex w-full flex-col items-start md:w-48">
       <button
-        className="w-full text-left text-base hover:bg-gray-200 active:bg-gray-300 px-4 py-1.5"
+        className="w-full px-4 py-1.5 text-left text-base hover:bg-gray-200 active:bg-gray-300"
         style={{
           color: tab === Tab.INFO ? ThemeColor.BLUE : '#232323',
         }}
@@ -120,7 +122,7 @@ export const AccountTabs = (props: { accoutSettings: AccountSettings }) => {
         </button>
       )} */}
       <button
-        className="w-full text-left text-base hover:bg-gray-200 active:bg-gray-300 px-4 py-1.5"
+        className="w-full px-4 py-1.5 text-left text-base hover:bg-gray-200 active:bg-gray-300"
         style={{
           color: tab === Tab.SUBSCRIBE_NEWSLETTER ? ThemeColor.BLUE : '#232323',
         }}
@@ -132,7 +134,7 @@ export const AccountTabs = (props: { accoutSettings: AccountSettings }) => {
       </button>
       <Divider />
       <Link
-        className="w-full text-left text-base hover:bg-gray-200 active:bg-gray-300 px-4 py-1.5"
+        className="w-full px-4 py-1.5 text-left text-base hover:bg-gray-200 active:bg-gray-300"
         href={'/logout'}
       >
         登出
@@ -141,16 +143,16 @@ export const AccountTabs = (props: { accoutSettings: AccountSettings }) => {
   )
 
   const infoTab = (
-    <div className="grow flex flex-col justify-center items-start">
-      <div className="w-full flex md:flex-row flex-col-reverse md:justify-start justify-center md:items-stretch items-center gap-8">
-        <div className="w-full lg:max-w-3xl grow flex flex-col justify-center items-start">
+    <div className="flex grow flex-col items-start justify-center">
+      <div className="flex w-full flex-col-reverse items-center justify-center gap-8 md:flex-row md:items-stretch md:justify-start">
+        <div className="flex w-full grow flex-col items-start justify-center lg:max-w-3xl">
           <Title>個人資料</Title>
           {accountSettings?.info?.map((info, index) => {
             return (
               <>
                 <div
                   key={`account-field-${index}`}
-                  className="flex flex-row justify-center items-center"
+                  className="flex flex-row items-center justify-center"
                 >
                   <span style={{ width: '120px', color: '#575757' }}>
                     {info?.label}
@@ -162,10 +164,10 @@ export const AccountTabs = (props: { accoutSettings: AccountSettings }) => {
             )
           })}
         </div>
-        <div className="relative lg:w-40 w-36 lg:min-w-40 min-w-36 flex flex-col justify-end">
+        <div className="relative flex w-36 min-w-36 flex-col justify-end lg:w-40 lg:min-w-40">
           <img src={'/assets/images/avatar_bg.png'} />
           <div
-            className="lg:w-11 lg:h-11 w-9 h-9 flex flex-row justify-center items-center absolute right-0 bg-white rounded-full cursor-pointer"
+            className="absolute right-0 flex h-9 w-9 cursor-pointer flex-row items-center justify-center rounded-full bg-white lg:h-11 lg:w-11"
             style={{ boxShadow: '0px 0px 8px 0px rgba(0, 0, 0, 0.2)' }}
             onClick={() => fileInputRef?.current?.click()}
           >
@@ -189,16 +191,16 @@ export const AccountTabs = (props: { accoutSettings: AccountSettings }) => {
   const myReadingsTab = <div></div>
 
   const settingsTab = (
-    <div className="w-full lg:max-w-4xl flex flex-col justify-center items-start">
+    <div className="flex w-full flex-col items-start justify-center lg:max-w-4xl">
       <Title>閱讀設定</Title>
-      <div className="w-full flex flex-row gap-6">
-        <div className="grow flex flex-col">
+      <div className="flex w-full flex-row gap-6">
+        <div className="flex grow flex-col">
           <SubTitle>文章前引導</SubTitle>
           <Description>
             在每篇文章的起始處，加入能引起小讀者興趣的元件，在開場就抓住他的注意力！
           </Description>
         </div>
-        <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-col items-center justify-center">
           <span>
             {accountSettings.settings.isGuideEnabled ? '開啟' : '關閉'}
           </span>
@@ -211,15 +213,15 @@ export const AccountTabs = (props: { accoutSettings: AccountSettings }) => {
         </div>
       </div>
       <Divider />
-      <div className="w-full flex flex-col">
-        <div className="w-full flex flex-row gap-6">
-          <div className="grow flex flex-col">
+      <div className="flex w-full flex-col">
+        <div className="flex w-full flex-row gap-6">
+          <div className="flex grow flex-col">
             <SubTitle>文章後QA</SubTitle>
             <Description>
               在每篇文章的結尾處，加入思辨題或選擇題，透過答題互動來強化小讀者的吸收。
             </Description>
           </div>
-          <div className="flex flex-col justify-center items-center">
+          <div className="flex flex-col items-center justify-center">
             <span>
               {accountSettings.settings.qa.isQAEnabled ? '開啟' : '關閉'}
             </span>
@@ -232,7 +234,7 @@ export const AccountTabs = (props: { accoutSettings: AccountSettings }) => {
           </div>
         </div>
         <div
-          className="flex flex-col px-6 py-5 gap-2 mt-4 rounded-2xl"
+          className="mt-4 flex flex-col gap-2 rounded-2xl px-6 py-5"
           style={{ background: Color.BORDER_GRAY }}
         >
           <SubTitle>思辨題數量</SubTitle>
@@ -251,14 +253,14 @@ export const AccountTabs = (props: { accoutSettings: AccountSettings }) => {
         </div>
       </div>
       <Divider />
-      <div className="w-full flex flex-row gap-6">
-        <div className="grow flex flex-col items-start">
+      <div className="flex w-full flex-row gap-6">
+        <div className="flex grow flex-col items-start">
           <SubTitle>推薦《報導者》相關文章</SubTitle>
           <Description>
             針對思辨能力較強的小讀者，推薦與文章主題相關的《報導者》文章。
           </Description>
         </div>
-        <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-col items-center justify-center">
           <span>
             {accountSettings.settings.isRecommendationEnabled ? '開啟' : '關閉'}
           </span>
@@ -274,14 +276,14 @@ export const AccountTabs = (props: { accoutSettings: AccountSettings }) => {
   )
 
   const subscribeNewsletterTab = (
-    <div className="flex flex-col justify-center items-start">
+    <div className="flex flex-col items-start justify-center">
       <Title>訂閱電子報</Title>
-      <div className="max-w-4xl flex flex-row justify-center items-start border-2 rounded-3xl p-8">
-        <div className="flex lg:flex-row flex-col justify-center items-center gap-4">
-          <div className="flex md:flex-row flex-col justify-center items-center gap-4">
+      <div className="flex max-w-4xl flex-row items-start justify-center rounded-3xl border-2 p-8">
+        <div className="flex flex-col items-center justify-center gap-4 lg:flex-row">
+          <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
             <img src="/assets/images/kids_newsletter_subscription.png" />
-            <div className="flex flex-col justify-center items-start gap-1">
-              <div className="flex flex-row justify-start items-center md:gap-2 gap-0.5">
+            <div className="flex flex-col items-start justify-center gap-1">
+              <div className="flex flex-row items-center justify-start gap-0.5 md:gap-2">
                 <SubTitle style={{ fontSize: '18px' }}>
                   報導仔新聞聯絡簿
                 </SubTitle>
@@ -307,14 +309,14 @@ export const AccountTabs = (props: { accoutSettings: AccountSettings }) => {
               </span>
             </div>
           </div>
-          <div className="flex flex-row justify-center items-center gap-4">
+          <div className="flex flex-row items-center justify-center gap-4">
             <Link
               style={{
                 fontWeight: '700',
                 borderColor: ThemeColor.BLUE,
                 borderWidth: '2px',
               }}
-              className="rounded-full md:text-lg text-base py-3 md:px-10 px-5 text-nowrap"
+              className="rounded-full px-5 py-3 text-base text-nowrap md:px-10 md:text-lg"
               href={NEWSLETTER_PREVIEW}
             >
               預覽
@@ -325,7 +327,7 @@ export const AccountTabs = (props: { accoutSettings: AccountSettings }) => {
                 color: 'white',
                 background: ThemeColor.BLUE,
               }}
-              className="rounded-full md:text-lg text-base py-3 md:px-10 px-5 text-nowrap"
+              className="rounded-full px-5 py-3 text-base text-nowrap md:px-10 md:text-lg"
               href={NEWSLETTER_SUBSCRIPTION}
             >
               前往訂閱
@@ -342,10 +344,10 @@ export const AccountTabs = (props: { accoutSettings: AccountSettings }) => {
         width: 'var(--container-width)',
         maxWidth: 'var(--normal-container-max-width)',
       }}
-      className="flex md:flex-row flex-col-reverse md:gap-8 gap-16 justify-start items-start mt-16"
+      className="mt-16 flex flex-col-reverse items-start justify-start gap-16 md:flex-row md:gap-8"
     >
       {panelBtns}
-      <div className="grow w-full">
+      <div className="w-full grow">
         {tab === Tab.INFO && infoTab}
         {tab === Tab.MY_READINGS && myReadingsTab}
         {tab === Tab.SETTINGS && settingsTab}

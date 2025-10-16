@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
+
 import { mediaQuery } from '../utils/media-query'
 
 export const Block = styled.div`

@@ -1,6 +1,7 @@
 import { list } from '@keystone-6/core'
-import { timestamp, text, file } from '@keystone-6/core/fields'
+import { file, text, timestamp } from '@keystone-6/core/fields'
 import type { ListConfig } from '@keystone-6/core/types'
+
 import {
   allowAllRoles,
   allowRoles,

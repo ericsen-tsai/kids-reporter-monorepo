@@ -1,16 +1,18 @@
 import { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
-import PostList from '@/components/post-list'
-import Navigator from '../../_components/category/navigator'
+
 import Pagination from '@/components/pagination'
+import PostList from '@/components/post-list'
 import {
-  GENERAL_DESCRIPTION,
-  POST_PER_PAGE,
-  POST_CONTENT_GQL,
   DEFAULT_THEME_COLOR,
   ERROR_PAGE,
+  GENERAL_DESCRIPTION,
+  POST_CONTENT_GQL,
+  POST_PER_PAGE,
 } from '@/constants'
-import { getPostSummaries, sendGQLRequest, log, LogLevel } from '@/utils'
+import { getPostSummaries, log, LogLevel, sendGQLRequest } from '@/utils'
+
+import Navigator from '../../_components/category/navigator'
 
 const seoFields = `
   ogTitle
@@ -350,12 +352,12 @@ export default async function Category({ params }: { params: { path: any } }) {
   return (
     <main
       style={{ width: '95vw' }}
-      className="flex flex-col justify-center items-center mb-10"
+      className="mb-10 flex flex-col items-center justify-center"
     >
       <div
-        className={`w-full flex flex-col justify-center items-center gap-10 theme-${theme}`}
+        className={`flex w-full flex-col items-center justify-center gap-10 theme-${theme}`}
       >
-        <img className="max-w-xl w-full" src={imageURL} loading="lazy" />
+        <img className="w-full max-w-xl" src={imageURL} loading="lazy" />
         <div className="flex flex-row flex-wrap justify-center gap-2.5">
           {navigationItems?.map(
             (item, index) =>

@@ -1,5 +1,6 @@
 'use client'
 import { useEffect } from 'react'
+
 import { BACK_TO_TOP_ELEMENT_ID } from '@/constants'
 
 const topDetectorID = 'top-detector'

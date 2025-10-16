@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { controller } from '@keystone-6/core/fields/types/virtual/views'
 import { FieldProps } from '@keystone-6/core/types'
 import { Button } from '@keystone-ui/button'
-import { FieldLabel, FieldContainer } from '@keystone-ui/fields'
-import { controller } from '@keystone-6/core/fields/types/virtual/views'
+import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
 import { TextArea } from '@keystone-ui/fields'
+import { useState } from 'react'
 
 export const Field = ({ value }: FieldProps<typeof controller>) => {
   const DEFAULT_BUTTON_TEXT = 'Copy to Clipboard'

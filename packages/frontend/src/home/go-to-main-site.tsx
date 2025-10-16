@@ -1,4 +1,5 @@
 import Link from 'next/link'
+
 import { MAIN_SITE_URL } from '@/constants'
 
 // TODO: rwd fonts
@@ -6,7 +7,7 @@ export const GoToMainSite = () => {
   return (
     <div
       style={{ width: '95vw', border: '1.5px solid #eaeaea' }}
-      className="max-w-5xl h-full flex flex-col md:flex-row justify-between items-center mb-8 px-12 py-8 rounded-3xl gap-8"
+      className="mb-8 flex h-full max-w-5xl flex-col items-center justify-between gap-8 rounded-3xl px-12 py-8 md:flex-row"
     >
       <img
         decoding="async"
@@ -14,7 +15,7 @@ export const GoToMainSite = () => {
         className="stk-img wp-image-6055 w-28 lg:w-40"
         src="/assets/images/main_site_logo.svg"
       />
-      <div className="shrink flex flex-col items-center md:items-start">
+      <div className="flex shrink flex-col items-center md:items-start">
         <h2
           style={{
             fontFamily:
@@ -23,7 +24,7 @@ export const GoToMainSite = () => {
             letterSpacing: '.08em',
             marginBottom: 'calc(var(--has-content-spacing, 1)*(0.3em + 10px))',
           }}
-          className="stk-block-heading__text has-text-align-center-mobile stk-block-heading--use-theme-margins font-bold text-xl lg:text-2xl"
+          className="stk-block-heading__text has-text-align-center-mobile stk-block-heading--use-theme-margins text-xl font-bold lg:text-2xl"
         >
           前往《報導者》主網站
         </h2>
@@ -41,7 +42,7 @@ export const GoToMainSite = () => {
           border: '2px solid var(--paletteColor5)',
           letterSpacing: '.08em',
         }}
-        className="w-36 lg:w-48 text-base lg:text-lg text-center px-4 py-3 rounded-full"
+        className="w-36 rounded-full px-4 py-3 text-center text-base lg:w-48 lg:text-lg"
         href={MAIN_SITE_URL}
         target="_blank"
         rel="noreferrer noopener"

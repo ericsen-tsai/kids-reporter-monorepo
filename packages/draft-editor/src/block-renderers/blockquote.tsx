@@ -1,9 +1,10 @@
+import { blockRenderers } from '@kids-reporter/draft-renderer'
 import React, { useState } from 'react'
 import styled from 'styled-components'
+
 import { AtomicBlockProps } from '../block-renderer-fn.type'
 import { BlockquoteInput, BlockquoteInputValue } from '../buttons/blockquote'
 import { EditableBlock as _EditableBlock } from './styled'
-import { blockRenderers } from '@kids-reporter/draft-renderer'
 
 const { BlockquoteInArticleBody } = blockRenderers
 

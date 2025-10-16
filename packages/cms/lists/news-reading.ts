@@ -1,11 +1,12 @@
 import { list } from '@keystone-6/core'
 import { integer, relationship, text, timestamp } from '@keystone-6/core/fields'
+import type { ListConfig } from '@keystone-6/core/types'
+
 import {
   allowAllRoles,
   allowRoles,
   RoleEnum,
 } from './utils/access-control-list'
-import type { ListConfig } from '@keystone-6/core/types'
 const NewsReadingGroupItem: ListConfig<any> = list({
   fields: {
     name: text({
@@ -124,4 +125,4 @@ const NewsReadingGroup: ListConfig<any> = list({
   },
 })
 
-export { NewsReadingGroupItem, NewsReadingGroup }
+export { NewsReadingGroup, NewsReadingGroupItem }

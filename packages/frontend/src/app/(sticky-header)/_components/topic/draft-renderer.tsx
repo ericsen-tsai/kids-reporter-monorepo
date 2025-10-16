@@ -1,11 +1,13 @@
 'use client'
-import { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+
 import { ProjectContentDraftRenderer } from '@kids-reporter/draft-renderer'
 import { RawDraftContentState } from 'draft-js'
+import { useEffect, useState } from 'react'
+import Skeleton from 'react-loading-skeleton'
+import styled from 'styled-components'
+
 import { Theme } from '@/constants'
-import 'react-loading-skeleton/dist/skeleton.css'
 
 const SkeletonContainer = styled.div`
   width: 100%;

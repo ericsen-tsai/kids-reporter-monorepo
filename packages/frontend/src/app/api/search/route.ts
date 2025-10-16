@@ -1,13 +1,15 @@
 import errors from '@twreporter/errors'
 import { NextResponse } from 'next/server'
+
+import envVars from '@/environment-variables'
 import { log, LogLevel } from '@/utils'
+
 import {
-  transferItemsToCards,
-  getFilteredSearchResults,
   defaultCount,
   defaultStart,
+  getFilteredSearchResults,
+  transferItemsToCards,
 } from './utils'
-import envVars from '@/environment-variables'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)

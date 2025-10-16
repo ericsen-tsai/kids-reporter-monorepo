@@ -1,7 +1,8 @@
 import Link from 'next/link'
-import { PostSummary, Loading } from '@/components/types'
-import { getFormattedDate } from '@/utils'
+
+import { Loading, PostSummary } from '@/components/types'
 import { ContentType } from '@/constants'
+import { getFormattedDate } from '@/utils'
 
 import styles from './card.module.css'
 
@@ -17,13 +18,13 @@ export const Card = ({ className, content }: CardProp) => {
     <div className="flex flex-row">
       <span
         style={{ color: 'var(--theme-color)', lineHeight: '160%' }}
-        className="text-left font-medium md:text-base text-sm tracking-wider"
+        className="text-left text-sm font-medium tracking-wider md:text-base"
       >
         {content.category}
       </span>
       {content.publishedDate || content.postCount > 0 ? (
         <span
-          className="md:text-base text-sm"
+          className="text-sm md:text-base"
           style={{ color: '#A3A3A3', letterSpacing: '0.08em' }}
         >
           ｜
@@ -31,7 +32,7 @@ export const Card = ({ className, content }: CardProp) => {
       ) : null}
       {content.publishedDate ? (
         <span
-          className="md:text-base text-sm"
+          className="text-sm md:text-base"
           style={{ color: '#A3A3A3', letterSpacing: '0.08em' }}
         >
           {`${getFormattedDate(content.publishedDate)}${
@@ -41,7 +42,7 @@ export const Card = ({ className, content }: CardProp) => {
       ) : null}
       {content?.postCount !== undefined && content.postCount > 0 ? (
         <span
-          className="md:text-base text-sm"
+          className="text-sm md:text-base"
           style={{ color: '#A3A3A3', letterSpacing: '0.08em' }}
         >
           {`共 ${content.postCount} 篇文章`}
@@ -57,7 +58,7 @@ export const Card = ({ className, content }: CardProp) => {
         lineHeight: '160%',
         letterSpacing: '0.08em',
       }}
-      className={`${styles.title} md:min-h-16 overflow-hidden not-italic font-bold md:text-2xl text-xl text-gray-900 text-left`}
+      className={`${styles.title} overflow-hidden text-left text-xl font-bold text-gray-900 not-italic md:min-h-16 md:text-2xl`}
     >
       {content?.type === ContentType.TAG ? '#' : ''}
       {content?.title}
@@ -69,14 +70,14 @@ export const Card = ({ className, content }: CardProp) => {
       style={{
         lineHeight: '160%',
       }}
-      className={`${styles.desc} overflow-hidden text-left not-italic font-medium text-base tracking-wider text-gray-900`}
+      className={`${styles.desc} overflow-hidden text-left text-base font-medium tracking-wider text-gray-900 not-italic`}
     >
       {content.desc}
     </span>
   )
 
   const textPart = (
-    <div className="flex flex-col justify-start md:gap-1.5 gap-1">
+    <div className="flex flex-col justify-start gap-1 md:gap-1.5">
       {top}
       {title}
       {desc}
@@ -86,11 +87,11 @@ export const Card = ({ className, content }: CardProp) => {
   const imagePart = (
     <div
       style={{ aspectRatio: '16/9' }}
-      className="shrink-0 max-w-full md:h-40 h-full relative overflow-hidden rounded-2xl"
+      className="relative h-full max-w-full shrink-0 overflow-hidden rounded-2xl md:h-40"
     >
       <img
         style={{ borderRadius: '20px' }}
-        className={`w-full h-full object-cover align-middle hover:scale-125`}
+        className={`h-full w-full object-cover align-middle hover:scale-125`}
         src={content.image ?? fallbackImg}
         loading={Loading.LAZY}
       />
@@ -108,7 +109,7 @@ export const Card = ({ className, content }: CardProp) => {
     content && (
       <Link
         href={content.url}
-        className={`w-full flex justify-start flex-col-reverse md:flex-row md:gap-6 md:gap-5 gap-3 bg-transparent rounded-2xl theme-${
+        className={`flex w-full flex-col-reverse justify-start gap-3 rounded-2xl bg-transparent md:flex-row md:gap-5 md:gap-6 theme-${
           content.theme
         } ${className ?? ''}`}
       >

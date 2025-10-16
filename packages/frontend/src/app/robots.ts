@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next'
+
 import { KIDS_URL_ORIGIN } from '@/constants'
 import envVars from '@/environment-variables'
 

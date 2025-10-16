@@ -1,6 +1,7 @@
 'use client'
-import PostCard from '@/components/post-card'
 import styled from 'styled-components'
+
+import PostCard from '@/components/post-card'
 import { PostSummary } from '@/components/types'
 import { mediaQuery } from '@/utils/media-query'
 

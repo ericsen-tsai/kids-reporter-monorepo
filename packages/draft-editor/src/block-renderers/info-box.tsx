@@ -1,9 +1,10 @@
+import { blockRenderers } from '@kids-reporter/draft-renderer'
 import React, { useState } from 'react'
 import styled from 'styled-components'
+
 import { AtomicBlockProps } from '../block-renderer-fn.type'
-import { EditableBlock as _EditableBlock } from './styled'
 import { InfoBoxInput, InfoBoxInputValue } from '../buttons/info-box'
-import { blockRenderers } from '@kids-reporter/draft-renderer'
+import { EditableBlock as _EditableBlock } from './styled'
 
 const { InfoBoxInArticleBody } = blockRenderers
 

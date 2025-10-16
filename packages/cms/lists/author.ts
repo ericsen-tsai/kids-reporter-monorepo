@@ -1,12 +1,13 @@
 import { list } from '@keystone-6/core'
 import { relationship, text, timestamp } from '@keystone-6/core/fields'
 import type { ListConfig } from '@keystone-6/core/types'
+
+import { slugConfig } from './config'
 import {
   allowAllRoles,
   allowRoles,
   RoleEnum,
 } from './utils/access-control-list'
-import { slugConfig } from './config'
 
 const listConfigurations: ListConfig<any> = list({
   fields: {

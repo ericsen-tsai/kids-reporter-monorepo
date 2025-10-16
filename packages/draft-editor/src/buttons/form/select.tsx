@@ -1,6 +1,6 @@
+import { Select as KeystoneSelect } from '@keystone-ui/fields'
 import React from 'react'
 import styled from 'styled-components'
-import { Select as KeystoneSelect } from '@keystone-ui/fields'
 
 const SelectBlock = styled.div`
   margin: 10px 0;

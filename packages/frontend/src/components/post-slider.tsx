@@ -1,18 +1,19 @@
 'use client'
-import { useRef } from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Swiper as SwiperCore } from 'swiper/types'
-import { Autoplay, Navigation, Pagination } from 'swiper/modules'
-import PostCard from '@/components/post-card'
-import { ArrowLeft, ArrowRight } from '@/icons/arrow'
-import { Theme, DEFAULT_THEME_COLOR } from '@/constants'
-import { getThemeColor } from '@/utils'
-import { PostSummary } from '@/components/types'
-
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import './post-slider.css'
+
+import { useRef } from 'react'
+import { Autoplay, Navigation, Pagination } from 'swiper/modules'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Swiper as SwiperCore } from 'swiper/types'
+
+import PostCard from '@/components/post-card'
+import { PostSummary } from '@/components/types'
+import { DEFAULT_THEME_COLOR, Theme } from '@/constants'
+import { ArrowLeft, ArrowRight } from '@/icons/arrow'
+import { getThemeColor } from '@/utils'
 
 export type PostSliderProp = {
   posts: PostSummary[]
@@ -45,9 +46,9 @@ export const PostSlider = ({
     postNum > 0 && (
       <div
         style={{ width: 'min(var(--normal-container-max-width), 100%)' }}
-        className={`flex items-center justify-center flex-col mx-auto mb-5 theme-${sliderTheme}`}
+        className={`mx-auto mb-5 flex flex-col items-center justify-center theme-${sliderTheme}`}
       >
-        <div className="w-full flex items-start justify-center flex-row relative">
+        <div className="relative flex w-full flex-row items-start justify-center">
           {postNum === 1 ? (
             posts[0] && (
               <div className="w-full md:w-1/2 lg:w-1/3">
@@ -88,14 +89,14 @@ export const PostSlider = ({
               </Swiper>
               <button
                 style={{ left: '15px', top: '15%', zIndex: '900' }}
-                className="w-8 lg:w-14 bg-transparent cursor-pointer absolute border-none"
+                className="absolute w-8 cursor-pointer border-none bg-transparent lg:w-14"
                 onClick={() => swiperRef.current?.slidePrev()}
               >
                 <ArrowLeft color={themeColor} />
               </button>
               <button
                 style={{ right: '15px', top: '15%', zIndex: '900' }}
-                className="w-8 lg:w-14 bg-transparent cursor-pointer absolute border-none"
+                className="absolute w-8 cursor-pointer border-none bg-transparent lg:w-14"
                 onClick={() => swiperRef.current?.slideNext()}
               >
                 <ArrowRight color={themeColor} />

@@ -1,9 +1,11 @@
 'use client'
-import Card, { CardProp } from './card'
-import styled from 'styled-components'
-import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { createRef } from 'react'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import styled from 'styled-components'
+
 import { mediaQuery } from '@/utils/media-query'
+
+import Card, { CardProp } from './card'
 
 const FlexContainer = styled(TransitionGroup)`
   display: flex;

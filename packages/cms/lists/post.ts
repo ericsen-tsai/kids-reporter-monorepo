@@ -1,18 +1,20 @@
-import envVars from '../environment-variables'
-import { KeystoneContext } from '@keystone-6/core/types'
+import { graphql, group, list } from '@keystone-6/core'
+import {
+  json,
+  relationship,
+  select,
+  text,
+  timestamp,
+  virtual,
+} from '@keystone-6/core/fields'
+import { KeystoneContext, ListConfig } from '@keystone-6/core/types'
 import {
   customFields,
   richTextEditorButtonNames,
 } from '@kids-reporter/cms-core'
-import { graphql, list, group } from '@keystone-6/core'
-import {
-  json,
-  virtual,
-  relationship,
-  timestamp,
-  text,
-  select,
-} from '@keystone-6/core/fields'
+
+import envVars from '../environment-variables'
+import { slugConfig } from './config'
 import {
   allowAllRoles,
   allowRoles,
@@ -21,8 +23,6 @@ import {
 import relationshipUtil, {
   OrderedRelationshipConfig,
 } from './utils/manual-order-relationship'
-import { slugConfig } from './config'
-import type { ListConfig } from '@keystone-6/core/types'
 
 const subSubcategories: OrderedRelationshipConfig = {
   fieldName: 'subSubcategories',

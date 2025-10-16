@@ -1,11 +1,11 @@
+import { graphql } from '@keystone-6/core'
 import {
   BaseListTypeInfo,
-  JSONValue,
-  FieldTypeFunc,
   CommonFieldConfig,
+  FieldTypeFunc,
   jsonFieldTypePolyfilledForSQLite,
+  JSONValue,
 } from '@keystone-6/core/types'
-import { graphql } from '@keystone-6/core'
 
 export type JsonFieldConfig<ListTypeInfo extends BaseListTypeInfo> =
   CommonFieldConfig<ListTypeInfo> & {

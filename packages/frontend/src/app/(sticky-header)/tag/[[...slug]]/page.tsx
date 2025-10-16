@@ -1,16 +1,17 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import PostList from '@/components/post-list'
+
 import Pagination from '@/components/pagination'
+import PostList from '@/components/post-list'
 import {
+  ContentType,
   GENERAL_DESCRIPTION,
-  POST_PER_PAGE,
-  POST_CONTENT_GQL,
   KIDS_URL_ORIGIN,
   OG_SUFFIX,
-  ContentType,
+  POST_CONTENT_GQL,
+  POST_PER_PAGE,
 } from '@/constants'
-import { getPostSummaries, sendGQLRequest, log, LogLevel } from '@/utils'
+import { getPostSummaries, log, LogLevel, sendGQLRequest } from '@/utils'
 
 const tagGQL = `
 query($where: TagWhereUniqueInput!, $take: Int, $skip: Int!, $orderBy: [PostOrderByInput!]!) {
@@ -127,12 +128,12 @@ export default async function Tag({ params }: { params: { slug: any } }) {
   return (
     <main
       style={{ width: '95vw' }}
-      className="flex flex-col justify-center items-center mb-10 px-9 pt-10 gap-10"
+      className="mb-10 flex flex-col items-center justify-center gap-10 px-9 pt-10"
     >
-      <div className="w-full flex flex-col justify-center items-center bg-white">
+      <div className="flex w-full flex-col items-center justify-center bg-white">
         <h1
           style={{ lineHeight: '160%' }}
-          className="text-center text-3xl text-gray-900 font-bold tracking-wider"
+          className="text-center text-3xl font-bold tracking-wider text-gray-900"
         >
           #{tag.name}
         </h1>

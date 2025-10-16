@@ -1,18 +1,19 @@
-import { list, graphql } from '@keystone-6/core'
+import { graphql, list } from '@keystone-6/core'
 import {
-  text,
+  checkbox,
   password,
   select,
+  text,
   timestamp,
   virtual,
-  checkbox,
 } from '@keystone-6/core/fields'
+import type { ListConfig } from '@keystone-6/core/types'
+
 import {
   allowAllRoles,
   allowRoles,
   RoleEnum,
 } from './utils/access-control-list'
-import type { ListConfig } from '@keystone-6/core/types'
 const listConfigurations: ListConfig<any> = list({
   fields: {
     name: text({

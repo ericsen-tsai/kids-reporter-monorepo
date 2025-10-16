@@ -1,12 +1,15 @@
 'use client'
-import { useEffect, useState } from 'react'
-import Skeleton from 'react-loading-skeleton'
-import Link from 'next/link'
+import 'react-loading-skeleton/dist/skeleton.css'
+
 import { ArticleIntroductionDraftRenderer } from '@kids-reporter/draft-renderer'
 import { RawDraftContentState } from 'draft-js'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import Skeleton from 'react-loading-skeleton'
+
 import { Theme } from '@/constants'
+
 import { useArticleContext } from './article-context'
-import 'react-loading-skeleton/dist/skeleton.css'
 
 const textColor = '#575757'
 

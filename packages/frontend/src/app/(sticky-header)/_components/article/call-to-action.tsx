@@ -1,5 +1,7 @@
 import Link from 'next/link'
+
 import { SUBSCRIBE_URL } from '@/constants'
+
 import styles from './call-to-action.module.css'
 
 const contributeURL = '/about#post'
@@ -12,7 +14,7 @@ export const CallToAction = () => {
         maxWidth: 'var(--max-width)',
         backgroundColor: '#fff9ec',
       }}
-      className="mx-auto p-6 rounded-3xl"
+      className="mx-auto rounded-3xl p-6"
     >
       <div
         style={{ backgroundImage: 'url(/assets/images/G文章頁_CTA.png)' }}
@@ -29,7 +31,7 @@ export const CallToAction = () => {
                   color: 'var(--paletteColor4)',
                   fontFamily: 'SweiMarkerSansCJKtc-Regular,Sans-serif',
                 }}
-                className="text-xl lg:text-3xl mb-6"
+                className="mb-6 text-xl lg:text-3xl"
               >
                 你的參與，可以讓報導點亮世界
               </h3>
@@ -41,14 +43,14 @@ export const CallToAction = () => {
                   letterSpacing: 'var(--letterSpacing)',
                   color: 'var(--paletteColor4)',
                 }}
-                className="md:max-w-96 text-sm lg:text-base pb-5 md:pb-12 mb-6"
+                className="mb-6 pb-5 text-sm md:max-w-96 md:pb-12 lg:text-base"
               >
                 一篇豐富、精彩和專業的報導，要經過記者、攝影、設計師、編輯，還有許多專家才能完成，完成後還要靠著社群編輯、行銷企劃，才能送到你的眼前。我們所有的努力，都希望能幫助你更了解這個世界，更希望你對這個世界發出提問。讓每一篇報導點亮世界，訂閱我們、歡迎投稿。
               </p>
             </div>
-            <div className="flex flex-row justify-center md:justify-start pb-48 md:pb-4 flex-wrap gap-5">
+            <div className="flex flex-row flex-wrap justify-center gap-5 pb-48 md:justify-start md:pb-4">
               <Link
-                className={`${styles['subscribe-btn']} min-h-12 flex items-center pt-2 pr-4 pb-3 pl-4 rounded-3xl`}
+                className={`${styles['subscribe-btn']} flex min-h-12 items-center rounded-3xl pt-2 pr-4 pb-3 pl-4`}
                 href={SUBSCRIBE_URL}
                 target="_blank"
                 rel="noreferrer noopener"
@@ -60,7 +62,7 @@ export const CallToAction = () => {
                 </span>
               </Link>
               <Link
-                className={`${styles['contribute-btn']} min-h-12 flex items-center pt-2 pr-4 pb-3 pl-4 rounded-3xl`}
+                className={`${styles['contribute-btn']} flex min-h-12 items-center rounded-3xl pt-2 pr-4 pb-3 pl-4`}
                 href={contributeURL}
               >
                 <span

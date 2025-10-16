@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+
 import { SEARCH_PLACEHOLDER, Z_INDEX_TOP } from '@/constants'
 import { CrossIcon, SearchIcon } from '@/icons'
 
@@ -32,7 +33,7 @@ export const SearchInput = (props: { value: string }) => {
     <>
       {isFocused && (
         <div
-          className="w-full h-full fixed top-0"
+          className="fixed top-0 h-full w-full"
           style={{
             backgroundColor: 'rgba(0, 0, 0, 0.3)',
             zIndex: Z_INDEX_TOP + 1,
@@ -40,7 +41,7 @@ export const SearchInput = (props: { value: string }) => {
         />
       )}
       <form
-        className="flex flex-row items-center max-w-md w-full h-10 relative lg:mb-12 md:mb-10 mb-6"
+        className="relative mb-6 flex h-10 w-full max-w-md flex-row items-center md:mb-10 lg:mb-12"
         style={{ zIndex: isFocused ? Z_INDEX_TOP + 2 : Z_INDEX_TOP - 2 }}
         role="search"
         method="get"
@@ -48,7 +49,7 @@ export const SearchInput = (props: { value: string }) => {
         aria-haspopup="listbox"
       >
         <input
-          className={`${styles.input} w-full h-full rounded-full text-base pl-3 pr-10`}
+          className={`${styles.input} h-full w-full rounded-full pr-10 pl-3 text-base`}
           style={{
             color: '#232323',
             backgroundColor: '#F5F5F5',
@@ -65,7 +66,7 @@ export const SearchInput = (props: { value: string }) => {
         />
         {!isResultMatchKeyword && (
           <button
-            className={`${styles['search-icon']} w-4 h-4 absolute bg-transparent cursor-pointer border-0 right-3.5`}
+            className={`${styles['search-icon']} absolute right-3.5 h-4 w-4 cursor-pointer border-0 bg-transparent`}
             type="submit"
             aria-label="搜尋按鈕"
           >
@@ -74,7 +75,7 @@ export const SearchInput = (props: { value: string }) => {
         )}
         {isResultMatchKeyword && (
           <button
-            className={`${styles['search-icon']} w-4 h-4 absolute bg-transparent cursor-pointer border-0 right-3.5`}
+            className={`${styles['search-icon']} absolute right-3.5 h-4 w-4 cursor-pointer border-0 bg-transparent`}
             aria-label="清除按鈕"
             onClick={onInputClear}
           >

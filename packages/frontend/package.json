@@ -14,8 +14,9 @@
   "dependencies": {
     "@googleapis/customsearch": "^1.0.4",
     "@kids-reporter/draft-renderer": "1.0.12",
+    "@kids-reporter/routing-ui": "0.1.0-alpha.1",
     "@radix-ui/react-slot": "^1.2.3",
-    "@tailwindcss/postcss": "^4.1.13",
+    "@tailwindcss/postcss": "^4.1.14",
     "@twreporter/errors": "^1.1.2",
     "@types/draft-js": "^0.11.10",
     "@types/node": "20.19.17",
@@ -28,7 +29,6 @@
     "clsx": "^2.1.1",
     "draft-js": "^0.11.7",
     "encoding": "^0.1.13",
-    "eslint-config-next": "^14.2.33",
     "lodash": "^4.17.21",
     "next": "^14.2.33",
     "react": "18.3.1",
@@ -39,13 +39,15 @@
     "styled-components": "5.3.5",
     "swiper": "^10.1.0",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^4.1.13",
+    "tailwindcss": "^4.1.14",
     "typescript": "5.9.2"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^14.2.33",
-    "eslint-config-next": "^14.2.33",
+    "@next/eslint-plugin-next": "^14.2.33",
     "@types/lodash": "^4.17.7",
-    "postcss": "^8.4.38"
+    "postcss": "^8.4.38",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.14"
   }
 }

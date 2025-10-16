@@ -1,10 +1,17 @@
-import Script from 'next/script'
-import BackToTop from '@/components/back-to-top'
-import Footer from '@/components/footer'
-import StyledComponentsRegistry from '@/components/registry'
 import '../globals.css'
-import { HeaderProvider } from '@/components/header/header-context'
-import { POPULAR_KEYWORDS } from '@/constants'
+
+import { Footer, HeaderProvider } from '@kids-reporter/routing-ui'
+import Script from 'next/script'
+
+import BackToTop from '@/components/back-to-top'
+import StyledComponentsRegistry from '@/components/registry'
+import {
+  ADDITIONAL_MENU_ITEMS,
+  DONATE_URL,
+  POPULAR_KEYWORDS,
+  PRIVACY_POLICY,
+  SOCIAL_MEDIA_ITEMS,
+} from '@/constants'
 
 const gtmID = 'GTM-T37WZJ44'
 
@@ -32,7 +39,12 @@ export default async function RootLayout({
           <body>
             {children}
             <BackToTop />
-            <Footer />
+            <Footer
+              socialMediaHrefs={SOCIAL_MEDIA_ITEMS.map((item) => item.href)}
+              additionalMenuItems={ADDITIONAL_MENU_ITEMS}
+              donateUrl={DONATE_URL}
+              privacyPolicyUrl={PRIVACY_POLICY}
+            />
             <noscript
               dangerouslySetInnerHTML={{
                 __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=${gtmID}" height="0" width="0" style="display: none; visibility: hidden;"></iframe>`,

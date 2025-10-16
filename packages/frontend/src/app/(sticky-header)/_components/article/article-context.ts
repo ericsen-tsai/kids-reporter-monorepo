@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react'
+
 import { FontSizeLevel } from '@/constants'
 
 type Article = {

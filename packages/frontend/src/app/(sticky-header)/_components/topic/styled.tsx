@@ -1,9 +1,10 @@
 'use client'
 import dynamic from 'next/dynamic'
 import styled from 'styled-components'
+
+import { FALLBACK_IMG, STICKY_HEADER_HEIGHT } from '@/constants'
 import { Photo } from '@/types'
 import { mediaQuery } from '@/utils/media-query'
-import { FALLBACK_IMG, STICKY_HEADER_HEIGHT } from '@/constants'
 
 const ImageWithFallback = dynamic(
   () => import('@/components/image-with-fallback'),

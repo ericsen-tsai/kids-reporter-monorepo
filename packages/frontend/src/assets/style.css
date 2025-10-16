@@ -1,7 +1,8 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?b5byri');
-  src:  url('fonts/icomoon.eot?b5byri#iefix') format('embedded-opentype'),
+  src: url('fonts/icomoon.eot?b5byri');
+  src:
+    url('fonts/icomoon.eot?b5byri#iefix') format('embedded-opentype'),
     url('fonts/icomoon.ttf?b5byri') format('truetype'),
     url('fonts/icomoon.woff?b5byri') format('woff'),
     url('fonts/icomoon.svg?b5byri#icomoon') format('svg');
@@ -10,7 +11,8 @@
   font-display: block;
 }
 
-[class^="icon-"], [class*=" icon-"] {
+[class^='icon-'],
+[class*=' icon-'] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'icomoon' !important;
   speak: never;
@@ -26,32 +28,32 @@
 }
 
 .icon-rpjr-icon-tag .path1:before {
-  content: "\e907";
+  content: '\e907';
   color: var(--theme-color);
 }
 .icon-rpjr-icon-tag .path2:before {
-  content: "\e908";
+  content: '\e908';
   margin-left: -1em;
   color: rgb(255, 255, 255);
 }
 .icon-rpjr-icon-arrow-right:before {
-  content: "\e900";
+  content: '\e900';
 }
 .icon-rpjr-icon-facebook:before {
-  content: "\e901";
+  content: '\e901';
 }
 .icon-rpjr-icon-github:before {
-  content: "\e902";
+  content: '\e902';
 }
 .icon-rpjr-icon-instagram:before {
-  content: "\e903";
+  content: '\e903';
 }
 .icon-rpjr-icon-medium:before {
-  content: "\e904";
+  content: '\e904';
 }
 .icon-rpjr-icon-rss:before {
-  content: "\e905";
+  content: '\e905';
 }
 .icon-rpjr-icon-twitter:before {
-  content: "\e906";
+  content: '\e906';
 }

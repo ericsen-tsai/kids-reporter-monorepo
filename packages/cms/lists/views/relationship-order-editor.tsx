@@ -1,9 +1,9 @@
-import { useState } from 'react'
-import styled from 'styled-components'
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { controller } from '@keystone-6/core/fields/types/json/views'
 import { FieldProps } from '@keystone-6/core/types'
 import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
-import { controller } from '@keystone-6/core/fields/types/json/views'
+import { useState } from 'react'
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import styled from 'styled-components'
 
 const DndItem = styled.div`
   userselect: 'none';

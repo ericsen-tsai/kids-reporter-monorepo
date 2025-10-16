@@ -1,8 +1,9 @@
 'use client'
 import { useState } from 'react'
 import styled from 'styled-components'
+
+import { STICKY_HEADER_HEIGHT, ThemeColor, Z_INDEX_TOP } from '@/constants'
 import { mediaQuery } from '@/utils/media-query'
-import { STICKY_HEADER_HEIGHT, Z_INDEX_TOP, ThemeColor } from '@/constants'
 
 const zIndex = Z_INDEX_TOP
 

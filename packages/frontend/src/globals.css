@@ -1,8 +1,11 @@
 @import 'tailwindcss';
+@import '@kids-reporter/routing-ui/styles.css';
 
 @source './src/**/*.{js,ts,jsx,tsx,mdx}';
+@source '../../routing-ui/src/**/*.{js,ts,jsx,tsx}';
+@source "../node_modules/@kids-reporter/routing-ui";
 
-/* Design System Configuration */
+/* Frontend-specific theme extensions */
 @theme {
   /* Colors - Neutral */
   --color-neutral-white: #ffffff;
@@ -291,7 +294,8 @@
 
   @font-face {
     font-family: SweiMarkerSansCJKtc-Regular;
-    src: url(https://cdn.jsdelivr.net/gh/max32002/swei-marker-sans@2.0/WebFont/CJK%20TC/SweiMarkerSansCJKtc-Bold.woff2)
+    src:
+      url(https://cdn.jsdelivr.net/gh/max32002/swei-marker-sans@2.0/WebFont/CJK%20TC/SweiMarkerSansCJKtc-Bold.woff2)
         format('woff2'),
       url(https://cdn.jsdelivr.net/gh/max32002/swei-marker-sans@2.0/WebFont/CJK%20TC/SweiMarkerSansCJKtc-Bold.woff)
         format('woff');
