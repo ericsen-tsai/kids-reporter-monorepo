@@ -199,6 +199,8 @@ type Post {
   ogDescription: String
   ogImage: Photo
   aiDialog: JSON
+  multipleChoiceQuestionsJSON: JSON
+  essayQuestionsJSON: JSON
   opening: String
   postChoiceQuestions(where: PostChoiceQuestionWhereInput! = {}, orderBy: [PostChoiceQuestionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostChoiceQuestionWhereUniqueInput): [PostChoiceQuestion!]
   postChoiceQuestionsCount(where: PostChoiceQuestionWhereInput! = {}): Int
@@ -334,6 +336,8 @@ input PostUpdateInput {
   ogTitle: String
   ogDescription: String
   ogImage: PhotoRelateToOneForUpdateInput
+  multipleChoiceQuestionsJSON: JSON
+  essayQuestionsJSON: JSON
   opening: String
   postChoiceQuestions: PostChoiceQuestionRelateToManyForUpdateInput
   postEssayQuestions: PostEssayQuestionRelateToManyForUpdateInput
@@ -446,6 +450,8 @@ input PostCreateInput {
   ogTitle: String
   ogDescription: String
   ogImage: PhotoRelateToOneForCreateInput
+  multipleChoiceQuestionsJSON: JSON
+  essayQuestionsJSON: JSON
   opening: String
   postChoiceQuestions: PostChoiceQuestionRelateToManyForCreateInput
   postEssayQuestions: PostEssayQuestionRelateToManyForCreateInput
