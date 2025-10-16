@@ -284,6 +284,27 @@ const listConfigurations: ListConfig<any> = list({
       ref: 'Photo',
     }),
     aiDialog,
+
+    // @TODO delete multipleChoiceQuestionsJSON field after ndx branch merged into dev branch
+    multipleChoiceQuestionsJSON: json({
+      defaultValue: [],
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'hidden' },
+        listView: { fieldMode: 'hidden' },
+      },
+    }),
+    // @TODO delete essayQuestionsJSON field after ndx branch merged into dev branch
+    essayQuestionsJSON: json({
+      defaultValue: [],
+      ui: {
+        views: './lists/views/essay-questions',
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'edit' },
+        listView: { fieldMode: 'hidden' },
+      },
+    }),
+
     opening: text({
       label: '開場白',
       ui: {
