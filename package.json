@@ -61,10 +61,17 @@
     "@types/eslint-config-prettier": "^6.11.3"
   },
   "lint-staged": {
-    "*.{js,ts,jsx,tsx}": [
-      "eslint --config eslint.config.mjs --cache --fix",
-      "prettier --write"
-    ]
+    "packages/api-gateway/**/*.{js,ts,jsx,tsx}": "cd packages/api-gateway && eslint --config eslint.config.mjs --cache --fix",
+    "packages/cms/**/*.{js,ts,jsx,tsx}": "cd packages/cms && eslint --config eslint.config.mjs --cache --fix",
+    "packages/core/**/*.{js,ts,jsx,tsx}": "cd packages/core && eslint --config eslint.config.mjs --cache --fix",
+    "packages/cronjob/**/*.{js,ts,jsx,tsx}": "cd packages/cronjob && eslint --config eslint.config.mjs --cache --fix",
+    "packages/draft-editor/**/*.{js,ts,jsx,tsx}": "cd packages/draft-editor && eslint --config eslint.config.mjs --cache --fix",
+    "packages/draft-renderer/**/*.{js,ts,jsx,tsx}": "cd packages/draft-renderer && eslint --config eslint.config.mjs --cache --fix",
+    "packages/frontend/**/*.{js,ts,jsx,tsx}": "cd packages/frontend && eslint --config eslint.config.mjs --cache --fix",
+    "packages/routing-ui/**/*.{js,ts,jsx,tsx}": "cd packages/routing-ui && eslint --config ./eslint.config.mjs --cache --fix",
+    "packages/image-resizer/**/*.{js,ts,jsx,tsx}": "cd packages/image-resizer && eslint --config eslint.config.mjs --cache --fix",
+    "*.{js,ts,jsx,tsx}": "eslint --config eslint.config.mjs --cache --fix",
+    "**/*.{js,ts,jsx,tsx}": "prettier --write"
   },
   "resolutions": {
     "react": "18.3.1",
