@@ -62,6 +62,9 @@ export default list<ListType<'PostEssayAnswer'>>({
         itemView: { fieldMode: 'read' },
       },
       isIndexed: 'unique',
+      db: {
+        isNullable: true,
+      },
     }),
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
@@ -90,7 +93,7 @@ export default list<ListType<'PostEssayAnswer'>>({
       defaultFieldMode: 'read',
     },
     listView: {
-      initialColumns: ['id', 'question', 'member', 'compositeKey'],
+      initialColumns: ['id', 'question', 'member'],
     },
   },
   db: { idField: { kind: 'autoincrement' } },
