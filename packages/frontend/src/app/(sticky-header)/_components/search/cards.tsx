@@ -7,6 +7,7 @@ import { mediaQuery } from '@/utils/media-query'
 
 import Card, { CardProp } from './card'
 
+// @ts-ignore - styled-components is not typed
 const FlexContainer = styled(TransitionGroup)`
   display: flex;
   flex-direction: column;
