@@ -1,9 +1,9 @@
-import React from 'react'
 import { controller } from '@keystone-6/core/fields/types/json/views'
 import type { FieldProps } from '@keystone-6/core/types'
-import { FieldContainer, FieldLabel, TextInput } from '@keystone-ui/fields'
 import { Button } from '@keystone-ui/button'
 import { Box } from '@keystone-ui/core'
+import { FieldContainer, FieldLabel, TextInput } from '@keystone-ui/fields'
+import React from 'react'
 
 type OptionItem = {
   content: string

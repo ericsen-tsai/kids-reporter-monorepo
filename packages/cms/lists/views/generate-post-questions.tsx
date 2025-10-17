@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
-import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
-import { Button } from '@keystone-ui/button'
+import { gql, useMutation } from '@keystone-6/core/admin-ui/apollo'
 import { controller } from '@keystone-6/core/fields/types/virtual/views'
 import { FieldProps } from '@keystone-6/core/types'
-import { gql, useMutation } from '@keystone-6/core/admin-ui/apollo'
+import { Button } from '@keystone-ui/button'
 import { Box } from '@keystone-ui/core'
+import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
+import React, { useState } from 'react'
 
 const GENERATE_QUESTIONS = gql`
   mutation GeneratePostQuestions($postId: ID!) {
