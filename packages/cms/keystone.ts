@@ -12,9 +12,9 @@ import appConfig from './config'
 import envVar from './environment-variables'
 import { createPreviewMiniApp } from './express-mini-apps/preview/app'
 import { twoFactorAuth } from './express-mini-apps/two-factor-auth'
+import { extendGraphqlSchema } from './graphql/extend-schema'
 import { listDefinition as lists } from './lists/index'
 import { RoleEnum } from './lists/utils/access-control-list'
-import { extendGraphqlSchema } from './graphql/extend-schema'
 const sessionDataQuery = 'id name role email twoFactorAuth'
 
 const { withAuth } = createAuth({

@@ -1,6 +1,6 @@
 import debounce from 'lodash/debounce'
 import { useEffect, useState } from 'react'
-import styled, { useTheme } from 'styled-components'
+import styled, { ThemeProvider, useTheme } from 'styled-components'
 
 import { DEBOUNCE_THRESHOLD } from '../utils/constants'
 import { breakpoints, mediaQuery } from '../utils/media-query'
@@ -48,7 +48,7 @@ type ImageBlockProps = {
   }
 }
 
-export function ImageBlock({ className = '', data }: ImageBlockProps) {
+function ImageBlockInner({ className = '', data }: ImageBlockProps) {
   const theme = useTheme()
   const { desc, imageFile, resized } = data || {}
   const [isDesktopAndAbove, setIsDesktopAndAbove] = useState(false)
@@ -101,6 +101,14 @@ export function ImageBlock({ className = '', data }: ImageBlockProps) {
   )
 
   return imgBlock
+}
+
+export function ImageBlock({ className = '', data }: ImageBlockProps) {
+  return (
+    <ThemeProvider theme={{}}>
+      <ImageBlockInner className={className} data={data} />
+    </ThemeProvider>
+  )
 }
 
 type ImageBlockInArticleBodyProps = ImageBlockProps

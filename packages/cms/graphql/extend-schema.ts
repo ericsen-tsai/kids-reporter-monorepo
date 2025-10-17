@@ -1,7 +1,8 @@
-import axios from 'axios'
 import { graphql } from '@keystone-6/core'
-import envVar from '../environment-variables'
+import axios from 'axios'
 import { convertFromRaw } from 'draft-js'
+
+import envVar from '../environment-variables'
 import type { TypedKeystoneContext } from '../types/context'
 
 const systemPrompt = `你是一位具有幽默感的閱讀陪伴精靈和出題助理，請回傳 JSON，格式固定如下：

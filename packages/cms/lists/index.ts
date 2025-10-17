@@ -8,6 +8,8 @@ import OnlineUser from './online-user'
 import PDF from './pdf'
 import Photo from './photo'
 import Post from './post'
+import PostChoiceQuestion from './post-choice-question'
+import PostEssayQuestion from './post-essay-question'
 import Project from './project'
 import ProjectCategory from './project-category'
 import SubSubcategory from './sub-subcategory'
@@ -15,8 +17,6 @@ import Subcategory from './subcatgory'
 import SVG from './svg'
 import Tag from './tag'
 import User from './user'
-import PostChoiceQuestion from './post-choice-question'
-import PostEssayQuestion from './post-essay-question'
 
 export const listDefinition = {
   User,
