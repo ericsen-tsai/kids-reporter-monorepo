@@ -6,7 +6,7 @@ import {
 } from 'draft-js'
 import debounce from 'lodash/debounce'
 import { useEffect, useState } from 'react'
-import styled, { useTheme } from 'styled-components'
+import styled, { ThemeProvider, useTheme } from 'styled-components'
 
 import blockRenderMaps from '../block-render-maps/index'
 import { decorator } from '../entity-decorators/index'
@@ -35,10 +35,7 @@ type ImageLinkBlockProps = {
   }
 }
 
-export const ImageLinkBlock = ({
-  className = '',
-  data,
-}: ImageLinkBlockProps) => {
+function ImageLinkBlockInner({ className = '', data }: ImageLinkBlockProps) {
   const theme = useTheme()
   const { url, rawContentState } = data
   const [isDesktopAndAbove, setIsDesktopAndAbove] = useState(false)
@@ -83,6 +80,17 @@ export const ImageLinkBlock = ({
   )
 
   return imgBlock
+}
+
+export const ImageLinkBlock = ({
+  className = '',
+  data,
+}: ImageLinkBlockProps) => {
+  return (
+    <ThemeProvider theme={{}}>
+      <ImageLinkBlockInner className={className} data={data} />
+    </ThemeProvider>
+  )
 }
 
 type ImageBlockInArticleBodyProps = ImageLinkBlockProps
