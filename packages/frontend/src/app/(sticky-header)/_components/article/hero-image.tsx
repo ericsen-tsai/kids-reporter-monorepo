@@ -1,9 +1,9 @@
+import { GetPostQuery } from '__generated__/operations/post.generated'
 import debounce from 'lodash/debounce'
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 
 import { DEBOUNCE_THRESHOLD, FALLBACK_IMG } from '@/constants'
-import { Photo } from '@/types'
 import { breakpoints } from '@/utils/media-query'
 
 import { useArticleContext } from './article-context'
@@ -14,7 +14,9 @@ const ImageWithFallback = dynamic(
 )
 
 type HeroImageProp = {
-  image: Photo
+  image: NonNullable<
+    NonNullable<NonNullable<GetPostQuery['post']>['heroImage']>
+  >
   caption: string
   handleImgModalOpen: (
     imgProps: React.ImgHTMLAttributes<HTMLImageElement>

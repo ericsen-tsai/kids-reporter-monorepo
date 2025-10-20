@@ -5,10 +5,12 @@ import BaodaozaiEventTrigger from '@/services/call-baodaozai/components/baodaoza
 
 type StartReadingBaodaozaiEventTriggerProps = {
   isSubmitted: boolean
+  content: string
 }
 
 function StartReadingBaodaozaiEventTrigger({
   isSubmitted,
+  content,
 }: StartReadingBaodaozaiEventTriggerProps) {
   const isAtTop = useIsAtTop(35)
   const [isFirstRenderAtTop, setIsFirstRenderAtTop] = useState(isAtTop)
@@ -26,8 +28,7 @@ function StartReadingBaodaozaiEventTrigger({
         isOpen: true,
         confirmText: '開始閱讀',
         hideCancelButton: true,
-        // TODO: get content from backend
-        // content: post?.intro
+        content,
       }}
       baodaozaiState={{
         isActive: true,

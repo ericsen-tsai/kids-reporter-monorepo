@@ -2,121 +2,19 @@ import { HeaderPostTitleSetter } from '@kids-reporter/routing-ui'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
+import { getPost, getPostMeta } from '@/api/post'
 import {
   ContentType,
   GENERAL_DESCRIPTION,
   KIDS_URL_ORIGIN,
   OG_SUFFIX,
-  POST_CONTENT_GQL,
 } from '@/constants'
-import { log, LogLevel, sendGQLRequest } from '@/utils'
+import { log, LogLevel } from '@/utils'
 
 import Article from '../../_components/article/article'
 import { TOC, TOCIndex } from '../../_components/article/table-of-content'
 
 const topicRelatedPostsNum = 5
-
-const heroImageGQL = `
-  heroImage {
-    imageFile {
-      width
-      height
-    }
-    resized {
-      small
-      medium
-      large
-    }
-  }
-`
-
-const categoryGQL = `
-  subSubcategoriesOrdered {
-    name
-    slug
-    subcategory {
-      name
-      slug
-      category {
-        name
-        slug
-        themeColor
-      }
-    }
-  }
-`
-
-const postGQL = `
-  query($where: PostWhereUniqueInput!, $orderBy: [NewsReadingGroupItemOrderByInput!]!, $take: Int, $relatedPostsWhere: PostWhereInput!) {
-    post(where: $where) {
-      title
-      newsReadingGroup {
-        items (orderBy: $orderBy){
-          name
-          embedCode
-        }
-      }
-      brief
-      content
-      publishedDate
-      ${heroImageGQL}
-      heroCaption
-      authors {
-        avatar {
-          resized {
-            tiny
-          }
-        }
-        bio
-        id
-        name
-        slug
-      }
-      authorsJSON
-      tagsOrdered {
-        name
-        slug
-      }
-      relatedPostsOrdered {
-        title
-        slug
-        publishedDate
-        ${heroImageGQL}
-        ogDescription
-        ${categoryGQL}
-      }
-      subtitle
-      ${categoryGQL}
-      mainProject {
-        title
-        slug
-      }
-      projects {
-        title
-        slug
-        relatedPosts(take: $take, where: $relatedPostsWhere) {
-          ${POST_CONTENT_GQL}
-        }
-      }
-    }
-  }
-`
-
-const metaGQL = `
-query($where: PostWhereUniqueInput!) {
-  post(where: $where) {
-    publishedDate
-    ogDescription
-    ogTitle
-    ogImage {
-      resized {
-        small
-      }
-    }
-    ${categoryGQL}
-  }
-}
-`
 
 export async function generateMetadata({
   params,
@@ -125,15 +23,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const slug = params.slug
 
-  const postMetaRes = await sendGQLRequest({
-    query: metaGQL,
-    variables: {
-      where: {
-        slug: slug,
-      },
+  const postMeta = await getPostMeta({
+    where: {
+      slug: slug,
     },
   })
-  const postMeta = postMetaRes?.data?.data?.post
+
   if (!postMeta) {
     log(LogLevel.WARNING, `Post meta not found! ${params.slug}`)
   }
@@ -178,22 +73,18 @@ export default async function PostPage({
     notFound()
   }
 
-  const postRes = await sendGQLRequest({
-    query: postGQL,
-    variables: {
-      where: {
-        slug: slug,
-      },
-      relatedPostsWhere: {
-        slug: {
-          notIn: slug,
-        },
-      },
-      orderBy: [{ order: 'asc' }],
-      take: topicRelatedPostsNum,
+  const post = await getPost({
+    where: {
+      slug: slug,
     },
+    relatedPostsWhere: {
+      slug: {
+        notIn: [slug],
+      },
+    },
+    orderBy: [{ order: 'asc' }],
+    take: topicRelatedPostsNum,
   })
-  const post = postRes?.data?.data?.post
   if (!post) {
     log(LogLevel.WARNING, `Post not found! ${slug}`)
     notFound()

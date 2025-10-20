@@ -9,7 +9,7 @@
     "analyze": "ANALYZE=true yarn build",
     "lint:check": "eslint src --ext .ts,.tsx,.js,.jsx",
     "type-check": "tsc --noEmit",
-    "codegen:local": "graphql-codegen --config codegen.ts",
+    "codegen:local": "graphql-codegen --config codegen.ts && prettier --write __generated__/**/*.generated.ts __generated__/types.ts",
     "codegen:production": "NODE_ENV=production graphql-codegen --config codegen.ts",
     "postinstall": "yarn codegen:local"
   },

@@ -2,9 +2,10 @@
 import './article.css'
 import './article.css'
 
+import { GetPostQuery } from '__generated__/operations/post.generated'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import AuthorCard, { Author } from '@/components/author-card'
 import Divider from '@/components/divider'
@@ -18,8 +19,10 @@ import {
 } from '@/constants'
 import {
   BaodaozaiActionSetter,
+  BaodaozaiChoiceQuestion,
   BaodaozaiEventTrigger,
   BaodaozaiQAModal,
+  BaodaozaiQuestions,
 } from '@/services/call-baodaozai'
 import { QAModalEvent } from '@/services/call-baodaozai/components/qa-modal'
 import { getPostSummaries } from '@/utils'
@@ -29,7 +32,7 @@ import Brief, { AuthorGroup } from './brief'
 import CallToAction from './call-to-action'
 import HeroImage from './hero-image'
 import ImageModal from './image-modal'
-import { IS_LOGIN, QUESTIONS } from './mock'
+import { IS_LOGIN } from './mock'
 import { NewsReading } from './news-reading'
 import PostRenderer from './post-renderer'
 import PublishedDate from './published-date'
@@ -143,7 +146,7 @@ const getPostContents = (post: any) => {
   }
 }
 
-const Article = ({ post }: { post: any }) => {
+const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
   const {
     theme,
     topicURL,
@@ -193,9 +196,13 @@ const Article = ({ post }: { post: any }) => {
   const postHeader = post && (
     <div className="hero-section">
       <header className="entry-header">
-        <Title text={post.title} subtitle={post.subtitle} fontSize={fontSize} />
+        <Title
+          text={post.title ?? ''}
+          subtitle={post.subtitle ?? ''}
+          fontSize={fontSize}
+        />
         <div className="post-date-category">
-          <PublishedDate date={post.publishedDate} />
+          <PublishedDate date={post.publishedDate ?? ''} />
           <SubSubcategory
             text={subSubcategory?.name}
             link={subSubcategoryURL}
@@ -254,6 +261,47 @@ const Article = ({ post }: { post: any }) => {
     setHide(false)
   }, [])
 
+  const newsReadingGroupItems = useMemo(() => {
+    if (!post?.newsReadingGroup?.items) return []
+    return post?.newsReadingGroup.items.map((item) => ({
+      name: item.name ?? '',
+      embedCode: item.embedCode ?? '',
+    }))
+  }, [post?.newsReadingGroup?.items])
+
+  const tags = useMemo(() => {
+    if (!post?.tagsOrdered) return []
+    return post.tagsOrdered.map((tag) => ({
+      name: tag.name ?? '',
+      slug: tag.slug ?? '',
+    }))
+  }, [post.tagsOrdered])
+
+  const postQuestions = useMemo<BaodaozaiQuestions | null>(() => {
+    // TODO: choose which questions to show
+    const choiceQuestions = post.postChoiceQuestions ?? []
+    // const essayQuestions = post.postEssayQuestions
+
+    const candidateQuestions = [...choiceQuestions]
+
+    if (candidateQuestions.length < 3) {
+      console.error('No enough questions')
+      return null
+    }
+
+    const questions = candidateQuestions.map<BaodaozaiChoiceQuestion>(
+      (question) => ({
+        id: question.id,
+        title: question.title ?? '',
+        options: question.options as BaodaozaiChoiceQuestion['options'],
+        reason: question.reason ?? '',
+        type: 'choice',
+      })
+    )
+
+    return [questions[0], questions[1], questions[2]]
+  }, [post.postChoiceQuestions])
+
   return (
     <>
       <div className={`post${theme ? ` theme-${theme}` : ''}`}>
@@ -273,15 +321,20 @@ const Article = ({ post }: { post: any }) => {
             imgProps={imgProps}
             handleImgModalClose={handleImgModalClose}
           />
-          <StartReadingBaodaozaiEventTrigger isSubmitted={isSubmitted} />
-          <HeroImage
-            image={post?.heroImage}
-            caption={post?.heroCaption}
-            handleImgModalOpen={handleImgModalOpen}
+          <StartReadingBaodaozaiEventTrigger
+            isSubmitted={isSubmitted}
+            content={post?.opening ?? ''}
           />
+          {post?.heroImage && post?.heroCaption && (
+            <HeroImage
+              image={post?.heroImage}
+              caption={post?.heroCaption ?? ''}
+              handleImgModalOpen={handleImgModalOpen}
+            />
+          )}
           {postHeader}
           {post?.newsReadingGroup && (
-            <NewsReading data={post.newsReadingGroup} />
+            <NewsReading items={newsReadingGroupItems} />
           )}
 
           <BaodaozaiEventTrigger
@@ -320,9 +373,7 @@ const Article = ({ post }: { post: any }) => {
             </div>
           </div>
 
-          {post?.tagsOrdered && (
-            <Tags title={'常用關鍵字'} tags={post.tagsOrdered} />
-          )}
+          {post?.tagsOrdered && <Tags title={'常用關鍵字'} tags={tags} />}
           <BaodaozaiEventTrigger
             dialogState={{
               isOpen: true,
@@ -339,12 +390,14 @@ const Article = ({ post }: { post: any }) => {
       </div>
       <CallToAction />
       <RelatedPosts posts={relatedPosts ?? []} sliderTheme={theme} />
-      <BaodaozaiQAModal
-        questions={QUESTIONS}
-        onClose={handleQAModalClose}
-        onSubmit={handleQAModalSubmit}
-        isOpen={isQAModalOpen}
-      />
+      {postQuestions && (
+        <BaodaozaiQAModal
+          questions={postQuestions}
+          onClose={handleQAModalClose}
+          onSubmit={handleQAModalSubmit}
+          isOpen={isQAModalOpen}
+        />
+      )}
     </>
   )
 }

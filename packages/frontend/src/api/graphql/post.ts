@@ -37,6 +37,7 @@ export const GET_POST_GQL = gql`
     $relatedPostsWhere: PostWhereInput!
   ) {
     post(where: $where) {
+      opening
       title
       newsReadingGroup {
         items(orderBy: $orderBy) {
@@ -124,6 +125,45 @@ export const GET_POST_GQL = gql`
         slug
         relatedPosts(take: $take, where: $relatedPostsWhere) {
           ...PostContent
+        }
+      }
+      postEssayQuestions {
+        id
+        title
+        hint
+      }
+      postChoiceQuestions {
+        id
+        title
+        options
+        reason
+      }
+    }
+  }
+`
+
+export const GET_POST_META_GQL = gql`
+  query GetPostMeta($where: PostWhereUniqueInput!) {
+    post(where: $where) {
+      publishedDate
+      ogDescription
+      ogTitle
+      ogImage {
+        resized {
+          small
+        }
+      }
+      subSubcategoriesOrdered {
+        name
+        slug
+        subcategory {
+          name
+          slug
+          category {
+            name
+            slug
+            themeColor
+          }
         }
       }
     }
