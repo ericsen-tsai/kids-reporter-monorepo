@@ -29,7 +29,7 @@ type GraphQLResponse<TData = Record<string, unknown>> = {
 }
 
 export const sendGQLRequest = async <
-  TResponseData extends Record<string, unknown> = Record<string, unknown>,
+  TResponseData extends Record<string, any> = Record<string, any>,
   TRequestData extends GraphQLRequest<Record<string, unknown>> = GraphQLRequest<
     Record<string, unknown>
   >,
