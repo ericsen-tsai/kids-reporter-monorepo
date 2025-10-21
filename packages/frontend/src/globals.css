@@ -82,9 +82,6 @@
   --line-height-normal: 1.6;
   --line-height-relaxed: 1.75;
 
-  /* Typography - Letter Spacing */
-  --letter-spacing-wide: 0.05em;
-
   /* Spacing - Grid System */
   --spacing-grid-xs: 4px;
   --spacing-grid-sm: 8px;
@@ -126,6 +123,7 @@
 
   /* Custom Shadows */
   --shadow-custom: 0 0 24px 0 rgba(0, 0, 0, 0.1);
+  --shadow-baodaozai-card: 0 2px 16px 0 rgba(0, 0, 0, 0.15);
 }
 
 @import './assets/style.css' layer(utilities);
@@ -308,7 +306,7 @@
     font-size: var(--font-size-h1-large);
     font-weight: 700;
     line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 2.4px;
   }
 
   .prose-h2-large {
@@ -316,7 +314,7 @@
     font-size: var(--font-size-h2-large);
     font-weight: 700;
     line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 2px;
   }
 
   .prose-h3-large {
@@ -324,7 +322,7 @@
     font-size: var(--font-size-h3-large);
     font-weight: 700;
     line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 1.6px;
   }
 
   .prose-h4-large {
@@ -332,7 +330,7 @@
     font-size: var(--font-size-h4-large);
     font-weight: 700;
     line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 1.4px;
   }
 
   .prose-h5-large {
@@ -340,7 +338,7 @@
     font-size: var(--font-size-h5-large);
     font-weight: 700;
     line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 1.1px;
   }
 
   .prose-h6-large {
@@ -348,7 +346,7 @@
     font-size: var(--font-size-h6-large);
     font-weight: 700;
     line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 0.9px;
   }
 
   /* Typography Utilities - Headlines Small */
@@ -357,7 +355,7 @@
     font-size: var(--font-size-h1-small);
     font-weight: 700;
     line-height: var(--line-height-tight);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 1.6px;
   }
 
   .prose-h2-small {
@@ -365,7 +363,7 @@
     font-size: var(--font-size-h2-small);
     font-weight: 700;
     line-height: var(--line-height-tight);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 1.4px;
   }
 
   .prose-h3-small {
@@ -373,7 +371,7 @@
     font-size: var(--font-size-h3-small);
     font-weight: 700;
     line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 1.2px;
   }
 
   .prose-h4-small {
@@ -381,7 +379,7 @@
     font-size: var(--font-size-h4-small);
     font-weight: 700;
     line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 1.1px;
   }
 
   .prose-h5-small {
@@ -389,7 +387,7 @@
     font-size: var(--font-size-h5-small);
     font-weight: 700;
     line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 1px;
   }
 
   .prose-h6-small {
@@ -397,7 +395,7 @@
     font-size: var(--font-size-h6-small);
     font-weight: 700;
     line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 0.9px;
   }
 
   /* Typography Utilities - Paragraphs */
@@ -406,7 +404,7 @@
     font-size: var(--font-size-p1);
     font-weight: 500;
     line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 0.8px;
   }
 
   .prose-p1-bold {
@@ -414,7 +412,7 @@
     font-size: var(--font-size-p1);
     font-weight: 700;
     line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 0.8px;
   }
 
   .prose-p2 {
@@ -422,7 +420,7 @@
     font-size: var(--font-size-p2);
     font-weight: 500;
     line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 0.7px;
   }
 
   .prose-p2-bold {
@@ -430,7 +428,7 @@
     font-size: var(--font-size-p2);
     font-weight: 700;
     line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 0.7px;
   }
 
   .prose-p3 {
@@ -438,7 +436,7 @@
     font-size: var(--font-size-p3);
     font-weight: 500;
     line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 0.6px;
   }
 
   .prose-p3-bold {
@@ -446,7 +444,7 @@
     font-size: var(--font-size-p3);
     font-weight: 700;
     line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 0.6px;
   }
 
   .prose-p4 {
@@ -454,7 +452,7 @@
     font-size: var(--font-size-p4);
     font-weight: 500;
     line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 0.5px;
   }
 
   .prose-p4-bold {
@@ -462,7 +460,7 @@
     font-size: var(--font-size-p4);
     font-weight: 700;
     line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
+    letter-spacing: 0.5px;
   }
 
   /* Swei Marker Sans Font Variants */

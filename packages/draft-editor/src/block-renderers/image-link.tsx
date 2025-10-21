@@ -64,6 +64,7 @@ const EditableBlock = styled(_EditableBlock)`
       background-color: #f0f0f0;
       opacity: 0.3;
     }
+  }
 `
 
 export type ImageLinkValue = {
