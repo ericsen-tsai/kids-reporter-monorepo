@@ -1,8 +1,9 @@
-import baseConfig, {
-  typescriptConfig,
-  javascriptConfig,
-} from '../../eslint.base.config.mjs'
 import globals from 'globals'
+
+import baseConfig, {
+  javascriptConfig,
+  typescriptConfig,
+} from '../../eslint.base.config.mjs'
 
 export default [
   ...baseConfig,

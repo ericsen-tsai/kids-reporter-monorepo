@@ -1,7 +1,7 @@
 import {
   BaodaozaiChoiceQuestion,
-  BaodaozaiQuestions,
   BaodaozaiQuestion,
+  BaodaozaiQuestions,
 } from '../../types'
 
 type EssayStep = {
