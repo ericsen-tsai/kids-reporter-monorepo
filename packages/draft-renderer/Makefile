@@ -6,12 +6,12 @@ help:
 
 dev: 
 	@echo "$(P) Start webpack dev server"
-	NODE_ENV=development yarn webpack serve -c dev/webpack.config.mjs
+	NODE_ENV=development yarn exec webpack serve -c dev/webpack.config.mjs
 
 build-lib:
 	@echo "$(P) Transpile es6, jsx and (typescript) to es5"
-	NODE_ENV=production yarn babel src --out-dir lib-temp --extensions '.ts,.tsx,.js,.jsx' --copy-files --root-mode upward  --ignore 'src/custom-fields/**/views/*'
-	NODE_ENV=production yarn babel lib-temp --out-dir lib --extensions '.ts,.tsx' --copy-files --config-file ./.views.babelrc.js
+	NODE_ENV=production yarn exec babel src --out-dir lib-temp --extensions '.ts,.tsx,.js,.jsx' --copy-files --root-mode upward  --ignore 'src/custom-fields/**/views/*'
+	NODE_ENV=production yarn exec babel lib-temp --out-dir lib --extensions '.ts,.tsx' --copy-files --config-file ./.views.babelrc.js
 	rm -rf lib-temp/
 
 build: clean build-lib
