@@ -14,23 +14,21 @@ function Baodaozai() {
   } = useCallBaodaozaiContext()
 
   const { confirmAction, cancelAction, ...dialogProps } = dialogWithActionProps
-  const { setIsActive, setAction, isActive } = baodaozaiProps
+  const { setIsActive, setAction, isActive, hide, setHide } = baodaozaiProps
 
-  const resetBaodaozai = useCallback(() => {
+  const handleConfirm = useCallback(() => {
+    confirmAction({ setHide, setIsActive, setAction })
     setAction('none')
     setIsActive(false)
     onDialogPropsChange({ isOpen: false })
-  }, [setAction, setIsActive, onDialogPropsChange])
-
-  const handleConfirm = useCallback(() => {
-    confirmAction()
-    resetBaodaozai()
-  }, [confirmAction, resetBaodaozai])
+  }, [confirmAction, setHide, setIsActive, setAction, onDialogPropsChange])
 
   const handleCancel = useCallback(() => {
-    cancelAction()
-    resetBaodaozai()
-  }, [cancelAction, resetBaodaozai])
+    cancelAction({ setHide, setIsActive, setAction })
+    setAction('none')
+    setIsActive(false)
+    onDialogPropsChange({ isOpen: false })
+  }, [cancelAction, setHide, setIsActive, setAction, onDialogPropsChange])
 
   const handleOpenDialog = useCallback(() => {
     onDialogPropsChange({ isOpen: true })
@@ -72,7 +70,12 @@ function Baodaozai() {
   }, [isActive, isMobile, dialogProps.isOpen, isTablet, dialogBoxHeight])
 
   return (
-    <div className="fixed right-0 bottom-0 z-1000 w-full tablet:right-0 tablet:bottom-0">
+    <div
+      className={cn(
+        'fixed right-0 bottom-0 z-1000 w-full transition-opacity duration-1000 tablet:right-0 tablet:bottom-0',
+        hide ? 'opacity-0' : 'opacity-100'
+      )}
+    >
       <div
         className="absolute -right-0 -bottom-0 z-[11] w-full tablet:right-6 tablet:bottom-21 tablet:z-1 tablet:w-auto tablet:translate-x-0 desktop:right-8"
         ref={refDialogBoxContainerRef}

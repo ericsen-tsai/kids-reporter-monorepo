@@ -65,7 +65,7 @@ function DialogBox({
             : 'translate-y-4 scale-95 opacity-0'
         )}
       >
-        <div className="rounded-t-[30px] rounded-b-none bg-neutral-white p-6 shadow-baodaozai-card tablet:rounded-b-[30px]">
+        <div className="w-full rounded-t-[30px] rounded-b-none bg-neutral-white p-6 shadow-baodaozai-card tablet:rounded-b-[30px]">
           <p className="prose-p1-bold text-neutral-900">{content}</p>
           <div className="mt-5 flex items-center justify-center gap-4">
             {!hideCancelButton && (

@@ -20,14 +20,14 @@ import {
   useViewModelInstanceEnum,
   useViewModelInstanceTrigger,
 } from '@rive-app/react-webgl2'
-import { BaodaozaiAction } from '../types'
+import { BaodaozaiAction, BaodaozaiActionSetter } from '../types'
 import { cn } from '@kids-reporter/routing-ui'
 import { DialogBoxProps } from '../components/dialog-box'
 
 export type CallBaodaozaiProps = {
   dialogWithActionProps: Omit<DialogBoxProps, 'onConfirm' | 'onCancel'> & {
-    confirmAction: () => void
-    cancelAction: () => void
+    confirmAction: BaodaozaiActionSetter
+    cancelAction: BaodaozaiActionSetter
   }
   baodaozaiProps: {
     action: BaodaozaiAction
@@ -36,6 +36,8 @@ export type CallBaodaozaiProps = {
     setAction: (action: BaodaozaiAction) => void
     triggerStep: () => void
     toggleActive: () => void
+    hide: boolean
+    setHide: (hide: boolean) => void
   }
   renderBaodaozai: React.ReactNode
 }
@@ -100,6 +102,8 @@ export function CallBaodaozaiProvider({
     setIsActive(!isActive)
   }, [isActive, setIsActive])
 
+  const [hide, setHide] = useState(false)
+
   const baodaozaiProps = useMemo(
     () => ({
       action: action as BaodaozaiAction,
@@ -108,8 +112,19 @@ export function CallBaodaozaiProvider({
       setAction,
       triggerStep,
       toggleActive,
+      hide,
+      setHide,
     }),
-    [action, isActive, setIsActive, setAction, triggerStep, toggleActive]
+    [
+      action,
+      isActive,
+      setIsActive,
+      setAction,
+      triggerStep,
+      toggleActive,
+      hide,
+      setHide,
+    ]
   )
 
   const renderBaodaozai = useMemo(() => {
