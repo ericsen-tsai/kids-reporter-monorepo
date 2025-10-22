@@ -1,9 +1,10 @@
 'use client'
 
-import { useCallback, useEffect, useRef } from 'react'
+import { memo, useCallback, useEffect, useRef } from 'react'
+
+import { useCallBaodaozaiContext } from '../context'
 import { BaodaozaiAction, BaodaozaiActionSetter } from '../types'
 import { DialogBoxProps } from './dialog-box'
-import { useCallBaodaozaiContext } from '../context'
 
 export type BaodaozaiEventTriggerProps = {
   dialogState?: Partial<
@@ -19,6 +20,7 @@ export type BaodaozaiEventTriggerProps = {
   }>
   once?: boolean
   disabled?: boolean
+  id?: string
 }
 
 function BaodaozaiEventTrigger({
@@ -26,10 +28,11 @@ function BaodaozaiEventTrigger({
   baodaozaiState: newBaodaozaiState = {},
   once = true,
   disabled = false,
+  id,
 }: BaodaozaiEventTriggerProps) {
   const {
     onDialogPropsChange,
-    baodaozaiProps: { setAction, setIsActive, triggerStep },
+    baodaozaiProps: { setAction, setIsActive, triggerStep, isInitialized },
   } = useCallBaodaozaiContext()
   const { action, isActive, shouldTriggerStep } = newBaodaozaiState
   const containerRef = useRef<HTMLDivElement>(null)
@@ -85,7 +88,7 @@ function BaodaozaiEventTrigger({
     return () => observer.disconnect()
   }, [handleInView, once, disabled])
 
-  return <div ref={containerRef} />
+  return isInitialized ? <div ref={containerRef} id={id} /> : null
 }
 
-export default BaodaozaiEventTrigger
+export default memo(BaodaozaiEventTrigger)
