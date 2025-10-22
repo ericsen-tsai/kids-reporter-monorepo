@@ -36,6 +36,7 @@ function BaodaozaiEventTrigger({
   } = useCallBaodaozaiContext()
   const { action, isActive, shouldTriggerStep } = newBaodaozaiState
   const containerRef = useRef<HTMLDivElement>(null)
+  const triggeredOnceRef = useRef(false)
 
   const handleInView = useCallback(() => {
     onDialogPropsChange({ ...newDialogState })
@@ -64,7 +65,7 @@ function BaodaozaiEventTrigger({
 
   useEffect(() => {
     const element = containerRef.current
-    if (!element || disabled) return
+    if (!element || disabled || triggeredOnceRef.current) return
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -73,6 +74,7 @@ function BaodaozaiEventTrigger({
             handleInView()
             if (once) {
               observer.disconnect()
+              triggeredOnceRef.current = true
             }
           }
         })
