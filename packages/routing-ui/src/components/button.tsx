@@ -16,13 +16,13 @@ const buttonVariants = cva(
           'text-white border-0 bg-red-400',
           'hover:bg-red-500',
           'active:bg-red-600',
-          'disabled:bg-gray-400 disabled:text-white disabled:cursor-default',
+          'disabled:text-white disabled:cursor-default disabled:bg-neutral-400',
         ],
         secondary: [
           'bg-white text-gray-900 border-2 border-red-400',
           'hover:text-white hover:border-red-500 hover:bg-red-500',
           'active:text-white active:border-red-600 active:bg-red-600',
-          'disabled:border-gray-400 disabled:bg-white disabled:text-gray-400 disabled:cursor-default',
+          'disabled:bg-white disabled:cursor-default disabled:border-neutral-400 disabled:text-neutral-400',
         ],
       },
       size: {

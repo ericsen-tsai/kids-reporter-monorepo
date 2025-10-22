@@ -14,7 +14,7 @@
     "@googleapis/customsearch": "^1.0.4",
     "@kids-reporter/draft-renderer": "^1.0.13",
     "@next/third-parties": "^14.1.1",
-    "@kids-reporter/routing-ui": "0.1.0-alpha.1",
+    "@kids-reporter/routing-ui": "0.1.0-alpha.2",
     "@radix-ui/react-slot": "^1.2.3",
     "@tailwindcss/postcss": "^4.1.14",
     "@twreporter/errors": "^1.1.2",
