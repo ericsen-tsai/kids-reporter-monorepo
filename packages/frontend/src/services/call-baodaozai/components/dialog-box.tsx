@@ -3,29 +3,35 @@
 import { Button } from '@kids-reporter/routing-ui'
 import { cn } from '@kids-reporter/routing-ui'
 
-const DialogArrow = (
+const DialogArrow = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="32"
-    height="44"
-    viewBox="0 0 32 44"
+    width="62"
+    height="64"
+    viewBox="0 0 62 64"
     fill="none"
   >
     <defs>
-      <filter id="drop-shadow" x="-50%" y="0%" width="200%" height="150%">
-        <feDropShadow
-          dx="0"
-          dy="4"
-          stdDeviation="8"
-          floodColor="rgba(0,0,0,0.05)"
-        />
+      <filter id="shadowBox">
+        {/* Left shadow */}
+        <feDropShadow dx="-3" dy="0" stdDeviation="2" floodOpacity="0.025" />
+
+        {/* Bottom shadow - layered for depth */}
+        <feDropShadow dx="0" dy="3" stdDeviation="2" floodOpacity="0.02" />
+        <feDropShadow dx="0" dy="6" stdDeviation="4" floodOpacity="0.015" />
+        <feDropShadow dx="0" dy="10" stdDeviation="6" floodOpacity="0.01" />
+
+        {/* Right shadow - layered for depth */}
+        <feDropShadow dx="3" dy="0" stdDeviation="2" floodOpacity="0.002" />
+        <feDropShadow dx="6" dy="0" stdDeviation="4" floodOpacity="0.0015" />
+        <feDropShadow dx="10" dy="0" stdDeviation="6" floodOpacity="0.001" />
       </filter>
     </defs>
     <path
       data-figma-bg-blur-radius="16"
       d="M0 2.72773e-05L32 44L32 -1.39876e-06L0 2.72773e-05Z"
       fill="white"
-      filter="url(#drop-shadow)"
+      filter="url(#shadowBox)"
     />
   </svg>
 )
@@ -88,13 +94,8 @@ function DialogBox({
             </Button>
           </div>
         </div>
-        <div
-          className={cn(
-            'hidden transition-all duration-300 ease-out tablet:block',
-            isOpen ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
-          )}
-        >
-          {DialogArrow}
+        <div className="hidden translate-x-5 translate-y-0 transition-all duration-300 ease-out tablet:block">
+          <DialogArrow />
         </div>
       </div>
     </div>
