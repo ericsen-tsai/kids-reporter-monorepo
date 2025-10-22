@@ -1,7 +1,5 @@
 'use client'
 
-import Image from 'next/image'
-
 import Button from './components/button'
 import {
   ADDITIONAL_MENU_ITEMS,
@@ -37,7 +35,7 @@ const Footer = ({
             <div className="max-w-100 gap-6 flex w-full flex-col items-center desktop:items-start">
               <div className="flex items-center">
                 <a href="/" className="flex items-center">
-                  <Image
+                  <img
                     src="/assets/images/footer-logo.svg"
                     alt="少年報導者"
                     loading="lazy"

@@ -1,6 +1,5 @@
 'use client'
 import { cva } from 'class-variance-authority'
-import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 
 import { Button, Input } from '../components'
@@ -89,7 +88,7 @@ const searchDropdownVariants = cva(
 export function LogoLink({ compactMode = false }: { compactMode?: boolean }) {
   return (
     <a href="/" className="flex items-center" rel="home">
-      <Image
+      <img
         src="/assets/images/brand-icon.svg"
         alt="少年報導者 The Reporter for Kids"
         loading="eager"
