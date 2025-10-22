@@ -135,7 +135,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
   const renderModalContent = useMemo(() => {
     if (isLeaving) {
       return (
-        <div className="mb-4 flex w-full flex-col items-start p-6 tablet:mb-0">
+        <div className="mb-5 flex w-full flex-col items-start p-6 tablet:mb-0">
           <h2 className="prose-h6-large mb-3 text-neutral-900">
             確定要放棄作答嗎？
           </h2>
@@ -479,10 +479,10 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
           <div
             className={cn(
               'flex w-full flex-col justify-end px-6 pt-5 pb-6 tablet:pt-6',
-              (isLeaving ||
-                currentModalStep?.type === 'choice-result' ||
+              (currentModalStep?.type === 'choice-result' ||
                 currentModalStep?.type === 'essay-result') &&
-                'bg-neutral-100'
+                'bg-neutral-100',
+              isLeaving && 'pt-0 tablet:pt-0'
             )}
           >
             {renderModalButtons}
