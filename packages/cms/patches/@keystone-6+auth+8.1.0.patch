@@ -1,17 +1,17 @@
 diff --git a/node_modules/@keystone-6/auth/pages/SigninPage/dist/keystone-6-auth-pages-SigninPage.esm.js b/node_modules/@keystone-6/auth/pages/SigninPage/dist/keystone-6-auth-pages-SigninPage.esm.js
-index 896fe92..e4aed27 100644
+index 896fe92..0a63cb6 100644
 --- a/node_modules/@keystone-6/auth/pages/SigninPage/dist/keystone-6-auth-pages-SigninPage.esm.js
 +++ b/node_modules/@keystone-6/auth/pages/SigninPage/dist/keystone-6-auth-pages-SigninPage.esm.js
-@@ -57,7 +57,8 @@ function SigninPage({
+@@ -57,7 +57,13 @@ function SigninPage({
    useEffect(() => {
      if (submitted) return;
      if (rawKeystone.authenticatedItem.state === 'authenticated') {
 -      router.push(redirect);
-      // WORKAROUND (Keystone Admin UI 2FA)
-      // Use server-side navigation via `window.location.href` to hit `/2fa-verify`.
-      // This forces a full page load so new session cookies and our Express 2FA
-      // middleware are applied. Using `router.push` here can preserve client state
-      // and inadvertently bypass the server redirect/middleware.
++      // WORKAROUND (Keystone Admin UI 2FA)
++      // Use server-side navigation via `window.location.href` to hit `/2fa-verify`.
++      // This forces a full page load so new session cookies and our Express 2FA
++      // middleware are applied. Using `router.push` here can preserve client state
++      // and inadvertently bypass the server redirect/middleware.
 +      window.location.href = '/2fa-verify'
 +      // router.push(redirect);
      }
