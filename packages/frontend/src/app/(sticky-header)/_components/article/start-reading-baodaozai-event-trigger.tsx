@@ -1,7 +1,7 @@
 import { useIsAtTop } from '@kids-reporter/routing-ui'
 import { useEffect, useState } from 'react'
 
-import BaodaozaiEventTrigger from '@/services/call-baodaozai/components/baodaozai-event-trigger'
+import { BaodaozaiEventTrigger } from '@/services/call-baodaozai'
 
 type StartReadingBaodaozaiEventTriggerProps = {
   isSubmitted: boolean
