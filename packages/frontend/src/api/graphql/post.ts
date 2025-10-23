@@ -76,6 +76,7 @@ export const GET_POST_GQL = gql`
         name
         slug
       }
+      TWReporterRelatedPostsJSON
       relatedPostsOrdered {
         title
         slug

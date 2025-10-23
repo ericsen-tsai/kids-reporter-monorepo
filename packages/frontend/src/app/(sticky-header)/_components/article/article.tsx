@@ -9,6 +9,7 @@ import { useCallback, useMemo, useState } from 'react'
 import AuthorCard, { Author } from '@/components/author-card'
 import Divider from '@/components/divider'
 import Tags from '@/components/tags'
+import { PostSummary } from '@/components/types'
 import {
   AUTHOR_ROLES_IN_ORDER,
   AuthorRole,
@@ -35,7 +36,7 @@ import { IS_LOGIN } from './mock'
 import { NewsReading } from './news-reading'
 import PostRenderer from './post-renderer'
 import PublishedDate from './published-date'
-import RelatedPosts from './related-posts'
+import RelatedArticles from './related-articles'
 import { MobileSidebar, Sidebar } from './sidebar'
 import StartReadingBaodaozaiEventTrigger from './start-reading-baodaozai-event-trigger'
 import SubSubcategory from './subSubcategory'
@@ -133,6 +134,25 @@ const getPostContents = (post: any) => {
       : ''
   const theme = category?.themeColor || DEFAULT_THEME_COLOR
 
+  const twReporterRelatedPosts: PostSummary[] =
+    post?.TWReporterRelatedPostsJSON?.map(
+      (twReporterPost: {
+        ogTitle: string
+        src: string
+        ogImgSrc: string
+        ogDescription: string
+      }) => ({
+        title: twReporterPost.ogTitle,
+        url: twReporterPost.src,
+        image: twReporterPost.ogImgSrc,
+        desc: twReporterPost.ogDescription,
+        category: '',
+        subSubcategory: '',
+        publishedDate: '',
+        theme: DEFAULT_THEME_COLOR,
+      })
+    ) ?? []
+
   return {
     theme,
     topicURL,
@@ -142,6 +162,7 @@ const getPostContents = (post: any) => {
     authorsInBrief,
     orderedAuthors,
     relatedPosts,
+    twReporterRelatedPosts,
   }
 }
 
@@ -155,6 +176,7 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
     authorsInBrief,
     orderedAuthors,
     relatedPosts,
+    twReporterRelatedPosts,
   } = getPostContents(post)
 
   const [fontSize, setFontSize] = useState<FontSizeLevel>(FontSizeLevel.NORMAL)
@@ -387,8 +409,11 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
           <AuthorCard title="誰幫我們完成這篇文章" authors={orderedAuthors} />
         </ArticleContext.Provider>
       </div>
+      <RelatedArticles
+        articles={relatedPosts ?? []}
+        twReporterArticles={twReporterRelatedPosts ?? []}
+      />
       <CallToAction />
-      <RelatedPosts posts={relatedPosts ?? []} sliderTheme={theme} />
       {postQuestions && (
         <BaodaozaiQAModal
           questions={postQuestions}
