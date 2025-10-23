@@ -409,10 +409,25 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
           <AuthorCard title="誰幫我們完成這篇文章" authors={orderedAuthors} />
         </ArticleContext.Provider>
       </div>
-      <RelatedArticles
-        articles={relatedPosts ?? []}
-        twReporterArticles={twReporterRelatedPosts ?? []}
-      />
+
+      <div className="relative w-full">
+        <div className="absolute top-[calc(50%+50vh)]">
+          <BaodaozaiEventTrigger
+            dialogState={{
+              content:
+                '現在點擊上方的 Tab，可以看到來自報導者的觀點了，一起來看看更多深度文章吧！',
+              hideCancelButton: true,
+              confirmText: '我知道了',
+            }}
+            id="show-related-articles"
+          />
+        </div>
+        <RelatedArticles
+          articles={relatedPosts ?? []}
+          twReporterArticles={twReporterRelatedPosts ?? []}
+        />
+      </div>
+
       <CallToAction />
       {postQuestions && (
         <BaodaozaiQAModal

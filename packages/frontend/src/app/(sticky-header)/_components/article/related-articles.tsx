@@ -34,7 +34,7 @@ function RelatedArticles({
   const renderContent = useMemo(() => {
     if (visibleArticles.length === 0) {
       return (
-        <div className="prose-p2 flex min-h-50 items-center justify-center">
+        <div className="prose-p2 flex min-h-50 w-full items-center justify-center">
           <span>相關報導持續整理中，歡迎之後再來探索。</span>
         </div>
       )
