@@ -1,5 +1,4 @@
 import '../globals.css'
-import '../globals.css'
 
 import { Footer, HeaderProvider } from '@kids-reporter/routing-ui'
 import { GoogleTagManager } from '@next/third-parties/google'

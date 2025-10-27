@@ -1,6 +1,5 @@
 'use client'
 import './article.css'
-import './article.css'
 
 import { GetPostQuery } from '__generated__/operations/post.generated'
 import Link from 'next/link'
@@ -285,7 +284,7 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
     const candidateQuestions = [...choiceQuestions]
 
     if (candidateQuestions.length < 3) {
-      console.error('No enough questions')
+      console.error('Not enough questions')
       return null
     }
 
