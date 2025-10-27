@@ -3,7 +3,7 @@
   "version": "1.0.10",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"yarn codegen:local:watch\" \"next dev\"",
+    "dev": "concurrently \"yarn codegen:local:watch\" \"next dev --port ${PORT:-3000}\"",
     "build": "yarn codegen:production && next build",
     "start": "next start",
     "analyze": "ANALYZE=true yarn build",
@@ -61,6 +61,7 @@
     "@graphql-codegen/typescript-operations": "^5.0.2",
     "@parcel/watcher": "^2.5.1",
     "concurrently": "^9.1.2",
-    "onchange": "^7.1.0"
+    "onchange": "^7.1.0",
+    "graphql": "^16.8.1"
   }
 }
