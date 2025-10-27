@@ -16,7 +16,7 @@
     "prepare": "husky",
     "update": "yarn changeset && yarn changeset version",
     "dev:cms": "cd packages/cms && dotenv -e .env.local -- yarn dev",
-    "dev:frontend": "cd packages/frontend && yarn dev --port 3001",
+    "dev:frontend": "cd packages/frontend && PORT=3001 yarn dev",
     "dev:api-gateway": "cd packages/api-gateway && dotenv -e .env.local -- yarn dev",
     "format:write": "yarn workspaces run prettier --write .",
     "format:check": "yarn workspaces run prettier --check .",

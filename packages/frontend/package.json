@@ -3,7 +3,7 @@
   "version": "1.0.10",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"yarn codegen:local:watch\" \"next dev\"",
+    "dev": "concurrently \"yarn codegen:local:watch\" \"next dev --port ${PORT:-3000}\"",
     "build": "yarn codegen:production && next build",
     "start": "next start",
     "analyze": "ANALYZE=true yarn build",
