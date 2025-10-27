@@ -1,7 +1,19 @@
 'use client'
 
-import { useContext, useState, useCallback, useMemo } from 'react'
+import { cn } from '@kids-reporter/routing-ui'
+import {
+  useRive,
+  useViewModel,
+  useViewModelInstance,
+  useViewModelInstanceBoolean,
+  useViewModelInstanceEnum,
+  useViewModelInstanceTrigger,
+} from '@rive-app/react-webgl2'
+import { useCallback, useContext, useMemo, useState } from 'react'
 import { createContext } from 'react'
+
+import { DialogBoxProps } from '../components/dialog-box'
+import { BaodaozaiAction, BaodaozaiActionSetter } from '../types'
 import {
   ACTION_KEY,
   ACTIVE_KEY,
@@ -12,17 +24,6 @@ import {
   STEP_KEY,
   VIEW_MODEL_NAME,
 } from './constants'
-import {
-  useRive,
-  useViewModel,
-  useViewModelInstance,
-  useViewModelInstanceBoolean,
-  useViewModelInstanceEnum,
-  useViewModelInstanceTrigger,
-} from '@rive-app/react-webgl2'
-import { BaodaozaiAction, BaodaozaiActionSetter } from '../types'
-import { cn } from '@kids-reporter/routing-ui'
-import { DialogBoxProps } from '../components/dialog-box'
 
 export type CallBaodaozaiProps = {
   dialogWithActionProps: Omit<DialogBoxProps, 'onConfirm' | 'onCancel'> & {
@@ -38,6 +39,7 @@ export type CallBaodaozaiProps = {
     toggleActive: () => void
     hide: boolean
     setHide: (hide: boolean) => void
+    isInitialized: boolean
   }
   renderBaodaozai: React.ReactNode
 }
@@ -114,6 +116,7 @@ export function CallBaodaozaiProvider({
       toggleActive,
       hide,
       setHide,
+      isInitialized: !!viewModel,
     }),
     [
       action,
@@ -124,6 +127,7 @@ export function CallBaodaozaiProvider({
       toggleActive,
       hide,
       setHide,
+      viewModel,
     ]
   )
 

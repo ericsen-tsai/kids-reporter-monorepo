@@ -2,17 +2,21 @@ import { Header } from '@kids-reporter/routing-ui'
 import { Metadata } from 'next'
 import { Fragment } from 'react'
 
+import { getCategoryPosts } from '@/api/category'
+import { getEditorPicksSettings } from '@/api/editor-picks-settings'
+import { getLatestPosts } from '@/api/post'
+import { getTopicProjects } from '@/api/project'
+import { getSubcategoryPosts } from '@/api/subcategory'
 import {
   ADDITIONAL_MENU_ITEMS,
   DONATE_URL,
   FALLBACK_IMG,
   GENERAL_DESCRIPTION,
   MENU_ITEMS,
-  POST_CONTENT_GQL,
   SEARCH_PLACEHOLDER,
+  SECTIONS,
   SOCIAL_MEDIA_ITEMS,
   SUBSCRIBE_URL,
-  Theme,
 } from '@/constants'
 import CallToAction from '@/home/call-to-action'
 import Divider from '@/home/divider'
@@ -22,7 +26,7 @@ import MakeFriends from '@/home/make-friend'
 import PostSelection from '@/home/post-selection'
 import SearchAndTags from '@/home/search-and-tags'
 import Section from '@/home/section'
-import { getPostSummaries, sendGQLRequest } from '@/utils'
+import { getPostSummaries } from '@/utils'
 
 export const dynamic = 'force-dynamic'
 
@@ -31,209 +35,71 @@ export const metadata: Metadata = {
   description: GENERAL_DESCRIPTION,
 }
 
-const sections = [
-  {
-    title: '時時刻刻',
-    image: 'topic_pic1.svg',
-    titleImg: 'topic_title1.svg',
-    link: '/category/news/times/',
-    theme: Theme.BLUE,
-  },
-  {
-    title: '真的假的',
-    image: 'topic_pic2.svg',
-    titleImg: 'topic_title2.svg',
-    link: '/category/news/knowledge/',
-    theme: Theme.BLUE,
-  },
-  {
-    title: '讀報新聞',
-    image: 'topic_pic3.svg',
-    titleImg: 'topic_title3.svg',
-    link: '/category/listening-news/',
-    theme: Theme.BLUE,
-  },
-  {
-    title: '他們的故事',
-    image: 'topic_pic4.svg',
-    titleImg: 'topic_title4.svg',
-    link: '/category/news/story/',
-    theme: Theme.RED,
-  },
-  {
-    title: '文化看世界',
-    image: 'topic_pic5.svg',
-    titleImg: 'topic_title5.svg',
-    link: '/category/news/explore/',
-    theme: Theme.RED,
-  },
-  {
-    title: '小讀者連線',
-    image: 'topic_pic7.svg',
-    titleImg: 'topic_title7.svg',
-    link: '/category/campus/joining/',
-    theme: Theme.YELLOW,
-  },
-  {
-    title: '圖解新聞',
-    image: 'topic_pic8.svg',
-    titleImg: 'topic_title8.svg',
-    link: '/category/comics/graphic-news/',
-    theme: Theme.YELLOW,
-  },
-  {
-    title: '上課好好玩',
-    image: 'topic_pic10.svg',
-    titleImg: 'topic_title10.svg',
-    link: '/category/campus/teaching/',
-    theme: Theme.YELLOW,
-  },
-  {
-    title: '火線新聞台',
-    image: 'topic_pic9.svg',
-    titleImg: 'topic_title9.svg',
-    link: '/category/comics/comic/',
-    theme: Theme.YELLOW,
-  },
-]
-
-const topicsGQL = `
-query Query($orderBy: [ProjectOrderByInput!]!, $take: Int) {
-  projects(orderBy: $orderBy, take: $take) {
-    title
-    subtitle
-    slug
-    heroImage {
-      resized {
-        small
-      }
-    }
-  }
-}
-`
-
-const latestPostsGQL = `
-query($orderBy: [PostOrderByInput!]!, $take: Int) {
-  posts(orderBy: $orderBy, take: $take) {
-    ${POST_CONTENT_GQL}
-  }
-}
-`
-
-const editorPicksGQL = `
-query($take: Int) {
-  editorPicksSettings {
-    editorPicksOfPostsOrdered(take: $take) {
-      ${POST_CONTENT_GQL}
-    }
-    editorPicksOfTags {
-      name
-      slug
-    }
-  }
-}
-`
-
-const categoryPostsGQL = `
-query($where: CategoryWhereUniqueInput!, $take: Int) {
-  category(where: $where) {
-    relatedPosts(take: $take) {
-      ${POST_CONTENT_GQL}
-    }
-  }
-}
-`
-
-const subcategoryPostsGQL = `
-query($where: SubcategoryWhereUniqueInput!, $take: Int) {
-  subcategory(where: $where) {
-    relatedPosts(take: $take) {
-      ${POST_CONTENT_GQL}
-    }
-  }
-}
-`
-
-const topicsNum = 9
-const latestPostsNum = 6
-const featuredPostsNum = 5
-const sectionPostsNum = 6
-const sortOrder = {
-  publishedDate: 'desc',
-}
-
 export default async function Home() {
   const serverRenderTime = new Date().toISOString()
   console.log('Server re-render at:', serverRenderTime)
 
-  // 1. Fetch topics
-  const topicsRes = await sendGQLRequest({
-    query: topicsGQL,
-    variables: {
-      orderBy: sortOrder,
-      take: topicsNum,
-    },
-  })
+  const [topicProjects, latestPostsData, editorPicksSettings] =
+    await Promise.all([
+      getTopicProjects({
+        orderBy: [{ publishedDate: 'desc' }],
+        take: 9,
+      }),
+      getLatestPosts({
+        orderBy: [{ publishedDate: 'desc' }],
+        take: 6,
+      }),
+      getEditorPicksSettings({
+        take: 5,
+      }),
+    ])
+
   const topics =
-    topicsRes?.data?.data?.projects?.map((topic: any) => {
+    topicProjects?.map((project) => {
       return {
-        url: `/topic/${topic.slug}`,
-        image: topic?.heroImage?.resized?.small ?? FALLBACK_IMG,
-        title: topic.title,
-        subtitle: topic.subtitle,
+        url: `/topic/${project.slug}`,
+        image: project.heroImage?.resized?.small ?? FALLBACK_IMG,
+        title: project.title ?? '',
+        subtitle: project.subtitle ?? '',
       }
     }) ?? []
 
-  // 2. Fetch latest posts
-  const latestPostsRes = await sendGQLRequest({
-    query: latestPostsGQL,
-    variables: {
-      orderBy: sortOrder,
-      take: latestPostsNum,
-    },
-  })
-  const latestPosts = getPostSummaries(latestPostsRes?.data?.data?.posts) ?? []
+  const latestPosts = getPostSummaries(latestPostsData ?? [])
 
-  // 3. Fetch featured posts & tags
-  const editorPicksRes = await sendGQLRequest({
-    query: editorPicksGQL,
-    variables: {
-      take: featuredPostsNum,
-    },
-  })
+  const firstEditorPicksSettings = editorPicksSettings?.[0]
+
   const featuredPosts =
     getPostSummaries(
-      editorPicksRes?.data?.data?.editorPicksSettings?.[0]
-        ?.editorPicksOfPostsOrdered
+      firstEditorPicksSettings?.editorPicksOfPostsOrdered ?? []
     ) ?? []
-  const tags =
-    editorPicksRes?.data?.data?.editorPicksSettings?.[0]?.editorPicksOfTags
+  const tags = (firstEditorPicksSettings?.editorPicksOfTags ?? []).map(
+    (tag) => ({
+      name: tag?.name ?? '',
+      slug: tag?.slug ?? '',
+    })
+  )
 
   // 4. Fetch posts for each section
-  const sectionPostsArray =
-    (await Promise.all(
-      sections.map(async (section): Promise<any> => {
-        // Get category/subcategory name from link.
-        // ex: '/category/listening-news/' => split to ['category', 'listening-news'] => pop 'listening-news'
-        const categoryTokens = section.link
-          .replace(/(^\/)|(\/$)/g, '')
-          .split('/')
-        const isSubcategory = categoryTokens.length === 3
-        const res = await sendGQLRequest({
-          query: isSubcategory ? subcategoryPostsGQL : categoryPostsGQL,
-          variables: {
-            where: {
-              slug: categoryTokens.pop(),
-            },
-            take: sectionPostsNum,
-          },
-        })
-        const category = isSubcategory
-          ? res?.data?.data?.subcategory
-          : res?.data?.data?.category
-        return getPostSummaries(category?.relatedPosts)
+  const sectionPostsArray = await Promise.all(
+    SECTIONS.map(async (sectionConfig) => {
+      // Get category/subcategory name from link.
+      // ex: '/category/listening-news/' => split to ['category', 'listening-news'] => pop 'listening-news'
+      const categoryTokens = sectionConfig.link
+        .replace(/(^\/)|(\/$)/g, '')
+        .split('/')
+      const isSubcategory = categoryTokens.length === 3
+      const slug = categoryTokens.pop()
+
+      if (!slug) return []
+      const requestFn = isSubcategory ? getSubcategoryPosts : getCategoryPosts
+      const posts = await requestFn({
+        where: { slug },
+        take: 6,
       })
-    )) ?? []
+
+      return getPostSummaries(posts)
+    })
+  )
 
   return (
     <main className="flex w-screen flex-col items-center">
@@ -247,14 +113,13 @@ export default async function Home() {
       />
       {topics?.length > 0 && <MainSlider topics={topics} />}
       <PostSelection latestPosts={latestPosts} featuredPosts={featuredPosts} />
-      {sections.map((sectionConfig, index) => {
+      {SECTIONS.map((sectionConfig, index) => {
+        const posts = sectionPostsArray?.[index]
+        if (!posts) return null
         return (
-          <Fragment key={`section-${index}`}>
-            <Section
-              config={sectionConfig}
-              posts={sectionPostsArray?.[index]}
-            />
-            {index < sections.length - 1 ? <Divider /> : null}
+          <Fragment key={sectionConfig.title}>
+            <Section config={sectionConfig} posts={posts} />
+            {index < SECTIONS.length - 1 ? <Divider /> : null}
           </Fragment>
         )
       })}

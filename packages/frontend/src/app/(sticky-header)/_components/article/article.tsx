@@ -1,8 +1,10 @@
 'use client'
 import './article.css'
 
-import { useCallback, useEffect, useState } from 'react'
+import { GetPostQuery } from '__generated__/operations/post.generated'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useCallback, useMemo, useState } from 'react'
 
 import AuthorCard, { Author } from '@/components/author-card'
 import Divider from '@/components/divider'
@@ -14,6 +16,14 @@ import {
   DEFAULT_THEME_COLOR,
   FontSizeLevel,
 } from '@/constants'
+import {
+  BaodaozaiActionSetter,
+  BaodaozaiChoiceQuestion,
+  BaodaozaiEventTrigger,
+  BaodaozaiQAModal,
+  BaodaozaiQuestions,
+} from '@/services/call-baodaozai'
+import { QAModalEvent } from '@/services/call-baodaozai/components/qa-modal'
 import { getPostSummaries } from '@/utils'
 
 import { ArticleContext } from './article-context'
@@ -21,24 +31,15 @@ import Brief, { AuthorGroup } from './brief'
 import CallToAction from './call-to-action'
 import HeroImage from './hero-image'
 import ImageModal from './image-modal'
+import { IS_LOGIN } from './mock'
 import { NewsReading } from './news-reading'
 import PostRenderer from './post-renderer'
 import PublishedDate from './published-date'
 import RelatedPosts from './related-posts'
 import { MobileSidebar, Sidebar } from './sidebar'
+import StartReadingBaodaozaiEventTrigger from './start-reading-baodaozai-event-trigger'
 import SubSubcategory from './subSubcategory'
 import Title from './title'
-import './article.css'
-import {
-  BaodaozaiActionSetter,
-  BaodaozaiEventTrigger,
-  BaodaozaiQAModal,
-} from '@/services/call-baodaozai'
-import { QAModalEvent } from '@/services/call-baodaozai/components/qa-modal'
-import { useRouter } from 'next/navigation'
-import { IS_LOGIN, QUESTIONS } from './mock'
-
-import { useIsAtTop } from '@kids-reporter/routing-ui'
 
 const getPostContents = (post: any) => {
   // Assemble authors for brief
@@ -144,7 +145,7 @@ const getPostContents = (post: any) => {
   }
 }
 
-const Article = ({ post }: { post: any }) => {
+const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
   const {
     theme,
     topicURL,
@@ -194,9 +195,13 @@ const Article = ({ post }: { post: any }) => {
   const postHeader = post && (
     <div className="hero-section">
       <header className="entry-header">
-        <Title text={post.title} subtitle={post.subtitle} fontSize={fontSize} />
+        <Title
+          text={post.title ?? ''}
+          subtitle={post.subtitle ?? ''}
+          fontSize={fontSize}
+        />
         <div className="post-date-category">
-          <PublishedDate date={post.publishedDate} />
+          <PublishedDate date={post.publishedDate ?? ''} />
           <SubSubcategory
             text={subSubcategory?.name}
             link={subSubcategoryURL}
@@ -205,15 +210,6 @@ const Article = ({ post }: { post: any }) => {
       </header>
     </div>
   )
-
-  const isAtTop = useIsAtTop()
-  const [isFirstRenderAtTop, setIsFirstRenderAtTop] = useState(isAtTop)
-
-  useEffect(() => {
-    if (!isAtTop && isFirstRenderAtTop) {
-      setIsFirstRenderAtTop(false)
-    }
-  }, [isAtTop, isFirstRenderAtTop])
 
   const [isQAModalOpen, setIsQAModalOpen] = useState(false)
 
@@ -259,6 +255,52 @@ const Article = ({ post }: { post: any }) => {
     [router]
   )
 
+  const handleQAModalClose = useCallback(({ setHide }: QAModalEvent) => {
+    setIsQAModalOpen(false)
+    setHide(false)
+  }, [])
+
+  const newsReadingGroupItems = useMemo(() => {
+    if (!post?.newsReadingGroup?.items) return []
+    return post?.newsReadingGroup.items.map((item) => ({
+      name: item.name ?? '',
+      embedCode: item.embedCode ?? '',
+    }))
+  }, [post?.newsReadingGroup?.items])
+
+  const tags = useMemo(() => {
+    if (!post?.tagsOrdered) return []
+    return post.tagsOrdered.map((tag) => ({
+      name: tag.name ?? '',
+      slug: tag.slug ?? '',
+    }))
+  }, [post.tagsOrdered])
+
+  const postQuestions = useMemo<BaodaozaiQuestions | null>(() => {
+    // TODO: choose which questions to show
+    const choiceQuestions = post.postChoiceQuestions ?? []
+    // const essayQuestions = post.postEssayQuestions
+
+    const candidateQuestions = [...choiceQuestions]
+
+    if (candidateQuestions.length < 3) {
+      console.error('Not enough questions')
+      return null
+    }
+
+    const questions = candidateQuestions.map<BaodaozaiChoiceQuestion>(
+      (question) => ({
+        id: question.id,
+        title: question.title ?? '',
+        options: question.options as BaodaozaiChoiceQuestion['options'],
+        reason: question.reason ?? '',
+        type: 'choice',
+      })
+    )
+
+    return [questions[0], questions[1], questions[2]]
+  }, [post.postChoiceQuestions])
+
   return (
     <>
       <div className={`post${theme ? ` theme-${theme}` : ''}`}>
@@ -278,31 +320,24 @@ const Article = ({ post }: { post: any }) => {
             imgProps={imgProps}
             handleImgModalClose={handleImgModalClose}
           />
-          <BaodaozaiEventTrigger
-            dialogState={{
-              isOpen: true,
-              confirmText: '開始閱讀',
-              hideCancelButton: true,
-              // TODO: get content from backend
-              // content: post?.intro
-            }}
-            baodaozaiState={{
-              isActive: true,
-              action: 'speak',
-            }}
-            disabled={!isFirstRenderAtTop || isSubmitted}
+          <StartReadingBaodaozaiEventTrigger
+            isSubmitted={isSubmitted}
+            content={post?.opening ?? ''}
           />
-          <HeroImage
-            image={post?.heroImage}
-            caption={post?.heroCaption}
-            handleImgModalOpen={handleImgModalOpen}
-          />
+          {post?.heroImage && post?.heroCaption && (
+            <HeroImage
+              image={post?.heroImage}
+              caption={post?.heroCaption ?? ''}
+              handleImgModalOpen={handleImgModalOpen}
+            />
+          )}
           {postHeader}
           {post?.newsReadingGroup && (
-            <NewsReading data={post.newsReadingGroup} />
+            <NewsReading items={newsReadingGroupItems} />
           )}
 
           <BaodaozaiEventTrigger
+            id="hide-start-reading"
             dialogState={{
               isOpen: false,
               hideCancelButton: true,
@@ -332,13 +367,12 @@ const Article = ({ post }: { post: any }) => {
                   action: 'none',
                 }}
                 disabled={isSubmitted}
+                id="change-to-ask-questions"
               />
             </div>
           </div>
 
-          {post?.tagsOrdered && (
-            <Tags title={'常用關鍵字'} tags={post.tagsOrdered} />
-          )}
+          {post?.tagsOrdered && <Tags title={'常用關鍵字'} tags={tags} />}
           <BaodaozaiEventTrigger
             dialogState={{
               isOpen: true,
@@ -348,20 +382,21 @@ const Article = ({ post }: { post: any }) => {
               action: 'speak',
             }}
             disabled={isSubmitted}
+            id="show-ask-questions"
           />
           <AuthorCard title="誰幫我們完成這篇文章" authors={orderedAuthors} />
         </ArticleContext.Provider>
       </div>
       <CallToAction />
       <RelatedPosts posts={relatedPosts ?? []} sliderTheme={theme} />
-      <BaodaozaiQAModal
-        questions={QUESTIONS}
-        onClose={() => {
-          setIsQAModalOpen(false)
-        }}
-        onSubmit={handleQAModalSubmit}
-        isOpen={isQAModalOpen}
-      />
+      {postQuestions && (
+        <BaodaozaiQAModal
+          questions={postQuestions}
+          onClose={handleQAModalClose}
+          onSubmit={handleQAModalSubmit}
+          isOpen={isQAModalOpen}
+        />
+      )}
     </>
   )
 }

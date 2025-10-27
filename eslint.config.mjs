@@ -1,5 +1,6 @@
-import baseConfig from './eslint.base.config.mjs'
 import globals from 'globals'
+
+import baseConfig from './eslint.base.config.mjs'
 
 export default [
   ...baseConfig,

@@ -7,6 +7,7 @@ help:
 postinstall: build-deps
 	@yarn patch-package;
 	@yarn keystone postinstall --fix;
+	@yarn patch-package;
 
 build-deps:
 	@if [ "$(SKIP_BUILD_DEPS)" = "true" ]; then \

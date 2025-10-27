@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import { useEffect } from 'react'
 
 import Button from '../../components/button'
@@ -95,7 +94,7 @@ function Menu({
           <div className="px-6 tablet:px-8 py-4 mt-4 hidden items-center justify-between tablet:flex">
             <div className="flex items-center">
               <a href="/">
-                <Image
+                <img
                   src="/assets/images/brand-icon.svg"
                   alt="少年報導者 The Reporter for Kids"
                   className="h-5"

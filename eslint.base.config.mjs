@@ -7,6 +7,7 @@ import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import globals from 'globals'
+
 import prettierOptions from './prettier.config.mjs'
 
 // Browser globals (includes all standard browser APIs)
@@ -156,6 +157,9 @@ export const configFileConfig = {
   plugins: {
     '@typescript-eslint': typescript,
     prettier,
+    'simple-import-sort': simpleImportSort,
+    react,
+    'react-hooks': reactHooks,
   },
   rules: {
     ...typescript.configs.recommended.rules,

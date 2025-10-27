@@ -135,7 +135,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
   const renderModalContent = useMemo(() => {
     if (isLeaving) {
       return (
-        <div className="mb-4 flex w-full flex-col items-start p-6 tablet:mb-0">
+        <div className="mb-5 flex w-full flex-col items-start p-6 tablet:mb-0">
           <h2 className="prose-h6-large mb-3 text-neutral-900">
             確定要放棄作答嗎？
           </h2>
@@ -435,10 +435,10 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
 
   return (
     <div className="scrollbar-thin fixed inset-0 z-1002 flex items-end justify-center tablet:items-center">
-      <div className="absolute inset-0 z-0 bg-neutral-600/50" />
+      <div className="absolute inset-0 z-0 bg-neutral-black/20" />
       <div
         className={cn(
-          'relative z-1 flex h-[calc(100vh-156px)] w-full flex-col rounded-t-[30px] shadow-[0px_2px_16px_0px_rgba(0,0,0,0.15)] tablet:h-144 tablet:w-120 tablet:rounded-[30px]',
+          'relative z-1 flex h-[calc(100vh-80px)] w-full flex-col rounded-t-[30px] shadow-[0px_2px_16px_0px_rgba(0,0,0,0.15)] tablet:h-144 tablet:w-120 tablet:rounded-[30px]',
           isLeaving && 'h-auto tablet:h-auto'
         )}
       >
@@ -478,11 +478,11 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
           </div>
           <div
             className={cn(
-              'flex w-full flex-col justify-end px-6 pb-6',
-              (isLeaving ||
-                currentModalStep?.type === 'choice-result' ||
+              'flex w-full flex-col justify-end px-6 pt-5 pb-6 tablet:pt-6',
+              (currentModalStep?.type === 'choice-result' ||
                 currentModalStep?.type === 'essay-result') &&
-                'bg-neutral-100'
+                'bg-neutral-100',
+              isLeaving && 'pt-0 tablet:pt-0'
             )}
           >
             {renderModalButtons}

@@ -1,6 +1,6 @@
 import baseConfig, {
-  typescriptConfig,
   nodeConfig,
+  typescriptConfig,
 } from '../../eslint.base.config.mjs'
 
 export default [
