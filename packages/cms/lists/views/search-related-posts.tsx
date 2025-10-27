@@ -73,11 +73,21 @@ export const Field = ({ field, value }: FieldProps<typeof controller>) => {
         )
         ?.map((item: any) => {
           const metaTag = item?.pagemap?.metatags?.[0]
+          const publishedDate = new Date(
+            item?.snippet
+              ?.split('...')?.[0]
+              .trim()
+              .replace('年', '-')
+              .replace('月', '-')
+              .replace('日', '')
+          ).toISOString()
+
           return {
             src: item.link,
             ogImgSrc: metaTag['og:image'],
             ogTitle: metaTag['og:title'],
             ogDescription: metaTag['og:description'],
+            publishedDate,
           }
         })
     } catch (e) {

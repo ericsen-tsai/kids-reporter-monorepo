@@ -141,6 +141,7 @@ const getPostContents = (post: any) => {
         src: string
         ogImgSrc: string
         ogDescription: string
+        publishedDate: string
       }) => ({
         title: twReporterPost.ogTitle,
         url: twReporterPost.src,
@@ -148,7 +149,7 @@ const getPostContents = (post: any) => {
         desc: twReporterPost.ogDescription,
         category: '',
         subSubcategory: '',
-        publishedDate: '',
+        publishedDate: twReporterPost.publishedDate,
         theme: DEFAULT_THEME_COLOR,
       })
     ) ?? []

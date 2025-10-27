@@ -95,13 +95,15 @@ export const Field = ({
         postJSON.src &&
         postJSON.ogImgSrc &&
         postJSON.ogTitle &&
-        postJSON.ogDescription
+        postJSON.ogDescription &&
+        postJSON.publishedDate
       ) {
         const post = {
           src: postJSON.src,
           ogImgSrc: postJSON.ogImgSrc,
           ogTitle: postJSON.ogTitle,
           ogDescription: postJSON.ogDescription,
+          publishedDate: postJSON.publishedDate,
         }
         const newRelatedPosts = [...relatedPosts, post]
         setRelatedPosts(newRelatedPosts)

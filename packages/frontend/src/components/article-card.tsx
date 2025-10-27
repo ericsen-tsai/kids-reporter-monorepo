@@ -18,6 +18,8 @@ type ArticleCardProp = {
 }
 
 function ArticleCard({ article, showOverImageCover = false }: ArticleCardProp) {
+  const hasCategoryOrSubcategory = article.subSubcategory ?? article.category
+
   return (
     <Link href={article.url} className="group block">
       <div className="flex gap-4">
@@ -41,9 +43,11 @@ function ArticleCard({ article, showOverImageCover = false }: ArticleCardProp) {
 
         <div className="flex min-w-0 flex-1 flex-col gap-2">
           <div className="flex items-center justify-between gap-4">
-            <span className="prose-p3-bold inline-flex items-center rounded-full bg-neutral-200 px-3 py-1 text-neutral-900">
-              {article.subSubcategory ?? article.category}
-            </span>
+            {hasCategoryOrSubcategory && (
+              <span className="prose-p3-bold inline-flex items-center rounded-full bg-neutral-200 px-3 py-1 text-neutral-900">
+                {article.subSubcategory ?? article.category}
+              </span>
+            )}
 
             <span className="prose-p2 text-neutral-500">
               {getFormattedDate(article.publishedDate)}
