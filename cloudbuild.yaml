@@ -26,6 +26,7 @@ steps:
       - '-c'
       - >
         cp yarn.lock packages/$_TARGET_PACKAGE
+        cp .yarnrc.yml packages/$_TARGET_PACKAGE
 
         cd packages/$_TARGET_PACKAGE
 
