@@ -1,9 +1,11 @@
+import { GetPostQuery } from '__generated__/operations/post.generated'
 import Link from 'next/link'
 
-export type Tag = {
-  name: string
-  slug: string
-}
+import { RecursiveNonNullable } from '@/types/utils'
+
+export type Tag = RecursiveNonNullable<
+  GetPostQuery['post']
+>['tagsOrdered'][number]
 
 type TagsProp = {
   title?: string

@@ -27,6 +27,10 @@ steps:
       - >
         cp yarn.lock packages/$_TARGET_PACKAGE
 
+        if [[ "$_TARGET_PACKAGE" == "frontend" ]]; then
+          cp packages/cms/schema.graphql packages/frontend/schema.graphql
+        fi
+
         cd packages/$_TARGET_PACKAGE
 
         echo "copy $_ENV_FILE to .env.local"

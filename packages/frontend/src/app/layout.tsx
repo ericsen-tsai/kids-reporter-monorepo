@@ -1,7 +1,10 @@
 import '../globals.css'
 
 import { Footer, HeaderProvider } from '@kids-reporter/routing-ui'
+import { GoogleTagManager } from '@next/third-parties/google'
+import { Noto_Sans_TC } from 'next/font/google'
 
+import StyledComponentsRegistry from '@/components/registry'
 import {
   ADDITIONAL_MENU_ITEMS,
   DONATE_URL,
@@ -9,10 +12,6 @@ import {
   PRIVACY_POLICY,
   SOCIAL_MEDIA_ITEMS,
 } from '@/constants'
-import StyledComponentsRegistry from '@/components/registry'
-import '../globals.css'
-import { GoogleTagManager } from '@next/third-parties/google'
-import { Noto_Sans_TC } from 'next/font/google'
 
 const GTM_ID = 'GTM-T37WZJ44'
 

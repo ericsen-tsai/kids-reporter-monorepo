@@ -1,0 +1,20 @@
+schema: packages/cms/schema.graphql
+documents:
+  - packages/frontend/src/**/*.{ts,tsx,js,jsx}
+  - packages/cms/**/*.{ts,tsx,js,jsx}
+  - '**/*.graphql'
+  - '**/*.gql'
+extensions:
+  languageServer:
+    enable: true
+  customScalars:
+    DateTime: string
+    JSON: any
+    PasswordState: string
+  pluckConfig:
+    globalGqlIdentifierName: gql
+    modules:
+      - name: graphql-tag
+        identifier: gql
+      - name: '@keystone-6/core/admin-ui/apollo'
+        identifier: gql

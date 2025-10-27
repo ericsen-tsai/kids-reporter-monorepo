@@ -1,9 +1,11 @@
 'use client'
 
+import { GetPostQuery } from '__generated__/operations/post.generated'
 import { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { Color } from '@/constants'
+import { RecursiveNonNullable } from '@/types/utils'
 import { mediaQuery } from '@/utils/media-query'
 
 const Title = styled.h3`
@@ -87,30 +89,23 @@ const IframeContainer = styled.div`
 
 type NewsReadingProps = {
   className?: string
-  data: {
-    items: {
-      name: string
-      embedCode: string
-    }[]
-  }
+  items: RecursiveNonNullable<GetPostQuery['post']>['newsReadingGroup']['items']
 }
 
-const NewsReading = ({ className, data }: NewsReadingProps) => {
-  const items = data?.items || []
-
+const NewsReading = ({ className, items }: NewsReadingProps) => {
   const options = useMemo(
     () =>
-      items.map((r) => {
+      items.map((item) => {
         return {
-          name: r?.name,
-          value: r?.name,
+          name: item?.name ?? '',
+          value: item?.name ?? '',
         }
       }),
     [items]
   )
 
   const [selectedOption, setSelectedOption] = useState(options[0])
-  const selectedReading = items?.find((r) => r?.name === selectedOption?.value)
+  const selectedReading = items.find((r) => r?.name === selectedOption?.value)
 
   if (items.length === 0) {
     return null

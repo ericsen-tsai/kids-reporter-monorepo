@@ -56,3 +56,6 @@ packages/**/dist
 
 # vscode
 .vscode
+
+# generated files
+packages/**/__generated__

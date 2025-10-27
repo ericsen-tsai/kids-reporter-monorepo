@@ -293,3 +293,69 @@ export const SOCIAL_MEDIA_ITEMS = [
     href: 'https://kids-storage.twreporter.org/rss/rss.xml',
   },
 ]
+
+export const SECTIONS = [
+  {
+    title: '時時刻刻',
+    image: 'topic_pic1.svg',
+    titleImg: 'topic_title1.svg',
+    link: '/category/news/times/',
+    theme: Theme.BLUE,
+  },
+  {
+    title: '真的假的',
+    image: 'topic_pic2.svg',
+    titleImg: 'topic_title2.svg',
+    link: '/category/news/knowledge/',
+    theme: Theme.BLUE,
+  },
+  {
+    title: '讀報新聞',
+    image: 'topic_pic3.svg',
+    titleImg: 'topic_title3.svg',
+    link: '/category/listening-news/',
+    theme: Theme.BLUE,
+  },
+  {
+    title: '他們的故事',
+    image: 'topic_pic4.svg',
+    titleImg: 'topic_title4.svg',
+    link: '/category/news/story/',
+    theme: Theme.RED,
+  },
+  {
+    title: '文化看世界',
+    image: 'topic_pic5.svg',
+    titleImg: 'topic_title5.svg',
+    link: '/category/news/explore/',
+    theme: Theme.RED,
+  },
+  {
+    title: '小讀者連線',
+    image: 'topic_pic7.svg',
+    titleImg: 'topic_title7.svg',
+    link: '/category/campus/joining/',
+    theme: Theme.YELLOW,
+  },
+  {
+    title: '圖解新聞',
+    image: 'topic_pic8.svg',
+    titleImg: 'topic_title8.svg',
+    link: '/category/comics/graphic-news/',
+    theme: Theme.YELLOW,
+  },
+  {
+    title: '上課好好玩',
+    image: 'topic_pic10.svg',
+    titleImg: 'topic_title10.svg',
+    link: '/category/campus/teaching/',
+    theme: Theme.YELLOW,
+  },
+  {
+    title: '火線新聞台',
+    image: 'topic_pic9.svg',
+    titleImg: 'topic_title9.svg',
+    link: '/category/comics/comic/',
+    theme: Theme.YELLOW,
+  },
+]
