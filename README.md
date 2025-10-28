@@ -21,7 +21,14 @@ Before modifying sub-packages' source codes, make sure you install dependencies 
 We need `husky` and `lint-staged` installed first.
 
 ### Installation
-`yarn install`
+- Corepack (Yarn v4): ensure Node 20 and run `corepack enable` once on your machine.
+- Install deps: `yarn install` (Berry config enforces immutable installs by default).
+- CI/Docker: use `yarn install --immutable` to prevent lockfile drift.
+
+### Yarn v4 (Berry) Notes
+- This repo uses Yarn v4 with node_modules (`.yarnrc.yml` sets `nodeLinker: node-modules`).
+- Yarn is pinned via `packageManager` in `package.json` and resolved by Corepack.
+- Subpackage Docker builds copy `.yarnrc.yml` and enable Corepack in the image.
 
 ### 如何在 workspaces 中新增 subpkg？
 新增 subpkg 的 convention 是在 `${root}/packages/` 底下新增資料夾和檔案，

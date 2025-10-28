@@ -17,9 +17,10 @@
   "dependencies": {
     "@googleapis/customsearch": "^1.0.4",
     "@kids-reporter/draft-renderer": "^1.0.13",
-    "@next/third-parties": "^14.1.1",
     "@kids-reporter/routing-ui": "0.1.0-alpha.2",
+    "@next/third-parties": "^14.1.1",
     "@radix-ui/react-slot": "^1.2.3",
+    "@rive-app/react-webgl2": "^4.23.4",
     "@tailwindcss/postcss": "^4.1.14",
     "@twreporter/errors": "^1.1.2",
     "@types/draft-js": "^0.11.10",
@@ -33,6 +34,7 @@
     "clsx": "^2.1.1",
     "draft-js": "^0.11.7",
     "encoding": "^0.1.13",
+    "graphql-tag": "^2.12.6",
     "lodash": "^4.17.21",
     "next": "^14.2.33",
     "react": "18.3.1",
@@ -44,24 +46,23 @@
     "swiper": "^10.1.0",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.14",
-    "typescript": "5.9.2",
-    "@rive-app/react-webgl2": "^4.23.4",
-    "graphql-tag": "^2.12.6"
+    "typescript": "5.9.2"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^14.2.33",
-    "@next/eslint-plugin-next": "^14.2.33",
-    "@types/lodash": "^4.17.7",
-    "postcss": "^8.4.38",
-    "prettier": "^3.6.2",
-    "prettier-plugin-tailwindcss": "^0.6.14",
     "@graphql-codegen/cli": "^6.0.0",
     "@graphql-codegen/near-operation-file-preset": "^3.1.0",
     "@graphql-codegen/typescript": "^5.0.2",
     "@graphql-codegen/typescript-operations": "^5.0.2",
+    "@next/bundle-analyzer": "^14.2.33",
+    "@next/eslint-plugin-next": "^14.2.33",
     "@parcel/watcher": "^2.5.1",
+    "@types/lodash": "^4.17.7",
+    "@types/react": "^18.3.7",
     "concurrently": "^9.1.2",
+    "graphql": "^16.8.1",
     "onchange": "^7.1.0",
-    "graphql": "^16.8.1"
+    "postcss": "^8.4.38",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.14"
   }
 }

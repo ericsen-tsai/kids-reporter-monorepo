@@ -6,7 +6,7 @@ help:
 
 build-lib:
 	@echo "$(P) Transpile es6, typescript, jsx and tsx to es5"
-	NODE_ENV=production yarn babel src --out-dir lib --extensions '.ts,.tsx,.js,.jsx' --copy-files --root-mode upward
+	NODE_ENV=production yarn exec babel src --out-dir lib --extensions '.ts,.tsx,.js,.jsx' --copy-files --root-mode upward
 
 build: clean build-lib
 
