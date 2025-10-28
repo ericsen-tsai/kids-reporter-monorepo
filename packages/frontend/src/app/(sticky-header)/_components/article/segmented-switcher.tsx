@@ -27,8 +27,9 @@ function SegmentedSwitcher({
         onClick={() => handleSegmentClick('kids')}
         className={cn(
           'flex min-w-40 flex-1 cursor-pointer items-center justify-center gap-2 rounded-[20px] px-4 py-[5px] transition-all duration-200',
-          selectedSegment === 'kids' && 'bg-neutral-white shadow-sm',
-          selectedSegment !== 'kids' && 'bg-transparent hover:bg-neutral-200'
+          selectedSegment === 'kids' &&
+            'bg-neutral-white shadow-sm hover:bg-neutral-200',
+          selectedSegment !== 'kids' && 'bg-transparent'
         )}
       >
         <KidsReporterIcon />

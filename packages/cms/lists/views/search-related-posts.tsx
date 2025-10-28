@@ -73,6 +73,7 @@ export const Field = ({ field, value }: FieldProps<typeof controller>) => {
         )
         ?.map((item: any) => {
           const metaTag = item?.pagemap?.metatags?.[0]
+          // TODO: use published date from meta tag
           const publishedDate = new Date(
             item?.snippet
               ?.split('...')?.[0]
