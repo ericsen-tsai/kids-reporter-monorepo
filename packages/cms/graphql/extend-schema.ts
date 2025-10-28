@@ -180,7 +180,58 @@ export const extendGraphqlSchema = graphql.extend(() => {
         },
       }),
     },
-    query: {},
+    query: {
+      searchTWReporterPosts: graphql.field({
+        type: graphql.list(graphql.JSON),
+        args: {
+          keywords: graphql.arg({ type: graphql.nonNull(graphql.String) }),
+        },
+        async resolve(root, args) {
+          const { keywords } = args as { keywords: string }
+
+          if (!keywords || !envVar.searchAPIKey || !envVar.twreporterID) {
+            return []
+          }
+
+          const customSearchURL = `https://www.googleapis.com/customsearch/v1?key=${envVar.searchAPIKey}&cx=${envVar.twreporterID}`
+
+          try {
+            const response = await axios.get(`${customSearchURL}&q=${keywords}`)
+            const posts = response?.data?.items
+              ?.filter(
+                (item: any) =>
+                  item?.link?.match('^https://www.twreporter.org/') &&
+                  (item?.pagemap?.metatags?.[0]['og:type'] === 'article' ||
+                    item?.link?.includes('/topics/'))
+              )
+              ?.map((item: any) => {
+                const metaTag = item?.pagemap?.metatags?.[0]
+                const publishedDate = new Date(
+                  item?.snippet
+                    ?.split('...')?.[0]
+                    .trim()
+                    .replace('年', '-')
+                    .replace('月', '-')
+                    .replace('日', '')
+                ).toISOString()
+
+                return {
+                  src: item.link,
+                  ogImgSrc: metaTag['og:image'],
+                  ogTitle: metaTag['og:title'],
+                  ogDescription: metaTag['og:description'],
+                  publishedDate,
+                }
+              })
+
+            return posts || []
+          } catch (e) {
+            console.log('Fetch posts failed!', e)
+            return []
+          }
+        },
+      }),
+    },
     type: {},
   }
 })
