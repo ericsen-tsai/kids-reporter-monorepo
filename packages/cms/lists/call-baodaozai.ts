@@ -1,10 +1,5 @@
 import { list } from '@keystone-6/core'
-import { timestamp } from '@keystone-6/core/fields'
-import type { ListConfig } from '@keystone-6/core/types'
-import {
-  customFields,
-  richTextEditorButtonNames,
-} from '@kids-reporter/cms-core'
+import { text, timestamp } from '@keystone-6/core/fields'
 
 import {
   allowAllRoles,
@@ -12,56 +7,56 @@ import {
   RoleEnum,
 } from './utils/access-control-list'
 
-const genRichTextEditorConfig = (label: string) => {
-  return customFields.richTextEditor({
-    label: label,
-    disabledButtons: [
-      richTextEditorButtonNames.blockquote,
-      richTextEditorButtonNames.code,
-      richTextEditorButtonNames.codeBlock,
-      richTextEditorButtonNames.embed,
-      richTextEditorButtonNames.h2,
-      richTextEditorButtonNames.h3,
-      richTextEditorButtonNames.h4,
-      richTextEditorButtonNames.h5,
-      richTextEditorButtonNames.image,
-      richTextEditorButtonNames.imageLink,
-      richTextEditorButtonNames.infoBox,
-      richTextEditorButtonNames.slideshow,
-      richTextEditorButtonNames.newsReading,
-      richTextEditorButtonNames.divider,
-      richTextEditorButtonNames.tocAnchor,
-      richTextEditorButtonNames.anchor,
-      richTextEditorButtonNames.annotation,
-      richTextEditorButtonNames.backgroundColor,
-      richTextEditorButtonNames.fontColor,
-      richTextEditorButtonNames.ul,
-      richTextEditorButtonNames.ol,
-    ],
-    ui: {
-      listView: {
-        fieldMode: 'hidden',
-      },
-    },
-  })
-}
-
-const listConfigurations: ListConfig<any> = list({
+export default list({
   fields: {
-    home: genRichTextEditorConfig('首頁'),
-    topics: genRichTextEditorConfig('專題集合頁'),
-    topic: genRichTextEditorConfig('專題頁'),
-    news: genRichTextEditorConfig('新聞集合頁'),
-    comics: genRichTextEditorConfig('漫畫集合頁'),
-    lessons: genRichTextEditorConfig('教案集合頁'),
-    podcasts: genRichTextEditorConfig('podcast集合頁'),
-    aboutUs: genRichTextEditorConfig('關於我們'),
+    home: text({
+      label: '首頁',
+      validation: { isRequired: true },
+    }),
+    topics: text({
+      label: '專題集合頁',
+      validation: { isRequired: true },
+    }),
+    topic: text({
+      label: '專題頁',
+      validation: { isRequired: true },
+    }),
+    news: text({
+      label: '新聞集合頁',
+      validation: { isRequired: true },
+    }),
+    comics: text({
+      label: '漫畫集合頁',
+      validation: { isRequired: true },
+    }),
+    lessons: text({
+      label: '教案集合頁',
+      validation: { isRequired: true },
+    }),
+    podcasts: text({
+      label: 'podcast集合頁',
+      validation: { isRequired: true },
+    }),
+    aboutUs: text({
+      label: '關於我們',
+      validation: { isRequired: true },
+    }),
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'read' },
+        listView: { fieldMode: 'read' },
+      },
     }),
     updatedAt: timestamp({
       db: {
         updatedAt: true,
+      },
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'read' },
+        listView: { fieldMode: 'read' },
       },
     }),
   },
@@ -78,9 +73,16 @@ const listConfigurations: ListConfig<any> = list({
     singular: 'Call Baodaozai',
     plural: 'Call Baodaozai',
     listView: {
-      initialColumns: ['nameTC', 'name'],
+      initialColumns: [
+        'home',
+        'topics',
+        'topic',
+        'news',
+        'comics',
+        'lessons',
+        'podcasts',
+        'aboutUs',
+      ],
     },
   },
 })
-
-export default listConfigurations

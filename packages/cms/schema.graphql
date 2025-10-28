@@ -1563,14 +1563,14 @@ input SVGCreateInput {
 
 type CallBaodaozai {
   id: ID!
-  home: JSON
-  topics: JSON
-  topic: JSON
-  news: JSON
-  comics: JSON
-  lessons: JSON
-  podcasts: JSON
-  aboutUs: JSON
+  home: String
+  topics: String
+  topic: String
+  news: String
+  comics: String
+  lessons: String
+  podcasts: String
+  aboutUs: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1584,25 +1584,41 @@ input CallBaodaozaiWhereInput {
   OR: [CallBaodaozaiWhereInput!]
   NOT: [CallBaodaozaiWhereInput!]
   id: IDFilter
+  home: StringFilter
+  topics: StringFilter
+  topic: StringFilter
+  news: StringFilter
+  comics: StringFilter
+  lessons: StringFilter
+  podcasts: StringFilter
+  aboutUs: StringFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
 
 input CallBaodaozaiOrderByInput {
   id: OrderDirection
+  home: OrderDirection
+  topics: OrderDirection
+  topic: OrderDirection
+  news: OrderDirection
+  comics: OrderDirection
+  lessons: OrderDirection
+  podcasts: OrderDirection
+  aboutUs: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
 
 input CallBaodaozaiUpdateInput {
-  home: JSON
-  topics: JSON
-  topic: JSON
-  news: JSON
-  comics: JSON
-  lessons: JSON
-  podcasts: JSON
-  aboutUs: JSON
+  home: String
+  topics: String
+  topic: String
+  news: String
+  comics: String
+  lessons: String
+  podcasts: String
+  aboutUs: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1613,14 +1629,14 @@ input CallBaodaozaiUpdateArgs {
 }
 
 input CallBaodaozaiCreateInput {
-  home: JSON
-  topics: JSON
-  topic: JSON
-  news: JSON
-  comics: JSON
-  lessons: JSON
-  podcasts: JSON
-  aboutUs: JSON
+  home: String
+  topics: String
+  topic: String
+  news: String
+  comics: String
+  lessons: String
+  podcasts: String
+  aboutUs: String
   createdAt: DateTime
   updatedAt: DateTime
 }
