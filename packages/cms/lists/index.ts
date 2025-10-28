@@ -8,7 +8,10 @@ import OnlineUser from './online-user'
 import PDF from './pdf'
 import Photo from './photo'
 import Post from './post'
+import PostChoiceAnswer from './post-choice-answer'
 import PostChoiceQuestion from './post-choice-question'
+import PostEssayAnswer from './post-essay-answer'
+import PostEssayAnswerLike from './post-essay-answer-like'
 import PostEssayQuestion from './post-essay-question'
 import Project from './project'
 import ProjectCategory from './project-category'
@@ -37,6 +40,9 @@ export const listDefinition = {
   CallBaodaozai,
   OnlineUser,
   Member,
+  PostChoiceAnswer,
   PostChoiceQuestion,
+  PostEssayAnswer,
   PostEssayQuestion,
+  PostEssayAnswerLike,
 }

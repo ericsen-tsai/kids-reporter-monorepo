@@ -1,26 +1,8 @@
+import { RoleEnum } from '../../constants/index'
 import envVars from '../../environment-variables'
+import type { Session } from '../../types/index'
 
-type Session = {
-  data: {
-    name: string
-    email: string
-    role: string
-    twoFactorAuthBypass: boolean
-  }
-}
-
-export const RoleEnum = {
-  Owner: 'owner',
-  Admin: 'admin',
-  Developer: 'developer',
-  Editor: 'editor',
-  Contributor: 'contributor',
-  Preview: 'preview',
-  FrontendHeadlessAccount: 'frontend_headless_account',
-  PreviewHeadlessAccount: 'preview_headless_account',
-  CronjobHeadlessAccount: 'cronjob_headless_account',
-  Member: 'member',
-}
+export { RoleEnum }
 
 export const allowRoles = (roles: string[]) => {
   return ({ session }: { session?: Session }) => {
@@ -36,7 +18,12 @@ export const allowRoles = (roles: string[]) => {
       return false
     }
 
-    return roles.indexOf(session?.data.role) > -1
+    const role = session?.data?.role
+    if (role) {
+      return roles.indexOf(role) > -1
+    }
+
+    return false
   }
 }
 
@@ -66,6 +53,11 @@ export const denyRoles = (roles: string[]) => {
       return false
     }
 
-    return roles.indexOf(session?.data.role) === -1
+    const role = session?.data?.role
+    if (role) {
+      return roles.indexOf(role) > -1
+    }
+
+    return false
   }
 }
