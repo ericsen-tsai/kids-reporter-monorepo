@@ -1,5 +1,6 @@
 import { graphql, group, list } from '@keystone-6/core'
 import {
+  checkbox,
   json,
   relationship,
   select,
@@ -300,7 +301,7 @@ const listConfigurations: ListConfig<any> = list({
       ui: {
         views: './lists/views/essay-questions',
         createView: { fieldMode: 'hidden' },
-        itemView: { fieldMode: 'edit' },
+        itemView: { fieldMode: 'hidden' },
         listView: { fieldMode: 'hidden' },
       },
     }),
@@ -349,6 +350,10 @@ const listConfigurations: ListConfig<any> = list({
         },
         inlineConnect: true,
       },
+    }),
+    showBaodaozai: checkbox({
+      label: '是否顯示報導仔？',
+      defaultValue: false,
     }),
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
