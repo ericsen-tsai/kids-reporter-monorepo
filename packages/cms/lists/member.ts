@@ -1,5 +1,11 @@
 import { graphql, list } from '@keystone-6/core'
-import { text, timestamp, virtual } from '@keystone-6/core/fields'
+import {
+  checkbox,
+  integer,
+  text,
+  timestamp,
+  virtual,
+} from '@keystone-6/core/fields'
 
 import type { ListType } from '../types/keystone-list-types'
 import {
@@ -77,6 +83,14 @@ export default list<ListType<'Member'>>({
           fieldMode: 'hidden',
         },
       },
+    }),
+    showBaodaozai: checkbox({
+      label: '是否顯示報導仔',
+      defaultValue: true,
+    }),
+    essayQuestionCount: integer({
+      label: '思辨題數量',
+      defaultValue: 3,
     }),
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
