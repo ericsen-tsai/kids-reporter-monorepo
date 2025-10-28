@@ -1,3 +1,4 @@
+import type { Session } from '../../types/index'
 import { allowRoles, RoleEnum } from './access-control-list'
 
 // Common operation access for member-owned resources
@@ -11,12 +12,15 @@ export const memberOwnedOperationAccess = allowRoles([
 // otherwise → filter by relationKey.id equals member id
 export const makeMemberOwnedFilter =
   (relationKey: 'self' | string) =>
-  ({ session }: { session?: any }) => {
+  ({ session }: { session?: Session }) => {
     const role = session?.data?.role
     if (role === RoleEnum.Admin) {
       return true
     }
-    const memberID = session?.data?.member?.id
+    const memberID =
+      session?.data && 'memberId' in session.data
+        ? session.data.memberId
+        : undefined
     if (!memberID) {
       return false
     }
