@@ -412,7 +412,7 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
         </ArticleContext.Provider>
       </div>
 
-      <div className="relative w-full">
+      <div className="relative w-screen">
         {/* related posts enter 50% of the viewport*/}
         <div className="absolute top-[calc(50%+50vh)]">
           <BaodaozaiEventTrigger
