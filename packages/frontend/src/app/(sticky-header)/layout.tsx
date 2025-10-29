@@ -22,7 +22,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           subscribeUrl={SUBSCRIBE_URL}
           donateUrl={DONATE_URL}
         />
-        <div className="flex grow">{children}</div>
+        <div className="flex w-full grow">{children}</div>
         <Baodaozai />
       </CallBaodaozaiProvider>
     </>
