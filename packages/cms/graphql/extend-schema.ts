@@ -1,5 +1,7 @@
 import { graphql } from '@keystone-6/core'
-import axios from 'axios'
+// @ts-ignore `@twreporter/errors` does not have tyepscript definition file yet
+import _errors from '@twreporter/errors'
+import axios, { AxiosError } from 'axios'
 import { convertFromRaw } from 'draft-js'
 import { GraphQLError } from 'graphql'
 
@@ -77,10 +79,10 @@ export const extendGraphqlSchema = graphql.extend(() => {
               JSON.stringify({
                 severity: 'INFO',
                 message: 'generatePostQuestions response',
-                data: res.data,
                 context: {
                   function: 'generatePostQuestions',
                   postId,
+                  data: res.data,
                 },
               })
             )
@@ -163,36 +165,30 @@ export const extendGraphqlSchema = graphql.extend(() => {
             }
 
             return true
-          } catch (_err: any) {
+          } catch (_err) {
             const err = _err instanceof Error ? _err : new Error(String(_err))
+            let errorMessage =
+              err.stack || err.message || 'generatePostQuestions failed'
+
+            if (_err instanceof AxiosError) {
+              const annotatedErr = _errors.helpers.annotateAxiosError(_err)
+              errorMessage = _errors.helpers.printAll(annotatedErr, {
+                withStack: true,
+                withPayload: true,
+              })
+            }
+
             // GCP structured logging
             console.log(
               JSON.stringify({
                 severity: 'ERROR',
-                message:
-                  err.stack || err.message || 'generatePostQuestions failed',
+                message: errorMessage,
                 context: {
                   function: 'generatePostQuestions',
                   postId,
                 },
               })
             )
-
-            // Check if it's an axios error for better error handling
-            if (axios.isAxiosError(_err)) {
-              const statusCode = _err.response?.status || 500
-              throw new GraphQLError(
-                `Failed to generate post questions: ${_err.message}`,
-                {
-                  extensions: {
-                    code: 'EXTERNAL_SERVICE_ERROR',
-                    http: {
-                      status: statusCode >= 400 && statusCode < 500 ? 400 : 500,
-                    },
-                  },
-                }
-              )
-            }
 
             throw new GraphQLError(
               'Internal server error while generating post questions',
@@ -237,7 +233,7 @@ export const extendGraphqlSchema = graphql.extend(() => {
 
             console.log(
               JSON.stringify({
-                severity: 'ERROR',
+                severity: 'WARNING',
                 message: errorMessage,
                 context: {
                   function: 'searchTWReporterPosts',
@@ -296,44 +292,35 @@ export const extendGraphqlSchema = graphql.extend(() => {
               JSON.stringify({
                 severity: 'INFO',
                 message: 'searchTWReporterPosts response',
-                data: response.data,
                 context: {
                   function: 'searchTWReporterPosts',
                   keywords,
+                  data: response.data,
                 },
               })
             )
 
             return posts || []
           } catch (_err) {
-            const err = _err instanceof Error ? _err : new Error(String(_err))
+            let errorMessage = 'searchTWReporterPosts failed'
+            if (_err instanceof AxiosError) {
+              const annotatedErr = _errors.helpers.annotateAxiosError(_err)
+              errorMessage = _errors.helpers.printAll(annotatedErr, {
+                withStack: true,
+                withPayload: true,
+              })
+            }
+
             console.log(
               JSON.stringify({
                 severity: 'ERROR',
-                message:
-                  err.stack || err.message || 'searchTWReporterPosts failed',
+                message: errorMessage,
                 context: {
                   function: 'searchTWReporterPosts',
                   keywords,
                 },
               })
             )
-
-            // Check if it's an axios error for better error handling
-            if (axios.isAxiosError(_err)) {
-              const statusCode = _err.response?.status || 500
-              throw new GraphQLError(
-                `Failed to search TW Reporter posts: ${_err.message}`,
-                {
-                  extensions: {
-                    code: 'EXTERNAL_SERVICE_ERROR',
-                    http: {
-                      status: statusCode >= 400 && statusCode < 500 ? 400 : 500,
-                    },
-                  },
-                }
-              )
-            }
 
             throw new GraphQLError(
               'Internal server error while searching TW Reporter posts',
