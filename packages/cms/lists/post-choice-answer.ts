@@ -1,16 +1,17 @@
 import { list } from '@keystone-6/core'
 import {
+  checkbox,
   integer,
   relationship,
   text,
   timestamp,
-  checkbox,
 } from '@keystone-6/core/fields'
-import {
-  memberOwnedOperationAccess,
-  makeMemberOwnedFilter,
-} from './utils/member-owned-access'
+
 import type { ListType } from '../types/keystone-list-types'
+import {
+  makeMemberOwnedFilter,
+  memberOwnedOperationAccess,
+} from './utils/member-owned-access'
 
 const memberFieldName = 'member'
 

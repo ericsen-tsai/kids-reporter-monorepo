@@ -35,6 +35,7 @@ const commonRules = {
   'react/prop-types': 'off',
   'simple-import-sort/imports': 'error',
   'simple-import-sort/exports': 'error',
+  'no-duplicate-imports': 'error',
 }
 
 // TypeScript rules

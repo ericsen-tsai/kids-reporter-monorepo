@@ -1,11 +1,12 @@
-import { list, graphql } from '@keystone-6/core'
+import { graphql, list } from '@keystone-6/core'
 import { relationship, text, timestamp, virtual } from '@keystone-6/core/fields'
+
+import type { ListType } from '../types/keystone-list-types'
 import { allowRoles, RoleEnum } from './utils/access-control-list'
 import {
-  memberOwnedOperationAccess,
   makeMemberOwnedFilter,
+  memberOwnedOperationAccess,
 } from './utils/member-owned-access'
-import type { ListType } from '../types/keystone-list-types'
 
 const memberFieldName = 'member'
 

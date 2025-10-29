@@ -6,8 +6,7 @@ import {
   timestamp,
   virtual,
 } from '@keystone-6/core/fields'
-import type { ListConfig } from '@keystone-6/core/types'
-import { KeystoneContext } from '@keystone-6/core/types'
+import type { KeystoneContext, ListConfig } from '@keystone-6/core/types'
 import {
   customFields,
   richTextEditorButtonNames,
