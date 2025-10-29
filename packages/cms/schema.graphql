@@ -193,7 +193,6 @@ type Post {
   relatedPostsCount(where: PostWhereInput! = {}): Int
   relatedPostsOrderJson: JSON
   relatedPostsOrdered(take: Int! = 12, skip: Int! = 0): [Post!]
-  searchTWReporterRelatedPosts: JSON
   TWReporterRelatedPostsJSON: JSON
   ogTitle: String
   ogDescription: String
@@ -2328,6 +2327,7 @@ type Query {
   postEssayAnswerLikesCount(where: PostEssayAnswerLikeWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
+  searchTWReporterPosts(keywords: String!): [JSON]
 }
 
 union AuthenticatedItem = User

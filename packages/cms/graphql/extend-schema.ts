@@ -1,7 +1,11 @@
 import { graphql } from '@keystone-6/core'
-import axios from 'axios'
+// @ts-ignore `@twreporter/errors` does not have tyepscript definition file yet
+import _errors from '@twreporter/errors'
+import axios, { AxiosError } from 'axios'
 import { convertFromRaw } from 'draft-js'
+import { GraphQLError } from 'graphql'
 
+import { RoleEnum } from '../constants/role-enum'
 import envVar from '../environment-variables'
 import type { Context } from '../types/index'
 
@@ -75,10 +79,10 @@ export const extendGraphqlSchema = graphql.extend(() => {
               JSON.stringify({
                 severity: 'INFO',
                 message: 'generatePostQuestions response',
-                data: res.data,
                 context: {
                   function: 'generatePostQuestions',
                   postId,
+                  data: res.data,
                 },
               })
             )
@@ -161,26 +165,178 @@ export const extendGraphqlSchema = graphql.extend(() => {
             }
 
             return true
-          } catch (_err: any) {
+          } catch (_err) {
             const err = _err instanceof Error ? _err : new Error(String(_err))
+            let errorMessage =
+              err.stack || err.message || 'generatePostQuestions failed'
+
+            if (_err instanceof AxiosError) {
+              const annotatedErr = _errors.helpers.annotateAxiosError(_err)
+              errorMessage = _errors.helpers.printAll(annotatedErr, {
+                withStack: true,
+                withPayload: true,
+              })
+            }
+
             // GCP structured logging
             console.log(
               JSON.stringify({
                 severity: 'ERROR',
-                message:
-                  err.stack || err.message || 'generatePostQuestions failed',
+                message: errorMessage,
                 context: {
                   function: 'generatePostQuestions',
                   postId,
                 },
               })
             )
-            throw err
+
+            throw new GraphQLError(
+              'Internal server error while generating post questions',
+              {
+                extensions: {
+                  code: 'INTERNAL_SERVER_ERROR',
+                  http: {
+                    status: 500,
+                  },
+                },
+              }
+            )
           }
         },
       }),
     },
-    query: {},
+    query: {
+      searchTWReporterPosts: graphql.field({
+        type: graphql.list(graphql.JSON),
+        args: {
+          keywords: graphql.arg({ type: graphql.nonNull(graphql.String) }),
+        },
+        async resolve(root, args, ctx: Context) {
+          const { keywords } = args
+
+          const session = ctx.session
+          const isUnauthorized = !session
+          const isForbidden = ![
+            RoleEnum.Admin,
+            RoleEnum.Contributor,
+            RoleEnum.Editor,
+            RoleEnum.Developer,
+            RoleEnum.Owner,
+          ].includes(session?.data?.role ?? '')
+
+          if (isUnauthorized || isForbidden) {
+            const errorMessage = isUnauthorized
+              ? 'Unauthorized to search TW Reporter posts'
+              : 'Forbidden to search TW Reporter posts'
+
+            const errorCode = isUnauthorized ? 'UNAUTHENTICATED' : 'FORBIDDEN'
+
+            console.log(
+              JSON.stringify({
+                severity: 'WARNING',
+                message: errorMessage,
+                context: {
+                  function: 'searchTWReporterPosts',
+                  keywords,
+                  errorCode,
+                },
+              })
+            )
+
+            throw new GraphQLError(errorMessage, {
+              extensions: {
+                code: errorCode,
+                http: {
+                  status: isUnauthorized ? 401 : 403,
+                },
+              },
+            })
+          }
+
+          if (!keywords || !envVar.searchAPIKey || !envVar.twreporterID) {
+            return []
+          }
+
+          const customSearchURL = `https://www.googleapis.com/customsearch/v1?key=${envVar.searchAPIKey}&cx=${envVar.twreporterID}`
+
+          try {
+            const response = await axios.get(`${customSearchURL}&q=${keywords}`)
+            const posts = response?.data?.items
+              ?.filter(
+                (item: any) =>
+                  item?.link?.match('^https://www.twreporter.org/') &&
+                  (item?.pagemap?.metatags?.[0]['og:type'] === 'article' ||
+                    item?.link?.includes('/topics/'))
+              )
+              ?.map((item: any) => {
+                const metaTag = item?.pagemap?.metatags?.[0]
+                const publishedDate = new Date(
+                  item?.snippet
+                    ?.split('...')?.[0]
+                    .trim()
+                    .replace('年', '-')
+                    .replace('月', '-')
+                    .replace('日', '')
+                ).toISOString()
+
+                return {
+                  src: item.link,
+                  ogImgSrc: metaTag['og:image'],
+                  ogTitle: metaTag['og:title'],
+                  ogDescription: metaTag['og:description'],
+                  publishedDate,
+                }
+              })
+
+            console.log(
+              JSON.stringify({
+                severity: 'INFO',
+                message: 'searchTWReporterPosts response',
+                context: {
+                  function: 'searchTWReporterPosts',
+                  keywords,
+                  data: response.data,
+                },
+              })
+            )
+
+            return posts || []
+          } catch (_err) {
+            let errorMessage = 'searchTWReporterPosts failed'
+            if (_err instanceof AxiosError) {
+              const annotatedErr = _errors.helpers.annotateAxiosError(_err)
+              errorMessage = _errors.helpers.printAll(annotatedErr, {
+                withStack: true,
+                withPayload: true,
+              })
+            }
+
+            console.log(
+              JSON.stringify({
+                severity: 'ERROR',
+                message: errorMessage,
+                context: {
+                  function: 'searchTWReporterPosts',
+                  keywords,
+                },
+              })
+            )
+
+            throw new GraphQLError(
+              'Internal server error while searching TW Reporter posts',
+              {
+                extensions: {
+                  code: 'INTERNAL_SERVER_ERROR',
+                  http: {
+                    status: 500,
+                  },
+                },
+              }
+            )
+          }
+        },
+      }),
+    },
     type: {},
   }
 })
