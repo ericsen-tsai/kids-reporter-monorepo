@@ -3,6 +3,7 @@ import errors from '@twreporter/errors'
 import {
   defaultCount,
   getFilteredSearchResults,
+  SearchResult,
   transferItemsToCards,
 } from '@/app/api/search/utils'
 import { ContentType, EMAIL } from '@/constants'
@@ -29,13 +30,13 @@ export default async function SearchPage({
     return <SearchTitle>請輸入要搜尋的字串。</SearchTitle>
   }
 
-  let data
+  let data: SearchResult | undefined
 
   try {
     data = await getFilteredSearchResults({
       q: `${searchParams.q} ${filterParams}`,
       apiKey: envVars.searchAPIKey,
-      cx: envVars.twreporterID,
+      cx: envVars.searchEngineID,
       start: 1,
       count: defaultCount,
     })
