@@ -375,7 +375,7 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
           <Divider />
           <div className="relative">
             <PostRenderer post={post} theme={theme} />
-            {/* middle of the article content enter 50% of the viewport*/}
+            {/* middle of the article content enters 50% of the viewport*/}
             <div className="absolute top-[calc(50%+50vh)]">
               <BaodaozaiEventTrigger
                 dialogState={{
@@ -413,7 +413,7 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
       </div>
 
       <div className="relative w-screen">
-        {/* related posts enter 50% of the viewport*/}
+        {/* related posts enters 50% of the viewport*/}
         <div className="absolute top-[calc(50%+50vh)]">
           <BaodaozaiEventTrigger
             dialogState={{
