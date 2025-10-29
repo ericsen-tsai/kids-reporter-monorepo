@@ -62,6 +62,7 @@ model Post {
   opening                                    String               @default("")
   postChoiceQuestions                        PostChoiceQuestion[] @relation("PostChoiceQuestion_post")
   postEssayQuestions                         PostEssayQuestion[]  @relation("PostEssayQuestion_post")
+  showBaodaozai                              Boolean              @default(false)
   createdAt                                  DateTime?            @default(now())
   updatedAt                                  DateTime?            @updatedAt
   createdBy                                  User?                @relation("Post_createdBy", fields: [createdById], references: [id])
@@ -349,6 +350,8 @@ model Member {
   email                           String                @default("")
   twreporter_user_id              String                @unique @default("")
   role                            String                @default("member")
+  showBaodaozai                   Boolean               @default(true)
+  essayQuestionCount              Int?                  @default(3)
   createdAt                       DateTime?             @default(now())
   updatedAt                       DateTime?             @updatedAt
   from_PostChoiceAnswer_member    PostChoiceAnswer[]    @relation("PostChoiceAnswer_member")
