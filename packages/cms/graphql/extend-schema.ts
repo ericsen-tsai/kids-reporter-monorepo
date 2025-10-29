@@ -1,7 +1,9 @@
 import { graphql } from '@keystone-6/core'
 import axios from 'axios'
 import { convertFromRaw } from 'draft-js'
+import { GraphQLError } from 'graphql'
 
+import { RoleEnum } from '../constants/role-enum'
 import envVar from '../environment-variables'
 import type { Context } from '../types/index'
 
@@ -175,7 +177,34 @@ export const extendGraphqlSchema = graphql.extend(() => {
                 },
               })
             )
-            throw err
+
+            // Check if it's an axios error for better error handling
+            if (axios.isAxiosError(_err)) {
+              const statusCode = _err.response?.status || 500
+              throw new GraphQLError(
+                `Failed to generate post questions: ${_err.message}`,
+                {
+                  extensions: {
+                    code: 'EXTERNAL_SERVICE_ERROR',
+                    http: {
+                      status: statusCode >= 400 && statusCode < 500 ? 400 : 500,
+                    },
+                  },
+                }
+              )
+            }
+
+            throw new GraphQLError(
+              'Internal server error while generating post questions',
+              {
+                extensions: {
+                  code: 'INTERNAL_SERVER_ERROR',
+                  http: {
+                    status: 500,
+                  },
+                },
+              }
+            )
           }
         },
       }),
@@ -186,8 +215,47 @@ export const extendGraphqlSchema = graphql.extend(() => {
         args: {
           keywords: graphql.arg({ type: graphql.nonNull(graphql.String) }),
         },
-        async resolve(root, args) {
-          const { keywords } = args as { keywords: string }
+        async resolve(root, args, ctx: Context) {
+          const { keywords } = args
+
+          const session = ctx.session
+          const isUnauthorized = !session
+          const isForbidden = ![
+            RoleEnum.Admin,
+            RoleEnum.Contributor,
+            RoleEnum.Editor,
+            RoleEnum.Developer,
+            RoleEnum.Owner,
+          ].includes(session?.data?.role ?? '')
+
+          if (isUnauthorized || isForbidden) {
+            const errorMessage = isUnauthorized
+              ? 'Unauthorized to search TW Reporter posts'
+              : 'Forbidden to search TW Reporter posts'
+
+            const errorCode = isUnauthorized ? 'UNAUTHENTICATED' : 'FORBIDDEN'
+
+            console.log(
+              JSON.stringify({
+                severity: 'ERROR',
+                message: errorMessage,
+                context: {
+                  function: 'searchTWReporterPosts',
+                  keywords,
+                  errorCode,
+                },
+              })
+            )
+
+            throw new GraphQLError(errorMessage, {
+              extensions: {
+                code: errorCode,
+                http: {
+                  status: isUnauthorized ? 401 : 403,
+                },
+              },
+            })
+          }
 
           if (!keywords || !envVar.searchAPIKey || !envVar.twreporterID) {
             return []
@@ -224,10 +292,60 @@ export const extendGraphqlSchema = graphql.extend(() => {
                 }
               })
 
+            console.log(
+              JSON.stringify({
+                severity: 'INFO',
+                message: 'searchTWReporterPosts response',
+                data: response.data,
+                context: {
+                  function: 'searchTWReporterPosts',
+                  keywords,
+                },
+              })
+            )
+
             return posts || []
-          } catch (e) {
-            console.log('Fetch posts failed!', e)
-            return []
+          } catch (_err) {
+            const err = _err instanceof Error ? _err : new Error(String(_err))
+            console.log(
+              JSON.stringify({
+                severity: 'ERROR',
+                message:
+                  err.stack || err.message || 'searchTWReporterPosts failed',
+                context: {
+                  function: 'searchTWReporterPosts',
+                  keywords,
+                },
+              })
+            )
+
+            // Check if it's an axios error for better error handling
+            if (axios.isAxiosError(_err)) {
+              const statusCode = _err.response?.status || 500
+              throw new GraphQLError(
+                `Failed to search TW Reporter posts: ${_err.message}`,
+                {
+                  extensions: {
+                    code: 'EXTERNAL_SERVICE_ERROR',
+                    http: {
+                      status: statusCode >= 400 && statusCode < 500 ? 400 : 500,
+                    },
+                  },
+                }
+              )
+            }
+
+            throw new GraphQLError(
+              'Internal server error while searching TW Reporter posts',
+              {
+                extensions: {
+                  code: 'INTERNAL_SERVER_ERROR',
+                  http: {
+                    status: 500,
+                  },
+                },
+              }
+            )
           }
         },
       }),
