@@ -1,5 +1,6 @@
 import Author from './author'
 import CallBaodaozai from './call-baodaozai'
+import CallBaodaozaiIntro from './call-baodaozai-intro'
 import Category from './category'
 import EditorPicksSetting from './editor-picks-setting'
 import Member from './member'
@@ -31,6 +32,7 @@ export const listDefinition = {
   Category,
   Subcategory,
   SubSubcategory,
+  CallBaodaozaiIntro,
   Tag,
   NewsReadingGroup,
   NewsReadingGroupItem,
