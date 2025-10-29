@@ -1,7 +1,6 @@
 'use client'
 
 import { cn } from '@kids-reporter/routing-ui'
-import { useCallback } from 'react'
 
 import { KidsReporterIcon, ReporterIcon } from '@/icons/miscellaneous'
 
@@ -14,17 +13,10 @@ function SegmentedSwitcher({
   onSegmentChange,
   selectedSegment = 'kids',
 }: SegmentedSwitcherProps) {
-  const handleSegmentClick = useCallback(
-    (segment: 'kids' | 'reporter') => {
-      onSegmentChange(segment)
-    },
-    [onSegmentChange]
-  )
-
   return (
     <div className="flex w-full items-center gap-1 rounded-[40px] bg-neutral-200 p-1 tablet:w-auto">
       <button
-        onClick={() => handleSegmentClick('kids')}
+        onClick={() => onSegmentChange('kids')}
         className={cn(
           'flex min-w-40 flex-1 cursor-pointer items-center justify-center gap-2 rounded-[20px] px-4 py-[5px] transition-all duration-200',
           selectedSegment === 'kids' &&
@@ -36,7 +28,7 @@ function SegmentedSwitcher({
         <span className="prose-p2-bold text-nowrap">少年報導者</span>
       </button>
       <button
-        onClick={() => handleSegmentClick('reporter')}
+        onClick={() => onSegmentChange('reporter')}
         className={cn(
           'flex min-w-40 flex-1 cursor-pointer items-center justify-center gap-2 rounded-[20px] px-4 py-[5px] transition-all duration-200',
           selectedSegment === 'reporter'
