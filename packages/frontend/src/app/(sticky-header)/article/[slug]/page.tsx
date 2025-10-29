@@ -105,7 +105,7 @@ export default async function PostPage({
   })
 
   return (
-    <main className="flex max-w-(--breakpoint-2xl) flex-col items-center">
+    <main className="mx-auto flex max-w-(--breakpoint-2xl) flex-col items-center">
       <HeaderPostTitleSetter postTitle={post?.title} />
       {tocIndexes.length > 0 && <TOC indexes={tocIndexes} />}
       {post && <Article post={post} />}

@@ -396,7 +396,7 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
             </div>
           </div>
 
-          {post?.tagsOrdered && <Tags title={'常用關鍵字'} tags={tags} />}
+          {post?.tagsOrdered && <Tags title="常用關鍵字" tags={tags} />}
           <BaodaozaiEventTrigger
             dialogState={{
               isOpen: true,
@@ -412,7 +412,7 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
         </ArticleContext.Provider>
       </div>
 
-      <div className="relative w-screen">
+      <div className="relative w-full">
         {/* related posts enters 50% of the viewport*/}
         <div className="absolute top-[calc(50%+50vh)]">
           <BaodaozaiEventTrigger
@@ -421,6 +421,7 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
                 '現在點擊上方的 Tab，可以看到來自報導者的觀點了，一起來看看更多深度文章吧！',
               hideCancelButton: true,
               confirmText: '我知道了',
+              confirmAction: () => {},
             }}
             id="show-related-articles"
           />
