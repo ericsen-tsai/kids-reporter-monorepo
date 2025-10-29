@@ -234,6 +234,14 @@ model SubSubcategory {
   @@index([subcategoryId])
 }
 
+model CallBaodaozaiIntro {
+  id        Int                        @id @default(autoincrement())
+  page      CallBaodaozaiIntroPageType @unique
+  content   String                     @default("")
+  createdAt DateTime?                  @default(now())
+  updatedAt DateTime?                  @updatedAt
+}
+
 model Tag {
   id                                        Int                  @id @default(autoincrement())
   slug                                      String               @unique @default("")
@@ -421,4 +429,15 @@ model PostEssayAnswerLike {
 
   @@index([answerId])
   @@index([memberId])
+}
+
+enum CallBaodaozaiIntroPageType {
+  home
+  article
+  topic
+  news
+  search
+  lessons
+  podcasts
+  aboutUs
 }

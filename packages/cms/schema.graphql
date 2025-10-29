@@ -1158,6 +1158,75 @@ input SubcategoryRelateToOneForCreateInput {
   connect: SubcategoryWhereUniqueInput
 }
 
+type CallBaodaozaiIntro {
+  id: ID!
+  page: CallBaodaozaiIntroPageType
+  content: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+enum CallBaodaozaiIntroPageType {
+  home
+  article
+  topic
+  news
+  search
+  lessons
+  podcasts
+  aboutUs
+}
+
+input CallBaodaozaiIntroWhereUniqueInput {
+  id: ID
+  page: CallBaodaozaiIntroPageType
+}
+
+input CallBaodaozaiIntroWhereInput {
+  AND: [CallBaodaozaiIntroWhereInput!]
+  OR: [CallBaodaozaiIntroWhereInput!]
+  NOT: [CallBaodaozaiIntroWhereInput!]
+  id: IDFilter
+  page: CallBaodaozaiIntroPageTypeNullableFilter
+  content: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CallBaodaozaiIntroPageTypeNullableFilter {
+  equals: CallBaodaozaiIntroPageType
+  in: [CallBaodaozaiIntroPageType!]
+  notIn: [CallBaodaozaiIntroPageType!]
+  not: CallBaodaozaiIntroPageTypeNullableFilter
+}
+
+input CallBaodaozaiIntroOrderByInput {
+  id: OrderDirection
+  page: OrderDirection
+  content: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CallBaodaozaiIntroUpdateInput {
+  page: CallBaodaozaiIntroPageType
+  content: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CallBaodaozaiIntroUpdateArgs {
+  where: CallBaodaozaiIntroWhereUniqueInput!
+  data: CallBaodaozaiIntroUpdateInput!
+}
+
+input CallBaodaozaiIntroCreateInput {
+  page: CallBaodaozaiIntroPageType
+  content: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 type Tag {
   id: ID!
   slug: String
@@ -2148,6 +2217,12 @@ type Mutation {
   updateSubSubcategories(data: [SubSubcategoryUpdateArgs!]!): [SubSubcategory]
   deleteSubSubcategory(where: SubSubcategoryWhereUniqueInput!): SubSubcategory
   deleteSubSubcategories(where: [SubSubcategoryWhereUniqueInput!]!): [SubSubcategory]
+  createCallBaodaozaiIntro(data: CallBaodaozaiIntroCreateInput!): CallBaodaozaiIntro
+  createCallBaodaozaiIntros(data: [CallBaodaozaiIntroCreateInput!]!): [CallBaodaozaiIntro]
+  updateCallBaodaozaiIntro(where: CallBaodaozaiIntroWhereUniqueInput!, data: CallBaodaozaiIntroUpdateInput!): CallBaodaozaiIntro
+  updateCallBaodaozaiIntros(data: [CallBaodaozaiIntroUpdateArgs!]!): [CallBaodaozaiIntro]
+  deleteCallBaodaozaiIntro(where: CallBaodaozaiIntroWhereUniqueInput!): CallBaodaozaiIntro
+  deleteCallBaodaozaiIntros(where: [CallBaodaozaiIntroWhereUniqueInput!]!): [CallBaodaozaiIntro]
   createTag(data: TagCreateInput!): Tag
   createTags(data: [TagCreateInput!]!): [Tag]
   updateTag(where: TagWhereUniqueInput!, data: TagUpdateInput!): Tag
@@ -2284,6 +2359,9 @@ type Query {
   subSubcategory(where: SubSubcategoryWhereUniqueInput!): SubSubcategory
   subSubcategories(where: SubSubcategoryWhereInput! = {}, orderBy: [SubSubcategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubSubcategoryWhereUniqueInput): [SubSubcategory!]
   subSubcategoriesCount(where: SubSubcategoryWhereInput! = {}): Int
+  callBaodaozaiIntro(where: CallBaodaozaiIntroWhereUniqueInput!): CallBaodaozaiIntro
+  callBaodaozaiIntros(where: CallBaodaozaiIntroWhereInput! = {}, orderBy: [CallBaodaozaiIntroOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CallBaodaozaiIntroWhereUniqueInput): [CallBaodaozaiIntro!]
+  callBaodaozaiIntrosCount(where: CallBaodaozaiIntroWhereInput! = {}): Int
   tag(where: TagWhereUniqueInput!): Tag
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int

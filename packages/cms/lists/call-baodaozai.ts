@@ -47,6 +47,8 @@ const genRichTextEditorConfig = (label: string) => {
 }
 
 const listConfigurations: ListConfig<any> = list({
+  description:
+    'This list is deprecated. Please use CallBaodaozaiIntro instead.',
   fields: {
     home: genRichTextEditorConfig('首頁'),
     topics: genRichTextEditorConfig('專題集合頁'),
@@ -74,12 +76,13 @@ const listConfigurations: ListConfig<any> = list({
     },
   },
   ui: {
-    label: 'Call Baodaozai',
-    singular: 'Call Baodaozai',
-    plural: 'Call Baodaozai',
+    label: 'Call Baodaozai (Deprecated)',
+    singular: 'Call Baodaozai (Deprecated)',
+    plural: 'Call Baodaozai (Deprecated)',
     listView: {
       initialColumns: ['nameTC', 'name'],
     },
+    isHidden: true,
   },
 })
 
