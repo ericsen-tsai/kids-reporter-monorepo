@@ -5,14 +5,14 @@ const gqlEndpoint =
 const isProduction = process.env.NEXT_PUBLIC_RELEASE_ENV === 'prod'
 
 const searchAPIKey = process.env.SEARCH_API_KEY || ''
-const twreporterID = process.env.TWREPORTER_ID || ''
+const searchEngineID = process.env.SEARCH_ENGINE_ID || ''
 
 const environmentVariables = {
   internalGqlEndpoint,
   gqlEndpoint,
   isProduction,
   searchAPIKey,
-  twreporterID,
+  searchEngineID,
 }
 
 export default environmentVariables

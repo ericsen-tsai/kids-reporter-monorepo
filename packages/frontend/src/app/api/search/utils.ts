@@ -41,7 +41,7 @@ const client = customsearch('v1')
 export const defaultCount = 10
 export const defaultStart = 1
 
-type SearchResult = {
+export type SearchResult = {
   nextQuery?: {
     count?: number
     startIndex?: number
@@ -173,7 +173,6 @@ async function getSearchResults({
   }
 
   const nextPage = searchRes.data.queries?.nextPage?.[0]
-
   const nextQuery = nextPage
     ? {
         startIndex: nextPage.startIndex,

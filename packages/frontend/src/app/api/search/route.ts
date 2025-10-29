@@ -30,7 +30,7 @@ export async function GET(request: Request) {
 
   try {
     const searchResults = await getFilteredSearchResults({
-      cx: envVars.twreporterID,
+      cx: envVars.searchEngineID,
       apiKey: envVars.searchAPIKey,
       q,
       start,
