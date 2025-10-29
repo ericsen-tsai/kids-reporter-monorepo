@@ -1,6 +1,6 @@
 'use client'
 
-import { memo, useCallback, useEffect, useRef } from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 
 import { useCallBaodaozaiContext } from '../context'
 import { BaodaozaiAction, BaodaozaiActionSetter } from '../types'
@@ -62,6 +62,14 @@ function BaodaozaiEventTrigger({
     setAction,
     triggerStep,
   ])
+  const [prevDisabled, setPrevDisabled] = useState(disabled)
+
+  useEffect(() => {
+    if (prevDisabled !== disabled) {
+      triggeredOnceRef.current = false
+      setPrevDisabled(disabled)
+    }
+  }, [disabled, prevDisabled])
 
   useEffect(() => {
     const element = containerRef.current

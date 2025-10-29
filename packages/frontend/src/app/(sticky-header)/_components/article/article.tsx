@@ -2,6 +2,7 @@
 import './article.css'
 
 import { GetPostQuery } from '__generated__/operations/post.generated'
+import { ScrollLevel, useScrollLevel } from '@kids-reporter/routing-ui'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useCallback, useMemo, useState } from 'react'
@@ -20,13 +21,13 @@ import {
 import {
   BaodaozaiActionSetter,
   BaodaozaiChoiceQuestion,
-  BaodaozaiEventTrigger,
   BaodaozaiQAModal,
   BaodaozaiQuestions,
+  QAModalEvent,
 } from '@/services/call-baodaozai'
-import { QAModalEvent } from '@/services/call-baodaozai/components/qa-modal'
 import { getPostSummaries } from '@/utils'
 
+import ArticleBaodaozaiEventTrigger from './article-baodaozai-event-trigger'
 import { ArticleContext } from './article-context'
 import Brief, { AuthorGroup } from './brief'
 import CallToAction from './call-to-action'
@@ -37,6 +38,9 @@ import { NewsReading } from './news-reading'
 import PostRenderer from './post-renderer'
 import PublishedDate from './published-date'
 import RelatedArticles from './related-articles'
+import ScrollUpBaodaozaiEventTrigger, {
+  ScrollUpBaodaozaiEventTriggerProps,
+} from './scroll-up-baodaozai-event-trigger'
 import { MobileSidebar, Sidebar } from './sidebar'
 import StartReadingBaodaozaiEventTrigger from './start-reading-baodaozai-event-trigger'
 import SubSubcategory from './subSubcategory'
@@ -236,7 +240,7 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
 
   const [isQAModalOpen, setIsQAModalOpen] = useState(false)
 
-  const handleBaodaozaiConfirmation = useCallback(
+  const handleBaodaozaiConfirm = useCallback(
     ({
       setHide,
       setIsActive,
@@ -250,9 +254,22 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
     []
   )
 
-  const router = useRouter()
+  const handleScrollUp = useCallback(
+    ({
+      setIsActive,
+      setAction,
+      onDialogPropsChange,
+    }: Parameters<ScrollUpBaodaozaiEventTriggerProps['onScrollUp']>[0]) => {
+      onDialogPropsChange({
+        isOpen: false,
+      })
+      setIsActive(false)
+      setAction('none')
+    },
+    []
+  )
 
-  const [isSubmitted, setIsSubmitted] = useState(false)
+  const router = useRouter()
 
   const handleQAModalSubmit = useCallback(
     (answers: Record<number, string>, events: QAModalEvent) => {
@@ -273,7 +290,6 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
           router.push(IS_LOGIN ? '/idea-hub' : '/login')
         },
       })
-      setIsSubmitted(true)
     },
     [router]
   )
@@ -324,8 +340,16 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
     return [questions[0], questions[1], questions[2]]
   }, [post.postChoiceQuestions])
 
+  const scrollingLevel = useScrollLevel({
+    scrollDownDistance: 150,
+    throttleThreshold: 50,
+  })
+
+  const isScrollingDown = scrollingLevel === ScrollLevel.DOWN_HIDDEN
+
   return (
     <>
+      <ScrollUpBaodaozaiEventTrigger onScrollUp={handleScrollUp} />
       <div className={`post${theme ? ` theme-${theme}` : ''}`}>
         <ArticleContext.Provider
           value={{
@@ -343,10 +367,7 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
             imgProps={imgProps}
             handleImgModalClose={handleImgModalClose}
           />
-          <StartReadingBaodaozaiEventTrigger
-            isSubmitted={isSubmitted}
-            content={post?.opening ?? ''}
-          />
+          <StartReadingBaodaozaiEventTrigger content={post?.opening ?? ''} />
           {post?.heroImage && post?.heroCaption && (
             <HeroImage
               image={post?.heroImage}
@@ -359,17 +380,10 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
             <NewsReading items={newsReadingGroupItems} />
           )}
 
-          <BaodaozaiEventTrigger
+          <ArticleBaodaozaiEventTrigger
             id="hide-start-reading"
-            dialogState={{
-              isOpen: false,
-              hideCancelButton: true,
-            }}
-            baodaozaiState={{
-              isActive: false,
-              action: 'none',
-            }}
-            disabled={isSubmitted}
+            disabled={!isScrollingDown}
+            startReadingContent={post?.opening ?? ''}
           />
           <Brief content={post?.brief} authors={authorsInBrief} theme={theme} />
           <Divider />
@@ -377,36 +391,29 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
             <PostRenderer post={post} theme={theme} />
             {/* middle of the article content enters 50% of the viewport*/}
             <div className="absolute top-[calc(50%+50vh)]">
-              <BaodaozaiEventTrigger
-                dialogState={{
-                  isOpen: false,
-                  content:
-                    '你好棒！已經把文章讀完了！接下來讓我問問你幾個和文章有關的問題⋯⋯',
-                  hideCancelButton: false,
-                  confirmText: '好！出招吧',
-                  confirmAction: handleBaodaozaiConfirmation,
-                }}
-                baodaozaiState={{
-                  isActive: false,
-                  action: 'none',
-                }}
-                disabled={isSubmitted}
-                id="change-to-ask-questions"
+              <ArticleBaodaozaiEventTrigger
+                id="change-ask-questions"
+                disabled={!isScrollingDown}
+                onAskQuestionsConfirm={handleBaodaozaiConfirm}
+              />
+              <ArticleBaodaozaiEventTrigger
+                id="change-start-reading"
+                disabled={isScrollingDown}
+                startReadingContent={post?.opening ?? ''}
               />
             </div>
           </div>
 
           {post?.tagsOrdered && <Tags title="常用關鍵字" tags={tags} />}
-          <BaodaozaiEventTrigger
-            dialogState={{
-              isOpen: true,
-            }}
-            baodaozaiState={{
-              isActive: true,
-              action: 'speak',
-            }}
-            disabled={isSubmitted}
+          <ArticleBaodaozaiEventTrigger
             id="show-ask-questions"
+            disabled={!isScrollingDown}
+            onAskQuestionsConfirm={handleBaodaozaiConfirm}
+          />
+          <ArticleBaodaozaiEventTrigger
+            id="change-ask-questions"
+            disabled={isScrollingDown}
+            onAskQuestionsConfirm={handleBaodaozaiConfirm}
           />
           <AuthorCard title="誰幫我們完成這篇文章" authors={orderedAuthors} />
         </ArticleContext.Provider>
@@ -415,15 +422,9 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
       <div className="relative w-full">
         {/* related posts enters 50% of the viewport*/}
         <div className="absolute top-[calc(50%+50vh)]">
-          <BaodaozaiEventTrigger
-            dialogState={{
-              content:
-                '現在點擊上方的 Tab，可以看到來自報導者的觀點了，一起來看看更多深度文章吧！',
-              hideCancelButton: true,
-              confirmText: '我知道了',
-              confirmAction: () => {},
-            }}
+          <ArticleBaodaozaiEventTrigger
             id="show-related-articles"
+            disabled={!isScrollingDown}
           />
         </div>
         <RelatedArticles
