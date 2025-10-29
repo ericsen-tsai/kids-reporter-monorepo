@@ -56,12 +56,12 @@
   --font-size-h5-large: 22px;
   --font-size-h6-large: 18px;
 
-  --font-size-h1-small: 28px;
-  --font-size-h2-small: 24px;
-  --font-size-h3-small: 22px;
-  --font-size-h4-small: 18px;
-  --font-size-h5-small: 17px;
-  --font-size-h6-small: 16px;
+  --font-size-h1-small: 32px;
+  --font-size-h2-small: 28px;
+  --font-size-h3-small: 24px;
+  --font-size-h4-small: 22px;
+  --font-size-h5-small: 20px;
+  --font-size-h6-small: 18px;
 
   --font-size-p1: 16px;
   --font-size-p2: 14px;
@@ -122,11 +122,11 @@
   /* Updated color palette using design system */
   --paletteColor1: var(--color-blue-400);
   --paletteColor2: var(--color-blue-600);
-  --paletteColor3: var(--color-neutral-gray-700);
-  --paletteColor4: var(--color-neutral-gray-900);
+  --paletteColor3: var(--color-neutral-700);
+  --paletteColor4: var(--color-neutral-900);
   --paletteColor5: var(--color-red-400);
   --paletteColor6: var(--color-yellow-400);
-  --paletteColor7: var(--color-neutral-gray-200);
+  --paletteColor7: var(--color-neutral-200);
   --paletteColor8: var(--color-neutral-white);
   --color: var(--paletteColor3);
 }
@@ -134,120 +134,6 @@
 /* Design System CSS Variables for compatibility */
 @layer base {
   :root {
-    /* Colors - Neutral */
-    --color-neutral-white: #ffffff;
-    --color-neutral-gray-100: #f8f8f8;
-    --color-neutral-gray-200: #eaeaea;
-    --color-neutral-gray-300: #d9d9d9;
-    --color-neutral-gray-400: #c6c6c6;
-    --color-neutral-gray-500: #a3a3a3;
-    --color-neutral-gray-600: #8e8e8e;
-    --color-neutral-gray-700: #575757;
-    --color-neutral-gray-800: #3b3b3b;
-    --color-neutral-gray-900: #232323;
-    --color-neutral-black: #000000;
-    --color-neutral-border: #00000026;
-
-    /* Colors - Brand Red */
-    --color-red-100: #fff0f2;
-    --color-red-200: #ffc4ca;
-    --color-red-300: #ff98a2;
-    --color-red-400: #f76977;
-    --color-red-500: #bd4450;
-    --color-red-600: #a0343e;
-    --color-red-700: #82262f;
-    --color-red-800: #651a22;
-
-    /* Colors - Brand Blue */
-    --color-blue-100: #e9f8ff;
-    --color-blue-200: #b9e8ff;
-    --color-blue-300: #89d9ff;
-    --color-blue-400: #27b3f5;
-    --color-blue-500: #1696d3;
-    --color-blue-600: #087bb1;
-    --color-blue-700: #00618f;
-    --color-blue-800: #004a6d;
-
-    /* Colors - Brand Yellow */
-    --color-yellow-100: #fff9ec;
-    --color-yellow-200: #ffedc2;
-    --color-yellow-300: #ffe197;
-    --color-yellow-400: #f8c341;
-    --color-yellow-500: #d6a52d;
-    --color-yellow-600: #b4881d;
-    --color-yellow-700: #926c10;
-    --color-yellow-800: #705207;
-
-    /* Typography - Font Families */
-    --font-family-noto: 'Noto Sans TC', sans-serif;
-    --font-family-swei: 'SweiMarkerSansCJKtc-Regular', sans-serif;
-
-    /* Typography - Font Sizes */
-    --font-size-h1-large: 48px;
-    --font-size-h2-large: 40px;
-    --font-size-h3-large: 32px;
-    --font-size-h4-large: 28px;
-    --font-size-h5-large: 22px;
-    --font-size-h6-large: 18px;
-
-    --font-size-h1-small: 28px;
-    --font-size-h2-small: 24px;
-    --font-size-h3-small: 22px;
-    --font-size-h4-small: 18px;
-    --font-size-h5-small: 17px;
-    --font-size-h6-small: 16px;
-
-    --font-size-p1: 16px;
-    --font-size-p2: 14px;
-    --font-size-p3: 12px;
-    --font-size-p4: 10px;
-
-    /* Typography - Line Heights */
-    --line-height-tight: 1.25;
-    --line-height-normal: 1.6;
-    --line-height-relaxed: 1.75;
-
-    /* Typography - Letter Spacing */
-    --letter-spacing-wide: 0.05em;
-
-    /* Spacing - Grid System */
-    --spacing-grid-xs: 4px;
-    --spacing-grid-sm: 8px;
-    --spacing-grid-md: 16px;
-    --spacing-grid-lg: 24px;
-    --spacing-grid-xl: 32px;
-    --spacing-grid-2xl: 48px;
-    --spacing-grid-3xl: 64px;
-    --spacing-grid-4xl: 96px;
-    --spacing-grid-5xl: 128px;
-
-    /* Container Widths */
-    --container-mobile: 375px;
-    --container-tablet: 768px;
-    --container-desktop: 1024px;
-    --container-hd: 1440px;
-
-    /* Grid Gutters */
-    --gutter-mobile: 16px;
-    --gutter-tablet: 24px;
-    --gutter-desktop: 32px;
-    --gutter-hd: 32px;
-
-    /* Margins */
-    --margin-mobile: 24px;
-    --margin-tablet: 32px;
-    --margin-desktop: 48px;
-    --margin-hd: 120px;
-
-    /* Responsive Breakpoints */
-    --breakpoint-mobile: 375px;
-    --breakpoint-tablet: 768px;
-    --breakpoint-desktop: 1024px;
-    --breakpoint-hd: 1440px;
-
-    /* Header */
-    --mobile-header-height: 64px;
-
     /* Legacy variables for backward compatibility */
     --fontFamily: var(--font-family-noto);
     --max-width: 1100px;
@@ -256,11 +142,11 @@
     /* Updated color palette using design system */
     --paletteColor1: var(--color-blue-400);
     --paletteColor2: var(--color-blue-600);
-    --paletteColor3: var(--color-neutral-gray-700);
-    --paletteColor4: var(--color-neutral-gray-900);
+    --paletteColor3: var(--color-neutral-700);
+    --paletteColor4: var(--color-neutral-900);
     --paletteColor5: var(--color-red-400);
     --paletteColor6: var(--color-yellow-400);
-    --paletteColor7: var(--color-neutral-gray-200);
+    --paletteColor7: var(--color-neutral-200);
     --paletteColor8: var(--color-neutral-white);
     --color: var(--paletteColor3);
   }
@@ -321,16 +207,16 @@
     font-family: var(--font-family-noto);
     font-size: var(--font-size-h1-small);
     font-weight: 700;
-    line-height: var(--line-height-tight);
-    letter-spacing: var(--letter-spacing-wide);
+    line-height: var(--line-height-normal);
+    letter-spacing: 1.6px;
   }
 
   .prose-h2-small {
     font-family: var(--font-family-noto);
     font-size: var(--font-size-h2-small);
     font-weight: 700;
-    line-height: var(--line-height-tight);
-    letter-spacing: var(--letter-spacing-wide);
+    line-height: var(--line-height-normal);
+    letter-spacing: 1.4px;
   }
 
   .prose-h3-small {

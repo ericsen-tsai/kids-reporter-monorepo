@@ -65,12 +65,12 @@
   --font-size-h5-large: 22px;
   --font-size-h6-large: 18px;
 
-  --font-size-h1-small: 28px;
-  --font-size-h2-small: 24px;
-  --font-size-h3-small: 22px;
-  --font-size-h4-small: 18px;
-  --font-size-h5-small: 17px;
-  --font-size-h6-small: 16px;
+  --font-size-h1-small: 32px;
+  --font-size-h2-small: 28px;
+  --font-size-h3-small: 24px;
+  --font-size-h4-small: 22px;
+  --font-size-h5-small: 20px;
+  --font-size-h6-small: 18px;
 
   --font-size-p1: 16px;
   --font-size-p2: 14px;
@@ -354,7 +354,7 @@
     font-family: var(--font-family-noto);
     font-size: var(--font-size-h1-small);
     font-weight: 700;
-    line-height: var(--line-height-tight);
+    line-height: var(--line-height-normal);
     letter-spacing: 1.6px;
   }
 
@@ -362,7 +362,7 @@
     font-family: var(--font-family-noto);
     font-size: var(--font-size-h2-small);
     font-weight: 700;
-    line-height: var(--line-height-tight);
+    line-height: var(--line-height-normal);
     letter-spacing: 1.4px;
   }
 
