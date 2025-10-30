@@ -38,9 +38,6 @@ import { NewsReading } from './news-reading'
 import PostRenderer from './post-renderer'
 import PublishedDate from './published-date'
 import RelatedArticles from './related-articles'
-import ScrollUpBaodaozaiEventTrigger, {
-  ScrollUpBaodaozaiEventTriggerProps,
-} from './scroll-up-baodaozai-event-trigger'
 import { MobileSidebar, Sidebar } from './sidebar'
 import StartReadingBaodaozaiEventTrigger from './start-reading-baodaozai-event-trigger'
 import SubSubcategory from './subSubcategory'
@@ -254,21 +251,6 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
     []
   )
 
-  const handleScrollUp = useCallback(
-    ({
-      setIsActive,
-      setAction,
-      onDialogPropsChange,
-    }: Parameters<ScrollUpBaodaozaiEventTriggerProps['onScrollUp']>[0]) => {
-      onDialogPropsChange({
-        isOpen: false,
-      })
-      setIsActive(false)
-      setAction('none')
-    },
-    []
-  )
-
   const router = useRouter()
 
   const handleQAModalSubmit = useCallback(
@@ -349,7 +331,6 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
 
   return (
     <>
-      <ScrollUpBaodaozaiEventTrigger onScrollUp={handleScrollUp} />
       <div className={`post${theme ? ` theme-${theme}` : ''}`}>
         <ArticleContext.Provider
           value={{
