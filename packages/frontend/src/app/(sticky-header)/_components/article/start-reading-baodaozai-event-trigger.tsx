@@ -1,3 +1,4 @@
+'use client'
 import { useIsAtTop } from '@kids-reporter/routing-ui'
 import { useEffect, useState } from 'react'
 
