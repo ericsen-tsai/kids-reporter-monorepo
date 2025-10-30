@@ -3,14 +3,13 @@
   "version": "1.0.10",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"yarn codegen:local:watch\" \"next dev --port ${PORT:-3000}\"",
+    "dev": "concurrently \"yarn codegen:local --watch\" \"next dev --port ${PORT:-3000}\"",
     "build": "yarn codegen:production && next build",
     "start": "next start",
     "analyze": "ANALYZE=true yarn build",
     "lint:check": "eslint src --ext .ts,.tsx,.js,.jsx",
     "type-check": "tsc --noEmit",
-    "codegen:local": "graphql-codegen --config codegen.ts && prettier --write __generated__/**/*.generated.ts __generated__/types.ts",
-    "codegen:local:watch": "concurrently \"graphql-codegen --config codegen.ts --watch\" \"onchange \"__generated__/\" -- prettier --write {{changed}} \"",
+    "codegen:local": "graphql-codegen --config codegen.ts",
     "codegen:production": "NODE_ENV=production graphql-codegen --config codegen.ts",
     "postinstall": "yarn codegen:local"
   },
@@ -60,7 +59,6 @@
     "@types/react": "^18.3.7",
     "concurrently": "^9.1.2",
     "graphql": "^16.8.1",
-    "onchange": "^7.1.0",
     "postcss": "^8.4.38",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14"

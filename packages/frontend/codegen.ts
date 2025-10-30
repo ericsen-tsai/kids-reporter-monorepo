@@ -23,7 +23,7 @@ const config: CodegenConfig = {
         },
       },
     },
-    '__generated__/operations.ts': {
+    '__generated__/operations': {
       plugins: ['typescript-operations'],
       preset: 'near-operation-file',
       presetConfig: {
@@ -41,6 +41,9 @@ const config: CodegenConfig = {
         },
       },
     },
+  },
+  hooks: {
+    afterAllFileWrite: ['prettier --write __generated__/**/*.ts'],
   },
 }
 
