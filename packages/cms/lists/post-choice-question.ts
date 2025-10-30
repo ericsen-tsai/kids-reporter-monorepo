@@ -1,12 +1,12 @@
 import { list } from '@keystone-6/core'
 import { json, relationship, text, timestamp } from '@keystone-6/core/fields'
 
+import type { ListType } from '../types/keystone-list-types'
 import {
   allowAllRoles,
   allowRoles,
   RoleEnum,
 } from './utils/access-control-list'
-import type { ListType } from '../types/keystone-list-types'
 
 const operationAccessControl = allowRoles([
   RoleEnum.Editor,

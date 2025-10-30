@@ -1,7 +1,6 @@
 'use client'
 
-import { Button } from '@kids-reporter/routing-ui'
-import { cn } from '@kids-reporter/routing-ui'
+import { Button, cn } from '@kids-reporter/routing-ui'
 
 const DialogArrow = () => (
   <svg
