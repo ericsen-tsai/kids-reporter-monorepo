@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from 'react'
 
 import ArticleGrid from '@/components/article-grid'
 import { PostSummary } from '@/components/types'
-import { RelatedPostsIcon } from '@/icons'
+import { RelatedPostsIcon, RelatedPostsIconLarge } from '@/icons'
 
 import SegmentedSwitcher from './segmented-switcher'
 
@@ -34,7 +34,7 @@ function RelatedArticles({
   const renderContent = useMemo(() => {
     if (visibleArticles.length === 0) {
       return (
-        <div className="prose-p2 flex min-h-50 w-full items-center justify-center">
+        <div className="flex min-h-50 w-full items-center justify-center prose-p2">
           <span>相關報導持續整理中，歡迎之後再來探索。</span>
         </div>
       )
@@ -51,10 +51,11 @@ function RelatedArticles({
     <div className="mx-auto flex w-full max-w-300 flex-col items-center justify-center px-6 py-10 tablet:px-8 tablet:py-12 desktop:px-12 desktop:py-18 hd:px-16 hd:py-24">
       <div className="mb-6 flex w-full flex-col items-start justify-between gap-6 tablet:flex-row">
         <div className="flex items-center gap-2">
-          <div className="flex size-11 items-center justify-center">
-            <RelatedPostsIcon />
+          <div className="flex size-11 items-center justify-center desktop:size-16">
+            <RelatedPostsIcon className="desktop:hidden" />
+            <RelatedPostsIconLarge className="hidden desktop:block" />
           </div>
-          <span className="prose-h2-small font-family-swei! text-neutral-900">
+          <span className="prose-h2-small font-family-swei! text-neutral-900 desktop:prose-h2-large">
             相關文章
           </span>
         </div>
