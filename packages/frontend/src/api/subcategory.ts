@@ -14,8 +14,5 @@ export const getSubcategoryPosts = async (
     query: GET_SUBCATEGORY_POSTS_GQL,
     variables,
   })
-  return (
-    response?.data?.data?.subcategory?.relatedPosts?.filter((post) => !!post) ??
-    []
-  )
+  return response?.data?.data?.subcategory
 }

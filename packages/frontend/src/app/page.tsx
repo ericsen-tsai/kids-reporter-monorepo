@@ -97,12 +97,15 @@ export default async function Home() {
 
       if (!slug) return []
       const requestFn = isSubcategory ? getSubcategoryPosts : getCategoryPosts
-      const posts = await requestFn({
+      const response = await requestFn({
         where: { slug },
         take: 6,
       })
 
-      return getPostSummaries(posts)
+      const relatedPosts =
+        response?.relatedPosts?.filter((post) => !!post) ?? []
+
+      return getPostSummaries(relatedPosts)
     })
   )
 

@@ -1,7 +1,16 @@
+import { Post } from '__generated__/types'
+import { cn } from '@kids-reporter/routing-ui'
 import { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 
 import { getCallBaodaozaiIntroContent } from '@/api/call-baodaozai-intro'
+import {
+  getCategoryMetadata,
+  getCategoryPosts,
+  getCategorySubcategoriesAndThemeColor,
+} from '@/api/category'
+import { getSubSubcategoryPosts } from '@/api/sub-subcategory'
+import { getSubcategoryPosts } from '@/api/subcategory'
 import AllSiteBaodaozaiEventTrigger from '@/components/all-site-baodaozai-event-trigger'
 import Pagination from '@/components/pagination'
 import PostList from '@/components/post-list'
@@ -10,63 +19,39 @@ import {
   DEFAULT_THEME_COLOR,
   ERROR_PAGE,
   GENERAL_DESCRIPTION,
-  POST_CONTENT_GQL,
   POST_PER_PAGE,
+  Theme,
 } from '@/constants'
-import { getPostSummaries, log, LogLevel, sendGQLRequest } from '@/utils'
+import { DeepPartial } from '@/types/utils'
+import { getPostSummaries, log, LogLevel } from '@/utils'
 import {
   mapCategorySlugToIntroPageType,
+  mapCategoryThemeToClassName,
   parseCategoryInfoFromPath,
 } from '@/utils/category'
 
 import Navigator from '../../_components/category/navigator'
 
-const seoFields = `
-  ogTitle
-  ogDescription
-  ogImage {
-    resized {
-      medium
-    }
-  }
-`
-
-const query = `
-  query GetCategory($categoryWhere: CategoryWhereUniqueInput!, $subcategoryWhere: SubcategoryWhereInput!) {
-    category(where: $categoryWhere) {
-      ${seoFields}
-      subcategories(where: $subcategoryWhere) {
-        ${seoFields}
-      }
-    }
-  }
-`
+function isPost(
+  post: DeepPartial<Post> | null | undefined
+): post is DeepPartial<Post> {
+  return post !== null && post !== undefined
+}
 
 export async function generateMetadata({
   params,
 }: {
   params: { path: string[] }
 }): Promise<Metadata> {
-  const categorySlug = params.path?.[0]
-  const subcategorySlug = params.path?.[1] ?? ''
+  const path = params.path
+  const { category, subcategory } = parseCategoryInfoFromPath(path)
 
-  const res = await sendGQLRequest({
-    query,
-    variables: {
-      categoryWhere: {
-        slug: categorySlug,
-      },
-      subcategoryWhere: {
-        slug: {
-          equals: subcategorySlug,
-        },
-      },
-    },
+  const categoryData = await getCategoryMetadata({
+    categoryWhere: { slug: category },
+    subcategoryWhere: { slug: { equals: subcategory } },
   })
 
-  const category = res?.data?.data?.category
-
-  if (!category) {
+  if (!categoryData) {
     log(
       LogLevel.INFO,
       `Category metadata not found. URL path is: /${params.path.join('/')}`
@@ -75,13 +60,16 @@ export async function generateMetadata({
   }
 
   const title =
-    category?.subcategories?.[0]?.ogTitle ||
-    category?.ogTitle ||
+    categoryData?.subcategories?.[0]?.ogTitle ||
+    categoryData?.ogTitle ||
     '分類: 少年報導者 The Reporter for Kids'
   const description =
-    category?.subcategories?.[0]?.ogDescription ||
-    category?.ogDescription ||
+    categoryData?.subcategories?.[0]?.ogDescription ||
+    categoryData?.ogDescription ||
     GENERAL_DESCRIPTION
+  const ogImage =
+    categoryData?.subcategories?.[0]?.ogImage?.resized?.medium ??
+    categoryData?.ogImage?.resized?.medium
 
   return {
     title,
@@ -89,78 +77,55 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      images:
-        category?.subcategories?.[0]?.ogImage?.resized?.medium ??
-        category?.ogImage?.resized?.medium,
+      images: ogImage,
     },
   }
 }
 
-const subcategoriesGQL = `
-query($where: CategoryWhereUniqueInput!) {
-  category(where: $where) {
-    subcategories {
-      name
-      slug
-    }
-    themeColor
+function getPosts({
+  category,
+  subcategory,
+  subSubcategory,
+  currentPage,
+}: {
+  category: string
+  subcategory?: string
+  subSubcategory?: string
+  currentPage: number
+}) {
+  const commonVariables = {
+    take: POST_PER_PAGE,
+    skip: (currentPage - 1) * POST_PER_PAGE,
   }
-}
-`
+  if (subSubcategory) {
+    return getSubSubcategoryPosts({
+      where: { slug: subSubcategory },
+      ...commonVariables,
+      orderBy: [
+        {
+          publishedDate: 'desc',
+        },
+      ],
+    })
+  }
+  if (subcategory) {
+    return getSubcategoryPosts({
+      where: { slug: subcategory },
+      ...commonVariables,
+    })
+  }
 
-const categoryPostsGQL = `
-query($where: CategoryWhereUniqueInput!, $take: Int!, $skip: Int!) {
-  category(where: $where) {
-    relatedPosts(take: $take, skip: $skip) {
-      ${POST_CONTENT_GQL}
-    }
-    relatedPostsCount
-  }
+  return getCategoryPosts({
+    where: { slug: category },
+    ...commonVariables,
+  })
 }
-`
-
-const subcategoryPostsGQL = `
-query($where: SubcategoryWhereUniqueInput!, $take: Int!, $skip: Int!) {
-  subcategory(where: $where) {
-    category {
-      slug
-    }
-    relatedPosts(take: $take, skip: $skip) {
-      ${POST_CONTENT_GQL}
-    }
-    relatedPostsCount
-  }
-}
-`
-
-const subSubcategoryPostsGQL = `
-query($where: SubSubcategoryWhereUniqueInput!, $take: Int!, $skip: Int!, $orderBy: [PostOrderByInput!]!) {
-  subSubcategory(where: $where) {
-    subcategory {
-      slug
-      category {
-        slug
-      }
-    }
-    relatedPosts(take: $take, skip: $skip, orderBy: $orderBy) {
-      ${POST_CONTENT_GQL}
-    }
-    relatedPostsCount
-  }
-}
-`
 
 export default async function Category({
   params,
 }: {
   params: { path: string[] | undefined }
 }) {
-  const path = params.path
-  if (!path || !Array.isArray(path) || path.length === 0) {
-    log(LogLevel.WARNING, `Incorrect category path! ${path}`)
-    notFound()
-  }
-
   // Category page routing scenarios:   ex: /category/path[0]/path[1]/path[2]...
   // -------------------------------------------------------------------------------
   // length = 1(category)               ex: /category/news
@@ -169,6 +134,7 @@ export default async function Category({
   // length = 3(category, page N)       ex: /category/news/page/2
   // length = 4(subcategory, page N)    ex: /category/news/times/page/2
   // length = 5(subSubcategory, page N) ex: /category/news/times/medical-news/page/2
+  const path = params.path
   const {
     category,
     subcategory,
@@ -189,106 +155,71 @@ export default async function Category({
     ? await getCallBaodaozaiIntroContent({ where: { page: pageEnum } })
     : undefined
 
-  // Fetch subcategories for navigation
-  const navigationItems = []
-  const subcategoriesRes = await sendGQLRequest({
-    query: subcategoriesGQL,
-    variables: {
-      where: {
-        slug: category,
-      },
-    },
+  const categoryData = await getCategorySubcategoriesAndThemeColor({
+    where: { slug: category },
   })
-  const categoryData = subcategoriesRes?.data?.data?.category
   if (!categoryData) {
     log(LogLevel.WARNING, 'Incorrect category!')
     notFound()
   }
-  const theme = categoryData.themeColor || DEFAULT_THEME_COLOR
-  const subcategories = categoryData.subcategories?.map((sub: any) => {
-    return (
-      sub && {
-        name: sub.name,
+  const theme = (categoryData.themeColor || DEFAULT_THEME_COLOR) as Theme
+  const subcategories =
+    categoryData.subcategories?.map((sub) => {
+      return {
+        name: sub.name ?? '',
         path: `/category/${category}/${sub.slug}`,
       }
-    )
-  })
+    }) ?? []
 
-  navigationItems.push({ name: '所有文章', path: `/category/${category}` })
-  if (Array.isArray(subcategories) && subcategories.length > 0) {
-    navigationItems.push(...subcategories)
-  }
+  const navigationItems = [
+    { name: '所有文章', path: `/category/${category}` },
+    ...subcategories,
+  ]
 
   // Fetch related posts of subSubcategory/subcategory/category
-  let query, slug
-  if (subSubcategory) {
-    query = subSubcategoryPostsGQL
-    slug = subSubcategory
-  } else if (subcategory) {
-    query = subcategoryPostsGQL
-    slug = subcategory
-  } else {
-    query = categoryPostsGQL
-    slug = category
-  }
-  const commonVars = {
-    where: {
-      slug: slug,
-    },
-    take: POST_PER_PAGE,
-    skip: (currentPage - 1) * POST_PER_PAGE,
-  }
-  const postsRes = await sendGQLRequest({
-    query: query,
-    variables: subSubcategory
-      ? {
-          ...commonVars,
-          orderBy: [
-            {
-              publishedDate: 'desc',
-            },
-          ],
-        }
-      : commonVars,
+  const postsRes = await getPosts({
+    category,
+    subcategory,
+    subSubcategory,
+    currentPage,
   })
+
   if (!postsRes) {
     log(LogLevel.WARNING, `Empty related posts!`)
     redirect(ERROR_PAGE)
   }
 
-  let targetCategory
-  if (subSubcategory) {
-    targetCategory = postsRes?.data?.data?.subSubcategory
+  if ('subcategory' in postsRes) {
+    const subcategoryCandidate = postsRes?.subcategory?.slug
+    const categoryCandidate = postsRes?.subcategory?.category?.slug
     if (
-      subcategory !== targetCategory?.subcategory?.slug ||
-      category !== targetCategory?.subcategory?.category?.slug
+      subcategory !== subcategoryCandidate ||
+      category !== categoryCandidate
     ) {
       log(
         LogLevel.WARNING,
-        `Parent category mismatch! subSubcategory=${subSubcategory}, subcategory=${targetCategory?.subcategory?.slug}/${subcategory}, category=${targetCategory?.subcategory?.category?.slug}/${category}`
+        `Parent category mismatch! subcategory=${subcategoryCandidate}, category=${categoryCandidate}`
       )
       redirect(ERROR_PAGE)
     }
-  } else if (subcategory) {
-    targetCategory = postsRes?.data?.data?.subcategory
-    if (category !== targetCategory?.category?.slug) {
+  }
+
+  if ('category' in postsRes) {
+    const categoryCandidate = postsRes?.category?.slug
+    if (category !== categoryCandidate) {
       log(
         LogLevel.WARNING,
-        `Parent category mismatch! subcategory=${subcategory}, category=${targetCategory?.category?.slug}/${category}`
+        `Parent category mismatch! category=${categoryCandidate}`
       )
       redirect(ERROR_PAGE)
     }
-  } else {
-    targetCategory = postsRes?.data?.data?.category
   }
 
-  if (!targetCategory) {
-    log(LogLevel.WARNING, 'Fetch targetCategory failed!')
-    notFound()
-  }
+  const relatedPostsRaw = postsRes.relatedPosts ?? []
+  const relatedPosts = relatedPostsRaw.filter(isPost)
 
-  const posts = getPostSummaries(targetCategory.relatedPosts)
-  const postsCount = targetCategory.relatedPostsCount
+  const posts = getPostSummaries(relatedPosts)
+  const postsCount = postsRes.relatedPostsCount ?? 0
 
   const totalPages = Math.ceil(postsCount / POST_PER_PAGE)
   if (totalPages > 0 && currentPage > totalPages) {
@@ -299,14 +230,15 @@ export default async function Category({
     notFound()
   }
 
-  let routingPrefix
-  if (subSubcategory) {
-    routingPrefix = `/category/${category}/${subcategory}/${subSubcategory}/page`
-  } else if (subcategory) {
-    routingPrefix = `/category/${category}/${subcategory}/page`
-  } else {
-    routingPrefix = `/category/${category}/page`
-  }
+  const routingPrefix = (() => {
+    if (subSubcategory) {
+      return `/category/${category}/${subcategory}/${subSubcategory}/page`
+    } else if (subcategory) {
+      return `/category/${category}/${subcategory}/page`
+    } else {
+      return `/category/${category}/page`
+    }
+  })()
 
   return (
     <main
@@ -314,7 +246,10 @@ export default async function Category({
       className="mb-10 flex flex-col items-center justify-center"
     >
       <div
-        className={`flex w-full flex-col items-center justify-center gap-10 theme-${theme}`}
+        className={cn(
+          mapCategoryThemeToClassName(theme),
+          'flex w-full flex-col items-center justify-center gap-10'
+        )}
       >
         <img className="w-full max-w-xl" src={imageURL} loading="lazy" />
         {pageEnum && (
