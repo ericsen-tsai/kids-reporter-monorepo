@@ -14,7 +14,7 @@ export async function GET() {
     status: 302,
   })
 
-  // 設定 cookie
+  // Set cookie
   response.cookies.set('id_token', envVars.mockIdToken, {
     httpOnly: true,
     domain:

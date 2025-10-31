@@ -1,9 +1,12 @@
 import { MenuItem, SettingsIconSmall } from '@kids-reporter/routing-ui'
 
+export { STATUS_CODES } from './status-codes'
+
 import envVars from '@/environment-variables'
 
 export const INTERNAL_API_URL = envVars.internalGqlEndpoint
 export const API_URL = envVars.gqlEndpoint
+export const ACCESS_TOKEN_ENDPOINT = `${envVars.apiGatewayEndpoint}/auth/access-token`
 
 export const KIDS_URL_ORIGIN = 'https://kids.twreporter.org'
 export const SUBSCRIBE_URL = 'https://solink.soundon.fm/kidstwreporter'
