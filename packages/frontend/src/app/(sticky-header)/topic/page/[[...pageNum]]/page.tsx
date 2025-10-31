@@ -3,6 +3,8 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
+import { getCallBaodaozaiIntroContent } from '@/api/call-baodaozai-intro'
+import AllSiteBaodaozaiEventTrigger from '@/components/all-site-baodaozai-event-trigger'
 import Pagination from '@/components/pagination'
 import PostSlider from '@/components/post-slider'
 import {
@@ -165,19 +167,22 @@ export default async function Topic({
     notFound()
   }
 
-  // Fetch projects of specific page
-  const projectsRes = await sendGQLRequest({
-    query: genTopicsGQL(currentPage === 1),
-    variables: {
-      orderBy: [
-        {
-          publishedDate: 'desc',
-        },
-      ],
-      take: POST_PER_PAGE,
-      skip: (currentPage - 1) * POST_PER_PAGE,
-    },
-  })
+  const [projectsRes, topicsIntroContent] = await Promise.all([
+    // Fetch projects of specific page
+    sendGQLRequest({
+      query: genTopicsGQL(currentPage === 1),
+      variables: {
+        orderBy: [
+          {
+            publishedDate: 'desc',
+          },
+        ],
+        take: POST_PER_PAGE,
+        skip: (currentPage - 1) * POST_PER_PAGE,
+      },
+    }),
+    getCallBaodaozaiIntroContent({ where: { page: 'topics' } }),
+  ])
   if (!projectsRes) {
     log(LogLevel.WARNING, 'Empty topic response!')
     notFound()
@@ -224,6 +229,15 @@ export default async function Topic({
     <main
       className={`${styles.main} mb-10 flex flex-col items-center justify-center`}
     >
+      <AllSiteBaodaozaiEventTrigger
+        id="show-intro"
+        content={topicsIntroContent}
+      />
+      <div className="relative">
+        <div className="absolute top-[150vh]">
+          <AllSiteBaodaozaiEventTrigger id="hide-intro" />
+        </div>
+      </div>
       <div className="flex w-full max-w-7xl flex-col items-center justify-center gap-10">
         <img
           className="w-full max-w-xl"

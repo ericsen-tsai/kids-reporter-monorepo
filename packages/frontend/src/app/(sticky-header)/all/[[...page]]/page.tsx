@@ -1,6 +1,8 @@
 import { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 
+import { getCallBaodaozaiIntroContent } from '@/api/call-baodaozai-intro'
+import AllSiteBaodaozaiEventTrigger from '@/components/all-site-baodaozai-event-trigger'
 import Pagination from '@/components/pagination'
 import PostList from '@/components/post-list'
 import {
@@ -82,19 +84,29 @@ export default async function LatestPosts({
     posts = postsRes?.data?.data?.posts
   }
 
-  const postSummeries = getPostSummaries(posts)
+  const postSummaries = getPostSummaries(posts)
+
+  const introContent = await getCallBaodaozaiIntroContent({
+    where: { page: 'all' },
+  })
 
   return (
     <main
       style={{ width: '95vw' }}
       className="mb-10 flex flex-col items-center justify-center gap-10"
     >
+      <AllSiteBaodaozaiEventTrigger id="show-intro" content={introContent} />
+      <div className="relative">
+        <div className="absolute top-[150vh]">
+          <AllSiteBaodaozaiEventTrigger id="hide-intro" />
+        </div>
+      </div>
       <img
         className="w-full max-w-xl"
         src={'/assets/images/new_article.svg'}
         loading="lazy"
       />
-      <PostList posts={postSummeries} />
+      <PostList posts={postSummaries} />
       {totalPages && totalPages > 0 && (
         <Pagination
           currentPage={currentPage}

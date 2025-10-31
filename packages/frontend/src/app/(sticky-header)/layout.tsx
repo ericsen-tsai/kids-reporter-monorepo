@@ -1,5 +1,6 @@
 import { Header } from '@kids-reporter/routing-ui'
 
+import ScrollUpBaodaozaiEventTrigger from '@/components/scroll-up-baodaozai-event-trigger'
 import {
   ADDITIONAL_MENU_ITEMS,
   DONATE_URL,
@@ -24,6 +25,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         />
         <div className="flex w-full grow">{children}</div>
         <Baodaozai />
+        <ScrollUpBaodaozaiEventTrigger />
       </CallBaodaozaiProvider>
     </>
   )

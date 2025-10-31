@@ -80,8 +80,8 @@ function AllSiteBaodaozaiEventTrigger({
     <BaodaozaiEventTrigger
       id={id}
       disabled={id === 'show-intro' && !isFirstRenderAtTop}
-      dialogState={eventConfig.dialogState}
-      baodaozaiState={eventConfig.baodaozaiState}
+      once={false}
+      {...eventConfig}
     />
   )
 }

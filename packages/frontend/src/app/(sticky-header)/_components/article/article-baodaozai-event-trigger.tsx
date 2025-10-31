@@ -165,8 +165,7 @@ function ArticleBaodaozaiEventTrigger({
       id={id}
       once={once}
       disabled={disabled}
-      dialogState={eventConfig.dialogState}
-      baodaozaiState={eventConfig.baodaozaiState}
+      {...eventConfig}
     />
   )
 }

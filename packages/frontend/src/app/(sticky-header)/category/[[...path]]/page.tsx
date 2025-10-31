@@ -1,9 +1,12 @@
 import { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 
+import { getCallBaodaozaiIntroContent } from '@/api/call-baodaozai-intro'
+import AllSiteBaodaozaiEventTrigger from '@/components/all-site-baodaozai-event-trigger'
 import Pagination from '@/components/pagination'
 import PostList from '@/components/post-list'
 import {
+  CATEGORY_IMAGES,
   DEFAULT_THEME_COLOR,
   ERROR_PAGE,
   GENERAL_DESCRIPTION,
@@ -11,6 +14,10 @@ import {
   POST_PER_PAGE,
 } from '@/constants'
 import { getPostSummaries, log, LogLevel, sendGQLRequest } from '@/utils'
+import {
+  mapCategorySlugToIntroPageType,
+  parseCategoryInfoFromPath,
+} from '@/utils/category'
 
 import Navigator from '../../_components/category/navigator'
 
@@ -143,21 +150,11 @@ query($where: SubSubcategoryWhereUniqueInput!, $take: Int!, $skip: Int!, $orderB
 }
 `
 
-const getImageFromCategory = (category: string) => {
-  let imageURL
-  if (category === 'news') {
-    imageURL = '/assets/images/category_news.svg'
-  } else if (category === 'listening-news') {
-    imageURL = '/assets/images/category_listening_news.svg'
-  } else if (category === 'comics') {
-    imageURL = '/assets/images/category_comics.svg'
-  } else {
-    imageURL = '/assets/images/category_campus.svg'
-  }
-  return imageURL
-}
-
-export default async function Category({ params }: { params: { path: any } }) {
+export default async function Category({
+  params,
+}: {
+  params: { path: string[] | undefined }
+}) {
   const path = params.path
   if (!path || !Array.isArray(path) || path.length === 0) {
     log(LogLevel.WARNING, `Incorrect category path! ${path}`)
@@ -172,61 +169,25 @@ export default async function Category({ params }: { params: { path: any } }) {
   // length = 3(category, page N)       ex: /category/news/page/2
   // length = 4(subcategory, page N)    ex: /category/news/times/page/2
   // length = 5(subSubcategory, page N) ex: /category/news/times/medical-news/page/2
-  let category = '',
-    subcategory = '',
-    subSubcategory = '',
-    theme = '',
-    currentPage = 1
-  if (path.length === 1 && path[0]) {
-    category = path[0]
-  } else if (path.length === 2 && path[0] && path[1]) {
-    category = path[0]
-    subcategory = path[1]
-  } else if (path.length === 3 && path[0] && path[1] && path[2]) {
-    if (
-      path[1] === 'page' &&
-      Number.isInteger(Number(path[2])) &&
-      Number(path[2]) > 0
-    ) {
-      category = path[0]
-      currentPage = Number(path[2])
-    } else {
-      category = path[0]
-      subcategory = path[1]
-      subSubcategory = path[2]
-    }
-  } else if (
-    path.length === 4 &&
-    path[0] &&
-    path[1] &&
-    path[2] &&
-    path[3] &&
-    path[2] === 'page' &&
-    Number.isInteger(Number(path[3])) &&
-    Number(path[3]) > 0
-  ) {
-    category = path[0]
-    subcategory = path[1]
-    currentPage = Number(path[3])
-  } else if (
-    path.length === 5 &&
-    path[0] &&
-    path[1] &&
-    path[2] &&
-    path[3] &&
-    path[4] &&
-    path[3] === 'page' &&
-    Number.isInteger(Number(path[4])) &&
-    Number(path[4]) > 0
-  ) {
-    category = path[0]
-    subcategory = path[1]
-    subSubcategory = path[2]
-    currentPage = Number(path[4])
-  } else {
-    log(LogLevel.WARNING, `Incorrect category path! ${path}`)
+  const {
+    category,
+    subcategory,
+    subSubcategory,
+    currentPage = 1,
+    isNotFound,
+  } = parseCategoryInfoFromPath(path)
+
+  if (isNotFound || !category) {
+    log(LogLevel.WARNING, `Category not found! ${path}`)
     notFound()
   }
+
+  const imageURL = CATEGORY_IMAGES[category]
+  const pageEnum = mapCategorySlugToIntroPageType(category)
+
+  const introContent = pageEnum
+    ? await getCallBaodaozaiIntroContent({ where: { page: pageEnum } })
+    : undefined
 
   // Fetch subcategories for navigation
   const navigationItems = []
@@ -243,7 +204,7 @@ export default async function Category({ params }: { params: { path: any } }) {
     log(LogLevel.WARNING, 'Incorrect category!')
     notFound()
   }
-  theme = categoryData.themeColor || DEFAULT_THEME_COLOR
+  const theme = categoryData.themeColor || DEFAULT_THEME_COLOR
   const subcategories = categoryData.subcategories?.map((sub: any) => {
     return (
       sub && {
@@ -347,8 +308,6 @@ export default async function Category({ params }: { params: { path: any } }) {
     routingPrefix = `/category/${category}/page`
   }
 
-  const imageURL = getImageFromCategory(category)
-
   return (
     <main
       style={{ width: '95vw' }}
@@ -358,6 +317,19 @@ export default async function Category({ params }: { params: { path: any } }) {
         className={`flex w-full flex-col items-center justify-center gap-10 theme-${theme}`}
       >
         <img className="w-full max-w-xl" src={imageURL} loading="lazy" />
+        {pageEnum && (
+          <>
+            <AllSiteBaodaozaiEventTrigger
+              id="show-intro"
+              content={introContent}
+            />
+            <div className="relative">
+              <div className="absolute top-[150vh]">
+                <AllSiteBaodaozaiEventTrigger id="hide-intro" />
+              </div>
+            </div>
+          </>
+        )}
         <div className="flex flex-row flex-wrap justify-center gap-2.5">
           {navigationItems?.map(
             (item, index) =>
