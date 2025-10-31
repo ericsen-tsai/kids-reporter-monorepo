@@ -1,6 +1,7 @@
 'use client'
 
 import { Button, cn } from '@kids-reporter/routing-ui'
+import { ReactNode } from 'react'
 
 const DialogArrow = () => (
   <svg
@@ -36,7 +37,7 @@ const DialogArrow = () => (
 )
 
 export type DialogBoxProps = {
-  content: string
+  content: ReactNode
   isOpen: boolean
   onConfirm: () => void
   onCancel: () => void
