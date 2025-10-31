@@ -1,5 +1,6 @@
 // @ts-ignore `@twreporter/errors` does not have tyepscript definition file yet
 import _errors from '@twreporter/errors'
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
 
@@ -39,12 +40,18 @@ export function createApp({
 
   const corsOpts = {
     origin: corsAllowOrigin,
+    credentials: true,
   }
 
   // common middlewares for every request
   // 1. log requests
   // 2. handle cors requests
-  app.use(middlewareCreator.createLoggerMw(gcpProjectId), cors(corsOpts))
+  // 3. parse header cookie
+  app.use(
+    middlewareCreator.createLoggerMw(gcpProjectId),
+    cors(corsOpts),
+    cookieParser()
+  )
 
   // mini app: GraphQL API
   app.use(createGraphQLProxy(gql))
