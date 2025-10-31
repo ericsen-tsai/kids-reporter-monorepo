@@ -32,7 +32,7 @@ function ArticleCard({ article, showOverImageCover = false }: ArticleCardProp) {
             />
             {showOverImageCover && (
               <div className="absolute inset-0 flex items-center justify-center gap-[6.5px] bg-black/50 opacity-0 group-hover:opacity-100">
-                <span className="prose-p1-bold hidden text-white desktop:block">
+                <span className="hidden prose-p1-bold text-white desktop:block">
                   前往報導者
                 </span>
                 <ExternalLinkIcon />
@@ -44,7 +44,7 @@ function ArticleCard({ article, showOverImageCover = false }: ArticleCardProp) {
         <div className="flex min-w-0 flex-1 flex-col gap-2">
           <div className="flex items-center justify-between gap-4">
             {hasCategoryOrSubcategory && (
-              <span className="prose-p3-bold inline-flex items-center rounded-full bg-neutral-200 px-3 py-1 text-neutral-900">
+              <span className="inline-flex items-center rounded-full bg-neutral-200 px-3 py-1 prose-p3-bold text-neutral-900">
                 {article.subSubcategory ?? article.category}
               </span>
             )}
@@ -54,7 +54,7 @@ function ArticleCard({ article, showOverImageCover = false }: ArticleCardProp) {
             </span>
           </div>
 
-          <h3 className="prose-p1-bold desktop:prose-h6-large line-clamp-2 font-bold text-neutral-900 transition-colors duration-200 group-hover:text-red-400">
+          <h3 className="line-clamp-2 prose-p1-bold font-bold text-neutral-900 transition-colors duration-200 group-hover:text-red-400 desktop:prose-h6-large">
             {article.title}
           </h3>
         </div>

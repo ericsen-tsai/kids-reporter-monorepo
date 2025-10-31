@@ -1,6 +1,6 @@
 'use client'
 
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { useCallBaodaozaiContext } from '../context'
 import { BaodaozaiAction, BaodaozaiActionSetter } from '../types'
@@ -21,6 +21,7 @@ export type BaodaozaiEventTriggerProps = {
   once?: boolean
   disabled?: boolean
   id?: string
+  suppressAfterAction?: boolean
 }
 
 function BaodaozaiEventTrigger({
@@ -28,6 +29,7 @@ function BaodaozaiEventTrigger({
   baodaozaiState: newBaodaozaiState = {},
   once = true,
   disabled = false,
+  suppressAfterAction = true,
   id,
 }: BaodaozaiEventTriggerProps) {
   const {
@@ -38,8 +40,37 @@ function BaodaozaiEventTrigger({
   const containerRef = useRef<HTMLDivElement>(null)
   const triggeredOnceRef = useRef(false)
 
+  const shouldSuppress = useRef(false)
+
+  const newDialogStateWithSuppress = useMemo(() => {
+    const { confirmAction, cancelAction, ...rest } = newDialogState
+    return {
+      ...rest,
+      ...(confirmAction
+        ? {
+            confirmAction: (args: Parameters<BaodaozaiActionSetter>[0]) => {
+              shouldSuppress.current = true
+              confirmAction(args)
+            },
+          }
+        : {}),
+      ...(cancelAction
+        ? {
+            cancelAction: (args: Parameters<BaodaozaiActionSetter>[0]) => {
+              shouldSuppress.current = true
+              cancelAction(args)
+            },
+          }
+        : {}),
+    }
+  }, [newDialogState])
+
   const handleInView = useCallback(() => {
-    onDialogPropsChange({ ...newDialogState })
+    onDialogPropsChange(
+      suppressAfterAction
+        ? { ...newDialogStateWithSuppress }
+        : { ...newDialogState }
+    )
 
     if (typeof isActive === 'boolean') {
       setIsActive(isActive)
@@ -61,7 +92,10 @@ function BaodaozaiEventTrigger({
     setIsActive,
     setAction,
     triggerStep,
+    suppressAfterAction,
+    newDialogStateWithSuppress,
   ])
+
   const [prevDisabled, setPrevDisabled] = useState(disabled)
 
   useEffect(() => {
@@ -73,7 +107,13 @@ function BaodaozaiEventTrigger({
 
   useEffect(() => {
     const element = containerRef.current
-    if (!element || disabled || triggeredOnceRef.current) return
+    if (
+      !element ||
+      disabled ||
+      triggeredOnceRef.current ||
+      shouldSuppress.current
+    )
+      return
 
     const observer = new IntersectionObserver(
       (entries) => {

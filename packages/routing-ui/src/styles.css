@@ -153,209 +153,208 @@
 }
 
 @layer utilities {
-  /* Typography Utilities - Headlines Large */
-  .prose-h1-large {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-h1-large);
-    font-weight: 700;
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
+  body.no-scroll {
+    overflow: hidden;
   }
+}
 
-  .prose-h2-large {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-h2-large);
-    font-weight: 700;
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
-  }
+/* Typography Utilities - Headlines Large */
+@utility prose-h1-large {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h1-large);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 2.4px;
+}
 
-  .prose-h3-large {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-h3-large);
-    font-weight: 700;
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
-  }
+@utility prose-h2-large {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h2-large);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 2px;
+}
 
-  .prose-h4-large {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-h4-large);
-    font-weight: 700;
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
-  }
+@utility prose-h3-large {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h3-large);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 1.6px;
+}
 
-  .prose-h5-large {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-h5-large);
-    font-weight: 700;
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
-  }
+@utility prose-h4-large {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h4-large);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 1.4px;
+}
 
-  .prose-h6-large {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-h6-large);
-    font-weight: 700;
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
-  }
+@utility prose-h5-large {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h5-large);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 1.1px;
+}
 
-  /* Typography Utilities - Headlines Small */
-  .prose-h1-small {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-h1-small);
-    font-weight: 700;
-    line-height: var(--line-height-normal);
-    letter-spacing: 1.6px;
-  }
+@utility prose-h6-large {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h6-large);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.9px;
+}
 
-  .prose-h2-small {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-h2-small);
-    font-weight: 700;
-    line-height: var(--line-height-normal);
-    letter-spacing: 1.4px;
-  }
+/* Typography Utilities - Headlines Small */
+@utility prose-h1-small {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h1-small);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 1.6px;
+}
 
-  .prose-h3-small {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-h3-small);
-    font-weight: 700;
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
-  }
+@utility prose-h2-small {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h2-small);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 1.4px;
+}
 
-  .prose-h4-small {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-h4-small);
-    font-weight: 700;
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
-  }
+@utility prose-h3-small {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h3-small);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 1.2px;
+}
 
-  .prose-h5-small {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-h5-small);
-    font-weight: 700;
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
-  }
+@utility prose-h4-small {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h4-small);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 1.1px;
+}
 
-  .prose-h6-small {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-h6-small);
-    font-weight: 700;
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
-  }
+@utility prose-h5-small {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h5-small);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 1px;
+}
 
-  /* Typography Utilities - Paragraphs */
-  .prose-p1 {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-p1);
-    font-weight: 500;
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
-  }
+@utility prose-h6-small {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h6-small);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.9px;
+}
 
-  .prose-p1-bold {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-p1);
-    font-weight: 700;
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
-  }
+/* Typography Utilities - Paragraphs */
+@utility prose-p1 {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-p1);
+  font-weight: 500;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.8px;
+}
 
-  .prose-p2 {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-p2);
-    font-weight: 500;
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
-  }
+@utility prose-p1-bold {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-p1);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.8px;
+}
 
-  .prose-p2-bold {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-p2);
-    font-weight: 700;
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
-  }
+@utility prose-p2 {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-p2);
+  font-weight: 500;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.7px;
+}
 
-  .prose-p3 {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-p3);
-    font-weight: 500;
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
-  }
+@utility prose-p2-bold {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-p2);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.7px;
+}
 
-  .prose-p3-bold {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-p3);
-    font-weight: 700;
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
-  }
+@utility prose-p3 {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-p3);
+  font-weight: 500;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.6px;
+}
 
-  .prose-p4 {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-p4);
-    font-weight: 500;
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
-  }
+@utility prose-p3-bold {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-p3);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.6px;
+}
 
-  .prose-p4-bold {
-    font-family: var(--font-family-noto);
-    font-size: var(--font-size-p4);
-    font-weight: 700;
-    line-height: var(--line-height-normal);
-    letter-spacing: var(--letter-spacing-wide);
-  }
+@utility prose-p4 {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-p4);
+  font-weight: 500;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.5px;
+}
 
-  /* Swei Marker Sans Font Variants */
-  .font-swei {
-    font-family: var(--font-family-swei);
-  }
+@utility prose-p4-bold {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-p4);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.5px;
+}
 
-  /* Theme Color Utilities */
-  .theme-red {
-    --theme-color: var(--color-red-400);
-  }
-  .theme-yellow {
-    --theme-color: var(--color-yellow-400);
-  }
-  .theme-blue {
-    --theme-color: var(--color-blue-400);
-  }
+/* Swei Marker Sans Font Variants */
+@utility font-swei {
+  font-family: var(--font-family-swei);
+}
 
-  /* Custom Scrollbar Utilities */
-  .scrollbar-thin {
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-neutral-gray-300) transparent;
-  }
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-neutral-300) transparent;
 
-  .scrollbar-thin::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     width: 6px;
   }
 
-  .scrollbar-thin::-webkit-scrollbar-track {
+  &::-webkit-scrollbar-track {
     background: transparent;
   }
 
-  .scrollbar-thin::-webkit-scrollbar-thumb {
+  &::-webkit-scrollbar-thumb {
     background: transparent;
     border-radius: 3px;
   }
 
-  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  &::-webkit-scrollbar-thumb:hover {
     background: transparent;
   }
+}
 
-  body.no-scroll {
-    overflow: hidden;
-  }
+/* Theme Color Utilities */
+@utility theme-red {
+  --theme-color: var(--color-red-400);
+}
+@utility theme-yellow {
+  --theme-color: var(--color-yellow-400);
+}
+@utility theme-blue {
+  --theme-color: var(--color-blue-400);
 }

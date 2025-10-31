@@ -40,7 +40,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     label: '校園',
-    href: '/category/campus/news-classroom',
+    href: '/category/campus',
     subItems: [
       { label: '校園寶可夢', href: '/category/campus/campus-pokemon' },
       { label: '上課好好玩', href: '/category/campus/teaching' },

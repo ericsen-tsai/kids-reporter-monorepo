@@ -29,7 +29,7 @@ const CloseIcon = ({ className }: { className?: string }) => (
 
 const inputVariants = cva(
   // Base styles
-  'prose-p1 desktop:bg-white! px-4 py-1.5 h-11 flex items-center rounded-full border border-transparent bg-neutral-100 transition-colors duration-200 hover:border-neutral-600',
+  'desktop:bg-white! px-4 py-1.5 h-11 flex items-center rounded-full border border-transparent bg-neutral-100 prose-p1 transition-colors duration-200 hover:border-neutral-600',
   {
     variants: {
       state: {

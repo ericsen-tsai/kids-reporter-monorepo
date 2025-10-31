@@ -86,7 +86,7 @@ function Menu({
       {/* Menu */}
       <div
         className={cn(
-          'top-0 left-0 tablet:w-80 bg-white shadow-2xl ease-in-out scrollbar-thin tablet:pt-0 fixed z-1001 h-full w-full transform pt-(--mobile-header-height) transition-transform duration-300',
+          'top-0 left-0 tablet:w-80 bg-white shadow-2xl ease-in-out tablet:pt-0 fixed z-1001 h-full scrollbar-thin w-full transform pt-(--mobile-header-height) transition-transform duration-300',
           isOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >

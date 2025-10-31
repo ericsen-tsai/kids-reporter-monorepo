@@ -2,6 +2,7 @@
 
 import { ComponentProps, useMemo } from 'react'
 
+import { ReporterIcon } from '@/icons'
 import {
   BaodaozaiActionSetter,
   BaodaozaiEventTrigger,
@@ -107,8 +108,15 @@ function createBaodaozaiEventConfig({
     'show-related-articles': {
       dialogState: {
         isOpen: true,
-        content:
-          '現在點擊上方的 Tab，可以看到來自報導者的觀點了，一起來看看更多深度文章吧！',
+        content: (
+          <span>
+            現在點擊相關文章的
+            <span className="mx-1 inline-block size-5 align-middle">
+              <ReporterIcon />
+            </span>
+            報導者，可以看到來自報導者的觀點了，一起來看看更多深度文章吧！
+          </span>
+        ),
         hideCancelButton: true,
         confirmText: '我知道了',
         confirmAction: () => {},
