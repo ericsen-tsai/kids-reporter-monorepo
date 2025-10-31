@@ -173,12 +173,12 @@ export function SearchInputSection(props: SearchInputSectionProps) {
           isFocused,
         })}
       >
-        <h3 className="prose-p3 font-bold mb-3 text-neutral-700">熱門搜尋</h3>
+        <h3 className="font-bold mb-3 prose-p3 text-neutral-700">熱門搜尋</h3>
         <div className="gap-2.5 flex flex-wrap">
           {tags.map((keyword) => (
             <a
               key={keyword}
-              className="px-3 py-1 prose-p2 font-bold cursor-pointer rounded-full bg-neutral-200 text-neutral-900 transition-colors duration-200 hover:bg-red-500 hover:text-neutral-white"
+              className="px-3 py-1 font-bold cursor-pointer rounded-full bg-neutral-200 prose-p2 text-neutral-900 transition-colors duration-200 hover:bg-red-500 hover:text-neutral-white"
               href={`/search?q=${encodeURIComponent(keyword)}`}
             >
               #{keyword}
@@ -285,7 +285,7 @@ export function BottomNavigation({
           <div key={item.label} className="flex items-center">
             <a
               href={item.href}
-              className="py-1 prose-p1 font-bold! h-6 flex items-center text-neutral-900 transition-colors hover:text-red-400"
+              className="py-1 font-bold! h-6 flex items-center prose-p1 text-neutral-900 transition-colors hover:text-red-400"
             >
               {item.label}
             </a>

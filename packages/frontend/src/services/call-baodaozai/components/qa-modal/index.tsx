@@ -136,7 +136,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
     if (isLeaving) {
       return (
         <div className="mb-5 flex w-full flex-col items-start p-6 tablet:mb-0">
-          <h2 className="prose-h6-large mb-3 text-neutral-900">
+          <h2 className="mb-3 prose-h6-large text-neutral-900">
             確定要放棄作答嗎？
           </h2>
           <p className="prose-p1 text-neutral-700">
@@ -186,7 +186,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
         return (
           <div className="flex h-full w-full flex-col p-6 pb-10 tablet:pb-6">
             <div className="mb-6 w-full">
-              <h2 className="prose-h6-large mb-3 text-neutral-900">
+              <h2 className="mb-3 prose-h6-large text-neutral-900">
                 {currentModalStep.title}
               </h2>
               <p className="prose-p1 text-neutral-700">
@@ -196,7 +196,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
 
             <textarea
               className={cn(
-                'prose-p1 h-72 w-full flex-1 resize-none rounded-2xl border-2 bg-white px-5 py-4 text-neutral-900 transition-all focus:outline-none',
+                'h-72 w-full flex-1 resize-none rounded-2xl border-2 bg-white px-5 py-4 prose-p1 text-neutral-900 transition-all focus:outline-none',
                 (answers[currentModalStep.questionIndex] || '').trim()
                   ? 'border-neutral-600'
                   : 'border-neutral-200 hover:border-neutral-600 focus:border-neutral-600'
@@ -217,7 +217,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
           <div className="flex h-full flex-col bg-neutral-100">
             <div className="flex flex-col bg-neutral-white">
               <div className="mb-6 w-full px-6 pt-6">
-                <h2 className="prose-h6-large text-center text-neutral-900">
+                <h2 className="text-center prose-h6-large text-neutral-900">
                   {answers[currentModalStep.questionIndex] ===
                   currentModalStep.correctAnswerContent
                     ? '答對了～'
@@ -252,7 +252,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
             {/* Answer Section */}
             <div className="w-full bg-neutral-100 p-6 pb-10 tablet:pb-6">
               <div className="mb-4">
-                <p className="prose-p1 mb-4 text-neutral-700">正確解答：</p>
+                <p className="mb-4 prose-p1 text-neutral-700">正確解答：</p>
                 <div className="w-full rounded-2xl border-2 border-neutral-200 bg-white p-4">
                   <span className="prose-p1-bold text-neutral-900">
                     {currentModalStep.correctAnswerIndex + 1}.{' '}
@@ -271,7 +271,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
           <div className="flex h-full w-full flex-col bg-neutral-100">
             <div className="flex flex-col bg-neutral-white">
               <div className="mb-6 w-full px-6 pt-6">
-                <h2 className="prose-h6-large text-center text-neutral-900">
+                <h2 className="text-center prose-h6-large text-neutral-900">
                   已送出
                 </h2>
               </div>
@@ -293,7 +293,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
 
             <div className="w-full bg-neutral-100 p-6 pb-10 tablet:pb-6">
               <div className="mb-4">
-                <p className="prose-p1 mb-4 text-neutral-700">你的回答：</p>
+                <p className="mb-4 prose-p1 text-neutral-700">你的回答：</p>
                 <div className="w-full rounded-2xl border-2 border-neutral-200 bg-white p-4">
                   <span className="prose-p1-bold text-wrap break-words text-neutral-900">
                     {currentAnswer}
@@ -434,7 +434,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
   if (!isOpen) return null
 
   return (
-    <div className="scrollbar-thin fixed inset-0 z-1002 flex items-end justify-center tablet:items-center">
+    <div className="fixed inset-0 z-1002 flex scrollbar-thin items-end justify-center tablet:items-center">
       <div className="absolute inset-0 z-0 bg-neutral-black/20" />
       <div
         className={cn(

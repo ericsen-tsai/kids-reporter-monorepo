@@ -90,7 +90,7 @@ function HeaderMenuItem({
             <a
               key={index}
               href={subItem.href}
-              className="px-6 tablet:px-12 py-2 pl-12 prose-p2 font-medium block transition-colors duration-200 hover:bg-neutral-black/5 hover:text-neutral-900 active:bg-neutral-black/10"
+              className="px-6 tablet:px-12 py-2 pl-12 font-medium block prose-p2 transition-colors duration-200 hover:bg-neutral-black/5 hover:text-neutral-900 active:bg-neutral-black/10"
               onClick={closeMenu}
             >
               {subItem.label}

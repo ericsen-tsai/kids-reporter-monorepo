@@ -44,7 +44,7 @@ const Footer = ({
                   />
                 </a>
               </div>
-              <p className="prose-p2 w-full text-neutral-900">
+              <p className="w-full prose-p2 text-neutral-900">
                 《少年報導者》是由非營利媒體《報導者》針對兒少打造的深度新聞報導品牌，與兒童和少年一起理解世界，參與未來。
               </p>
               <Button size={44} variant="secondary" asChild className="w-75">
@@ -60,7 +60,7 @@ const Footer = ({
                   <a
                     key={link.label}
                     href={link.href}
-                    className="prose-p2-bold min-w-30 text-neutral-900 transition-colors duration-200 hover:text-red-400"
+                    className="min-w-30 prose-p2-bold text-neutral-900 transition-colors duration-200 hover:text-red-400"
                     target={link.external ? '_blank' : undefined}
                     rel={link.external ? 'noopener noreferrer' : undefined}
                   >
@@ -73,7 +73,7 @@ const Footer = ({
                   <a
                     key={link.label}
                     href={link.href}
-                    className="prose-p2-bold min-w-30 text-neutral-900 transition-colors duration-200 hover:text-red-400"
+                    className="min-w-30 prose-p2-bold text-neutral-900 transition-colors duration-200 hover:text-red-400"
                     target={link.external ? '_blank' : undefined}
                     rel={link.external ? 'noopener noreferrer' : undefined}
                   >
@@ -110,7 +110,7 @@ const Footer = ({
               })}
             </div>
 
-            <div className="prose-p3 text-center text-neutral-white desktop:order-1 desktop:text-left">
+            <div className="text-center prose-p3 text-neutral-white desktop:order-1 desktop:text-left">
               <p className="desktop:inline">
                 衛部救字第1131363879號｜勸募期間 2025/1/1~12/31
                 <span className="hidden desktop:inline">｜</span>

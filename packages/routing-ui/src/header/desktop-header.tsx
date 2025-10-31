@@ -70,7 +70,7 @@ export function DesktopHeader({
                 </div>
                 {postTitle && (
                   <div className="pr-12 block">
-                    <p className="prose-p2 font-medium tracking-wide max-w-124 overflow-hidden text-ellipsis whitespace-nowrap text-neutral-900">
+                    <p className="font-medium tracking-wide max-w-124 overflow-hidden prose-p2 text-ellipsis whitespace-nowrap text-neutral-900">
                       {postTitle}
                     </p>
                   </div>
@@ -84,7 +84,7 @@ export function DesktopHeader({
                     postTitle && compactMode && 'max-w-0'
                   )}
                 >
-                  <span className="prose-p2 font-medium translate-y-0 inline-block tracking-[2.2px]! text-nowrap text-neutral-900 opacity-100">
+                  <span className="font-medium translate-y-0 inline-block prose-p2 tracking-[2.2px]! text-nowrap text-neutral-900 opacity-100">
                     理解世界 × 參與未來
                   </span>
                 </div>
