@@ -20,7 +20,8 @@
     "composite": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "__generated__/*": ["./__generated__/*"]
     },
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
