@@ -77,14 +77,18 @@ function Baodaozai() {
       )}
     >
       <div
-        className="absolute -right-0 -bottom-0 z-[11] w-full tablet:right-6 tablet:bottom-21 tablet:z-1 tablet:w-auto tablet:translate-x-0 desktop:right-8"
-        ref={refDialogBoxContainerRef}
+        className={cn(
+          'absolute -right-0 -bottom-0 z-[11] w-full tablet:right-6 tablet:bottom-21 tablet:z-1 tablet:w-auto tablet:translate-x-0 desktop:right-8',
+          dialogProps.isOpen ? 'pointer-events-auto' : 'pointer-events-none'
+        )}
       >
-        <DialogBox
-          {...dialogProps}
-          onConfirm={handleConfirm}
-          onCancel={handleCancel}
-        />
+        <div ref={refDialogBoxContainerRef}>
+          <DialogBox
+            {...dialogProps}
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+          />
+        </div>
       </div>
       <button
         className={cn(
