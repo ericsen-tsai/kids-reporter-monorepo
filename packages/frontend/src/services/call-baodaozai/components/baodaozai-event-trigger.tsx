@@ -46,31 +46,23 @@ function BaodaozaiEventTrigger({
     const { confirmAction, cancelAction, ...rest } = newDialogState
     return {
       ...rest,
-      ...(confirmAction
-        ? {
-            confirmAction: (args: Parameters<BaodaozaiActionSetter>[0]) => {
-              shouldSuppress.current = true
-              confirmAction(args)
-            },
-          }
-        : {}),
-      ...(cancelAction
-        ? {
-            cancelAction: (args: Parameters<BaodaozaiActionSetter>[0]) => {
-              shouldSuppress.current = true
-              cancelAction(args)
-            },
-          }
-        : {}),
+      confirmAction: (args: Parameters<BaodaozaiActionSetter>[0]) => {
+        if (suppressAfterAction) {
+          shouldSuppress.current = true
+        }
+        confirmAction?.(args)
+      },
+      cancelAction: (args: Parameters<BaodaozaiActionSetter>[0]) => {
+        if (suppressAfterAction) {
+          shouldSuppress.current = true
+        }
+        cancelAction?.(args)
+      },
     }
-  }, [newDialogState])
+  }, [newDialogState, suppressAfterAction])
 
   const handleInView = useCallback(() => {
-    onDialogPropsChange(
-      suppressAfterAction
-        ? { ...newDialogStateWithSuppress }
-        : { ...newDialogState }
-    )
+    onDialogPropsChange({ ...newDialogStateWithSuppress })
 
     if (typeof isActive === 'boolean') {
       setIsActive(isActive)
@@ -85,15 +77,13 @@ function BaodaozaiEventTrigger({
     }
   }, [
     onDialogPropsChange,
-    newDialogState,
+    newDialogStateWithSuppress,
     isActive,
     action,
     shouldTriggerStep,
     setIsActive,
     setAction,
     triggerStep,
-    suppressAfterAction,
-    newDialogStateWithSuppress,
   ])
 
   const [prevDisabled, setPrevDisabled] = useState(disabled)
