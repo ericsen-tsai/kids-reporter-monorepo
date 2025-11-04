@@ -41,7 +41,7 @@ function isPost(
 export async function generateMetadata({
   params,
 }: {
-  params: { path: string[] }
+  params: { path: string[] | undefined }
 }): Promise<Metadata> {
   const path = params.path
   const { category, subcategory } = parseCategoryInfoFromPath(path)
@@ -54,7 +54,7 @@ export async function generateMetadata({
   if (!categoryData) {
     log(
       LogLevel.INFO,
-      `Category metadata not found. URL path is: /${params.path.join('/')}`
+      `Category metadata not found. URL path is: /${path?.join('/') ?? ''}`
     )
     return {}
   }

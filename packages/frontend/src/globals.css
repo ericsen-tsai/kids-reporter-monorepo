@@ -290,7 +290,7 @@
     font-weight: bold;
   }
 
-  // for backward compatibility
+  /* for backward compatibility */
   .theme-red {
     --theme-color: var(--color-red-400);
   }
