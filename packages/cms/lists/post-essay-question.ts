@@ -9,7 +9,6 @@ import {
 } from './utils/access-control-list'
 
 const operationAccessControl = allowRoles([
-  RoleEnum.FrontendHeadlessAccount,
   RoleEnum.Admin,
   RoleEnum.Owner,
   RoleEnum.Editor,
