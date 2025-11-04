@@ -12,6 +12,7 @@ const operationAccessControl = allowRoles([
   RoleEnum.FrontendHeadlessAccount,
   RoleEnum.Admin,
   RoleEnum.Owner,
+  RoleEnum.Editor,
 ])
 
 export default list<ListType<'PostEssayQuestion'>>({
