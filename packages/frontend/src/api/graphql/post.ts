@@ -39,6 +39,7 @@ export const GET_POST_GQL = gql`
     post(where: $where) {
       opening
       title
+      showBaodaozai
       newsReadingGroup {
         items(orderBy: $orderBy) {
           name
