@@ -43,9 +43,13 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
     setCurrentModalStepIndex(currentModalStepIndex + 1)
   }, [currentModalStepIndex])
 
-  const handlePass = useCallback(() => {
-    setCurrentModalStepIndex(currentModalStepIndex + 2)
-  }, [currentModalStepIndex])
+  const handlePass = useCallback(
+    (questionIndex: number) => {
+      setCurrentModalStepIndex(currentModalStepIndex + 2)
+      setAnswers((prev) => ({ ...prev, [questionIndex]: '' }))
+    },
+    [currentModalStepIndex, setAnswers]
+  )
 
   const handleShowLeaving = useCallback(() => {
     setIsLeaving(true)
@@ -69,6 +73,13 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
     onSubmit(answers, events)
   }, [onSubmit, answers, events])
 
+  const handleAnswerChange = useCallback(
+    (questionIndex: number, answer: string) => {
+      setAnswers((prev) => ({ ...prev, [questionIndex]: answer }))
+    },
+    []
+  )
+
   const modalSteps = useMemo(() => {
     return getModalStepsFromQuestions({
       questions,
@@ -77,13 +88,6 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
       onSubmit: handleSubmit,
     })
   }, [handleNext, handlePass, questions, handleSubmit])
-
-  const handleAnswerChange = useCallback(
-    (questionIndex: number, answer: string) => {
-      setAnswers((prev) => ({ ...prev, [questionIndex]: answer }))
-    },
-    []
-  )
 
   const handleReset = useCallback(() => {
     setAnswers({})

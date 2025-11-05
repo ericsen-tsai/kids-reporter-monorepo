@@ -1,0 +1,1 @@
+export const BAODAOZAI_QUESTION_COUNT = 3

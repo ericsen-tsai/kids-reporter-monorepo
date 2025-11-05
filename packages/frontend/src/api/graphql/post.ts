@@ -35,6 +35,8 @@ export const GET_POST_GQL = gql`
     $orderBy: [NewsReadingGroupItemOrderByInput!]!
     $take: Int
     $relatedPostsWhere: PostWhereInput!
+    $postEssayQuestionsTake: Int
+    $postChoiceQuestionsTake: Int
   ) {
     post(where: $where) {
       opening
@@ -129,12 +131,12 @@ export const GET_POST_GQL = gql`
           ...PostContent
         }
       }
-      postEssayQuestions {
+      postEssayQuestions(take: $postEssayQuestionsTake) {
         id
         title
         hint
       }
-      postChoiceQuestions {
+      postChoiceQuestions(take: $postChoiceQuestionsTake) {
         id
         title
         options
