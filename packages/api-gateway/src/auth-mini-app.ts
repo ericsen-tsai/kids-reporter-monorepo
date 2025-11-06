@@ -114,6 +114,7 @@ export function createAuthMiniApp() {
             cookie: `id_token=${idToken}`,
             'content-type': 'application/json',
           },
+          timeout: 10000, // 10 seconds
         }
       )
 
