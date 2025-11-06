@@ -1,7 +1,7 @@
 // WARNING:
 //
 // THIS FILE IS ONLY FOR DEVELOPMENT.
-// After login implementation is done, this route `/login` should be DELETED.
+// After login implementation is done, this route `/login_test` should be DELETED.
 
 import { NextResponse } from 'next/server'
 

@@ -1,7 +1,6 @@
 import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 
-import { LoginComponent } from '@/components/login'
 import { GENERAL_DESCRIPTION, IS_LOGIN_ENABLED } from '@/constants'
 
 export const metadata: Metadata = {
@@ -14,9 +13,6 @@ export default async function Login() {
     notFound()
   }
 
-  return (
-    <main className="my-24 flex flex-col items-center justify-center">
-      <LoginComponent />
-    </main>
-  )
+  // Redirect to the API route handler that sets the cookie and redirects
+  redirect('/api/login_test')
 }
