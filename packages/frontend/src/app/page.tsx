@@ -43,21 +43,36 @@ export default async function Home() {
   const serverRenderTime = new Date().toISOString()
   console.log('Server re-render at:', serverRenderTime)
 
-  const [topicProjects, latestPostsData, editorPicksSettings, introContent] =
-    await Promise.all([
-      getTopicProjects({
-        orderBy: [{ publishedDate: 'desc' }],
-        take: 9,
-      }),
-      getLatestPosts({
-        orderBy: [{ publishedDate: 'desc' }],
-        take: 6,
-      }),
-      getEditorPicksSettings({
-        take: 5,
-      }),
-      getCallBaodaozaiIntroContent({ where: { page: 'home' } }),
-    ])
+  const [
+    topicProjectsRes,
+    latestPostsDataRes,
+    editorPicksSettingsRes,
+    introContentRes,
+  ] = await Promise.allSettled([
+    getTopicProjects({
+      orderBy: [{ publishedDate: 'desc' }],
+      take: 9,
+    }),
+    getLatestPosts({
+      orderBy: [{ publishedDate: 'desc' }],
+      take: 6,
+    }),
+    getEditorPicksSettings({
+      take: 5,
+    }),
+    getCallBaodaozaiIntroContent({ where: { page: 'home' } }),
+  ])
+
+  const topicProjects =
+    topicProjectsRes.status === 'fulfilled' ? topicProjectsRes.value : []
+  const latestPostsData =
+    latestPostsDataRes.status === 'fulfilled' ? latestPostsDataRes.value : []
+  const editorPicksSettings =
+    editorPicksSettingsRes.status === 'fulfilled'
+      ? editorPicksSettingsRes.value
+      : []
+  const introContent =
+    introContentRes.status === 'fulfilled' ? introContentRes.value : undefined
 
   const topics =
     topicProjects?.map((project) => {
@@ -85,7 +100,7 @@ export default async function Home() {
   )
 
   // 4. Fetch posts for each section
-  const sectionPostsArray = await Promise.all(
+  const sectionPostsArrayRes = await Promise.allSettled(
     SECTIONS.map(async (sectionConfig) => {
       // Get category/subcategory name from link.
       // ex: '/category/listening-news/' => split to ['category', 'listening-news'] => pop 'listening-news'
@@ -108,6 +123,10 @@ export default async function Home() {
       return getPostSummaries(relatedPosts)
     })
   )
+
+  const sectionPostsArray = sectionPostsArrayRes.map((res) => {
+    return res.status === 'fulfilled' ? res.value : []
+  })
 
   return (
     <CallBaodaozaiProvider>

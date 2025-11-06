@@ -167,7 +167,7 @@ export default async function Topic({
     notFound()
   }
 
-  const [projectsRes, topicsIntroContent] = await Promise.all([
+  const [projectsRes, topicsIntroContentRes] = await Promise.allSettled([
     // Fetch projects of specific page
     sendGQLRequest({
       query: genTopicsGQL(currentPage === 1),
@@ -183,13 +183,14 @@ export default async function Topic({
     }),
     getCallBaodaozaiIntroContent({ where: { page: 'topics' } }),
   ])
-  if (!projectsRes) {
+  if (projectsRes.status === 'rejected') {
     log(LogLevel.WARNING, 'Empty topic response!')
     notFound()
   }
 
-  const topics = projectsRes?.data?.data?.projects
-  const topicsCount = projectsRes?.data?.data?.projectsCount
+  const projects = projectsRes.value
+  const topics = projects?.data?.data?.projects
+  const topicsCount = projects?.data?.data?.projectsCount
   const totalPages = Math.ceil(topicsCount / POST_PER_PAGE)
   if (currentPage > 1 && currentPage > totalPages) {
     log(
@@ -224,6 +225,11 @@ export default async function Topic({
   const topicsForListing = featuredTopic
     ? topicSummaries.slice(1)
     : topicSummaries
+
+  const topicsIntroContent =
+    topicsIntroContentRes.status === 'fulfilled'
+      ? topicsIntroContentRes.value
+      : ''
 
   return (
     <main
