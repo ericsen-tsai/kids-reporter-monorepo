@@ -18,7 +18,10 @@ import {
   DEFAULT_THEME_COLOR,
   FontSizeLevel,
 } from '@/constants'
-import { BAODAOZAI_QUESTION_COUNT } from '@/constants/baodaozai-question-count'
+import {
+  BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT,
+  BAODAOZAI_QUESTION_COUNT,
+} from '@/constants/baodaozai-question-count'
 import { useHydratedAuthStore } from '@/services/auth/use-hydrated-auth-store'
 import {
   BaodaozaiActionSetter,
@@ -283,14 +286,14 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
   }, [post.tagsOrdered])
 
   const showBaodaozai = (() => {
-    if (typeof post?.showBaodaozai === 'boolean' && !post.showBaodaozai) {
-      return false
+    if (post?.showBaodaozai === true && member?.showBaodaozai === true) {
+      return true
     }
-    if (typeof member?.showBaodaozai === 'boolean') return member.showBaodaozai
     return false
   })()
 
-  const essayQuestionCount = member?.essayQuestionCount ?? 3
+  const essayQuestionCount =
+    member?.essayQuestionCount ?? BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT
 
   const postQuestions = useMemo<BaodaozaiQuestions | null>(() => {
     const essayCount = essayQuestionCount
