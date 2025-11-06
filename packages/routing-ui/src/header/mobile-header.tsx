@@ -36,7 +36,7 @@ export function MobileHeader({
             {mobileBackButtonHref && (
               <a
                 href={mobileBackButtonHref}
-                className="size-8 mr-2 flex cursor-pointer items-center justify-center"
+                className="size-8 mr-2 flex cursor-pointer items-center justify-center tablet:hidden"
               >
                 <ArrowIcon />
               </a>
