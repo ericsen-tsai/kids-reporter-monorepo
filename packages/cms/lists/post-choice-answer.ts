@@ -8,6 +8,7 @@ import {
 } from '@keystone-6/core/fields'
 
 import type { ListType } from '../types/keystone-list-types'
+import { allowRoles, RoleEnum } from './utils/access-control-list'
 import {
   makeMemberOwnedFilter,
   memberOwnedOperationAccess,
@@ -34,6 +35,12 @@ export default list<ListType<'PostChoiceAnswer'>>({
       many: false,
       ui: {
         hideCreate: true,
+      },
+      graphql: {
+        omit: {
+          create: true,
+          update: true,
+        },
       },
     }),
     choiceIndex: integer({
@@ -118,8 +125,8 @@ export default list<ListType<'PostChoiceAnswer'>>({
   access: {
     operation: {
       query: operationAccessControl,
-      create: operationAccessControl,
-      update: operationAccessControl,
+      create: allowRoles([RoleEnum.Member]),
+      update: allowRoles([RoleEnum.Member]),
       delete: operationAccessControl,
     },
     filter: {
@@ -129,13 +136,34 @@ export default list<ListType<'PostChoiceAnswer'>>({
     },
   },
   hooks: {
-    resolveInput: async ({ resolvedData, item, context }) => {
+    resolveInput: async ({ resolvedData, item, context, operation }) => {
       const questionId = resolvedData.question?.connect?.id ?? item?.questionId
-      const memberId = resolvedData.member?.connect?.id ?? item?.memberId
+      const memberId = item?.memberId?.toString()
 
-      if (questionId && memberId) {
+      const sessionMemberId = context.session?.data?.memberId?.toString()
+
+      if (!sessionMemberId) {
+        throw new Error(
+          'You must be signed in as a member to submit an answer.'
+        )
+      }
+
+      if (operation === 'create') {
+        // connect the answer to the member
+        resolvedData.member = {
+          connect: {
+            id: sessionMemberId,
+          },
+        }
+      } else if (operation === 'update') {
+        if (sessionMemberId !== memberId) {
+          throw new Error('You cannot edit the answer for another member.')
+        }
+      }
+
+      if (questionId) {
         // Use relational question id + member id as uniqueness
-        resolvedData.compositeKey = `${questionId}:${memberId}`
+        resolvedData.compositeKey = `${questionId}:${sessionMemberId}`
       }
 
       const choiceIndex = resolvedData.choiceIndex
