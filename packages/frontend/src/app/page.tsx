@@ -2,11 +2,14 @@ import { Header } from '@kids-reporter/routing-ui'
 import { Metadata } from 'next'
 import { Fragment } from 'react'
 
+import { getCallBaodaozaiIntroContent } from '@/api/call-baodaozai-intro'
 import { getCategoryPosts } from '@/api/category'
 import { getEditorPicksSettings } from '@/api/editor-picks-settings'
 import { getLatestPosts } from '@/api/post'
 import { getTopicProjects } from '@/api/project'
 import { getSubcategoryPosts } from '@/api/subcategory'
+import AllSiteBaodaozaiEventTrigger from '@/components/all-site-baodaozai-event-trigger'
+import ScrollUpBaodaozaiEventTrigger from '@/components/scroll-up-baodaozai-event-trigger'
 import {
   ADDITIONAL_MENU_ITEMS,
   DONATE_URL,
@@ -26,6 +29,7 @@ import MakeFriends from '@/home/make-friend'
 import PostSelection from '@/home/post-selection'
 import SearchAndTags from '@/home/search-and-tags'
 import Section from '@/home/section'
+import { Baodaozai, CallBaodaozaiProvider } from '@/services/call-baodaozai'
 import { getPostSummaries } from '@/utils'
 
 export const dynamic = 'force-dynamic'
@@ -39,20 +43,36 @@ export default async function Home() {
   const serverRenderTime = new Date().toISOString()
   console.log('Server re-render at:', serverRenderTime)
 
-  const [topicProjects, latestPostsData, editorPicksSettings] =
-    await Promise.all([
-      getTopicProjects({
-        orderBy: [{ publishedDate: 'desc' }],
-        take: 9,
-      }),
-      getLatestPosts({
-        orderBy: [{ publishedDate: 'desc' }],
-        take: 6,
-      }),
-      getEditorPicksSettings({
-        take: 5,
-      }),
-    ])
+  const [
+    topicProjectsRes,
+    latestPostsDataRes,
+    editorPicksSettingsRes,
+    introContentRes,
+  ] = await Promise.allSettled([
+    getTopicProjects({
+      orderBy: [{ publishedDate: 'desc' }],
+      take: 9,
+    }),
+    getLatestPosts({
+      orderBy: [{ publishedDate: 'desc' }],
+      take: 6,
+    }),
+    getEditorPicksSettings({
+      take: 5,
+    }),
+    getCallBaodaozaiIntroContent({ where: { page: 'home' } }),
+  ])
+
+  const topicProjects =
+    topicProjectsRes.status === 'fulfilled' ? topicProjectsRes.value : []
+  const latestPostsData =
+    latestPostsDataRes.status === 'fulfilled' ? latestPostsDataRes.value : []
+  const editorPicksSettings =
+    editorPicksSettingsRes.status === 'fulfilled'
+      ? editorPicksSettingsRes.value
+      : []
+  const introContent =
+    introContentRes.status === 'fulfilled' ? introContentRes.value : undefined
 
   const topics =
     topicProjects?.map((project) => {
@@ -80,7 +100,7 @@ export default async function Home() {
   )
 
   // 4. Fetch posts for each section
-  const sectionPostsArray = await Promise.all(
+  const sectionPostsArrayRes = await Promise.allSettled(
     SECTIONS.map(async (sectionConfig) => {
       // Get category/subcategory name from link.
       // ex: '/category/listening-news/' => split to ['category', 'listening-news'] => pop 'listening-news'
@@ -92,41 +112,61 @@ export default async function Home() {
 
       if (!slug) return []
       const requestFn = isSubcategory ? getSubcategoryPosts : getCategoryPosts
-      const posts = await requestFn({
+      const response = await requestFn({
         where: { slug },
         take: 6,
       })
 
-      return getPostSummaries(posts)
+      const relatedPosts =
+        response?.relatedPosts?.filter((post) => !!post) ?? []
+
+      return getPostSummaries(relatedPosts)
     })
   )
 
+  const sectionPostsArray = sectionPostsArrayRes.map((res) => {
+    return res.status === 'fulfilled' ? res.value : []
+  })
+
   return (
-    <main className="flex w-screen flex-col items-center">
-      <Header
-        menuItems={MENU_ITEMS}
-        additionalMenuItems={ADDITIONAL_MENU_ITEMS}
-        socialMediaHrefs={SOCIAL_MEDIA_ITEMS.map((item) => item.href)}
-        searchPlaceholder={SEARCH_PLACEHOLDER}
-        subscribeUrl={SUBSCRIBE_URL}
-        donateUrl={DONATE_URL}
-      />
-      {topics?.length > 0 && <MainSlider topics={topics} />}
-      <PostSelection latestPosts={latestPosts} featuredPosts={featuredPosts} />
-      {SECTIONS.map((sectionConfig, index) => {
-        const posts = sectionPostsArray?.[index]
-        if (!posts) return null
-        return (
-          <Fragment key={sectionConfig.title}>
-            <Section config={sectionConfig} posts={posts} />
-            {index < SECTIONS.length - 1 ? <Divider /> : null}
-          </Fragment>
-        )
-      })}
-      <SearchAndTags tags={tags} />
-      <MakeFriends />
-      <CallToAction />
-      <GoToMainSite />
-    </main>
+    <CallBaodaozaiProvider>
+      <main className="flex w-screen flex-col items-center">
+        <Header
+          menuItems={MENU_ITEMS}
+          additionalMenuItems={ADDITIONAL_MENU_ITEMS}
+          socialMediaHrefs={SOCIAL_MEDIA_ITEMS.map((item) => item.href)}
+          searchPlaceholder={SEARCH_PLACEHOLDER}
+          subscribeUrl={SUBSCRIBE_URL}
+          donateUrl={DONATE_URL}
+        />
+        <AllSiteBaodaozaiEventTrigger id="show-intro" content={introContent} />
+        <div className="relative">
+          <div className="absolute top-[150vh]">
+            <AllSiteBaodaozaiEventTrigger id="hide-intro" />
+          </div>
+        </div>
+        {topics?.length > 0 && <MainSlider topics={topics} />}
+        <PostSelection
+          latestPosts={latestPosts}
+          featuredPosts={featuredPosts}
+        />
+        {SECTIONS.map((sectionConfig, index) => {
+          const posts = sectionPostsArray?.[index]
+          if (!posts) return null
+          return (
+            <Fragment key={sectionConfig.title}>
+              <Section config={sectionConfig} posts={posts} />
+              {index < SECTIONS.length - 1 ? <Divider /> : null}
+            </Fragment>
+          )
+        })}
+        <SearchAndTags tags={tags} />
+        <MakeFriends />
+        <CallToAction />
+        <GoToMainSite />
+        <Baodaozai />
+        <ScrollUpBaodaozaiEventTrigger />
+      </main>
+    </CallBaodaozaiProvider>
   )
 }

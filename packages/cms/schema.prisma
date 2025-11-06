@@ -436,11 +436,11 @@ model PostEssayAnswerLike {
 
 enum CallBaodaozaiIntroPageType {
   home
-  article
-  topic
+  all
+  topics
   news
-  search
-  lessons
-  podcasts
-  aboutUs
+  comics
+  campus
+  listeningNews
+  classroom
 }

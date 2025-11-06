@@ -9,3 +9,10 @@ export type Photo = {
     large: string
   }
 }
+
+export type CategorySlug =
+  | 'news'
+  | 'comics'
+  | 'campus'
+  | 'listening-news'
+  | 'classroom'

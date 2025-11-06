@@ -1,23 +1,16 @@
 'use client'
+
 import throttle from 'lodash/throttle'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 
-import {
-  QAModalEvent as ScrollUpBaodaozaiEventTriggerEvent,
-  useCallBaodaozaiContext,
-} from '@/services/call-baodaozai'
-
-export type ScrollUpBaodaozaiEventTriggerProps = {
-  onScrollUp: (events: ScrollUpBaodaozaiEventTriggerEvent) => void
-}
+import { useCallBaodaozaiContext } from '@/services/call-baodaozai'
 
 const SCROLL_UP_THRESHOLD = 100
 
-function ScrollUpBaodaozaiEventTrigger({
-  onScrollUp,
-}: ScrollUpBaodaozaiEventTriggerProps) {
+function ScrollUpBaodaozaiEventTrigger() {
   const { onDialogPropsChange, baodaozaiProps } = useCallBaodaozaiContext()
-  const { setHide, setIsActive, setAction } = baodaozaiProps
+  const { setIsActive, setAction, isInitialized } = baodaozaiProps
+
   const lastScrollY = useRef(0)
   const scrollUpStartY = useRef(0)
   const isScrollingUp = useRef(false)
@@ -28,21 +21,11 @@ function ScrollUpBaodaozaiEventTrigger({
   }, [])
 
   const triggerScrollUpEvent = useCallback(() => {
-    onScrollUp({
-      setHide,
-      setIsActive,
-      setAction,
-      onDialogPropsChange,
-    })
+    onDialogPropsChange({ isOpen: false })
+    setIsActive(false)
+    setAction('none')
     resetScrollTracking()
-  }, [
-    onScrollUp,
-    setHide,
-    setIsActive,
-    setAction,
-    onDialogPropsChange,
-    resetScrollTracking,
-  ])
+  }, [onDialogPropsChange, setIsActive, setAction, resetScrollTracking])
 
   const throttledTriggerScrollUpEvent = useMemo(
     () => throttle(triggerScrollUpEvent, 100),
@@ -73,12 +56,14 @@ function ScrollUpBaodaozaiEventTrigger({
   }, [throttledTriggerScrollUpEvent, resetScrollTracking])
 
   useEffect(() => {
+    if (!isInitialized) return
+
     window.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [handleScroll])
+  }, [handleScroll, isInitialized])
 
   return null
 }

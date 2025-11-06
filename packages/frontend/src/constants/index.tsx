@@ -1,6 +1,7 @@
 import { MenuItem, SettingsIconSmall } from '@kids-reporter/routing-ui'
 
 import envVars from '@/environment-variables'
+import { CategorySlug } from '@/types'
 
 export const INTERNAL_API_URL = envVars.internalGqlEndpoint
 export const API_URL = envVars.gqlEndpoint
@@ -359,3 +360,11 @@ export const SECTIONS = [
     theme: Theme.YELLOW,
   },
 ]
+
+export const CATEGORY_IMAGES: Record<CategorySlug, string> = {
+  news: '/assets/images/category_news.svg',
+  comics: '/assets/images/category_comics.svg',
+  campus: '/assets/images/category_campus.svg',
+  classroom: '/assets/images/category_campus.svg',
+  'listening-news': '/assets/images/category_listening_news.svg',
+}

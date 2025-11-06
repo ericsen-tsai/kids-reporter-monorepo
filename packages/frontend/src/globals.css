@@ -289,6 +289,17 @@
         format('woff');
     font-weight: bold;
   }
+
+  /* for backward compatibility */
+  .theme-red {
+    --theme-color: var(--color-red-400);
+  }
+  .theme-yellow {
+    --theme-color: var(--color-yellow-400);
+  }
+  .theme-blue {
+    --theme-color: var(--color-blue-400);
+  }
 }
 
 /* Typography Utilities - Headlines Large */
