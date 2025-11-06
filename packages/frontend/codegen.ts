@@ -5,6 +5,8 @@ const schemaPath =
     ? 'schema.graphql'
     : '../../packages/cms/schema.graphql'
 
+// Generated artifacts are written to packages/frontend/__generated__ so that
+// imports can use the "__generated__/" alias configured in tsconfig.json.
 const config: CodegenConfig = {
   overwrite: true,
   schema: schemaPath,

@@ -35,7 +35,9 @@ export const sendGQLRequest = async <
   >,
 >(
   data: TRequestData,
-  config?: AxiosRequestConfig<TRequestData> | undefined
+  config?:
+    | (AxiosRequestConfig<TRequestData> & { authToken?: string })
+    | undefined
 ) => {
   let url
   if (typeof window === 'undefined' && !envVars.isProduction) {
@@ -46,6 +48,12 @@ export const sendGQLRequest = async <
 
   let response
   try {
+    const { authToken, headers, ...axiosConfig } = config ?? {}
+    const mergedHeaders = {
+      ...(headers ?? {}),
+      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+    }
+
     response = await axios.post(
       url,
       {
@@ -54,7 +62,8 @@ export const sendGQLRequest = async <
       },
       {
         timeout: AXIOS_TIMEOUT,
-        ...config,
+        ...axiosConfig,
+        headers: mergedHeaders,
       }
     )
   } catch (err) {
