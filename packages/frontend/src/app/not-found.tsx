@@ -1,5 +1,6 @@
 import { Header, SearchIcon } from '@kids-reporter/routing-ui'
 
+import AuthHeaderLoggedInSetter from '@/components/auth-header-logged-in-setter'
 import {
   ADDITIONAL_MENU_ITEMS,
   DONATE_URL,
@@ -20,6 +21,7 @@ function NotFound() {
         subscribeUrl={SUBSCRIBE_URL}
         donateUrl={DONATE_URL}
       />
+      <AuthHeaderLoggedInSetter />
       <div
         style={{ width: '95vw' }}
         className="mb-16 flex flex-col items-center justify-center"

@@ -1,5 +1,6 @@
 import { Header } from '@kids-reporter/routing-ui'
 
+import AuthHeaderLoggedInSetter from '@/components/auth-header-logged-in-setter'
 import ScrollUpBaodaozaiEventTrigger from '@/components/scroll-up-baodaozai-event-trigger'
 import {
   ADDITIONAL_MENU_ITEMS,
@@ -23,6 +24,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           subscribeUrl={SUBSCRIBE_URL}
           donateUrl={DONATE_URL}
         />
+        <AuthHeaderLoggedInSetter />
         <div className="flex w-full grow">{children}</div>
         <Baodaozai />
         <ScrollUpBaodaozaiEventTrigger />

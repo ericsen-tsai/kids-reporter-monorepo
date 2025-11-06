@@ -9,6 +9,7 @@ import { getLatestPosts } from '@/api/post'
 import { getTopicProjects } from '@/api/project'
 import { getSubcategoryPosts } from '@/api/subcategory'
 import AllSiteBaodaozaiEventTrigger from '@/components/all-site-baodaozai-event-trigger'
+import AuthHeaderLoggedInSetter from '@/components/auth-header-logged-in-setter'
 import ScrollUpBaodaozaiEventTrigger from '@/components/scroll-up-baodaozai-event-trigger'
 import {
   ADDITIONAL_MENU_ITEMS,
@@ -144,6 +145,7 @@ export default async function Home() {
           donateUrl={DONATE_URL}
         />
         <BaodaozaiVisibilitySetter show={true} />
+        <AuthHeaderLoggedInSetter />
         <AllSiteBaodaozaiEventTrigger id="show-intro" content={introContent} />
         <div className="relative">
           <div className="absolute top-[150vh]">
