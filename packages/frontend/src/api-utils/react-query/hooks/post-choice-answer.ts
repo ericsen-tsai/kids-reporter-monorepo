@@ -15,13 +15,20 @@ export const POST_CHOICE_ANSWERS_QUERY_KEY = 'post-choice-answers'
 export function usePostChoiceAnswersQuery({
   memberId,
   accessToken,
+  postSlug,
 }: {
   memberId: string
   accessToken: string
+  postSlug?: string
 }) {
   return useQuery({
-    queryKey: [POST_CHOICE_ANSWERS_QUERY_KEY, memberId],
-    queryFn: () => getPostChoiceAnswersByMemberId(memberId, accessToken),
+    queryKey: [
+      POST_CHOICE_ANSWERS_QUERY_KEY,
+      memberId,
+      postSlug ?? 'all-posts',
+    ],
+    queryFn: () =>
+      getPostChoiceAnswersByMemberId(memberId, accessToken, postSlug),
     enabled: !!memberId && !!accessToken,
     staleTime: Infinity,
   })

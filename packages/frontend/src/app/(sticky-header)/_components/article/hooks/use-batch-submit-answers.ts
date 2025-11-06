@@ -19,9 +19,11 @@ import { log, LogLevel } from '@/utils'
 
 function useBatchSubmitAnswers({
   memberId,
+  postSlug,
   accessToken,
 }: {
   memberId: string
+  postSlug: string
   accessToken: string
 }) {
   const queryClient = useQueryClient()
@@ -37,10 +39,12 @@ function useBatchSubmitAnswers({
 
   const { data: essayAnswers } = usePostEssayAnswersQuery({
     memberId,
+    postSlug,
     accessToken,
   })
   const { data: choiceAnswers } = usePostChoiceAnswersQuery({
     memberId,
+    postSlug,
     accessToken,
   })
 

@@ -15,13 +15,16 @@ export const POST_ESSAY_ANSWERS_QUERY_KEY = 'post-essay-answers'
 export function usePostEssayAnswersQuery({
   memberId,
   accessToken,
+  postSlug,
 }: {
   memberId: string
   accessToken: string
+  postSlug?: string
 }) {
   return useQuery({
-    queryKey: [POST_ESSAY_ANSWERS_QUERY_KEY, memberId],
-    queryFn: () => getPostEssayAnswersByMemberId(memberId, accessToken),
+    queryKey: [POST_ESSAY_ANSWERS_QUERY_KEY, memberId, postSlug ?? 'all-posts'],
+    queryFn: () =>
+      getPostEssayAnswersByMemberId(memberId, accessToken, postSlug),
     enabled: !!memberId && !!accessToken,
     staleTime: Infinity,
   })

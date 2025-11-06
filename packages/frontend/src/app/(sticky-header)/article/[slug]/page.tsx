@@ -113,7 +113,7 @@ export default async function PostPage({
     <main className="mx-auto flex max-w-(--breakpoint-2xl) flex-col items-center">
       <HeaderPostTitleSetter postTitle={post?.title} />
       {tocIndexes.length > 0 && <TOC indexes={tocIndexes} />}
-      {post && <Article post={post} />}
+      {post && <Article post={post} slug={slug} />}
     </main>
   )
 }

@@ -17,10 +17,14 @@ import {
 
 export const getPostEssayAnswersByMemberId = async (
   memberId: string,
-  accessToken: string
+  accessToken: string,
+  postSlug?: string
 ) => {
   const variables: GetPostEssayAnswersQueryVariables = {
-    where: { member: { id: { equals: memberId } } },
+    where: {
+      member: { id: { equals: memberId } },
+      ...(postSlug && { question: { post: { slug: { equals: postSlug } } } }),
+    },
   }
   const response = await sendGQLRequest<GetPostEssayAnswersQuery>(
     {

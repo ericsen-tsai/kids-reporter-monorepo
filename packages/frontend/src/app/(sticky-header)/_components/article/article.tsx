@@ -175,7 +175,13 @@ const getPostContents = (post: any) => {
   }
 }
 
-const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
+const Article = ({
+  post,
+  slug,
+}: {
+  post: NonNullable<GetPostQuery['post']>
+  slug: string
+}) => {
   const {
     theme,
     topicURL,
@@ -332,6 +338,7 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
 
   const { onBatchSubmitAnswers } = useBatchSubmitAnswers({
     memberId: member?.id ?? '',
+    postSlug: slug,
     accessToken: tokens?.accessToken ?? '',
   })
 
