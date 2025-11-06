@@ -64,6 +64,7 @@ export const sendGQLRequest = async <
         timeout: AXIOS_TIMEOUT,
         ...axiosConfig,
         headers: mergedHeaders,
+        withCredentials: true,
       }
     )
   } catch (err) {
