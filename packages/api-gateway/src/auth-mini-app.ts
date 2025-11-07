@@ -43,7 +43,7 @@ function decodeJwtPayload(jwtToken: string): {
   try {
     return JSON.parse(decodedString)
   } catch (_err) {
-    throw errors.headers.wrap(
+    throw errors.helpers.wrap(
       _err,
       'DecodeJwtPayloadError',
       'Invalid JWT: failed to parse payload as JSON',

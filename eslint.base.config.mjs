@@ -41,7 +41,14 @@ const commonRules = {
 // TypeScript rules
 const typescriptRules = {
   ...commonRules,
-  '@typescript-eslint/no-unused-vars': 'error',
+  '@typescript-eslint/no-unused-vars': [
+    'error',
+    {
+      argsIgnorePattern: '^_',
+      varsIgnorePattern: '^_',
+      caughtErrorsIgnorePattern: '^_',
+    },
+  ],
   '@typescript-eslint/no-explicit-any': 'off',
   '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
   '@typescript-eslint/ban-ts-comment': [

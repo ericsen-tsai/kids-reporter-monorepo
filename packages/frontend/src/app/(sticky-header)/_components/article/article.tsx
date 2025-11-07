@@ -19,10 +19,17 @@ import {
   FontSizeLevel,
 } from '@/constants'
 import {
+  BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT,
+  BAODAOZAI_QUESTION_COUNT,
+} from '@/constants/baodaozai-question-count'
+import { useHydratedAuthStore } from '@/services/auth/use-hydrated-auth-store'
+import {
   BaodaozaiActionSetter,
   BaodaozaiChoiceQuestion,
+  BaodaozaiEssayQuestion,
   BaodaozaiQAModal,
   BaodaozaiQuestions,
+  BaodaozaiVisibilitySetter,
   QAModalEvent,
 } from '@/services/call-baodaozai'
 import { getPostSummaries } from '@/utils'
@@ -32,8 +39,8 @@ import { ArticleContext } from './article-context'
 import Brief, { AuthorGroup } from './brief'
 import CallToAction from './call-to-action'
 import HeroImage from './hero-image'
+import useBatchSubmitAnswers from './hooks/use-batch-submit-answers'
 import ImageModal from './image-modal'
-import { IS_LOGIN } from './mock'
 import { NewsReading } from './news-reading'
 import PostRenderer from './post-renderer'
 import PublishedDate from './published-date'
@@ -168,7 +175,13 @@ const getPostContents = (post: any) => {
   }
 }
 
-const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
+const Article = ({
+  post,
+  slug,
+}: {
+  post: NonNullable<GetPostQuery['post']>
+  slug: string
+}) => {
   const {
     theme,
     topicURL,
@@ -253,28 +266,9 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
 
   const router = useRouter()
 
-  const handleQAModalSubmit = useCallback(
-    (answers: Record<number, string>, events: QAModalEvent) => {
-      // TODO: send answers to backend
-      setIsQAModalOpen(false)
-      events.setHide(false)
-      events.setIsActive(true)
-      events.setAction('speak')
-      events.onDialogPropsChange({
-        isOpen: true,
-        content: IS_LOGIN
-          ? `想知道其他讀者的答案嗎？
-      大家送出的思辨題答案都會顯示在這裡喔～`
-          : '登入帳號完成閱讀設定，還可以挑戰更多隱藏版的思辨題唷！',
-        cancelText: '跳過',
-        confirmText: IS_LOGIN ? '完成閱讀設定' : '立即登入',
-        confirmAction: () => {
-          router.push(IS_LOGIN ? '/idea-hub' : '/login')
-        },
-      })
-    },
-    [router]
-  )
+  const { member, tokens } = useHydratedAuthStore()
+
+  const isLogin = !!member
 
   const handleQAModalClose = useCallback(({ setHide }: QAModalEvent) => {
     setIsQAModalOpen(false)
@@ -297,19 +291,35 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
     }))
   }, [post.tagsOrdered])
 
-  const postQuestions = useMemo<BaodaozaiQuestions | null>(() => {
-    // TODO: choose which questions to show
-    const choiceQuestions = post.postChoiceQuestions ?? []
-    // const essayQuestions = post.postEssayQuestions
-
-    const candidateQuestions = [...choiceQuestions]
-
-    if (candidateQuestions.length < 3) {
-      console.error('Not enough questions')
-      return null
+  const showBaodaozai = (() => {
+    if (post?.showBaodaozai === true && !isLogin) {
+      return true
     }
+    if (
+      post?.showBaodaozai === true &&
+      isLogin &&
+      member?.showBaodaozai === true
+    ) {
+      return true
+    }
+    return false
+  })()
 
-    const questions = candidateQuestions.map<BaodaozaiChoiceQuestion>(
+  const essayQuestionCount = isLogin
+    ? (member?.essayQuestionCount ?? BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT)
+    : 0
+
+  const postQuestions = useMemo<BaodaozaiQuestions | null>(() => {
+    const essayCount = essayQuestionCount
+    const choiceCount = BAODAOZAI_QUESTION_COUNT - essayCount
+
+    const essayQuestions = (post.postEssayQuestions ?? []).slice(0, essayCount)
+    const choiceQuestions = (post.postChoiceQuestions ?? []).slice(
+      BAODAOZAI_QUESTION_COUNT - choiceCount,
+      BAODAOZAI_QUESTION_COUNT
+    )
+
+    const finalChoiceQuestions = choiceQuestions.map<BaodaozaiChoiceQuestion>(
       (question) => ({
         id: question.id,
         title: question.title ?? '',
@@ -319,8 +329,51 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
       })
     )
 
-    return [questions[0], questions[1], questions[2]]
-  }, [post.postChoiceQuestions])
+    const finalEssayQuestions = essayQuestions.map<BaodaozaiEssayQuestion>(
+      (question) => ({
+        id: question.id,
+        title: question.title ?? '',
+        hint: question.hint ?? '',
+        type: 'essay',
+      })
+    )
+
+    return [
+      ...finalChoiceQuestions,
+      ...finalEssayQuestions,
+    ] as BaodaozaiQuestions
+  }, [post.postChoiceQuestions, post.postEssayQuestions, essayQuestionCount])
+
+  const { onBatchSubmitAnswers } = useBatchSubmitAnswers({
+    memberId: member?.id ?? '',
+    postSlug: slug,
+    accessToken: tokens?.accessToken ?? '',
+  })
+
+  const handleQAModalSubmit = useCallback(
+    async (answers: Record<number, string>, events: QAModalEvent) => {
+      if (isLogin) {
+        await onBatchSubmitAnswers(answers, postQuestions)
+      }
+      setIsQAModalOpen(false)
+      events.setHide(false)
+      events.setIsActive(true)
+      events.setAction('speak')
+      events.onDialogPropsChange({
+        isOpen: true,
+        content: isLogin
+          ? `想知道其他讀者的答案嗎？
+      大家送出的思辨題答案都會顯示在這裡喔～`
+          : '登入帳號完成閱讀設定，還可以挑戰更多隱藏版的思辨題唷！',
+        cancelText: '跳過',
+        confirmText: isLogin ? '完成閱讀設定' : '立即登入',
+        confirmAction: () => {
+          router.push(isLogin ? '/idea-hub' : '/login')
+        },
+      })
+    },
+    [isLogin, onBatchSubmitAnswers, postQuestions, router]
+  )
 
   const scrollingLevel = useScrollLevel({
     scrollDownDistance: 150,
@@ -331,6 +384,7 @@ const Article = ({ post }: { post: NonNullable<GetPostQuery['post']> }) => {
 
   return (
     <>
+      <BaodaozaiVisibilitySetter show={showBaodaozai} />
       <div className={`post${theme ? ` theme-${theme}` : ''}`}>
         <ArticleContext.Provider
           value={{

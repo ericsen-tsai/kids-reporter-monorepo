@@ -54,7 +54,7 @@ const parseQuestionToStep = ({
   questionIndex: number
   isLastQuestion: boolean
   onNext: () => void
-  onPass: () => void
+  onPass: (questionIndex: number) => void
   onSubmit: () => void
 }): ModalStep => {
   if (question.type === 'essay') {
@@ -64,7 +64,7 @@ const parseQuestionToStep = ({
       tips: question.hint,
       questionIndex,
       onNext,
-      onPass: isLastQuestion ? onSubmit : onPass,
+      onPass: isLastQuestion ? onSubmit : () => onPass(questionIndex),
     }
   }
 
@@ -120,7 +120,7 @@ export const getModalStepsFromQuestions = ({
 }: {
   questions: BaodaozaiQuestions
   onNext: () => void
-  onPass: () => void
+  onPass: (questionIndex: number) => void
   onSubmit: () => void
 }): ModalStep[] => {
   return questions.reduce<ModalStep[]>((steps, question, index) => {

@@ -11,12 +11,14 @@ export type BaodaozaiActionSetter = ({
 }) => void
 
 export type BaodaozaiEssayQuestion = {
+  id: string
   type: 'essay'
   title: string
   hint: string
 }
 
 export type BaodaozaiChoiceQuestion = {
+  id: string
   type: 'choice'
   title: string
   reason: string

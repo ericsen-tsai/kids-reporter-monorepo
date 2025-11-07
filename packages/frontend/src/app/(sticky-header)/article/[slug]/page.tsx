@@ -9,12 +9,15 @@ import {
   KIDS_URL_ORIGIN,
   OG_SUFFIX,
 } from '@/constants'
+import { BAODAOZAI_QUESTION_COUNT } from '@/constants/baodaozai-question-count'
 import { log, LogLevel } from '@/utils'
 
 import Article from '../../_components/article/article'
 import { TOC, TOCIndex } from '../../_components/article/table-of-content'
 
 const topicRelatedPostsNum = 5
+const postEssayQuestionsTake = BAODAOZAI_QUESTION_COUNT
+const postChoiceQuestionsTake = BAODAOZAI_QUESTION_COUNT
 
 export async function generateMetadata({
   params,
@@ -84,6 +87,8 @@ export default async function PostPage({
     },
     orderBy: [{ order: 'asc' }],
     take: topicRelatedPostsNum,
+    postEssayQuestionsTake,
+    postChoiceQuestionsTake,
   })
   if (!post) {
     log(LogLevel.WARNING, `Post not found! ${slug}`)
@@ -108,7 +113,7 @@ export default async function PostPage({
     <main className="mx-auto flex max-w-(--breakpoint-2xl) flex-col items-center">
       <HeaderPostTitleSetter postTitle={post?.title} />
       {tocIndexes.length > 0 && <TOC indexes={tocIndexes} />}
-      {post && <Article post={post} />}
+      {post && <Article post={post} slug={slug} />}
     </main>
   )
 }
