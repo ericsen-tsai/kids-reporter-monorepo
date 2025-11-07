@@ -103,11 +103,6 @@ function useBatchSubmitAnswers({
                       id: question.id,
                     },
                   },
-                  member: {
-                    connect: {
-                      id: memberId,
-                    },
-                  },
                   content: answers[index],
                 },
               })
@@ -131,11 +126,6 @@ function useBatchSubmitAnswers({
                   question: {
                     connect: {
                       id: question.id,
-                    },
-                  },
-                  member: {
-                    connect: {
-                      id: memberId,
                     },
                   },
                   choiceIndex: parseInt(answers[index]),
@@ -170,7 +160,6 @@ function useBatchSubmitAnswers({
       essayAnswers,
       choiceAnswers,
       createPostEssayAnswer,
-      memberId,
       updatePostEssayAnswer,
       createPostChoiceAnswer,
       updatePostChoiceAnswer,

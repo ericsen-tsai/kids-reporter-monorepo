@@ -21,9 +21,6 @@ export const CREATE_POST_ESSAY_ANSWER_MUTATION = gql`
       question {
         id
       }
-      member {
-        id
-      }
       content
     }
   }
@@ -33,9 +30,6 @@ export const UPDATE_POST_ESSAY_ANSWER_MUTATION = gql`
   mutation UpdatePostEssayAnswer($id: ID!, $data: PostEssayAnswerUpdateInput!) {
     updatePostEssayAnswer(where: { id: $id }, data: $data) {
       id
-      member {
-        id
-      }
       content
     }
   }
