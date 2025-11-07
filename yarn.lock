@@ -6249,10 +6249,13 @@ __metadata:
   resolution: "@kids-reporter/api-gateway@workspace:packages/api-gateway"
   dependencies:
     "@twreporter/errors": "npm:^1.1.2"
+    "@types/cookie-parser": "npm:^1.4.6"
     "@types/cors": "npm:^2.8.15"
     "@types/express": "npm:^4.17.20"
     axios: "npm:^1.4.0"
+    cookie-parser: "npm:^1.4.6"
     cors: "npm:^2.8.5"
+    dotenv-cli: "npm:^10.0.0"
     express: "npm:^4.18.2"
     http-proxy-middleware: "npm:^2.0.6"
     nodemon: "npm:^2.0.20"
@@ -8121,6 +8124,15 @@ __metadata:
   dependencies:
     "@types/node": "npm:*"
   checksum: 10c0/2e1cdba2c410f25649e77856505cd60223250fa12dff7a503e492208dbfdd25f62859918f28aba95315251fd1f5e1ffbfca1e25e73037189ab85dd3f8d0a148c
+  languageName: node
+  linkType: hard
+
+"@types/cookie-parser@npm:^1.4.6":
+  version: 1.4.10
+  resolution: "@types/cookie-parser@npm:1.4.10"
+  peerDependencies:
+    "@types/express": "*"
+  checksum: 10c0/5e2c0e0fd9cb47eae5bd7cd73768b36b7711594cbd07969a03f015118d57b832291726d9cb7bd350c9e3a1707e5e2f082e7e0635e8ce335474897ab940d55771
   languageName: node
   linkType: hard
 
