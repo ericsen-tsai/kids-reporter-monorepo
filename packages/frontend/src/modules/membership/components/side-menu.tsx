@@ -15,7 +15,7 @@ function MembershipSideMenu() {
     return pathname?.startsWith(href)
   }
   return (
-    <div className="flex w-full flex-col gap-4 tablet:max-w-37">
+    <div className="flex w-full flex-col gap-4 tablet:max-w-40">
       <div className="flex flex-col gap-0">
         {MEMBERSHIP_MENU_ITEMS.map((item) => {
           const active = isActive(item.href)
@@ -24,7 +24,7 @@ function MembershipSideMenu() {
               key={item.href}
               href={item.href}
               className={cn(
-                'w-full px-6 py-2 text-left prose-p1 tablet:px-8',
+                'w-full px-6 py-2 text-left prose-p1 tablet:px-8 desktop:px-4',
                 'bg-neutral-100 text-neutral-900',
                 'hover:bg-black/5 active:bg-black/10',
                 active && 'text-red-400'
@@ -36,12 +36,12 @@ function MembershipSideMenu() {
         })}
       </div>
 
-      <div className="mx-auto h-px w-[calc(100%-48px)] bg-neutral-200 tablet:w-[calc(100%-64px)]" />
+      <div className="mx-auto h-px w-[calc(100%-48px)] bg-neutral-200 tablet:w-[calc(100%-64px)] desktop:w-[calc(100%-32px)]" />
 
       <Link
         href="/logout"
         className={cn(
-          'w-full px-6 py-2 text-left prose-p1 tablet:px-8',
+          'w-full px-6 py-2 text-left prose-p1 tablet:px-8 desktop:px-4',
           'bg-neutral-100 text-neutral-900',
           'hover:bg-black/5 active:bg-black/10'
         )}
