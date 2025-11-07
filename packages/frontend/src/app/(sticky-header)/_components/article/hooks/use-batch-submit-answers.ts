@@ -83,11 +83,11 @@ function useBatchSubmitAnswers({
           if (!answers[index]) return
           try {
             if (question.type === 'essay') {
-              if (existingEssayQuestionIds.includes(question.id)) {
+              const existingEssayQuestionIndex =
+                existingEssayQuestionIds.indexOf(question.id)
+              if (existingEssayQuestionIndex !== -1) {
                 const answerId =
-                  essayAnswers?.find(
-                    (answer) => answer.question?.id === question.id
-                  )?.id ?? ''
+                  essayAnswers?.[existingEssayQuestionIndex]?.id ?? ''
                 await updatePostEssayAnswer({
                   id: answerId,
                   data: {
@@ -113,11 +113,11 @@ function useBatchSubmitAnswers({
               })
             }
             if (question.type === 'choice') {
-              if (existingChoiceQuestionIds.includes(question.id)) {
+              const existingChoiceQuestionIndex =
+                existingChoiceQuestionIds.indexOf(question.id)
+              if (existingChoiceQuestionIndex !== -1) {
                 const answerId =
-                  choiceAnswers?.find(
-                    (answer) => answer.question?.id === question.id
-                  )?.id ?? ''
+                  choiceAnswers?.[existingChoiceQuestionIndex]?.id ?? ''
                 await updatePostChoiceAnswer({
                   id: answerId,
                   data: {
@@ -150,10 +150,15 @@ function useBatchSubmitAnswers({
               question
             )
 
-            const msg = errors.helpers.printAll(err, {
-              withStack: true,
-              withPayload: true,
-            })
+            const msg = errors.helpers.printAll(
+              err,
+              {
+                withStack: true,
+                withPayload: true,
+              },
+              0,
+              0
+            )
 
             log(LogLevel.ERROR, msg)
           }

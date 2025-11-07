@@ -46,7 +46,10 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
   const handlePass = useCallback(
     (questionIndex: number) => {
       setCurrentModalStepIndex(currentModalStepIndex + 2)
-      setAnswers((prev) => ({ ...prev, [questionIndex]: '' }))
+      setAnswers((prev) => {
+        const { [questionIndex]: _, ...rest } = prev
+        return rest
+      })
     },
     [currentModalStepIndex, setAnswers]
   )
