@@ -1876,7 +1876,6 @@ input PostChoiceAnswerOrderByInput {
 
 input PostChoiceAnswerUpdateInput {
   question: PostChoiceQuestionRelateToOneForUpdateInput
-  member: MemberRelateToOneForUpdateInput
   choiceIndex: Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -1888,12 +1887,6 @@ input PostChoiceQuestionRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
-input MemberRelateToOneForUpdateInput {
-  create: MemberCreateInput
-  connect: MemberWhereUniqueInput
-  disconnect: Boolean
-}
-
 input PostChoiceAnswerUpdateArgs {
   where: PostChoiceAnswerWhereUniqueInput!
   data: PostChoiceAnswerUpdateInput!
@@ -1901,7 +1894,6 @@ input PostChoiceAnswerUpdateArgs {
 
 input PostChoiceAnswerCreateInput {
   question: PostChoiceQuestionRelateToOneForCreateInput
-  member: MemberRelateToOneForCreateInput
   choiceIndex: Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -1910,11 +1902,6 @@ input PostChoiceAnswerCreateInput {
 input PostChoiceQuestionRelateToOneForCreateInput {
   create: PostChoiceQuestionCreateInput
   connect: PostChoiceQuestionWhereUniqueInput
-}
-
-input MemberRelateToOneForCreateInput {
-  create: MemberCreateInput
-  connect: MemberWhereUniqueInput
 }
 
 type PostChoiceQuestion {
@@ -2024,7 +2011,6 @@ input PostEssayAnswerOrderByInput {
 
 input PostEssayAnswerUpdateInput {
   question: PostEssayQuestionRelateToOneForUpdateInput
-  member: MemberRelateToOneForUpdateInput
   content: String
   createdAt: DateTime
   updatedAt: DateTime
@@ -2043,7 +2029,6 @@ input PostEssayAnswerUpdateArgs {
 
 input PostEssayAnswerCreateInput {
   question: PostEssayQuestionRelateToOneForCreateInput
-  member: MemberRelateToOneForCreateInput
   content: String
   createdAt: DateTime
   updatedAt: DateTime
@@ -2143,7 +2128,6 @@ input PostEssayAnswerLikeOrderByInput {
 
 input PostEssayAnswerLikeUpdateInput {
   answer: PostEssayAnswerRelateToOneForUpdateInput
-  member: MemberRelateToOneForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -2161,7 +2145,6 @@ input PostEssayAnswerLikeUpdateArgs {
 
 input PostEssayAnswerLikeCreateInput {
   answer: PostEssayAnswerRelateToOneForCreateInput
-  member: MemberRelateToOneForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
 }

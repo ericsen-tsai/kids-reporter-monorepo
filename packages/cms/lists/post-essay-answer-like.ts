@@ -2,10 +2,16 @@ import { list } from '@keystone-6/core'
 import { relationship, text, timestamp } from '@keystone-6/core/fields'
 
 import type { ListType } from '../types/keystone-list-types'
+import { allowRoles, RoleEnum } from './utils/access-control-list'
 import {
   makeMemberOwnedFilter,
   memberOwnedOperationAccess,
 } from './utils/member-owned-access'
+
+const memberFieldName = 'member'
+
+const operationAccessControl = memberOwnedOperationAccess
+const filterAccessControl = makeMemberOwnedFilter(memberFieldName)
 
 export default list<ListType<'PostEssayAnswerLike'>>({
   fields: {
@@ -20,6 +26,12 @@ export default list<ListType<'PostEssayAnswerLike'>>({
       ref: 'Member',
       many: false,
       ui: { hideCreate: true },
+      graphql: {
+        omit: {
+          create: true,
+          update: true,
+        },
+      },
     }),
     compositeKey: text({
       label: '唯一鍵',
@@ -77,24 +89,45 @@ export default list<ListType<'PostEssayAnswerLike'>>({
   db: { idField: { kind: 'autoincrement' } },
   access: {
     operation: {
-      query: memberOwnedOperationAccess,
-      create: memberOwnedOperationAccess,
-      update: memberOwnedOperationAccess,
-      delete: memberOwnedOperationAccess,
+      query: operationAccessControl,
+      create: allowRoles([RoleEnum.Member]),
+      update: allowRoles([RoleEnum.Member]),
+      delete: operationAccessControl,
     },
     filter: {
-      query: makeMemberOwnedFilter('member'),
-      update: makeMemberOwnedFilter('member'),
-      delete: makeMemberOwnedFilter('member'),
+      query: filterAccessControl,
+      update: filterAccessControl,
+      delete: filterAccessControl,
     },
   },
   hooks: {
-    resolveInput: async ({ resolvedData, item }) => {
+    resolveInput: async ({ resolvedData, item, context, operation }) => {
       const answerId = resolvedData.answer?.connect?.id ?? item?.answerId
-      const memberId = resolvedData.member?.connect?.id ?? item?.memberId
-      if (answerId && memberId) {
-        resolvedData.compositeKey = `${answerId}:${memberId}`
+      const memberId = item?.memberId?.toString()
+
+      const sessionMemberId = context.session?.data?.memberId?.toString()
+
+      if (!sessionMemberId) {
+        throw new Error('You must be signed in as a member to submit a like.')
       }
+
+      if (operation === 'create') {
+        // connect the answer to the member
+        resolvedData.member = {
+          connect: {
+            id: sessionMemberId,
+          },
+        }
+      } else if (operation === 'update') {
+        if (sessionMemberId !== memberId) {
+          throw new Error('You cannot edit the like for another member.')
+        }
+      }
+
+      if (answerId) {
+        resolvedData.compositeKey = `${answerId}:${sessionMemberId}`
+      }
+
       return resolvedData
     },
   },
