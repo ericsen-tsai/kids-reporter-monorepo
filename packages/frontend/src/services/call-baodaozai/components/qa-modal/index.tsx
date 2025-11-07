@@ -171,7 +171,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
                   onClick={() =>
                     handleAnswerChange(
                       currentModalStep.questionIndex,
-                      option.content
+                      index.toString()
                     )
                   }
                   className={cn(
@@ -221,12 +221,12 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
         )
       case 'choice-result':
         return (
-          <div className="flex h-full flex-col bg-neutral-100">
+          <div className="flex h-full w-full flex-col bg-neutral-100">
             <div className="flex flex-col bg-neutral-white">
               <div className="mb-6 w-full px-6 pt-6">
                 <h2 className="text-center prose-h6-large text-neutral-900">
                   {answers[currentModalStep.questionIndex] ===
-                  currentModalStep.correctAnswerContent
+                  currentModalStep.correctAnswerIndex.toString()
                     ? '答對了～'
                     : '再接再厲'}
                 </h2>
@@ -236,7 +236,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
                 <div className="flex h-[120px] w-[300px] items-center justify-center">
                   <div className="flex h-full w-full items-center justify-center">
                     {answers[currentModalStep.questionIndex] ===
-                    currentModalStep.correctAnswerContent ? (
+                    currentModalStep.correctAnswerIndex.toString() ? (
                       <Image
                         src="/assets/images/baodaozai/correct_answer.svg"
                         alt="Correct Answer"

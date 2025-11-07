@@ -292,14 +292,22 @@ const Article = ({
   }, [post.tagsOrdered])
 
   const showBaodaozai = (() => {
-    if (post?.showBaodaozai === true && member?.showBaodaozai === true) {
+    if (post?.showBaodaozai === true && !isLogin) {
+      return true
+    }
+    if (
+      post?.showBaodaozai === true &&
+      isLogin &&
+      member?.showBaodaozai === true
+    ) {
       return true
     }
     return false
   })()
 
-  const essayQuestionCount =
-    member?.essayQuestionCount ?? BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT
+  const essayQuestionCount = isLogin
+    ? (member?.essayQuestionCount ?? BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT)
+    : 0
 
   const postQuestions = useMemo<BaodaozaiQuestions | null>(() => {
     const essayCount = essayQuestionCount
