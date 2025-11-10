@@ -3,6 +3,7 @@ import '../globals.css'
 import { Footer } from '@kids-reporter/routing-ui'
 import { GoogleTagManager } from '@next/third-parties/google'
 import { Noto_Sans_TC } from 'next/font/google'
+import localFont from 'next/font/local'
 
 import Providers from '@/components/providers'
 import {
@@ -20,13 +21,18 @@ const notoSansTC = Noto_Sans_TC({
   variable: '--font-noto-sans-tc',
 })
 
+const swei = localFont({
+  src: '../assets/fonts/SweiMarkerSansCJKtc-Bold.woff2',
+  variable: '--font-swei-marker',
+})
+
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html className={notoSansTC.variable}>
+    <html className={`${notoSansTC.variable} ${swei.variable}`}>
       <GoogleTagManager gtmId={GTM_ID} />
       <body>
         <Providers>
