@@ -21,7 +21,7 @@ function Member() {
 
   return (
     <div className="w-full bg-neutral-100 desktop:px-12">
-      <div className="mx-auto flex w-full max-w-300 flex-col items-center gap-8 pt-6 pb-40 tablet:items-start">
+      <div className="mx-auto flex w-full max-w-300 flex-col items-center gap-8 pt-6 pb-40 tablet:items-start tablet:pt-8 desktop:pt-16">
         <div className="flex w-full flex-col items-center gap-4 tablet:hidden">
           <div className="h-[136px] w-[136px] overflow-hidden rounded-full">
             <Image

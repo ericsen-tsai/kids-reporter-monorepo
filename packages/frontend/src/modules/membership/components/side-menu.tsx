@@ -24,7 +24,7 @@ function MembershipSideMenu() {
               key={item.href}
               href={item.href}
               className={cn(
-                'w-full px-6 py-2 text-left prose-p1 tablet:px-8 desktop:px-4',
+                'w-full px-6 py-2 text-left prose-p1 transition-all duration-300 tablet:px-8 desktop:px-4',
                 'bg-neutral-100 text-neutral-900',
                 'hover:bg-black/5 active:bg-black/10',
                 active && 'text-red-400'
@@ -41,7 +41,7 @@ function MembershipSideMenu() {
       <Link
         href="/logout"
         className={cn(
-          'w-full px-6 py-2 text-left prose-p1 tablet:px-8 desktop:px-4',
+          'w-full px-6 py-2 text-left prose-p1 transition-all duration-300 tablet:px-8 desktop:px-4',
           'bg-neutral-100 text-neutral-900',
           'hover:bg-black/5 active:bg-black/10'
         )}
