@@ -3,34 +3,76 @@ import {
   Button,
   HeaderMobileBackButtonHrefSetter,
 } from '@kids-reporter/routing-ui'
-import { useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { useCallback, useEffect, useState } from 'react'
 
+import { getMemberPostsWithAnswers } from '@/api/extended'
+import {
+  MEMBER_POSTS_WITH_ANSWERS_QUERY_KEY,
+  useGetMemberPostsWithAnswersQuery,
+} from '@/api-utils/react-query/hooks/extended'
 import { ArrowLeft, ArrowRight } from '@/icons'
+import { useHydratedAuthStore } from '@/services/auth/use-hydrated-auth-store'
 
 import MembershipSideMenu from '../components/side-menu'
-import { PostQuestionAnswers } from '../types'
-import { MOCK_POST_QUESTION_ANSWERS } from './mock-data'
 import PostQuestionAnswersList from './post-question-answers-list'
-
-type MyReadingProps = {
-  postQuestionAnswers?: PostQuestionAnswers
-}
+import { parseMemberPostsWithAnswersToPostQuestionAnswers } from './utils'
 
 const PAGE_ITEM_COUNT = 5
 
-function MyReading({
-  postQuestionAnswers = MOCK_POST_QUESTION_ANSWERS,
-}: MyReadingProps) {
+function MyReading() {
   const [currentPage, setCurrentPage] = useState(1)
+  const [totalCount, setTotalCount] = useState<number | undefined>()
+  const { member, tokens } = useHydratedAuthStore()
+  const { data: memberPostsWithAnswersData, isLoading } =
+    useGetMemberPostsWithAnswersQuery({
+      memberId: member?.id ?? '',
+      take: PAGE_ITEM_COUNT,
+      skip: (currentPage - 1) * PAGE_ITEM_COUNT,
+      accessToken: tokens?.accessToken ?? '',
+    })
 
-  const totalPages = Math.ceil(postQuestionAnswers.length / PAGE_ITEM_COUNT)
+  useEffect(() => {
+    if (typeof totalCount === 'number' && memberPostsWithAnswersData) return
+    setTotalCount(memberPostsWithAnswersData?.totalCount)
+  }, [memberPostsWithAnswersData, totalCount])
+
+  const totalPages = totalCount ? Math.ceil(totalCount / PAGE_ITEM_COUNT) : 0
+
+  const currentPostQuestionAnswers = memberPostsWithAnswersData
+    ? parseMemberPostsWithAnswersToPostQuestionAnswers(
+        memberPostsWithAnswersData
+      )
+    : []
+
   const isFirstPage = currentPage === 1
   const isLastPage = currentPage === totalPages
 
-  const currentPostQuestionAnswers = postQuestionAnswers.slice(
-    (currentPage - 1) * PAGE_ITEM_COUNT,
-    currentPage * PAGE_ITEM_COUNT
-  )
+  const queryClient = useQueryClient()
+  const handlePrefetchNextPage = useCallback(() => {
+    if (isLastPage || !member?.id) return
+    queryClient.prefetchQuery({
+      queryKey: [
+        MEMBER_POSTS_WITH_ANSWERS_QUERY_KEY,
+        member?.id ?? '',
+        PAGE_ITEM_COUNT,
+        currentPage + 1,
+      ],
+      queryFn: () =>
+        getMemberPostsWithAnswers({
+          memberId: member?.id ?? '',
+          take: PAGE_ITEM_COUNT,
+          skip: currentPage * PAGE_ITEM_COUNT,
+          accessToken: tokens?.accessToken ?? '',
+        }),
+    })
+  }, [currentPage, isLastPage, member?.id, queryClient, tokens?.accessToken])
+
+  useEffect(() => {
+    handlePrefetchNextPage()
+  }, [currentPage, handlePrefetchNextPage])
+
+  const isGetMemberPostsWithAnswersLoading = isLoading || !member?.id
 
   return (
     <div className="mx-auto w-full bg-neutral-100 pt-6 pb-40 tablet:pt-8 desktop:px-12 desktop:pt-16 desktop:pb-50">
@@ -45,9 +87,10 @@ function MyReading({
           </h1>
           <PostQuestionAnswersList
             postQuestionAnswers={currentPostQuestionAnswers}
+            isLoading={isGetMemberPostsWithAnswersLoading}
             key={currentPage}
           />
-          {postQuestionAnswers.length > PAGE_ITEM_COUNT && (
+          {!isLoading && totalPages > 1 && (
             <div className="mt-6 flex justify-center gap-4">
               <Button
                 variant="secondary"
