@@ -336,6 +336,221 @@ export const extendGraphqlSchema = graphql.extend(() => {
           }
         },
       }),
+      getMemberPostsWithAnswers: graphql.field({
+        type: graphql.JSON,
+        args: {
+          memberId: graphql.arg({ type: graphql.nonNull(graphql.ID) }),
+          take: graphql.arg({ type: graphql.Int, defaultValue: 5 }),
+          skip: graphql.arg({ type: graphql.Int, defaultValue: 0 }),
+        },
+        async resolve(root, args, ctx: Context) {
+          const { memberId, take = 5, skip = 0 } = args
+
+          try {
+            // Get unique post IDs from essay answers using Prisma
+            const essayAnswers = await ctx.query.PostEssayAnswer.findMany({
+              where: { member: { id: { equals: memberId } } },
+              query: `
+                id
+                question {
+                  id
+                  post {
+                    id
+                  }
+                }
+              `,
+            })
+
+            // Get unique post IDs from choice answers using Prisma
+            const choiceAnswers = await ctx.query.PostChoiceAnswer.findMany({
+              where: { member: { id: { equals: memberId } } },
+              query: `
+                id
+                question {
+                  id
+                  post {
+                    id
+                  }
+                }
+              `,
+            })
+
+            // Extract unique post IDs
+            const postIds = [
+              ...new Set([
+                ...essayAnswers
+                  .map((a) => a.question?.post?.id?.toString())
+                  .filter(Boolean),
+                ...choiceAnswers
+                  .map((a) => a.question?.post?.id?.toString())
+                  .filter(Boolean),
+              ]),
+            ]
+
+            const totalCount = postIds.length
+
+            if (postIds.length === 0) {
+              return { posts: [], totalCount: 0 }
+            }
+
+            // Get posts with pagination
+            const relatedPosts = await ctx.query.Post.findMany({
+              where: { id: { in: postIds } },
+              orderBy: [{ publishedDate: 'desc' }],
+              query: `
+                id
+                title
+                slug
+                publishedDate
+                postEssayQuestions {
+                  id
+                  title
+                  hint
+                }
+                postChoiceQuestions {
+                  id
+                  title
+                  options
+                  reason
+                }
+              `,
+            })
+
+            const postIdsForAnswers = relatedPosts.map((p) => p.id)
+
+            const essayAnswersData = await ctx.query.PostEssayAnswer.findMany({
+              where: {
+                AND: [
+                  { member: { id: { equals: memberId } } },
+                  { question: { post: { id: { in: postIdsForAnswers } } } },
+                ],
+              },
+              query: `
+                id
+                content
+                likesCount
+                createdAt
+                updatedAt
+                question {
+                  id
+                  title
+                  hint
+                  post {
+                    id
+                  }
+                }
+              `,
+            })
+
+            const choiceAnswersData = await ctx.query.PostChoiceAnswer.findMany(
+              {
+                where: {
+                  AND: [
+                    { member: { id: { equals: memberId } } },
+                    { question: { post: { id: { in: postIdsForAnswers } } } },
+                  ],
+                },
+                query: `
+                id
+                choiceIndex
+                correct
+                createdAt
+                updatedAt
+                question {
+                  id
+                  title
+                  options
+                  reason
+                  post {
+                    id
+                  }
+                }
+              `,
+              }
+            )
+
+            const posts = relatedPosts
+              .map((post) => {
+                const postId = post.id.toString()
+                const essayAnswers = essayAnswersData.filter(
+                  (a) => a.question?.post?.id?.toString() === postId
+                )
+                const choiceAnswers = choiceAnswersData.filter(
+                  (a) => a.question?.post?.id?.toString() === postId
+                )
+
+                const allAnswers = [...essayAnswers, ...choiceAnswers]
+                const lastAnsweredTime = allAnswers.reduce(
+                  (acc, answer) => {
+                    const currentDate = new Date(
+                      answer.updatedAt ?? answer.createdAt
+                    )
+                    return currentDate.getTime() > new Date(acc).getTime()
+                      ? currentDate.toISOString()
+                      : acc
+                  },
+                  new Date(
+                    allAnswers[0].updatedAt ?? allAnswers[0].createdAt
+                  ).toISOString()
+                )
+                return {
+                  id: post.id,
+                  title: post.title,
+                  slug: post.slug,
+                  publishedDate: post.publishedDate,
+                  essayAnswers,
+                  choiceAnswers,
+                  lastAnsweredTime,
+                }
+              })
+              .sort((a, b) => {
+                return (
+                  new Date(b.lastAnsweredTime).getTime() -
+                  new Date(a.lastAnsweredTime).getTime()
+                )
+              })
+              .slice(skip ?? 0, (skip ?? 0) + (take ?? 5))
+
+            return {
+              posts,
+              totalCount,
+            }
+          } catch (err) {
+            let errorMessage = 'memberPostsWithAnswers failed'
+            if (err instanceof AxiosError) {
+              const annotatedErr = _errors.helpers.annotateAxiosError(err)
+              errorMessage = _errors.helpers.printAll(annotatedErr, {
+                withStack: true,
+                withPayload: true,
+              })
+            }
+
+            console.log(
+              JSON.stringify({
+                severity: 'ERROR',
+                message: 'memberPostsWithAnswers failed',
+                context: {
+                  function: 'memberPostsWithAnswers',
+                  memberId,
+                  error: errorMessage,
+                },
+              })
+            )
+
+            throw new GraphQLError(
+              'Internal server error while fetching member posts with answers',
+              {
+                extensions: {
+                  code: 'INTERNAL_SERVER_ERROR',
+                  http: {
+                    status: 500,
+                  },
+                },
+              }
+            )
+          }
+        },
+      }),
     },
     type: {},
   }
