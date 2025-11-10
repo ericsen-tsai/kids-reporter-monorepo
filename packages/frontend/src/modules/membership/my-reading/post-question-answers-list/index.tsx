@@ -30,8 +30,12 @@ function PostQuestionAnswersList({
 }: PostQuestionAnswersListProps) {
   if (postQuestionAnswers.length === 0) {
     return (
-      <div className="flex w-full items-center justify-center py-20">
-        <p className="prose-p1 text-neutral-500">尚無回答記錄</p>
+      <div className="flex min-h-50 w-full items-center justify-center">
+        <p className="prose-p1 text-neutral-500">
+          尚無回答紀錄，
+          <br />
+          歡迎前往文章頁進行互動測驗。
+        </p>
       </div>
     )
   }

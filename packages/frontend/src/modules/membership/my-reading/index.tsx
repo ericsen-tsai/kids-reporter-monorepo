@@ -33,7 +33,7 @@ function MyReading({
   )
 
   return (
-    <div className="mx-auto w-full bg-neutral-100 pt-6 pb-40 tablet:pt-8 desktop:px-12 desktop:pt-16">
+    <div className="mx-auto w-full bg-neutral-100 pt-6 pb-40 tablet:pt-8 desktop:px-12 desktop:pt-16 desktop:pb-50">
       <div className="mx-auto flex w-full max-w-300 gap-8">
         <HeaderMobileBackButtonHrefSetter href="/member" />
         <div className="hidden tablet:block">
