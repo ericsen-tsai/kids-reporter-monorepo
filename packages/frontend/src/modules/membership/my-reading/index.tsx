@@ -49,24 +49,35 @@ function MyReading() {
   const isLastPage = currentPage === totalPages
 
   const queryClient = useQueryClient()
+
+  const hasMorePages = totalPages > currentPage
+
   const handlePrefetchNextPage = useCallback(() => {
-    if (isLastPage || !member?.id) return
+    const memberId = member?.id ?? ''
+    if (isLastPage || !memberId || !hasMorePages) return
     queryClient.prefetchQuery({
       queryKey: [
         MEMBER_POSTS_WITH_ANSWERS_QUERY_KEY,
-        member?.id ?? '',
+        memberId,
         PAGE_ITEM_COUNT,
-        currentPage + 1,
+        currentPage * PAGE_ITEM_COUNT,
       ],
       queryFn: () =>
         getMemberPostsWithAnswers({
-          memberId: member?.id ?? '',
+          memberId,
           take: PAGE_ITEM_COUNT,
           skip: currentPage * PAGE_ITEM_COUNT,
           accessToken: tokens?.accessToken ?? '',
         }),
     })
-  }, [currentPage, isLastPage, member?.id, queryClient, tokens?.accessToken])
+  }, [
+    currentPage,
+    isLastPage,
+    member?.id,
+    queryClient,
+    hasMorePages,
+    tokens?.accessToken,
+  ])
 
   useEffect(() => {
     handlePrefetchNextPage()
