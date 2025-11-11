@@ -9,6 +9,11 @@ function BaodaozaiVisibilitySetter({ show }: { show: boolean }) {
   const { setHide } = baodaozaiProps
   useEffect(() => {
     setHide(!show)
+
+    return () => {
+      // reset hide state when component unmounts
+      setHide(false)
+    }
   }, [show, setHide])
   return null
 }
