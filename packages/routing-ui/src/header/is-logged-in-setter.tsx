@@ -4,17 +4,19 @@ import { useHeaderContext } from './header-context'
 
 type IsLoggedInSetterProps = {
   isLoggedIn: boolean
+  loginUrl: string
 }
 
-function IsLoggedInSetter({ isLoggedIn }: IsLoggedInSetterProps) {
+function IsLoggedInSetter({ isLoggedIn, loginUrl }: IsLoggedInSetterProps) {
   const context = useHeaderContext()
   const setIsLoggedIn = context?.setIsLoggedIn
+  const setLoginUrl = context?.setLoginUrl
 
   useEffect(() => {
     setIsLoggedIn?.(isLoggedIn)
-
+    setLoginUrl?.(loginUrl)
     return () => setIsLoggedIn?.(false)
-  }, [isLoggedIn, setIsLoggedIn])
+  }, [isLoggedIn, setIsLoggedIn, loginUrl, setLoginUrl])
 
   return null
 }

@@ -19,6 +19,8 @@ type HeaderContextType = {
   setIsLoggedIn: (isLoggedIn: boolean) => void
   mobileBackButtonHref?: string
   setMobileBackButtonHref: (href?: string) => void
+  loginUrl?: string
+  setLoginUrl: (url?: string) => void
 }
 
 const HeaderContext = createContext<HeaderContextType | undefined>(undefined)
@@ -36,6 +38,7 @@ export function HeaderProvider({
   const [mobileBackButtonHref, setMobileBackButtonHref] = useState<
     string | undefined
   >(undefined)
+  const [loginUrl, setLoginUrl] = useState<string | undefined>(undefined)
   const openMenu = useCallback(() => setIsMenuOpen(true), [])
   const closeMenu = useCallback(() => setIsMenuOpen(false), [])
 
@@ -51,6 +54,8 @@ export function HeaderProvider({
       setIsLoggedIn,
       mobileBackButtonHref,
       setMobileBackButtonHref,
+      loginUrl,
+      setLoginUrl,
     }),
     [
       postTitle,
@@ -63,6 +68,8 @@ export function HeaderProvider({
       setIsLoggedIn,
       mobileBackButtonHref,
       setMobileBackButtonHref,
+      loginUrl,
+      setLoginUrl,
     ]
   )
 

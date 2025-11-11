@@ -11,6 +11,7 @@ type MobileHeaderProps = {
   isMenuOpen: boolean
   isLoggedIn?: boolean
   mobileBackButtonHref?: string
+  loginUrl?: string
 }
 
 export function MobileHeader({
@@ -19,6 +20,7 @@ export function MobileHeader({
   showCloseButtonWhenMenuOpen,
   isMenuOpen,
   isLoggedIn,
+  loginUrl,
   mobileBackButtonHref,
 }: MobileHeaderProps) {
   const showCloseButton = showCloseButtonWhenMenuOpen && isMenuOpen
@@ -47,7 +49,7 @@ export function MobileHeader({
           <div className="gap-4 flex items-center">
             {!showCloseButton && (
               <a
-                href={isLoggedIn ? '/member' : '/login'}
+                href={isLoggedIn ? '/member' : loginUrl}
                 className="w-8 h-8 flex items-center justify-center rounded-full text-red-400 transition-colors duration-200 hover:text-red-500"
                 aria-label="登入"
               >

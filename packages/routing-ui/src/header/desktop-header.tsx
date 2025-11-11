@@ -20,6 +20,7 @@ type DesktopHeaderProps = {
   subscribeUrl: string
   menuItems: MenuItem[]
   isLoggedIn?: boolean
+  loginUrl?: string
 }
 
 export function DesktopHeader({
@@ -32,6 +33,7 @@ export function DesktopHeader({
   subscribeUrl,
   menuItems,
   isLoggedIn,
+  loginUrl,
 }: DesktopHeaderProps) {
   return (
     <>
@@ -100,7 +102,7 @@ export function DesktopHeader({
                   subscribeUrl={subscribeUrl}
                 />
                 <a
-                  href={isLoggedIn ? '/member' : '/login'}
+                  href={isLoggedIn ? '/member' : loginUrl}
                   className="w-8 h-8 flex items-center justify-center rounded-full text-red-400 transition-colors duration-200 hover:text-red-500"
                   aria-label="登入"
                 >
