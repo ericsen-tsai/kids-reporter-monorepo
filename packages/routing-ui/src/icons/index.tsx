@@ -368,7 +368,7 @@ export const ArrowIcon = () => {
     >
       <path
         d="M8.25 15.25L1.25 8.25L8.25 1.25"
-        stroke="#8E8E8E"
+        stroke="currentColor"
         strokeWidth="2.5"
         strokeLinecap="round"
         strokeLinejoin="round"

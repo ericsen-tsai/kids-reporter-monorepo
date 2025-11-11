@@ -59,17 +59,13 @@ export function HeaderProvider({
     }),
     [
       postTitle,
-      setPostTitle,
       isMenuOpen,
       openMenu,
       closeMenu,
       keywords,
       isLoggedIn,
-      setIsLoggedIn,
       mobileBackButtonHref,
-      setMobileBackButtonHref,
       loginUrl,
-      setLoginUrl,
     ]
   )
 

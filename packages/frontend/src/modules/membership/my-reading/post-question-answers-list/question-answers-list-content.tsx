@@ -25,13 +25,13 @@ function QuestionAnswersListContent({
 
   return (
     <div className="flex w-full flex-col gap-4">
-      {answers.map((answer, index) => {
+      {answers.map((answer) => {
         const questionTitle = answer.question?.title
         const isEssayAnswer = 'likesCount' in answer
         const isChoiceAnswer = 'choiceIndex' in answer
         return (
           <div
-            key={index}
+            key={answer.id}
             className="flex w-full flex-col gap-3 rounded-2xl bg-neutral-200 p-5"
           >
             <div className="flex items-center gap-2">

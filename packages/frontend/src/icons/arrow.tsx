@@ -51,7 +51,7 @@ export const ArrowDown = ({ className }: { className?: string }) => {
       <g clipPath="url(#clip0_535_16631)">
         <path
           d="M5 9L12 16L19 9"
-          stroke="#8E8E8E"
+          stroke="currentColor"
           strokeWidth="2.5"
           strokeLinecap="round"
           strokeLinejoin="round"

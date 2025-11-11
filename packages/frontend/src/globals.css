@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import '@kids-reporter/routing-ui/styles.css';
+@import 'tw-animate-css';
 
 @source './src/**/*.{js,ts,jsx,tsx,mdx}';
 @source '../../routing-ui/src/**/*.{js,ts,jsx,tsx}';
@@ -55,7 +56,7 @@
 
   /* Typography - Font Families */
   --font-family-noto: var(--font-noto-sans-tc), sans-serif;
-  --font-family-swei: 'SweiMarkerSansCJKtc-Regular', sans-serif;
+  --font-family-swei: var(--font-swei-marker), sans-serif;
 
   /* Typography - Font Sizes */
   --font-size-h1-large: 48px;
@@ -456,7 +457,7 @@
 }
 
 @utility font-swei {
-  font-family: var(--font-swei-marker);
+  font-family: var(--font-family-swei);
   font-weight: 700;
 }
 

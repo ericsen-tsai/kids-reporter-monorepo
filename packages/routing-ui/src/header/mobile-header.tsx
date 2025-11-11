@@ -38,7 +38,7 @@ export function MobileHeader({
             {mobileBackButtonHref && (
               <a
                 href={mobileBackButtonHref}
-                className="size-8 mr-2 flex cursor-pointer items-center justify-center tablet:hidden"
+                className="size-8 mr-2 flex cursor-pointer items-center justify-center text-neutral-600 tablet:hidden"
               >
                 <ArrowIcon />
               </a>
@@ -49,7 +49,7 @@ export function MobileHeader({
           <div className="gap-4 flex items-center">
             {!showCloseButton && (
               <a
-                href={isLoggedIn ? '/member' : loginUrl}
+                href={isLoggedIn ? '/member' : (loginUrl ?? '/login')}
                 className="w-8 h-8 flex items-center justify-center rounded-full text-red-400 transition-colors duration-200 hover:text-red-500"
                 aria-label="登入"
               >

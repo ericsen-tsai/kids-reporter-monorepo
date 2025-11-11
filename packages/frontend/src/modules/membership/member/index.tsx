@@ -14,7 +14,7 @@ function Member() {
   const router = useRouter()
 
   useEffect(() => {
-    if (!isMobile) {
+    if (isMobile === false) {
       router.replace(MEMBERSHIP_MENU_ITEMS[0].href)
     }
   }, [isMobile, router])

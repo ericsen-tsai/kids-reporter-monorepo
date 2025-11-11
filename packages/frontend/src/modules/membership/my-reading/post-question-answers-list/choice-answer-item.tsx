@@ -18,7 +18,7 @@ function ChoiceAnswerItem({ answer }: { answer: PostChoiceAnswer }) {
   const correctOptionIndex = options.findIndex((opt) => opt.isCorrectAnswer)
 
   return (
-    <div key={answer.id} className="flex flex-col">
+    <div className="flex flex-col">
       <div className="flex items-center">
         <div
           className={cn(
@@ -32,7 +32,9 @@ function ChoiceAnswerItem({ answer }: { answer: PostChoiceAnswer }) {
         </div>
         <div className="flex flex-1 items-center rounded-r-xl bg-white px-4 py-4">
           <p className="prose-p1-medium text-neutral-900">
-            {`${(answer.choiceIndex ?? 0) + 1}. ${selectedOption?.content}`}
+            {selectedOption
+              ? `${(answer.choiceIndex ?? 0) + 1}. ${selectedOption.content}`
+              : '未選擇'}
           </p>
         </div>
       </div>
