@@ -402,17 +402,6 @@ export const extendGraphqlSchema = graphql.extend(() => {
                 title
                 slug
                 publishedDate
-                postEssayQuestions {
-                  id
-                  title
-                  hint
-                }
-                postChoiceQuestions {
-                  id
-                  title
-                  options
-                  reason
-                }
               `,
             })
 
