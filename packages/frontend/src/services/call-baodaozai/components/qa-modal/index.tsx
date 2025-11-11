@@ -176,7 +176,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
                   }
                   className={cn(
                     'w-full cursor-pointer rounded-2xl border-2 bg-white px-5 py-4 text-left transition-all',
-                    answers[currentModalStep.questionIndex] === option.content
+                    answers[currentModalStep.questionIndex] === index.toString()
                       ? 'border-neutral-600'
                       : 'border-neutral-200 hover:border-neutral-300 hover:bg-neutral-100'
                   )}
