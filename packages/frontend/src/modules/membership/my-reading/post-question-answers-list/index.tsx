@@ -17,7 +17,7 @@ type PostQuestionAnswersListProps = {
 
 function formatDate(dateString: string): string {
   const date = new Date(dateString)
-  if (!date || isNaN(date.getTime())) {
+  if (isNaN(date.getTime())) {
     return ''
   }
   const year = date.getFullYear()

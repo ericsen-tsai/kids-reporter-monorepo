@@ -93,7 +93,7 @@ function MyReading() {
           <MembershipSideMenu />
         </div>
         <div className="flex flex-1 flex-col px-6 tablet:px-8 desktop:px-0">
-          <h1 className="mb-6 prose-h4-large font-family-swei text-neutral-900">
+          <h1 className="mb-6 prose-h4-large font-swei text-neutral-900">
             我的回答
           </h1>
           <PostQuestionAnswersList

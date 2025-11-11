@@ -55,7 +55,7 @@ function RelatedArticles({
             <RelatedPostsIcon className="desktop:hidden" />
             <RelatedPostsIconLarge className="hidden desktop:block" />
           </div>
-          <span className="prose-h2-small font-family-swei! text-neutral-900 desktop:prose-h2-large">
+          <span className="prose-h2-small font-swei text-neutral-900 desktop:prose-h2-large">
             相關文章
           </span>
         </div>
