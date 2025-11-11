@@ -15,7 +15,10 @@ function IsLoggedInSetter({ isLoggedIn, loginUrl }: IsLoggedInSetterProps) {
   useEffect(() => {
     setIsLoggedIn?.(isLoggedIn)
     setLoginUrl?.(loginUrl)
-    return () => setIsLoggedIn?.(false)
+    return () => {
+      setIsLoggedIn?.(false)
+      setLoginUrl?.(undefined)
+    }
   }, [isLoggedIn, setIsLoggedIn, loginUrl, setLoginUrl])
 
   return null
