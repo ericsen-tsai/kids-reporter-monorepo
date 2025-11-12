@@ -44,6 +44,9 @@
   --color-yellow-700: #926c10;
   --color-yellow-800: #705207;
 
+  /* Colors - Semantic Error */
+  --color-semantic-danger: #c7000a;
+
   /* Typography - Font Families */
   --font-family-noto: 'Noto Sans TC', sans-serif;
 
@@ -148,6 +151,14 @@
     --paletteColor7: var(--color-neutral-200);
     --paletteColor8: var(--color-neutral-white);
     --color: var(--paletteColor3);
+  }
+
+  ::selection {
+    background-color: var(--color-neutral-400);
+  }
+
+  ::-moz-selection {
+    background-color: var(--color-neutral-400);
   }
 }
 

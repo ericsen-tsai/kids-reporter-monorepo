@@ -29,7 +29,7 @@ const CloseIcon = ({ className }: { className?: string }) => (
 
 const inputVariants = cva(
   // Base styles
-  'desktop:bg-white! px-4 py-1.5 h-11 flex items-center rounded-full border border-transparent bg-neutral-100 prose-p1 transition-colors duration-200 hover:border-neutral-600',
+  'px-4 py-1.5 h-11 relative flex items-center border border-transparent bg-neutral-100 prose-p1 transition-colors duration-200 hover:border-neutral-600 desktop:bg-neutral-white!',
   {
     variants: {
       state: {
@@ -38,11 +38,23 @@ const inputVariants = cva(
         focus: 'border-neutral-600',
         active: 'border-neutral-600',
         unfocus: 'border-transparent',
-        error: 'border-red-600',
+        error: 'border-semantic-danger hover:border-semantic-danger',
+      },
+      mode: {
+        default: 'rounded-[12px] border-neutral-400',
+        search: 'rounded-full',
       },
     },
+    compoundVariants: [
+      {
+        state: 'error',
+        mode: 'default',
+        className: 'border-semantic-danger',
+      },
+    ],
     defaultVariants: {
       state: 'default',
+      mode: 'default',
     },
   }
 )
@@ -52,9 +64,11 @@ export type InputProps = {
   value?: string
   onChange?: (value: string) => void
   onClear?: () => void
-  showClearButton?: boolean
   children?: React.ReactNode
   inputRef?: React.RefObject<HTMLInputElement>
+  error?: boolean
+  errorMessage?: string
+  mode?: 'default' | 'search'
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'>
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -64,11 +78,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       value,
       onChange,
       onClear,
-      showClearButton = true,
       className,
       onFocus,
       onBlur,
       inputRef,
+      error,
+      errorMessage,
+      mode = 'default',
       ...props
     },
     ref
@@ -81,13 +97,15 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const hasValue = currentValue.length > 0
 
     // Determine current state
-    const currentState = isFocused
-      ? 'focus'
-      : hasValue
-        ? isActive
-          ? 'active'
-          : 'unfocus'
-        : 'default'
+    const currentState = error
+      ? 'error'
+      : isFocused
+        ? 'focus'
+        : hasValue
+          ? isActive
+            ? 'active'
+            : 'unfocus'
+          : 'default'
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = e.target.value
@@ -132,13 +150,18 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       currentRef.current?.focus()
     }
 
-    const inputClasses = cn(inputVariants({ state: currentState }), className)
+    const inputClasses = cn(
+      inputVariants({ state: currentState, mode }),
+      className
+    )
+
+    const isSearchMode = mode === 'search'
 
     return (
       <div className="gap-2 flex flex-col">
         <div className={inputClasses} ref={ref}>
           <div className="text-neutral-600">
-            <SearchIconSmall />
+            {isSearchMode && <SearchIconSmall />}
           </div>
           <input
             type="text"
@@ -147,12 +170,20 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             onFocus={handleFocus}
             onBlur={handleBlur}
             placeholder={placeholder}
-            className="placeholder:font-medium ml-2 max-w-[72%] flex-1 flex-shrink-1 bg-transparent text-neutral-900 placeholder:text-neutral-400 focus:outline-none"
+            className={cn(
+              'flex-1 flex-shrink-1 bg-transparent text-neutral-900 placeholder:prose-p1 placeholder:text-neutral-400 focus:outline-none disabled:bg-neutral-100 disabled:text-neutral-400',
+              isSearchMode && 'ml-2 max-w-[72%]'
+            )}
             ref={inputRef ?? innerInputRef}
             {...props}
           />
+          {errorMessage && (
+            <p className="-bottom-5 left-0 absolute prose-p3 text-semantic-danger">
+              {errorMessage}
+            </p>
+          )}
 
-          {showClearButton && hasValue && (
+          {isSearchMode && hasValue && (
             <button
               type="button"
               onClick={handleClear}
