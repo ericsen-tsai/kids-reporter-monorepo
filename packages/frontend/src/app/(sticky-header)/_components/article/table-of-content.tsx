@@ -19,7 +19,7 @@ const TOCContainer = styled.div`
   }
 `
 
-const TOCTab = styled.div<{ isExpanded: boolean }>`
+const TOCTab = styled.div<{ $isExpanded: boolean }>`
   width: 30px;
   position: fixed;
   z-index: ${zIndex};
@@ -27,10 +27,10 @@ const TOCTab = styled.div<{ isExpanded: boolean }>`
   left: 0;
   transition: transform 0.1s ease-in-out 0.1s;
   transform: ${(props) =>
-    props.isExpanded ? `translateX(160px)` : 'translateX(0px)'};
+    props.$isExpanded ? `translateX(160px)` : 'translateX(0px)'};
   ${mediaQuery.mediumAbove} {
     transform: ${(props) =>
-      props.isExpanded ? `translateX(180px)` : 'translateX(0px)'};
+      props.$isExpanded ? `translateX(180px)` : 'translateX(0px)'};
   }
   cursor: pointer;
 
@@ -53,7 +53,7 @@ const TOCTab = styled.div<{ isExpanded: boolean }>`
     transform: translate(-50%, -50%);
   }
 `
-const TOCBackground = styled.div<{ isExpanded: boolean }>`
+const TOCBackground = styled.div<{ $isExpanded: boolean }>`
   width: 160px;
   height: 100vh;
   display: flex;
@@ -68,11 +68,11 @@ const TOCBackground = styled.div<{ isExpanded: boolean }>`
   background-color: #f4f4f4;
   transition: transform 0.1s ease-in-out 0.1s;
   transform: ${(props) =>
-    props.isExpanded ? 'translateX(0px)' : `translateX(-160px)`};
+    props.$isExpanded ? 'translateX(0px)' : `translateX(-160px)`};
   ${mediaQuery.mediumAbove} {
     width: 180px;
     transform: ${(props) =>
-      props.isExpanded ? 'translateX(0px)' : `translateX(-180px)`};
+      props.$isExpanded ? 'translateX(0px)' : `translateX(-180px)`};
   }
 `
 
@@ -107,11 +107,11 @@ export const TOC = (props: { indexes: TOCIndex[] }) => {
         onClick={() => {
           setIsExpanded(!isExpanded)
         }}
-        isExpanded={isExpanded}
+        $isExpanded={isExpanded}
       >
         <div>{TOCBtn}</div>
       </TOCTab>
-      <TOCBackground isExpanded={isExpanded}>
+      <TOCBackground $isExpanded={isExpanded}>
         {props.indexes?.map(
           (tocIndex, index) =>
             tocIndex && (
