@@ -11,6 +11,7 @@ import {
   POST_CONTENT_GQL,
   POST_PER_PAGE,
 } from '@/constants'
+import { BaodaozaiVisibilitySetter } from '@/services/call-baodaozai'
 import { getPostSummaries, log, LogLevel, sendGQLRequest } from '@/utils'
 
 export const metadata: Metadata = {
@@ -95,6 +96,7 @@ export default async function LatestPosts({
       style={{ width: '95vw' }}
       className="mb-10 flex flex-col items-center justify-center gap-10"
     >
+      <BaodaozaiVisibilitySetter show={true} />
       <AllSiteBaodaozaiEventTrigger id="show-intro" content={introContent} />
       <div className="relative">
         <div className="absolute top-[150vh]">

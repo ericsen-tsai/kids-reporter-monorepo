@@ -29,7 +29,11 @@ import MakeFriends from '@/home/make-friend'
 import PostSelection from '@/home/post-selection'
 import SearchAndTags from '@/home/search-and-tags'
 import Section from '@/home/section'
-import { Baodaozai, CallBaodaozaiProvider } from '@/services/call-baodaozai'
+import {
+  Baodaozai,
+  BaodaozaiVisibilitySetter,
+  CallBaodaozaiProvider,
+} from '@/services/call-baodaozai'
 import { getPostSummaries } from '@/utils'
 
 export const dynamic = 'force-dynamic'
@@ -139,6 +143,7 @@ export default async function Home() {
           subscribeUrl={SUBSCRIBE_URL}
           donateUrl={DONATE_URL}
         />
+        <BaodaozaiVisibilitySetter show={true} />
         <AllSiteBaodaozaiEventTrigger id="show-intro" content={introContent} />
         <div className="relative">
           <div className="absolute top-[150vh]">
