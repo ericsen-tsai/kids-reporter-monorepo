@@ -109,7 +109,8 @@ export function CallBaodaozaiProvider({
     setIsActive(!isActive)
   }, [isActive, setIsActive])
 
-  const [hide, setHide] = useState(false)
+  // let Baodaozai invisible until visibility setter is called
+  const [hide, setHide] = useState(true)
 
   const baodaozaiProps = useMemo(
     () => ({

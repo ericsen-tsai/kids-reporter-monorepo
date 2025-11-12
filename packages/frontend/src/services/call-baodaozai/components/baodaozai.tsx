@@ -69,18 +69,11 @@ function Baodaozai() {
     return isTablet ? '24px' : '32px'
   }, [isActive, isMobile, dialogProps.isOpen, isTablet, dialogBoxHeight])
 
-  // let Baodaozai invisible until it is initialized
-  const [innerHide, setInnerHide] = useState(true)
-
-  useEffect(() => {
-    setInnerHide(hide)
-  }, [hide])
-
   return (
     <div
       className={cn(
         'fixed right-0 bottom-0 z-1000 w-full transition-opacity duration-1000 tablet:right-0 tablet:bottom-0',
-        innerHide ? 'opacity-0' : 'opacity-100'
+        hide ? 'opacity-0' : 'opacity-100'
       )}
     >
       <div

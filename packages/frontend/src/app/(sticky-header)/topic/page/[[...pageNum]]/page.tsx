@@ -15,6 +15,7 @@ import {
   Theme,
   TOPIC_PAGE_ROUTE,
 } from '@/constants'
+import { BaodaozaiVisibilitySetter } from '@/services/call-baodaozai'
 import {
   getFormattedDate,
   getPostSummaries,
@@ -235,6 +236,7 @@ export default async function Topic({
     <main
       className={`${styles.main} mb-10 flex flex-col items-center justify-center`}
     >
+      <BaodaozaiVisibilitySetter show={true} />
       <AllSiteBaodaozaiEventTrigger
         id="show-intro"
         content={topicsIntroContent}

@@ -22,6 +22,7 @@ import {
   POST_PER_PAGE,
   Theme,
 } from '@/constants'
+import { BaodaozaiVisibilitySetter } from '@/services/call-baodaozai'
 import { DeepPartial } from '@/types/utils'
 import { getPostSummaries, log, LogLevel } from '@/utils'
 import {
@@ -254,6 +255,7 @@ export default async function Category({
         <img className="w-full max-w-xl" src={imageURL} loading="lazy" />
         {pageEnum && (
           <>
+            <BaodaozaiVisibilitySetter show={true} />
             <AllSiteBaodaozaiEventTrigger
               id="show-intro"
               content={introContent}
