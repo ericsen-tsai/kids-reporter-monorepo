@@ -1,4 +1,7 @@
-export const getFormattedDate = (date: string): string => {
+export const getFormattedDate = (
+  date: string,
+  separator: string = '.'
+): string => {
   const dateObj = new Date(date)
   if (!date || !dateObj) {
     return ''
@@ -6,5 +9,5 @@ export const getFormattedDate = (date: string): string => {
   const year = dateObj.getFullYear()
   const month = `${dateObj.getMonth() + 1}`.padStart(2, '0')
   const day = `${dateObj.getDate()}`.padStart(2, '0')
-  return [year, month, day].join('.')
+  return [year, month, day].join(separator)
 }
