@@ -1,26 +1,11 @@
 import { Header, SearchIcon } from '@kids-reporter/routing-ui'
 
 import AuthHeaderLoggedInSetter from '@/components/auth-header-logged-in-setter'
-import {
-  ADDITIONAL_MENU_ITEMS,
-  DONATE_URL,
-  MENU_ITEMS,
-  SEARCH_PLACEHOLDER,
-  SOCIAL_MEDIA_ITEMS,
-  SUBSCRIBE_URL,
-} from '@/constants'
 
 function NotFound() {
   return (
     <>
-      <Header
-        menuItems={MENU_ITEMS}
-        additionalMenuItems={ADDITIONAL_MENU_ITEMS}
-        socialMediaHrefs={SOCIAL_MEDIA_ITEMS.map((item) => item.href)}
-        searchPlaceholder={SEARCH_PLACEHOLDER}
-        subscribeUrl={SUBSCRIBE_URL}
-        donateUrl={DONATE_URL}
-      />
+      <Header />
       <AuthHeaderLoggedInSetter />
       <div
         style={{ width: '95vw' }}

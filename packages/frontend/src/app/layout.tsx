@@ -6,12 +6,6 @@ import { Noto_Sans_TC } from 'next/font/google'
 import localFont from 'next/font/local'
 
 import Providers from '@/components/providers'
-import {
-  ADDITIONAL_MENU_ITEMS,
-  DONATE_URL,
-  PRIVACY_POLICY,
-  SOCIAL_MEDIA_ITEMS,
-} from '@/constants'
 
 const GTM_ID = 'GTM-T37WZJ44'
 
@@ -37,12 +31,7 @@ export default async function RootLayout({
       <body>
         <Providers>
           {children}
-          <Footer
-            socialMediaHrefs={SOCIAL_MEDIA_ITEMS.map((item) => item.href)}
-            additionalMenuItems={ADDITIONAL_MENU_ITEMS}
-            donateUrl={DONATE_URL}
-            privacyPolicyUrl={PRIVACY_POLICY}
-          />
+          <Footer />
         </Providers>
         <noscript
           dangerouslySetInnerHTML={{
