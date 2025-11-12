@@ -3,9 +3,9 @@ import { GetMemberPostsWithAnswersQuerySchema } from '@/api/extended'
 import { PostQuestionAnswers } from '../types'
 
 export function parseMemberPostsWithAnswersToPostQuestionAnswers(
-  memberPostsWithAnswers: GetMemberPostsWithAnswersQuerySchema['getMemberPostsWithAnswers']
+  memberPostsWithAnswers: GetMemberPostsWithAnswersQuerySchema['getMemberPostsWithAnswers']['posts']
 ): PostQuestionAnswers {
-  return memberPostsWithAnswers.posts.map((post) => {
+  return memberPostsWithAnswers.map((post) => {
     const answers = [...post.choiceAnswers, ...post.essayAnswers]
 
     return {

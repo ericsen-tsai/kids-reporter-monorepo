@@ -44,7 +44,7 @@ export type GetMemberPostsWithAnswersQuerySchema = {
       }[]
       lastAnsweredTime: string
     }[]
-    totalCount: number
+    nextCursor: string | null
   }
 }
 

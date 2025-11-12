@@ -1,20 +1,28 @@
 import { GetMemberPostsWithAnswersQueryVariables } from '__generated__/operations/extended.generated'
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { getMemberPostsWithAnswers } from '@/api/extended'
 
 export const MEMBER_POSTS_WITH_ANSWERS_QUERY_KEY = 'member-posts-with-answers'
 
-export function useGetMemberPostsWithAnswersQuery({
+export function useGetMemberPostsWithAnswersInfinityQuery({
   accessToken,
   memberId,
   take = 5,
-  skip = 0,
-}: GetMemberPostsWithAnswersQueryVariables & { accessToken: string }) {
-  return useQuery({
-    queryKey: [MEMBER_POSTS_WITH_ANSWERS_QUERY_KEY, memberId, take, skip],
-    queryFn: () =>
-      getMemberPostsWithAnswers({ memberId, take, skip, accessToken }),
+}: Omit<GetMemberPostsWithAnswersQueryVariables, 'nextCursor'> & {
+  accessToken: string
+}) {
+  return useInfiniteQuery({
+    queryKey: [MEMBER_POSTS_WITH_ANSWERS_QUERY_KEY, memberId, take],
+    queryFn: ({ pageParam }) =>
+      getMemberPostsWithAnswers({
+        memberId,
+        take,
+        nextCursor: pageParam ?? undefined,
+        accessToken,
+      }),
     enabled: !!memberId && !!accessToken,
+    initialPageParam: null as string | null,
+    getNextPageParam: (lastPage) => lastPage?.nextCursor ?? undefined,
   })
 }

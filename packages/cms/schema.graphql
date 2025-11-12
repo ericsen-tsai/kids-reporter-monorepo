@@ -2404,7 +2404,7 @@ type Query {
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   searchTWReporterPosts(keywords: String!): [JSON]
-  getMemberPostsWithAnswers(memberId: ID!, take: Int = 5, skip: Int = 0): JSON
+  getMemberPostsWithAnswers(memberId: ID!, take: Int = 5, cursor: String): JSON
 }
 
 union AuthenticatedItem = User
