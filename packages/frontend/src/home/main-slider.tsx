@@ -5,6 +5,7 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import './main-slider.css'
 
+import { cn } from '@kids-reporter/routing-ui'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRef } from 'react'
@@ -132,16 +133,22 @@ export const MainSlider = (props: SliderProp) => {
           })}
         </Swiper>
         <button
-          className="prev-btn absolute top-1/4 w-14 cursor-pointer border-none bg-transparent"
+          className={cn(
+            'prev-btn absolute top-1/4 w-14 cursor-pointer border-none bg-transparent',
+            `text-${DEFAULT_THEME_COLOR}`
+          )}
           onClick={() => swiperRef.current?.slidePrev()}
         >
-          <ArrowLeft color={DEFAULT_THEME_COLOR} />
+          <ArrowLeft />
         </button>
         <button
-          className="next-btn absolute top-1/4 w-14 cursor-pointer border-none bg-transparent"
+          className={cn(
+            'next-btn absolute top-1/4 w-14 cursor-pointer border-none bg-transparent',
+            `text-${DEFAULT_THEME_COLOR}`
+          )}
           onClick={() => swiperRef.current?.slideNext()}
         >
-          <ArrowRight color={DEFAULT_THEME_COLOR} />
+          <ArrowRight />
         </button>
       </div>
     </div>
