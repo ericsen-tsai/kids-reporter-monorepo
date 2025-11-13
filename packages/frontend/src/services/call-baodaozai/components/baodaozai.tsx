@@ -72,8 +72,8 @@ function Baodaozai() {
   return (
     <div
       className={cn(
-        'fixed right-0 bottom-0 z-1000 w-full transition-opacity duration-1000 tablet:right-0 tablet:bottom-0',
-        hide ? 'opacity-0' : 'opacity-100'
+        'fixed right-0 bottom-0 z-1000 w-full tablet:right-0 tablet:bottom-0',
+        hide ? 'opacity-0' : 'opacity-100 transition-opacity duration-1000'
       )}
     >
       <div

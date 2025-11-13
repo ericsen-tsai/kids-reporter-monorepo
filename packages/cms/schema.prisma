@@ -351,7 +351,7 @@ model Member {
   twreporter_user_id              String                @unique @default("")
   role                            String                @default("member")
   showBaodaozai                   Boolean               @default(true)
-  essayQuestionCount              Int?                  @default(3)
+  essayQuestionCount              Int?                  @default(1)
   createdAt                       DateTime?             @default(now())
   updatedAt                       DateTime?             @updatedAt
   from_PostChoiceAnswer_member    PostChoiceAnswer[]    @relation("PostChoiceAnswer_member")
