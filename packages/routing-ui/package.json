@@ -1,7 +1,7 @@
 {
   "name": "@kids-reporter/routing-ui",
   "license": "MIT",
-  "version": "0.1.0-alpha.5",
+  "version": "0.1.0-alpha.6",
   "description": "Routing UI for Kids Reporter",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -18,8 +18,7 @@
     "build": "./scripts/build.sh",
     "lint": "eslint . --config ./eslint.config.mjs",
     "lint:check": "eslint . --config ./eslint.config.mjs",
-    "type-check": "tsc --noEmit",
-    "postinstall": "yarn build"
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
@@ -50,5 +49,8 @@
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "tailwindcss": "^4.1.14"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }
