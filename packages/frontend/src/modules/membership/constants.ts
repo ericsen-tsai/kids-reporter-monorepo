@@ -11,4 +11,7 @@ export const MOCK_USER = {
   name: '孫小美',
   id: 'xxxx-xxxx-xxxx-xxxx',
   avatar: DEFAULT_AVATAR,
+  nickname: '小美',
+  email: 'test@test.com',
+  joinedAt: '2024-01-01',
 }
