@@ -51,13 +51,13 @@ function MyReading() {
 
   return (
     <div className="mx-auto w-full bg-neutral-100 pt-6 pb-40 tablet:pt-8 desktop:px-12 desktop:pt-16 desktop:pb-50">
-      <div className="mx-auto flex w-full max-w-300 gap-8">
+      <div className="mx-auto flex w-full max-w-300 gap-6 desktop:gap-3">
         <HeaderMobileBackButtonHrefSetter href="/member" />
         <div className="hidden tablet:block">
           <MembershipSideMenu />
         </div>
-        <div className="flex flex-1 flex-col px-6 tablet:px-8 desktop:px-0">
-          <h1 className="mb-6 prose-h4-large font-swei text-neutral-900">
+        <div className="flex flex-1 flex-col px-6 tablet:pr-8 tablet:pl-0 desktop:px-0">
+          <h1 className="mb-6 prose-h4-large font-swei text-neutral-900 desktop:pl-5">
             我的回答
           </h1>
           <PostQuestionAnswersList
@@ -65,26 +65,27 @@ function MyReading() {
             isLoading={isGetMemberPostsWithAnswersLoading}
             key={currentPage}
           />
-          {!isGetMemberPostsWithAnswersLoading && (
-            <div className="mt-6 flex justify-center gap-4">
-              <Button
-                variant="secondary"
-                className="size-11 p-0"
-                disabled={isFirstPage}
-                onClick={() => setCurrentPage(currentPage - 1)}
-              >
-                <ArrowLeft />
-              </Button>
-              <Button
-                variant="secondary"
-                className="size-11 p-0"
-                disabled={isLastPage}
-                onClick={() => setCurrentPage(currentPage + 1)}
-              >
-                <ArrowRight />
-              </Button>
-            </div>
-          )}
+          {!isGetMemberPostsWithAnswersLoading &&
+            currentPostQuestionAnswers.length > 0 && (
+              <div className="mt-6 flex justify-center gap-4">
+                <Button
+                  variant="secondary"
+                  className="size-11 p-0"
+                  disabled={isFirstPage}
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                >
+                  <ArrowLeft />
+                </Button>
+                <Button
+                  variant="secondary"
+                  className="size-11 p-0"
+                  disabled={isLastPage}
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                >
+                  <ArrowRight />
+                </Button>
+              </div>
+            )}
         </div>
       </div>
     </div>
