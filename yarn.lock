@@ -6363,6 +6363,7 @@ __metadata:
     styled-components: "npm:6.1.19"
     webpack: "npm:^5.90.0"
     webpack-cli: "npm:^4.10.0"
+    webpack-dev-server: "npm:^4.15.1"
   peerDependencies:
     react: 18.3.1
     react-dom: 18.3.1
@@ -6391,6 +6392,7 @@ __metadata:
     styled-components: "npm:6.1.19"
     webpack: "npm:^5.90.0"
     webpack-cli: "npm:^4.10.0"
+    webpack-dev-server: "npm:^4.15.1"
   peerDependencies:
     react: 18.3.1
     react-dom: 18.3.1
@@ -6504,7 +6506,6 @@ __metadata:
     class-variance-authority: "npm:^0.7.1"
     clsx: "npm:^2.1.1"
     lodash: "npm:^4.17.21"
-    next: "npm:^14.2.33"
     prettier: "npm:^3.6.2"
     prettier-plugin-tailwindcss: "npm:^0.6.14"
     react: "npm:18.3.1"
@@ -14968,12 +14969,12 @@ __metadata:
   linkType: hard
 
 "launch-editor@npm:^2.6.0":
-  version: 2.11.1
-  resolution: "launch-editor@npm:2.11.1"
+  version: 2.12.0
+  resolution: "launch-editor@npm:2.12.0"
   dependencies:
     picocolors: "npm:^1.1.1"
     shell-quote: "npm:^1.8.3"
-  checksum: 10c0/b1aad04eef3a675aa35e82498bedaaeb790b9a02834a9cff79987dd7c6f5d92fd8f79ff7a8a4cd61681e0d462069de30d0bc65b41a936a7e3d700a4fdac1090e
+  checksum: 10c0/fac5e7ad90bf185594cad4c831a52419eef50e667c4eddb5b0a58eb5f944e16d947636ee767b9896ffd46a51db34925edd3b854c48efb47f6d767ffd7d904e71
   languageName: node
   linkType: hard
 
@@ -18012,7 +18013,6 @@ __metadata:
     lint-staged: "npm:^16.2.0"
     prettier: "npm:^3.6.2"
     typescript: "npm:^5.9.2"
-    webpack-dev-server: "npm:^4.15.1"
   languageName: unknown
   linkType: soft
 
