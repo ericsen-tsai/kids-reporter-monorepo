@@ -40,8 +40,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.2.0",
     "prettier": "^3.6.2",
-    "typescript": "^5.9.2",
-    "webpack-dev-server": "^4.15.1"
+    "typescript": "^5.9.2"
   },
   "lint-staged": {
     "packages/api-gateway/**/*.{js,ts,jsx,tsx}": "cd packages/api-gateway && eslint --config eslint.config.mjs --cache --fix",
