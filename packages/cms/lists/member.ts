@@ -90,7 +90,7 @@ export default list<ListType<'Member'>>({
     }),
     essayQuestionCount: integer({
       label: '思辨題數量',
-      defaultValue: 3,
+      defaultValue: 1,
     }),
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
