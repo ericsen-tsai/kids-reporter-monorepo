@@ -12,11 +12,12 @@ import QuestionAnswersListContent from './question-answers-list-content'
 
 type PostQuestionAnswersListProps = {
   postQuestionAnswers: PostQuestionAnswers
+  isLoading: boolean
 }
 
 function formatDate(dateString: string): string {
   const date = new Date(dateString)
-  if (!date || isNaN(date.getTime())) {
+  if (isNaN(date.getTime())) {
     return ''
   }
   const year = date.getFullYear()
@@ -27,7 +28,16 @@ function formatDate(dateString: string): string {
 
 function PostQuestionAnswersList({
   postQuestionAnswers,
+  isLoading,
 }: PostQuestionAnswersListProps) {
+  if (isLoading) {
+    return (
+      <div className="flex min-h-50 w-full items-center justify-center">
+        <p className="prose-p1 text-neutral-500">載入中...</p>
+      </div>
+    )
+  }
+
   if (postQuestionAnswers.length === 0) {
     return (
       <div className="flex min-h-50 w-full items-center justify-center">

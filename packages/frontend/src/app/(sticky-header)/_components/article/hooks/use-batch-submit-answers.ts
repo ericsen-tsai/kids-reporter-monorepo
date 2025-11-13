@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import errors from '@twreporter/errors'
 import { useCallback } from 'react'
 
+import { MEMBER_POSTS_WITH_ANSWERS_QUERY_KEY } from '@/api-utils/react-query/hooks/extended'
 import {
   POST_CHOICE_ANSWERS_QUERY_KEY,
   useCreatePostChoiceAnswerMutation,
@@ -34,6 +35,9 @@ function useBatchSubmitAnswers({
     })
     queryClient.invalidateQueries({
       queryKey: [POST_CHOICE_ANSWERS_QUERY_KEY, memberId],
+    })
+    queryClient.invalidateQueries({
+      queryKey: [MEMBER_POSTS_WITH_ANSWERS_QUERY_KEY, memberId],
     })
   }, [queryClient, memberId])
 

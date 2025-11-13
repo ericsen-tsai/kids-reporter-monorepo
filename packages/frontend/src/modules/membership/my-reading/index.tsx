@@ -3,34 +3,51 @@ import {
   Button,
   HeaderMobileBackButtonHrefSetter,
 } from '@kids-reporter/routing-ui'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
+import { useGetMemberPostsWithAnswersInfinityQuery } from '@/api-utils/react-query/hooks/extended'
 import { ArrowLeft, ArrowRight } from '@/icons'
+import { useHydratedAuthStore } from '@/services/auth/use-hydrated-auth-store'
 
 import MembershipSideMenu from '../components/side-menu'
-import { PostQuestionAnswers } from '../types'
-import { MOCK_POST_QUESTION_ANSWERS } from './mock-data'
 import PostQuestionAnswersList from './post-question-answers-list'
-
-type MyReadingProps = {
-  postQuestionAnswers?: PostQuestionAnswers
-}
+import { parseMemberPostsWithAnswersToPostQuestionAnswers } from './utils'
 
 const PAGE_ITEM_COUNT = 5
 
-function MyReading({
-  postQuestionAnswers = MOCK_POST_QUESTION_ANSWERS,
-}: MyReadingProps) {
+function MyReading() {
   const [currentPage, setCurrentPage] = useState(1)
+  const { member, tokens } = useHydratedAuthStore()
+  const {
+    data: memberPostsWithAnswersPageData,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+  } = useGetMemberPostsWithAnswersInfinityQuery({
+    memberId: member?.id ?? '',
+    take: PAGE_ITEM_COUNT,
+    accessToken: tokens?.accessToken ?? '',
+  })
 
-  const totalPages = Math.ceil(postQuestionAnswers.length / PAGE_ITEM_COUNT)
+  const memberPostsWithAnswers = useMemo(() => {
+    return memberPostsWithAnswersPageData?.pages[currentPage - 1]?.posts ?? []
+  }, [memberPostsWithAnswersPageData, currentPage])
+
+  const currentPostQuestionAnswers = memberPostsWithAnswers
+    ? parseMemberPostsWithAnswersToPostQuestionAnswers(memberPostsWithAnswers)
+    : []
+
   const isFirstPage = currentPage === 1
-  const isLastPage = currentPage === totalPages
+  const isLastPage =
+    currentPage === (memberPostsWithAnswersPageData?.pages.length ?? 0)
 
-  const currentPostQuestionAnswers = postQuestionAnswers.slice(
-    (currentPage - 1) * PAGE_ITEM_COUNT,
-    currentPage * PAGE_ITEM_COUNT
-  )
+  useEffect(() => {
+    if (hasNextPage) {
+      fetchNextPage()
+    }
+  }, [currentPage, fetchNextPage, hasNextPage])
+
+  const isGetMemberPostsWithAnswersLoading = isLoading || !member?.id
 
   return (
     <div className="mx-auto w-full bg-neutral-100 pt-6 pb-40 tablet:pt-8 desktop:px-12 desktop:pt-16 desktop:pb-50">
@@ -40,14 +57,15 @@ function MyReading({
           <MembershipSideMenu />
         </div>
         <div className="flex flex-1 flex-col px-6 tablet:px-8 desktop:px-0">
-          <h1 className="mb-6 prose-h4-large font-family-swei text-neutral-900">
+          <h1 className="mb-6 prose-h4-large font-swei text-neutral-900">
             我的回答
           </h1>
           <PostQuestionAnswersList
             postQuestionAnswers={currentPostQuestionAnswers}
+            isLoading={isGetMemberPostsWithAnswersLoading}
             key={currentPage}
           />
-          {postQuestionAnswers.length > PAGE_ITEM_COUNT && (
+          {!isGetMemberPostsWithAnswersLoading && (
             <div className="mt-6 flex justify-center gap-4">
               <Button
                 variant="secondary"

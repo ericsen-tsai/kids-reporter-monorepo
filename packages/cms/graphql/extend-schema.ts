@@ -1,4 +1,5 @@
 import { graphql } from '@keystone-6/core'
+import { Prisma } from '@prisma/client'
 // @ts-ignore `@twreporter/errors` does not have tyepscript definition file yet
 import _errors from '@twreporter/errors'
 import axios, { AxiosError } from 'axios'
@@ -324,6 +325,236 @@ export const extendGraphqlSchema = graphql.extend(() => {
 
             throw new GraphQLError(
               'Internal server error while searching TW Reporter posts',
+              {
+                extensions: {
+                  code: 'INTERNAL_SERVER_ERROR',
+                  http: {
+                    status: 500,
+                  },
+                },
+              }
+            )
+          }
+        },
+      }),
+      getMemberPostsWithAnswers: graphql.field({
+        type: graphql.JSON,
+        args: {
+          memberId: graphql.arg({ type: graphql.nonNull(graphql.ID) }),
+          take: graphql.arg({ type: graphql.Int, defaultValue: 5 }),
+          cursor: graphql.arg({ type: graphql.String }),
+        },
+        async resolve(root, args, ctx: Context) {
+          const { memberId, take = 5, cursor } = args
+
+          const session = ctx.session
+          const isUnauthorized = !session
+          const isForbidden = ![RoleEnum.Admin, RoleEnum.Member].includes(
+            session?.data?.role ?? ''
+          )
+
+          if (isUnauthorized || isForbidden) {
+            const errorMessage = isUnauthorized
+              ? 'Unauthorized to get member posts with answers'
+              : 'Forbidden to get member posts with answers'
+
+            const errorCode = isUnauthorized ? 'UNAUTHENTICATED' : 'FORBIDDEN'
+
+            console.log(
+              JSON.stringify({
+                severity: 'WARNING',
+                message: errorMessage,
+                context: {
+                  function: 'getMemberPostsWithAnswers',
+                  memberId,
+                  take,
+                  cursor,
+                  errorCode,
+                },
+              })
+            )
+
+            throw new GraphQLError(errorMessage, {
+              extensions: {
+                code: errorCode,
+                http: {
+                  status: isUnauthorized ? 401 : 403,
+                },
+              },
+            })
+          }
+
+          const takeValue = take ?? 5
+
+          try {
+            const whereClause = cursor
+              ? Prisma.sql`WHERE pla.last_answered_time < ${cursor}::timestamp`
+              : Prisma.empty
+
+            const sqlQuery = Prisma.sql`
+              WITH all_answer_times AS (
+                SELECT 
+                  peq."post" as post_id,
+                  COALESCE(pea."updatedAt", pea."createdAt") as answer_time
+                FROM "PostEssayAnswer" pea
+                INNER JOIN "PostEssayQuestion" peq ON peq.id = pea."question"
+                WHERE pea."member" = ${memberId}
+                
+                UNION ALL
+                
+                SELECT 
+                  pcq."post" as post_id,
+                  COALESCE(pca."updatedAt", pca."createdAt") as answer_time
+                FROM "PostChoiceAnswer" pca
+                INNER JOIN "PostChoiceQuestion" pcq ON pcq.id = pca."question"
+                WHERE pca."member" = ${memberId}
+              ),
+              post_last_answered AS (
+                SELECT 
+                  post_id,
+                  MAX(answer_time) as last_answered_time
+                FROM all_answer_times
+                GROUP BY post_id
+              )
+              SELECT 
+                p.id,
+                p.title,
+                p.slug,
+                p."publishedDate" as published_date,
+                pla.last_answered_time
+              FROM "Post" p
+              INNER JOIN post_last_answered pla ON pla.post_id = p.id
+              ${whereClause}
+              ORDER BY pla.last_answered_time DESC
+              LIMIT ${takeValue + 1}
+            `
+
+            const postsWithLastAnsweredTime = await ctx.prisma.$queryRaw<
+              Array<{
+                id: number
+                title: string
+                slug: string
+                published_date: Date | null
+                last_answered_time: Date
+              }>
+            >(sqlQuery)
+
+            if (postsWithLastAnsweredTime.length === 0) {
+              return { posts: [], nextCursor: null }
+            }
+
+            // Check if there's a next page
+            const hasNextPage = postsWithLastAnsweredTime.length > takeValue
+
+            const postsToReturn = postsWithLastAnsweredTime.slice(0, takeValue)
+
+            const postIds = postsToReturn.map((p) => p.id.toString())
+
+            const essayAnswersData = await ctx.query.PostEssayAnswer.findMany({
+              where: {
+                AND: [
+                  { member: { id: { equals: memberId } } },
+                  { question: { post: { id: { in: postIds } } } },
+                ],
+              },
+              query: `
+                id
+                content
+                likesCount
+                createdAt
+                updatedAt
+                question {
+                  id
+                  title
+                  hint
+                  post {
+                    id
+                  }
+                }
+              `,
+            })
+
+            const choiceAnswersData = await ctx.query.PostChoiceAnswer.findMany(
+              {
+                where: {
+                  AND: [
+                    { member: { id: { equals: memberId } } },
+                    { question: { post: { id: { in: postIds } } } },
+                  ],
+                },
+                query: `
+                id
+                choiceIndex
+                correct
+                createdAt
+                updatedAt
+                question {
+                  id
+                  title
+                  options
+                  reason
+                  post {
+                    id
+                  }
+                }
+              `,
+              }
+            )
+
+            const posts = postsToReturn.map((post) => {
+              const postId = post.id.toString()
+              const essayAnswers = essayAnswersData.filter(
+                (a) => a.question?.post?.id?.toString() === postId
+              )
+              const choiceAnswers = choiceAnswersData.filter(
+                (a) => a.question?.post?.id?.toString() === postId
+              )
+
+              return {
+                id: post.id,
+                title: post.title,
+                slug: post.slug,
+                publishedDate: post.published_date
+                  ? post.published_date.toISOString()
+                  : null,
+                essayAnswers,
+                choiceAnswers,
+                lastAnsweredTime: post.last_answered_time.toISOString(),
+              }
+            })
+
+            const nextCursor = hasNextPage
+              ? posts[posts.length - 1].lastAnsweredTime
+              : null
+
+            return {
+              posts,
+              nextCursor,
+            }
+          } catch (err) {
+            let errorMessage = 'memberPostsWithAnswers failed'
+            if (err instanceof AxiosError) {
+              const annotatedErr = _errors.helpers.annotateAxiosError(err)
+              errorMessage = _errors.helpers.printAll(annotatedErr, {
+                withStack: true,
+                withPayload: true,
+              })
+            }
+
+            console.log(
+              JSON.stringify({
+                severity: 'ERROR',
+                message: 'memberPostsWithAnswers failed',
+                context: {
+                  function: 'memberPostsWithAnswers',
+                  memberId,
+                  error: errorMessage,
+                },
+              })
+            )
+
+            throw new GraphQLError(
+              'Internal server error while fetching member posts with answers',
               {
                 extensions: {
                   code: 'INTERNAL_SERVER_ERROR',
