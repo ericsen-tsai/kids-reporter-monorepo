@@ -356,3 +356,23 @@ export const HamburgerIconSmall = () => (
     />
   </svg>
 )
+
+export const ArrowIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="10"
+      height="17"
+      viewBox="0 0 10 17"
+      fill="none"
+    >
+      <path
+        d="M8.25 15.25L1.25 8.25L8.25 1.25"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}

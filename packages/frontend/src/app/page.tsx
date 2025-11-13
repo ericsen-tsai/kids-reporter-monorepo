@@ -9,18 +9,9 @@ import { getLatestPosts } from '@/api/post'
 import { getTopicProjects } from '@/api/project'
 import { getSubcategoryPosts } from '@/api/subcategory'
 import AllSiteBaodaozaiEventTrigger from '@/components/all-site-baodaozai-event-trigger'
+import AuthHeaderLoggedInSetter from '@/components/auth-header-logged-in-setter'
 import ScrollUpBaodaozaiEventTrigger from '@/components/scroll-up-baodaozai-event-trigger'
-import {
-  ADDITIONAL_MENU_ITEMS,
-  DONATE_URL,
-  FALLBACK_IMG,
-  GENERAL_DESCRIPTION,
-  MENU_ITEMS,
-  SEARCH_PLACEHOLDER,
-  SECTIONS,
-  SOCIAL_MEDIA_ITEMS,
-  SUBSCRIBE_URL,
-} from '@/constants'
+import { FALLBACK_IMG, GENERAL_DESCRIPTION, SECTIONS } from '@/constants'
 import CallToAction from '@/home/call-to-action'
 import Divider from '@/home/divider'
 import GoToMainSite from '@/home/go-to-main-site'
@@ -135,15 +126,9 @@ export default async function Home() {
   return (
     <CallBaodaozaiProvider>
       <main className="flex w-screen flex-col items-center">
-        <Header
-          menuItems={MENU_ITEMS}
-          additionalMenuItems={ADDITIONAL_MENU_ITEMS}
-          socialMediaHrefs={SOCIAL_MEDIA_ITEMS.map((item) => item.href)}
-          searchPlaceholder={SEARCH_PLACEHOLDER}
-          subscribeUrl={SUBSCRIBE_URL}
-          donateUrl={DONATE_URL}
-        />
+        <Header />
         <BaodaozaiVisibilitySetter show={true} />
+        <AuthHeaderLoggedInSetter />
         <AllSiteBaodaozaiEventTrigger id="show-intro" content={introContent} />
         <div className="relative">
           <div className="absolute top-[150vh]">

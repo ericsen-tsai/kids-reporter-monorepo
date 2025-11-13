@@ -1,57 +1,67 @@
-type ArrowProp = {
-  color: string
-}
-
-export const ArrowLeft = (props: ArrowProp) => {
+export const ArrowLeft = () => {
   return (
     <svg
-      width="100%"
-      height="100%"
-      viewBox="0 0 54 54"
-      fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      width="11"
+      height="19"
+      viewBox="0 0 11 19"
+      fill="none"
     >
       <path
-        d="M27 2C13.1929 2 2 13.1929 2 27C2 40.8071 13.1929 52 27 52C40.8071 52 52 40.8071 52 27C52 13.1929 40.8071 2 27 2Z"
-        fill={props.color}
-        stroke="white"
+        d="M9.42993 17.5L1.50005 9.5L9.42993 1.5"
+        stroke="currentColor"
         strokeWidth="3"
-        strokeMiterlimit="10"
-      ></path>
-      <path
-        d="M29.9297 39.1001L17.9359 27.0002L29.9297 14.9003"
-        stroke="white"
-        strokeWidth="4"
         strokeLinecap="round"
         strokeLinejoin="round"
-      ></path>
+      />
     </svg>
   )
 }
 
-export const ArrowRight = (props: ArrowProp) => {
+export const ArrowRight = () => {
   return (
     <svg
-      width="100%"
-      height="100%"
-      viewBox="0 0 54 54"
-      fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      width="11"
+      height="19"
+      viewBox="0 0 11 19"
+      fill="none"
     >
       <path
-        d="M27 52C40.8071 52 52 40.8071 52 27C52 13.1929 40.8071 2 27 2C13.1929 2 2 13.1929 2 27C2 40.8071 13.1929 52 27 52Z"
-        fill={props.color}
-        stroke="white"
+        d="M1.5 17.5L9.42988 9.5L1.5 1.5"
+        stroke="currentColor"
         strokeWidth="3"
-        strokeMiterlimit="10"
-      ></path>
-      <path
-        d="M24.0703 14.8999L36.0641 26.9998L24.0703 39.0997"
-        stroke="white"
-        strokeWidth="4"
         strokeLinecap="round"
         strokeLinejoin="round"
-      ></path>
+      />
+    </svg>
+  )
+}
+
+export const ArrowDown = ({ className }: { className?: string }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+    >
+      <g clipPath="url(#clip0_535_16631)">
+        <path
+          d="M5 9L12 16L19 9"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_535_16631">
+          <rect width="24" height="24" fill="white" />
+        </clipPath>
+      </defs>
     </svg>
   )
 }

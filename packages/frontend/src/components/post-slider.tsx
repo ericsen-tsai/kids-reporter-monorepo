@@ -4,6 +4,7 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import './post-slider.css'
 
+import { cn } from '@kids-reporter/routing-ui'
 import { useRef } from 'react'
 import { Autoplay, Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -89,17 +90,23 @@ export const PostSlider = ({
               </Swiper>
               <button
                 style={{ left: '15px', top: '15%', zIndex: '900' }}
-                className="absolute w-8 cursor-pointer border-none bg-transparent lg:w-14"
+                className={cn(
+                  'absolute w-8 cursor-pointer border-none bg-transparent lg:w-14',
+                  `text-${themeColor}`
+                )}
                 onClick={() => swiperRef.current?.slidePrev()}
               >
-                <ArrowLeft color={themeColor} />
+                <ArrowLeft />
               </button>
               <button
                 style={{ right: '15px', top: '15%', zIndex: '900' }}
-                className="absolute w-8 cursor-pointer border-none bg-transparent lg:w-14"
+                className={cn(
+                  'absolute w-8 cursor-pointer border-none bg-transparent lg:w-14',
+                  `text-${themeColor}`
+                )}
                 onClick={() => swiperRef.current?.slideNext()}
               >
-                <ArrowRight color={themeColor} />
+                <ArrowRight />
               </button>
             </>
           )}

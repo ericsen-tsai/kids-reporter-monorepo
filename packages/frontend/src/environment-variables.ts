@@ -11,6 +11,8 @@ const searchEngineID = process.env.SEARCH_ENGINE_ID || ''
 
 const mockIdToken = process.env.MOCK_ID_TOKEN || ''
 
+const loginUrl = process.env.NEXT_PUBLIC_LOGIN_URL || '/login'
+
 const environmentVariables = {
   internalGqlEndpoint,
   gqlEndpoint,
@@ -19,6 +21,7 @@ const environmentVariables = {
   searchAPIKey,
   searchEngineID,
   mockIdToken,
+  loginUrl,
 }
 
 export default environmentVariables

@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import '@kids-reporter/routing-ui/styles.css';
+@import 'tw-animate-css';
 
 @source './src/**/*.{js,ts,jsx,tsx,mdx}';
 @source '../../routing-ui/src/**/*.{js,ts,jsx,tsx}';
@@ -55,7 +56,7 @@
 
   /* Typography - Font Families */
   --font-family-noto: var(--font-noto-sans-tc), sans-serif;
-  --font-family-swei: 'SweiMarkerSansCJKtc-Regular', sans-serif;
+  --font-family-swei: var(--font-swei-marker), sans-serif;
 
   /* Typography - Font Sizes */
   --font-size-h1-large: 48px;
@@ -280,16 +281,6 @@
     content: '\e900';
   }
 
-  @font-face {
-    font-family: SweiMarkerSansCJKtc-Regular;
-    src:
-      url(https://cdn.jsdelivr.net/gh/max32002/swei-marker-sans@2.0/WebFont/CJK%20TC/SweiMarkerSansCJKtc-Bold.woff2)
-        format('woff2'),
-      url(https://cdn.jsdelivr.net/gh/max32002/swei-marker-sans@2.0/WebFont/CJK%20TC/SweiMarkerSansCJKtc-Bold.woff)
-        format('woff');
-    font-weight: bold;
-  }
-
   /* for backward compatibility */
   .theme-red {
     --theme-color: var(--color-red-400);
@@ -465,9 +456,9 @@
   letter-spacing: 0.5px;
 }
 
-/* Swei Marker Sans Font Variants */
 @utility font-swei {
   font-family: var(--font-family-swei);
+  font-weight: 700;
 }
 
 @utility scrollbar-thin {

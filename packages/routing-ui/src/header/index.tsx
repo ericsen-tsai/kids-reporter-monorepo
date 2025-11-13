@@ -38,6 +38,8 @@ function Header({
 }: HeaderProps) {
   const context = useHeaderContext()
   const postTitle = context?.postTitle
+  const isLoggedIn = context?.isLoggedIn || false
+  const loginUrl = context?.loginUrl || '/login'
   const isMenuOpen = context?.isMenuOpen || false
   const openMenu = context?.openMenu
   const closeMenu = context?.closeMenu
@@ -45,6 +47,7 @@ function Header({
   const onHamburgerOverlayOpen = () => {
     openMenu?.()
   }
+  const mobileBackButtonHref = context?.mobileBackButtonHref
 
   const onCloseMenu = () => {
     closeMenu?.()
@@ -71,12 +74,17 @@ function Header({
         searchPlaceholder={searchPlaceholder}
         subscribeUrl={subscribeUrl}
         menuItems={menuItems}
+        isLoggedIn={isLoggedIn}
+        loginUrl={loginUrl}
       />
       <MobileHeader
         onCloseMenu={onCloseMenu}
         showCloseButtonWhenMenuOpen={isMobile}
         onHamburgerOverlayOpen={onHamburgerOverlayOpen}
         isMenuOpen={isMenuOpen}
+        isLoggedIn={isLoggedIn}
+        loginUrl={loginUrl}
+        mobileBackButtonHref={mobileBackButtonHref}
       />
       <Menu
         isOpen={isMenuOpen}

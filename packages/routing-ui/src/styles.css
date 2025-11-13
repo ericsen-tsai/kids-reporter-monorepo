@@ -46,7 +46,6 @@
 
   /* Typography - Font Families */
   --font-family-noto: 'Noto Sans TC', sans-serif;
-  --font-family-swei: 'SweiMarkerSansCJKtc-Regular', sans-serif;
 
   /* Typography - Font Sizes */
   --font-size-h1-large: 48px;
@@ -319,11 +318,6 @@
   font-weight: 700;
   line-height: var(--line-height-normal);
   letter-spacing: 0.5px;
-}
-
-/* Swei Marker Sans Font Variants */
-@utility font-swei {
-  font-family: var(--font-family-swei);
 }
 
 @utility scrollbar-thin {
