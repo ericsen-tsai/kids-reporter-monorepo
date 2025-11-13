@@ -6468,7 +6468,25 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@kids-reporter/routing-ui@npm:0.1.0-alpha.5, @kids-reporter/routing-ui@workspace:packages/routing-ui":
+"@kids-reporter/routing-ui@npm:0.1.0-alpha.5":
+  version: 0.1.0-alpha.5
+  resolution: "@kids-reporter/routing-ui@npm:0.1.0-alpha.5"
+  dependencies:
+    "@radix-ui/react-slot": "npm:^1.2.3"
+    class-variance-authority: "npm:^0.7.1"
+    clsx: "npm:^2.1.1"
+    lodash: "npm:^4.17.21"
+    next: "npm:^14.2.33"
+    tailwind-merge: "npm:^3.3.1"
+  peerDependencies:
+    react: 18.3.1
+    react-dom: 18.3.1
+    tailwindcss: ^4.1.14
+  checksum: 10c0/26e9b616f96ccfdc3dc0d8a99cdeaf56eb59ac672eebcd78777a62950cc40de2b116a287612086cbb13901e29ae1d2dd57eb74544d84841270b113db8996a658
+  languageName: node
+  linkType: hard
+
+"@kids-reporter/routing-ui@workspace:packages/routing-ui":
   version: 0.0.0-use.local
   resolution: "@kids-reporter/routing-ui@workspace:packages/routing-ui"
   dependencies:
