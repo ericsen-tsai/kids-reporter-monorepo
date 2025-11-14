@@ -6,6 +6,7 @@ import {
 } from '@kids-reporter/routing-ui'
 import { useCallback, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 import MembershipSideMenu from '../components/side-menu'
 import UserAvatar from '../components/user-avatar'
@@ -40,7 +41,12 @@ function Account() {
   }
 
   const handleFormSubmit = useCallback(
-    () => handleSubmit((data) => console.log(data))(),
+    () =>
+      handleSubmit((data) => {
+        toast.success('已儲存')
+        setIsEditMode(false)
+        console.log({ data })
+      })(),
     [handleSubmit]
   )
 

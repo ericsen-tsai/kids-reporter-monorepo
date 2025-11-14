@@ -6,6 +6,7 @@ import { Noto_Sans_TC } from 'next/font/google'
 import localFont from 'next/font/local'
 
 import Providers from '@/components/providers'
+import { Toaster } from '@/components/toaster'
 
 const GTM_ID = 'GTM-T37WZJ44'
 
@@ -32,6 +33,7 @@ export default async function RootLayout({
         <Providers>
           {children}
           <Footer />
+          <Toaster />
         </Providers>
         <noscript
           dangerouslySetInnerHTML={{
