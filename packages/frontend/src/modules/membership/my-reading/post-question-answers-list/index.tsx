@@ -51,54 +51,53 @@ function PostQuestionAnswersList({
   }
 
   return (
-    <>
-      <div className="mx-auto h-px w-full bg-neutral-200 desktop:w-[calc(100%-40px)]"></div>
-      <Accordion type="multiple" className="flex w-full flex-col gap-0">
-        {postQuestionAnswers.map((group) => {
-          return (
-            <AccordionItem
-              key={group.title}
-              value={group.title}
-              className="border-none"
+    <Accordion
+      type="multiple"
+      className="flex w-full flex-col gap-0 border-t-[2px] border-t-neutral-200"
+    >
+      {postQuestionAnswers.map((group) => {
+        return (
+          <AccordionItem
+            key={group.title}
+            value={group.title}
+            className="border-b-[2px] border-b-neutral-200 last:border-b"
+          >
+            <AccordionTrigger
+              className={cn(
+                'group flex cursor-pointer items-center gap-4 rounded-none py-5 transition-all duration-300 desktop:px-4',
+                'bg-transparent hover:bg-black/5 active:bg-black/10',
+                'focus-visible:outline-none'
+              )}
             >
-              <AccordionTrigger
-                className={cn(
-                  'group flex cursor-pointer items-center gap-4 rounded-none py-5 transition-all duration-300 desktop:px-5',
-                  'bg-transparent hover:bg-black/5 active:bg-black/10',
-                  'focus-visible:outline-none'
-                )}
-              >
-                <div className="flex flex-1 flex-col gap-1 text-left">
-                  <div className="flex items-center gap-2">
-                    <span className="prose-p2 text-neutral-500">
-                      {formatDate(group.lastAnsweredTime)}
-                    </span>
-                    <span
-                      className={cn(
-                        'rounded px-1.5 py-0.5 prose-p3-bold',
-                        'bg-neutral-200 text-neutral-600'
-                      )}
-                    >
-                      共作答 {group.answers.length} 題
-                    </span>
-                  </div>
-                  <h3 className="prose-p1-bold text-neutral-900">
-                    {group.title}
-                  </h3>
+              <div className="flex flex-1 flex-col gap-1 text-left">
+                <div className="flex items-center gap-2">
+                  <span className="prose-p2 text-neutral-500">
+                    {formatDate(group.lastAnsweredTime)}
+                  </span>
+                  <span
+                    className={cn(
+                      'rounded px-1.5 py-0.5 prose-p3-bold transition-all duration-300 group-hover:bg-neutral-300 group-active:bg-neutral-300',
+                      'bg-neutral-200 text-neutral-600'
+                    )}
+                  >
+                    共作答 {group.answers.length} 題
+                  </span>
                 </div>
-              </AccordionTrigger>
-              <AccordionContent className="pt-2 pb-10 desktop:px-5">
-                <QuestionAnswersListContent
-                  href={group.href}
-                  answers={group.answers}
-                />
-              </AccordionContent>
-              <div className="mx-auto h-px w-full bg-neutral-200 desktop:w-[calc(100%-40px)]"></div>
-            </AccordionItem>
-          )
-        })}
-      </Accordion>
-    </>
+                <h3 className="prose-h6-large text-neutral-900">
+                  {group.title}
+                </h3>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="pt-2 pb-10">
+              <QuestionAnswersListContent
+                href={group.href}
+                answers={group.answers}
+              />
+            </AccordionContent>
+          </AccordionItem>
+        )
+      })}
+    </Accordion>
   )
 }
 

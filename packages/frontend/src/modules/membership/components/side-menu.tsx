@@ -15,7 +15,7 @@ function MembershipSideMenu() {
     return pathname?.startsWith(href)
   }
   return (
-    <div className="flex w-full flex-col gap-4 tablet:max-w-40">
+    <div className="flex w-full flex-col gap-4">
       <div className="flex flex-col gap-0">
         {MEMBERSHIP_MENU_ITEMS.map((item) => {
           const active = isActive(item.href)
@@ -36,7 +36,7 @@ function MembershipSideMenu() {
         })}
       </div>
 
-      <div className="mx-auto h-px w-[calc(100%-48px)] bg-neutral-200 tablet:w-[calc(100%-64px)] desktop:w-[calc(100%-32px)]" />
+      <div className="mx-auto h-[2px] w-[calc(100%-48px)] bg-neutral-200 tablet:w-[calc(100%-64px)] desktop:w-full" />
 
       <Link
         href="/logout"

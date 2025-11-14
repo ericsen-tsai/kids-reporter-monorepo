@@ -35,7 +35,7 @@ function QuestionAnswersListContent({
             className="flex w-full flex-col gap-3 rounded-2xl bg-neutral-200 p-5"
           >
             <div className="flex items-center gap-2">
-              <div className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center text-neutral-900">
+              <div className="mt-[5px] flex h-6 w-6 shrink-0 items-center justify-center text-neutral-900">
                 <LightbulbIcon />
               </div>
               <h3 className="flex-1 prose-p1-bold text-neutral-900">
@@ -58,7 +58,7 @@ function QuestionAnswersListContent({
           <ArticleShortcutIcon />
           <span>閱讀完整文章</span>
         </Link>
-        <div className="h-4 w-px bg-neutral-900"></div>
+        <div className="h-4 w-[2px] bg-neutral-900"></div>
         <Link
           href={href}
           className="flex items-center gap-1 text-neutral-900 hover:text-red-400 active:text-red-500"

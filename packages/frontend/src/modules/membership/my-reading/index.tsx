@@ -51,13 +51,13 @@ function MyReading() {
 
   return (
     <div className="mx-auto w-full bg-neutral-100 pt-6 pb-40 tablet:pt-8 desktop:px-12 desktop:pt-16 desktop:pb-50">
-      <div className="mx-auto flex w-full max-w-300 gap-6 desktop:gap-3">
+      <div className="mx-auto w-full max-w-300 tablet:grid tablet:grid-cols-12">
         <HeaderMobileBackButtonHrefSetter href="/member" />
-        <div className="hidden tablet:block">
+        <div className="hidden tablet:col-span-2 tablet:block tablet:min-w-[150px] desktop:pr-8">
           <MembershipSideMenu />
         </div>
-        <div className="flex flex-1 flex-col px-6 tablet:pr-8 tablet:pl-0 desktop:px-0">
-          <h1 className="mb-6 prose-h4-large font-swei text-neutral-900 desktop:pl-5">
+        <div className="flex flex-1 flex-col px-6 tablet:col-span-9 tablet:px-8 desktop:col-span-8 desktop:px-0">
+          <h1 className="mb-6 prose-h4-large font-swei text-neutral-900">
             我的回答
           </h1>
           <PostQuestionAnswersList
