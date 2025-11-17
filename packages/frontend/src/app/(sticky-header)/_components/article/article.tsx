@@ -363,12 +363,16 @@ const Article = ({
         isOpen: true,
         content: isLogin
           ? `想知道其他讀者的答案嗎？
-      大家送出的思辨題答案都會顯示在這裡喔～`
+大家送出的思辨題答案都會顯示在「小讀者觀點大集合」頁面喔～`
           : '登入帳號完成閱讀設定，還可以挑戰更多隱藏版的思辨題唷！',
         cancelText: '跳過',
         confirmText: isLogin ? '完成閱讀設定' : '立即登入',
         confirmAction: () => {
-          router.push(isLogin ? '/idea-hub' : '/login')
+          if (isLogin) {
+            window.open('/idea-hub', '_blank')
+          } else {
+            router.push('/login')
+          }
         },
       })
     },
