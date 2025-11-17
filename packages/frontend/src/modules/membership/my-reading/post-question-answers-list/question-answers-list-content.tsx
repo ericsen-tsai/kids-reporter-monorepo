@@ -34,7 +34,7 @@ function QuestionAnswersListContent({
             key={answer.id}
             className="flex w-full flex-col gap-3 rounded-2xl bg-neutral-200 p-5"
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-start gap-2">
               <div className="mt-px flex h-6 w-6 shrink-0 items-center justify-center text-neutral-900">
                 <LightbulbIcon />
               </div>
