@@ -33,6 +33,7 @@ import {
   QAModalEvent,
 } from '@/services/call-baodaozai'
 import { getPostSummaries } from '@/utils'
+import getLoginUrl from '@/utils/get-login-url'
 
 import ArticleBaodaozaiEventTrigger from './article-baodaozai-event-trigger'
 import { ArticleContext } from './article-context'
@@ -366,12 +367,12 @@ const Article = ({
 大家送出的思辨題答案都會顯示在「小讀者觀點大集合」頁面喔～`
           : '登入帳號完成閱讀設定，還可以挑戰更多隱藏版的思辨題唷！',
         cancelText: '跳過',
-        confirmText: isLogin ? '完成閱讀設定' : '立即登入',
+        confirmText: isLogin ? '立即前往' : '立即登入',
         confirmAction: () => {
           if (isLogin) {
             window.open('/idea-hub', '_blank')
           } else {
-            router.push('/login')
+            router.push(getLoginUrl())
           }
         },
       })
