@@ -83,7 +83,7 @@ function PostQuestionAnswersList({
                     共作答 {group.answers.length} 題
                   </span>
                 </div>
-                <h3 className="prose-h6-large text-neutral-900">
+                <h3 className="prose-p1-bold text-neutral-900 desktop:prose-h6-large">
                   {group.title}
                 </h3>
               </div>
