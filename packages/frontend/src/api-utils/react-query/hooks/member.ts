@@ -2,7 +2,6 @@ import { UpdateMemberProfileMutationVariables } from '__generated__/operations/m
 import { useMutation } from '@tanstack/react-query'
 
 import { updateMemberProfile } from '@/api/member'
-import { useHydratedAuthStore } from '@/services/auth/use-hydrated-auth-store'
 
 export const useUpdateMemberProfileMutation = ({
   accessToken,
@@ -11,12 +10,8 @@ export const useUpdateMemberProfileMutation = ({
   accessToken: string
   memberId: string
 }) => {
-  const { exchangeTokenAndPopulateMember } = useHydratedAuthStore()
   return useMutation({
     mutationFn: (variables: UpdateMemberProfileMutationVariables) =>
       updateMemberProfile({ memberId, accessToken, data: variables.data }),
-    onSuccess: () => {
-      exchangeTokenAndPopulateMember()
-    },
   })
 }

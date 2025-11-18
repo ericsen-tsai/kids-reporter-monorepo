@@ -11,9 +11,10 @@ import { AccountFormData } from '../types'
 
 type EditUserAvatarProps = {
   name: string
+  onFileSelect?: (file: File) => void
 }
 
-function EditUserAvatar({ name }: EditUserAvatarProps) {
+function EditUserAvatar({ name, onFileSelect }: EditUserAvatarProps) {
   const { control, setError, clearErrors } = useFormContext<AccountFormData>()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const objectUrlRef = useRef<string | null>(null)
@@ -23,27 +24,29 @@ function EditUserAvatar({ name }: EditUserAvatarProps) {
     onFieldChange: (value: string) => void
   ) => {
     const file = e.target.files?.[0]
-    if (file) {
-      if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-        setError('avatar', {
-          message: '不支援的檔案格式',
-        })
-        return
-      }
-      if (file.size > MAX_IMAGE_SIZE) {
-        setError('avatar', {
-          message: '檔案大小超過限制，請上傳小於 5MB 的圖片',
-        })
-        return
-      }
-      if (objectUrlRef.current) {
-        URL.revokeObjectURL(objectUrlRef.current)
-      }
-      const previewUrl = URL.createObjectURL(file)
-      objectUrlRef.current = previewUrl
-      onFieldChange(previewUrl)
-      clearErrors('avatar')
+    if (!file) {
+      return
     }
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      setError('avatarUrl', {
+        message: '不支援的檔案格式',
+      })
+      return
+    }
+    if (file.size > MAX_IMAGE_SIZE) {
+      setError('avatarUrl', {
+        message: '檔案大小超過限制，請上傳小於 5MB 的圖片',
+      })
+      return
+    }
+    if (objectUrlRef.current) {
+      URL.revokeObjectURL(objectUrlRef.current)
+    }
+    const previewUrl = URL.createObjectURL(file)
+    objectUrlRef.current = previewUrl
+    onFieldChange(previewUrl)
+    clearErrors('avatarUrl')
+    onFileSelect?.(file)
   }
 
   // Cleanup on unmount
@@ -61,7 +64,7 @@ function EditUserAvatar({ name }: EditUserAvatarProps) {
 
   return (
     <Controller
-      name="avatar"
+      name="avatarUrl"
       control={control}
       render={({ field, fieldState }) => {
         const avatarUrl = field.value || ''
@@ -71,7 +74,7 @@ function EditUserAvatar({ name }: EditUserAvatarProps) {
             <div className="relative size-[136px] overflow-hidden rounded-full border-2 border-neutral-200 desktop:size-[168px]">
               <Image
                 src={avatarUrl || DEFAULT_AVATAR}
-                alt={name}
+                alt={name || 'default avatar'}
                 className="size-full bg-white object-cover"
                 fill
                 sizes="(max-width: 1024px) 136px, 168px"

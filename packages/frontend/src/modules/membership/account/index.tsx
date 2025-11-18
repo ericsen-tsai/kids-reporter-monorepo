@@ -4,39 +4,70 @@ import {
   Button,
   HeaderMobileBackButtonHrefSetter,
 } from '@kids-reporter/routing-ui'
-import { useCallback, useState } from 'react'
+import errors from '@twreporter/errors'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
+import { useUpdateMemberProfileMutation } from '@/api-utils/react-query/hooks/member'
+import {
+  useDeletePhotoMutation,
+  useUploadPhotoMutation,
+} from '@/api-utils/react-query/hooks/photos'
+import { DEFAULT_TEXT_HOLDER } from '@/constants/input-field'
+import { useHydratedAuthStore } from '@/services/auth/use-hydrated-auth-store'
+import { getFormattedDate, log, LogLevel } from '@/utils'
+
 import MembershipSideMenu from '../components/side-menu'
 import UserAvatar from '../components/user-avatar'
-import { MOCK_USER } from '../constants'
 import { AccountFormData, accountFormSchema } from '../types'
 import EditMode from './edit-mode'
 import EditUserAvatar from './edit-user-avatar'
 import ViewMode from './view-mode'
 
-const defaultValues: AccountFormData = {
-  name: MOCK_USER.name,
-  nickname: MOCK_USER.nickname,
-  email: MOCK_USER.email,
-  avatar: MOCK_USER.avatar,
-}
-
 function Account() {
   const [isEditMode, setIsEditMode] = useState(false)
+  const avatarFileRef = useRef<File | null>(null)
+
+  const {
+    member,
+    tokens,
+    hydrated: isFetchedMember,
+    fetchMember,
+  } = useHydratedAuthStore()
+
+  const defaultValues = useMemo(() => {
+    return {
+      name: member?.name ?? '',
+      nickname: member?.nickname ?? '',
+      contactEmail: member?.contactEmail ?? '',
+      avatarUrl: member?.avatar?.url ?? '',
+    }
+  }, [member])
 
   const methods = useForm<AccountFormData>({
     resolver: zodResolver(accountFormSchema),
     values: defaultValues,
-    resetOptions: {
-      keepValues: true,
-    },
+    mode: 'onBlur',
+  })
+
+  const { mutateAsync: updateMemberProfile } = useUpdateMemberProfileMutation({
+    accessToken: tokens?.accessToken ?? '',
+    memberId: member?.id ?? '',
+  })
+
+  const { mutateAsync: uploadPhoto } = useUploadPhotoMutation({
+    accessToken: tokens?.accessToken ?? '',
+  })
+
+  const { mutateAsync: deletePhoto } = useDeletePhotoMutation({
+    accessToken: tokens?.accessToken ?? '',
   })
 
   const {
     handleSubmit,
     reset,
+    getFieldState,
     formState: { isDirty },
   } = methods
 
@@ -44,20 +75,91 @@ function Account() {
     setIsEditMode(true)
   }
 
-  const handleFormSubmit = useCallback(
-    () =>
-      handleSubmit((data) => {
+  const handleUpdateMemberProfile = useCallback(
+    async (data: AccountFormData) => {
+      try {
+        const avatarUrlFieldState = getFieldState('avatarUrl')
+        const isAvatarDirty = avatarUrlFieldState?.isDirty
+        let avatarId: string | undefined
+        if (isAvatarDirty && avatarFileRef.current) {
+          const oldAvatarId = member?.avatar?.id
+          if (oldAvatarId) {
+            await deletePhoto(oldAvatarId)
+          }
+          const newAvatar = await uploadPhoto({
+            file: avatarFileRef.current,
+            fileName: data.name ?? '',
+          })
+          avatarId = newAvatar?.id
+          avatarFileRef.current = null
+        }
+
+        await updateMemberProfile({
+          where: { id: member?.id ?? '' },
+          data: {
+            ...(isAvatarDirty
+              ? { avatar: { connect: { id: avatarId ?? '' } } }
+              : {}),
+            name: data.name ?? '',
+            nickname: data.nickname ?? '',
+            contactEmail: data.contactEmail ?? '',
+          },
+        })
         toast.success('已儲存')
         setIsEditMode(false)
-        console.log({ data })
-      })(),
-    [handleSubmit]
+        fetchMember()
+      } catch (_error) {
+        const err = errors.helpers.wrap(
+          _error,
+          'AccountError',
+          'Error to update member profile'
+        )
+
+        const msg = errors.helpers.printAll(err, {
+          withStack: true,
+          withPayload: true,
+        })
+
+        log(LogLevel.ERROR, msg)
+        toast.error('儲存失敗，請稍後再試。')
+      }
+    },
+    [
+      getFieldState,
+      updateMemberProfile,
+      member?.id,
+      member?.avatar?.id,
+      uploadPhoto,
+      deletePhoto,
+      fetchMember,
+    ]
   )
+
+  const handleFormSubmit = useCallback(() => {
+    handleSubmit(handleUpdateMemberProfile)()
+  }, [handleSubmit, handleUpdateMemberProfile])
 
   const handleCancel = () => {
     setIsEditMode(false)
     reset(defaultValues)
+    avatarFileRef.current = null
   }
+
+  const memberData = useMemo(() => {
+    return {
+      name: isFetchedMember ? (member?.name ?? '') : DEFAULT_TEXT_HOLDER,
+      nickname: isFetchedMember
+        ? (member?.nickname ?? '')
+        : DEFAULT_TEXT_HOLDER,
+      id: isFetchedMember ? (member?.id ?? '') : DEFAULT_TEXT_HOLDER,
+      contactEmail: isFetchedMember
+        ? (member?.contactEmail ?? '')
+        : DEFAULT_TEXT_HOLDER,
+      joinedDate: isFetchedMember
+        ? getFormattedDate(member?.joinedAt ?? '', '/')
+        : DEFAULT_TEXT_HOLDER,
+    }
+  }, [isFetchedMember, member])
 
   return (
     <FormProvider {...methods}>
@@ -100,29 +202,42 @@ function Account() {
 
               <div className="mb-5 flex w-full items-center justify-center tablet:hidden">
                 {isEditMode ? (
-                  <EditUserAvatar name={MOCK_USER.name} />
+                  <EditUserAvatar
+                    name={member?.name ?? ''}
+                    onFileSelect={(file) => {
+                      avatarFileRef.current = file
+                    }}
+                  />
                 ) : (
-                  <UserAvatar avatar={MOCK_USER.avatar} name={MOCK_USER.name} />
+                  <UserAvatar
+                    avatar={member?.avatar?.url ?? ''}
+                    name={member?.name ?? ''}
+                  />
                 )}
               </div>
 
               {isEditMode ? (
-                <EditMode id={MOCK_USER.id} joinedAt={MOCK_USER.joinedAt} />
-              ) : (
-                <ViewMode
-                  name={MOCK_USER.name}
-                  nickname={MOCK_USER.nickname}
-                  id={MOCK_USER.id}
-                  email={MOCK_USER.email}
-                  joinedAt={MOCK_USER.joinedAt}
+                <EditMode
+                  id={member?.id ?? ''}
+                  joinedAt={member?.joinedAt ?? ''}
                 />
+              ) : (
+                <ViewMode {...memberData} />
               )}
             </div>
             <div className="mt-[70px] hidden tablet:mr-8 tablet:block desktop:mt-[78px] desktop:mr-0">
               {isEditMode ? (
-                <EditUserAvatar name={MOCK_USER.name} />
+                <EditUserAvatar
+                  name={member?.name ?? ''}
+                  onFileSelect={(file) => {
+                    avatarFileRef.current = file
+                  }}
+                />
               ) : (
-                <UserAvatar avatar={MOCK_USER.avatar} name={MOCK_USER.name} />
+                <UserAvatar
+                  avatar={member?.avatar?.url ?? ''}
+                  name={member?.name ?? ''}
+                />
               )}
             </div>
           </div>
