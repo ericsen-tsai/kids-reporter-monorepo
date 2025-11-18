@@ -177,6 +177,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             aria-describedby={
               errorMessage ? `${props.id ?? 'input'}-error` : undefined
             }
+            aria-invalid={!!errorMessage}
             ref={inputRef ?? innerInputRef}
             {...props}
           />

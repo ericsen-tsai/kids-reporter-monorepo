@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
 import { DEFAULT_AVATAR } from '@/constants'
+import { ALLOWED_IMAGE_TYPES, MAX_IMAGE_SIZE } from '@/constants/input-field'
 import { EditPenIcon } from '@/icons'
 
 import { AccountFormData } from '../types'
@@ -13,7 +14,7 @@ type EditUserAvatarProps = {
 }
 
 function EditUserAvatar({ name }: EditUserAvatarProps) {
-  const { control } = useFormContext<AccountFormData>()
+  const { control, setError } = useFormContext<AccountFormData>()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const objectUrlRef = useRef<string | null>(null)
 
@@ -23,6 +24,18 @@ function EditUserAvatar({ name }: EditUserAvatarProps) {
   ) => {
     const file = e.target.files?.[0]
     if (file) {
+      if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+        setError('avatar', {
+          message: '不支援的檔案格式',
+        })
+        return
+      }
+      if (file.size > MAX_IMAGE_SIZE) {
+        setError('avatar', {
+          message: '檔案大小超過限制，請上傳小於 5MB 的圖片',
+        })
+        return
+      }
       if (objectUrlRef.current) {
         URL.revokeObjectURL(objectUrlRef.current)
       }
@@ -49,7 +62,7 @@ function EditUserAvatar({ name }: EditUserAvatarProps) {
     <Controller
       name="avatar"
       control={control}
-      render={({ field }) => {
+      render={({ field, fieldState }) => {
         const avatarUrl = field.value || ''
 
         return (
@@ -81,6 +94,15 @@ function EditUserAvatar({ name }: EditUserAvatarProps) {
                 <EditPenIcon />
               </button>
             </div>
+            {fieldState.error && (
+              <p
+                className="absolute top-[calc(100%+4px)] left-1/2 w-full -translate-x-1/2 text-center prose-p3 text-semantic-danger"
+                id="avatar-error"
+                role="alert"
+              >
+                {fieldState.error.message}
+              </p>
+            )}
           </div>
         )
       }}

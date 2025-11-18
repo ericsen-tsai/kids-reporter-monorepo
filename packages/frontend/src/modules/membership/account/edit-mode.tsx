@@ -75,7 +75,6 @@ function EditMode({ id, joinedAt }: EditModeProps) {
             </span>
             <Input
               value={id}
-              onChange={() => {}}
               placeholder={id}
               disabled
               className="w-full rounded-xl border border-neutral-400 bg-neutral-100 desktop:bg-neutral-100!"
@@ -122,7 +121,6 @@ function EditMode({ id, joinedAt }: EditModeProps) {
             </span>
             <Input
               value={getFormattedDate(joinedAt, '/')}
-              onChange={() => {}}
               placeholder={getFormattedDate(joinedAt, '/')}
               disabled
               className="w-full rounded-xl border border-neutral-400 bg-neutral-100 desktop:bg-neutral-100!"
