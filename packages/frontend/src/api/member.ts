@@ -2,10 +2,14 @@ import {
   GetMemberProfileQuery,
   GetMemberProfileQueryVariables,
 } from '__generated__/operations/member.generated'
+import { MemberUpdateInput } from '__generated__/types'
 
 import { sendGQLRequest } from '@/utils'
 
-import { GET_MEMBER_PROFILE_GQL } from './graphql/member'
+import {
+  GET_MEMBER_PROFILE_GQL,
+  UPDATE_MEMBER_PROFILE_GQL,
+} from './graphql/member'
 
 export const getMemberProfileByTwreporterUserId = async ({
   twreporterUserId,
@@ -57,4 +61,29 @@ export const getMemberProfileByMemberId = async ({
   )
 
   return response?.data?.data?.member
+}
+
+export const updateMemberProfile = async ({
+  memberId,
+  accessToken,
+  data,
+}: {
+  memberId: string
+  accessToken: string
+  data: MemberUpdateInput
+}) => {
+  const response = await sendGQLRequest<MemberUpdateInput>(
+    {
+      query: UPDATE_MEMBER_PROFILE_GQL,
+      variables: {
+        where: { id: memberId },
+        data,
+      },
+    },
+    {
+      authToken: accessToken,
+    }
+  )
+
+  return response?.data?.data
 }
