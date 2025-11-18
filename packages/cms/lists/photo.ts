@@ -6,7 +6,7 @@ import {
   timestamp,
   virtual,
 } from '@keystone-6/core/fields'
-import type { ListConfig } from '@keystone-6/core/types'
+import { ListType } from 'types'
 
 import config from '../config'
 import {
@@ -14,7 +14,8 @@ import {
   allowRoles,
   RoleEnum,
 } from './utils/access-control-list'
-const listConfigurations: ListConfig<any> = list({
+
+export default list<ListType<'Photo'>>({
   fields: {
     name: text({
       label: '標題',
@@ -122,11 +123,10 @@ const listConfigurations: ListConfig<any> = list({
         RoleEnum.Admin,
         RoleEnum.Editor,
         RoleEnum.Contributor,
+        RoleEnum.Member,
       ]),
       update: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
       delete: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
     },
   },
 })
-
-export default listConfigurations
