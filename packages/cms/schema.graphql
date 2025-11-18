@@ -1755,12 +1755,15 @@ input OnlineUserCreateInput {
 type Member {
   id: ID!
   name: String
+  nickname: String
   email: String
+  contactEmail: String
   twreporter_user_id: String
   role: String
   twoFactorAuth: JSON
   showBaodaozai: Boolean
   essayQuestionCount: Int
+  avatar: Photo
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1776,11 +1779,14 @@ input MemberWhereInput {
   NOT: [MemberWhereInput!]
   id: IDFilter
   name: StringFilter
+  nickname: StringFilter
   email: StringFilter
+  contactEmail: StringFilter
   twreporter_user_id: StringFilter
   role: StringFilter
   showBaodaozai: BooleanFilter
   essayQuestionCount: IntNullableFilter
+  avatar: PhotoWhereInput
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -1788,7 +1794,9 @@ input MemberWhereInput {
 input MemberOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  nickname: OrderDirection
   email: OrderDirection
+  contactEmail: OrderDirection
   twreporter_user_id: OrderDirection
   role: OrderDirection
   showBaodaozai: OrderDirection
@@ -1799,11 +1807,14 @@ input MemberOrderByInput {
 
 input MemberUpdateInput {
   name: String
+  nickname: String
   email: String
+  contactEmail: String
   twreporter_user_id: String
   role: String
   showBaodaozai: Boolean
   essayQuestionCount: Int
+  avatar: PhotoRelateToOneForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1815,11 +1826,14 @@ input MemberUpdateArgs {
 
 input MemberCreateInput {
   name: String
+  nickname: String
   email: String
+  contactEmail: String
   twreporter_user_id: String
   role: String
   showBaodaozai: Boolean
   essayQuestionCount: Int
+  avatar: PhotoRelateToOneForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
