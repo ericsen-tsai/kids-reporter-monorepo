@@ -3,6 +3,7 @@ import { KeystoneContext } from '@keystone-6/core/types'
 import { Express, NextFunction, Request, Response } from 'express'
 
 import appConfig from '../../config'
+import envVar from '../../environment-variables'
 import { verify2FAJWT } from './index'
 
 const cookieName2fa = appConfig.twoFactorAuth.cookieName
@@ -140,6 +141,7 @@ export function twoFactorAuthMiddleware(
         '/images/*',
         '/files/*',
         '/preview-server/*',
+        ...(envVar.nodeEnv !== 'production' ? ['/resized/*'] : []),
       ],
       (req: Request, res: Response, next: NextFunction) => {
         res.locals.skip2fa = true
@@ -165,6 +167,10 @@ export function twoFactorAuthMiddleware(
       next: NextFunction
     ) => {
       if (res.locals.skip2fa) {
+        return next('route')
+      }
+      // Also skip 2FA for /resized/* routes in non-production
+      if (envVar.nodeEnv !== 'production' && req.path.startsWith('/resized/')) {
         return next('route')
       }
       return next()
