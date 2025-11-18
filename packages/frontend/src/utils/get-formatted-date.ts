@@ -3,7 +3,7 @@ export const getFormattedDate = (
   separator: string = '.'
 ): string => {
   const dateObj = new Date(date)
-  if (!date || !dateObj) {
+  if (!date || !dateObj || isNaN(dateObj.getTime())) {
     return ''
   }
   const year = dateObj.getFullYear()
