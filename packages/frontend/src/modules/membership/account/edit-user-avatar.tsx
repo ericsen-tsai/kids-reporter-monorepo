@@ -1,6 +1,6 @@
 'use client'
 import Image from 'next/image'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
 import { DEFAULT_AVATAR } from '@/constants'
@@ -15,6 +15,7 @@ type EditUserAvatarProps = {
 function EditUserAvatar({ name }: EditUserAvatarProps) {
   const { control } = useFormContext<AccountFormData>()
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const objectUrlRef = useRef<string | null>(null)
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -22,10 +23,23 @@ function EditUserAvatar({ name }: EditUserAvatarProps) {
   ) => {
     const file = e.target.files?.[0]
     if (file) {
+      if (objectUrlRef.current) {
+        URL.revokeObjectURL(objectUrlRef.current)
+      }
       const previewUrl = URL.createObjectURL(file)
+      objectUrlRef.current = previewUrl
       onFieldChange(previewUrl)
     }
   }
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (objectUrlRef.current) {
+        URL.revokeObjectURL(objectUrlRef.current)
+      }
+    }
+  }, [])
 
   const handleAvatarClick = () => {
     fileInputRef.current?.click()
@@ -46,6 +60,7 @@ function EditUserAvatar({ name }: EditUserAvatarProps) {
                 alt={name}
                 className="size-full bg-white object-cover"
                 fill
+                sizes="(max-width: 1024px) 136px, 168px"
               />
             </div>
             <div className="absolute right-1 bottom-1 z-100 flex size-9 items-center justify-center rounded-full bg-white shadow desktop:size-11">

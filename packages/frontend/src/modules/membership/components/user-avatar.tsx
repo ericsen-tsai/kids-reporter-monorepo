@@ -13,6 +13,7 @@ function UserAvatar({ avatar, name }: UserAvatarProps) {
         alt={name}
         className="size-full bg-white object-cover"
         fill
+        sizes="(max-width: 1024px) 136px, 168px"
       />
     </div>
   )

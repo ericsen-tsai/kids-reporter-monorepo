@@ -10,9 +10,9 @@ export type PostQuestionAnswers = {
 
 export const accountFormSchema = z.object({
   name: z.string().min(1, '請輸入全名'),
-  nickname: z.string(),
+  nickname: z.string().optional(),
   email: z.email('請輸入有效的電子郵件格式'),
-  avatar: z.string(),
+  avatar: z.url().optional(),
 })
 
 export type AccountFormData = z.infer<typeof accountFormSchema>

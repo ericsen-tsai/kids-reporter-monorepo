@@ -174,11 +174,18 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               'flex-1 flex-shrink-1 bg-transparent text-neutral-900 placeholder:prose-p1 placeholder:text-neutral-400 focus:outline-none disabled:bg-neutral-100 disabled:text-neutral-400',
               isSearchMode && 'ml-2 max-w-[72%]'
             )}
+            aria-describedby={
+              errorMessage ? `${props.id ?? 'input'}-error` : undefined
+            }
             ref={inputRef ?? innerInputRef}
             {...props}
           />
           {errorMessage && (
-            <p className="-bottom-5 left-0 absolute prose-p3 text-semantic-danger">
+            <p
+              className="-bottom-5 left-0 absolute prose-p3 text-semantic-danger"
+              id={`${props.id ?? 'input'}-error`}
+              role="alert"
+            >
               {errorMessage}
             </p>
           )}

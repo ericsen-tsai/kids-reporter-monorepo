@@ -70,12 +70,16 @@ function EditMode({ id, joinedAt }: EditModeProps) {
         <div className="flex items-center justify-between gap-4">
           <div className="flex w-full flex-col gap-1">
             <span className="prose-p1-bold text-neutral-900">會員帳號</span>
+            <span id="member-account-desc" className="sr-only">
+              會員帳號無法編輯
+            </span>
             <Input
               value={id}
               onChange={() => {}}
               placeholder={id}
               disabled
               className="w-full rounded-xl border border-neutral-400 bg-neutral-100 desktop:bg-neutral-100!"
+              aria-describedby="member-account-desc"
             />
           </div>
         </div>
@@ -113,12 +117,16 @@ function EditMode({ id, joinedAt }: EditModeProps) {
         <div className="flex items-center justify-between gap-4">
           <div className="flex w-full flex-col gap-1">
             <span className="prose-p1-bold text-neutral-900">加入日期</span>
+            <span id="join-date-desc" className="sr-only">
+              加入日期無法編輯
+            </span>
             <Input
               value={getFormattedDate(joinedAt, '/')}
               onChange={() => {}}
               placeholder={getFormattedDate(joinedAt, '/')}
               disabled
               className="w-full rounded-xl border border-neutral-400 bg-neutral-100 desktop:bg-neutral-100!"
+              aria-describedby="join-date-desc"
             />
           </div>
         </div>
