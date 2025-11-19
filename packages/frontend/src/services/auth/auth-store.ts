@@ -13,7 +13,11 @@ import {
   getMemberProfileByMemberId,
   getMemberProfileByTwreporterUserId,
 } from '@/api/member'
-import { ACCESS_TOKEN_ENDPOINT, STATUS_CODES } from '@/constants'
+import {
+  ACCESS_TOKEN_ENDPOINT,
+  LOGOUT_ENDPOINT,
+  STATUS_CODES,
+} from '@/constants'
 import { AXIOS_TIMEOUT, log, LogLevel } from '@/utils'
 
 type MemberProfile = {
@@ -53,6 +57,7 @@ type AuthState = {
   fetchMember: () => Promise<void>
   setAuth: (payload: { member: MemberProfile; tokens: AuthTokens }) => void
   clearAuth: () => void
+  logout: () => Promise<void>
 }
 
 type AccessTokenResponse = {
@@ -227,6 +232,13 @@ export const useAuthStore = create<AuthState>()(
             status: 'idle',
             error: undefined,
           })
+        },
+        async logout() {
+          await axios.post(LOGOUT_ENDPOINT, null, {
+            timeout: AXIOS_TIMEOUT,
+            withCredentials: true,
+          })
+          get().clearAuth()
         },
       }),
       {
