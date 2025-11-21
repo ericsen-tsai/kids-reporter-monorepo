@@ -49,7 +49,7 @@ $ yarn start
 **如何使用 `--override` flag：**
 
 若需讓 dotenv 覆寫現有的 shell 環境變數，可在執行 make 指令時加上 `DOTENV_FLAGS="--override"`，例如：
+
 ```
 $ DOTENV_FLAGS="--override" make dev
 ```
-

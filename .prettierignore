@@ -4,3 +4,7 @@ node_modules/
 # IDE
 .vscode/
 .cursor/
+
+# generated files
+schema.graphql
+schema.prisma

@@ -6,4 +6,3 @@ dist/
 
 # Generated files
 .keystone/
-schema.graphql
