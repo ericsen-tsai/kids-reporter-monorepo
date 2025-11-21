@@ -20,7 +20,7 @@ import {
 } from '@/constants'
 import { AXIOS_TIMEOUT, log, LogLevel } from '@/utils'
 
-type MemberProfile = {
+export type MemberProfile = {
   id: string
   name?: string
   email?: string
@@ -55,7 +55,12 @@ type AuthState = {
   error?: string
   exchangeTokenAndPopulateMember: () => Promise<void>
   fetchMember: () => Promise<void>
-  setAuth: (payload: { member: MemberProfile; tokens: AuthTokens }) => void
+  setAuth: (
+    payload: Partial<{
+      member: MemberProfile
+      tokens: AuthTokens
+    }>
+  ) => void
   clearAuth: () => void
   logout: () => Promise<void>
 }
@@ -219,8 +224,8 @@ export const useAuthStore = create<AuthState>()(
         },
         setAuth({ member, tokens }) {
           set({
-            member,
-            tokens,
+            ...(member ? { member } : {}),
+            ...(tokens ? { tokens } : {}),
             status: 'authenticated',
             error: undefined,
           })

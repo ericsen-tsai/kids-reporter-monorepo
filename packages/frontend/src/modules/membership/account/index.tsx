@@ -98,7 +98,6 @@ function Account() {
         }
 
         await updateMemberProfile({
-          where: { id: member?.id ?? '' },
           data: {
             ...(isAvatarDirty
               ? { avatar: { connect: { id: avatarId ?? '' } } }
@@ -130,7 +129,6 @@ function Account() {
     [
       getFieldState,
       updateMemberProfile,
-      member?.id,
       member?.avatar?.id,
       uploadMemberAvatar,
       deleteMemberAvatar,

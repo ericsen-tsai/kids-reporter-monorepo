@@ -30,6 +30,8 @@ export const UPDATE_MEMBER_PROFILE_GQL = gql`
       name
       nickname
       contactEmail
+      showBaodaozai
+      essayQuestionCount
       avatar {
         id
       }
