@@ -1,6 +1,6 @@
 type CheckboxProps = {
   checked: boolean
-  onChange: (checked: boolean) => void
+  onChange: (value: string) => void
   label: string
   value: string
 }
@@ -13,7 +13,7 @@ function Checkbox({ checked, onChange, label, value }: CheckboxProps) {
         value={value}
         name="questionCount"
         checked={checked}
-        onChange={() => onChange(!checked)}
+        onChange={() => onChange(value)}
         className="hidden"
       />
       <div

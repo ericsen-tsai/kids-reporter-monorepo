@@ -4,6 +4,7 @@ import { ACCESS_TOKEN_ENDPOINT, STATUS_CODES } from '@/constants'
 import { ID_TOKEN_COOKIE_NAME } from '@/services/auth/constants'
 
 import { PROTECTED_ROUTES } from './constants/route'
+import { AXIOS_TIMEOUT } from './utils'
 
 function isProtectedRoute(pathname: string): boolean {
   return PROTECTED_ROUTES.some((route) => pathname.startsWith(route))
@@ -13,14 +14,19 @@ async function validateIdToken(request: NextRequest): Promise<boolean> {
   try {
     const cookieHeader = request.headers.get('cookie') || ''
 
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), AXIOS_TIMEOUT)
+
     const response = await fetch(ACCESS_TOKEN_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Cookie: cookieHeader,
       },
-      credentials: 'include',
+      signal: controller.signal,
     })
+
+    clearTimeout(timeoutId)
 
     return (
       response.status !== STATUS_CODES.BAD_REQUEST &&
