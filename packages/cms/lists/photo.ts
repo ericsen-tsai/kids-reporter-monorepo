@@ -131,7 +131,12 @@ export default list<ListType<'Photo'>>({
         RoleEnum.Member,
       ]),
       update: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
-      delete: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
+      delete: allowRoles([
+        RoleEnum.Owner,
+        RoleEnum.Admin,
+        RoleEnum.Editor,
+        RoleEnum.Member,
+      ]),
     },
   },
 })
