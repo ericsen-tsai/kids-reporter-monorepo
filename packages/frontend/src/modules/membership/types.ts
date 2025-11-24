@@ -1,4 +1,5 @@
 import { PostChoiceAnswer, PostEssayAnswer } from '__generated__/types'
+import { z } from 'zod'
 
 export type PostQuestionAnswers = {
   title: string
@@ -6,3 +7,12 @@ export type PostQuestionAnswers = {
   answers: (PostChoiceAnswer | PostEssayAnswer)[]
   lastAnsweredTime: string
 }[]
+
+export const accountFormSchema = z.object({
+  name: z.string().min(1, '請輸入全名'),
+  nickname: z.string().optional(),
+  email: z.email('請輸入有效的電子郵件格式'),
+  avatar: z.url().optional(),
+})
+
+export type AccountFormData = z.infer<typeof accountFormSchema>

@@ -1,10 +1,10 @@
 'use client'
 import { useMediaQuery } from '@kids-reporter/routing-ui'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 import MembershipSideMenu from '../components/side-menu'
+import UserAvatar from '../components/user-avatar'
 import { MEMBERSHIP_MENU_ITEMS, MOCK_USER } from '../constants'
 
 function Member() {
@@ -23,15 +23,7 @@ function Member() {
     <div className="w-full bg-neutral-100 desktop:px-12">
       <div className="mx-auto flex w-full max-w-300 flex-col items-center gap-8 pt-6 pb-40 tablet:grid tablet:grid-cols-12 tablet:items-start tablet:gap-6 tablet:pt-8 desktop:gap-8 desktop:pt-16 desktop:pb-50">
         <div className="flex w-full flex-col items-center gap-4 tablet:hidden">
-          <div className="h-[136px] w-[136px] overflow-hidden rounded-full">
-            <Image
-              width={136}
-              height={136}
-              src={user.avatar}
-              alt={user.name}
-              className="h-full w-full bg-white object-cover"
-            />
-          </div>
+          <UserAvatar avatar={user.avatar} name={user.name} />
           <div className="flex flex-col items-center gap-0">
             <h2 className="text-center prose-h5-small text-neutral-900">
               {user.name}

@@ -164,6 +164,7 @@ export function SearchInputSection(props: SearchInputSectionProps) {
           inputRef={ref}
           onChange={setSearchValue}
           value={searchValue}
+          mode="search"
         />
       </form>
       <div

@@ -6,6 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/accordion'
+import { getFormattedDate } from '@/utils/get-formatted-date'
 
 import { PostQuestionAnswers } from '../../types'
 import QuestionAnswersListContent from './question-answers-list-content'
@@ -13,17 +14,6 @@ import QuestionAnswersListContent from './question-answers-list-content'
 type PostQuestionAnswersListProps = {
   postQuestionAnswers: PostQuestionAnswers
   isLoading: boolean
-}
-
-function formatDate(dateString: string): string {
-  const date = new Date(dateString)
-  if (isNaN(date.getTime())) {
-    return ''
-  }
-  const year = date.getFullYear()
-  const month = `${date.getMonth() + 1}`.padStart(2, '0')
-  const day = `${date.getDate()}`.padStart(2, '0')
-  return `${year}/${month}/${day}`
 }
 
 function PostQuestionAnswersList({
@@ -72,7 +62,7 @@ function PostQuestionAnswersList({
               <div className="flex flex-1 flex-col gap-1 text-left">
                 <div className="flex items-center gap-2">
                   <span className="prose-p2 text-neutral-500">
-                    {formatDate(group.lastAnsweredTime)}
+                    {getFormattedDate(group.lastAnsweredTime, '/')}
                   </span>
                   <span
                     className={cn(
