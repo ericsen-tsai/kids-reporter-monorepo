@@ -9,7 +9,6 @@ import {
 import { ListType } from 'types'
 
 import config from '../config'
-import envVar from '../environment-variables'
 import {
   allowAllRoles,
   allowRoles,
@@ -92,10 +91,7 @@ export default list<ListType<'Photo'>>({
           }
 
           Object.entries(resizedTargets).forEach(([key, value]) => {
-            const resizedFilename =
-              envVar.nodeEnv !== 'production'
-                ? `${filename}${extension}`
-                : `${filename}-${value}.webp`
+            const resizedFilename = `${filename}-${value}.webp`
             rtn[key] =
               `${config.googleCloudStorage.origin}/resized/${resizedFilename}`
           })
@@ -128,15 +124,9 @@ export default list<ListType<'Photo'>>({
         RoleEnum.Admin,
         RoleEnum.Editor,
         RoleEnum.Contributor,
-        RoleEnum.Member,
       ]),
       update: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
-      delete: allowRoles([
-        RoleEnum.Owner,
-        RoleEnum.Admin,
-        RoleEnum.Editor,
-        RoleEnum.Member,
-      ]),
+      delete: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
     },
   },
 })

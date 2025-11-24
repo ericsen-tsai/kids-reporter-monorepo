@@ -107,7 +107,6 @@ model Photo {
   from_Category_ogImage          Category[]        @relation("Category_ogImage")
   from_Subcategory_ogImage       Subcategory[]     @relation("Subcategory_ogImage")
   from_Tag_ogImage               Tag[]             @relation("Tag_ogImage")
-  from_Member_avatar             Member[]          @relation("Member_avatar")
 }
 
 model Author {
@@ -355,16 +354,34 @@ model Member {
   role                            String                @default("member")
   showBaodaozai                   Boolean               @default(true)
   essayQuestionCount              Int?                  @default(1)
-  avatar                          Photo?                @relation("Member_avatar", fields: [avatarId], references: [id])
+  avatar                          MemberAvatar?         @relation("Member_avatar", fields: [avatarId], references: [id])
   avatarId                        Int?                  @map("avatar")
   createdAt                       DateTime?             @default(now())
   updatedAt                       DateTime?             @updatedAt
+  from_MemberAvatar_member        MemberAvatar[]        @relation("MemberAvatar_member")
   from_PostChoiceAnswer_member    PostChoiceAnswer[]    @relation("PostChoiceAnswer_member")
   from_PostEssayAnswer_member     PostEssayAnswer[]     @relation("PostEssayAnswer_member")
   from_PostEssayAnswerLike_member PostEssayAnswerLike[] @relation("PostEssayAnswerLike_member")
 
   @@index([email])
   @@index([avatarId])
+}
+
+model MemberAvatar {
+  id                  Int       @id @default(autoincrement())
+  name                String    @default("")
+  imageFile_id        String?
+  imageFile_filesize  Int?
+  imageFile_width     Int?
+  imageFile_height    Int?
+  imageFile_extension String?
+  member              Member?   @relation("MemberAvatar_member", fields: [memberId], references: [id])
+  memberId            String?   @map("member")
+  createdAt           DateTime? @default(now())
+  updatedAt           DateTime? @updatedAt
+  from_Member_avatar  Member[]  @relation("Member_avatar")
+
+  @@index([memberId])
 }
 
 model PostChoiceAnswer {

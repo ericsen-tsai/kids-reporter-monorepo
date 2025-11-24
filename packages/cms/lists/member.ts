@@ -100,7 +100,7 @@ export default list<ListType<'Member'>>({
       defaultValue: 1,
     }),
     avatar: relationship({
-      ref: 'Photo',
+      ref: 'MemberAvatar',
       many: false,
       label: '大頭照',
     }),
