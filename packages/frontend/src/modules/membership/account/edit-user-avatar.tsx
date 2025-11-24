@@ -14,7 +14,7 @@ type EditUserAvatarProps = {
 }
 
 function EditUserAvatar({ name }: EditUserAvatarProps) {
-  const { control, setError } = useFormContext<AccountFormData>()
+  const { control, setError, clearErrors } = useFormContext<AccountFormData>()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const objectUrlRef = useRef<string | null>(null)
 
@@ -42,6 +42,7 @@ function EditUserAvatar({ name }: EditUserAvatarProps) {
       const previewUrl = URL.createObjectURL(file)
       objectUrlRef.current = previewUrl
       onFieldChange(previewUrl)
+      clearErrors('avatar')
     }
   }
 
