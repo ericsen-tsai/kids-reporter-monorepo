@@ -271,14 +271,17 @@ export const extendGraphqlSchema = graphql.extend(() => {
               )
               ?.map((item: any) => {
                 const metaTag = item?.pagemap?.metatags?.[0]
-                const publishedDate = new Date(
+                const publishedDateObj = new Date(
                   item?.snippet
                     ?.split('...')?.[0]
                     .trim()
                     .replace('年', '-')
                     .replace('月', '-')
                     .replace('日', '')
-                ).toISOString()
+                )
+                const publishedDate = isNaN(publishedDateObj.getTime())
+                  ? null
+                  : publishedDateObj.toISOString()
 
                 return {
                   src: item.link,
@@ -311,6 +314,8 @@ export const extendGraphqlSchema = graphql.extend(() => {
                 withPayload: true,
               })
             }
+
+            console.log({ _err })
 
             console.log(
               JSON.stringify({
