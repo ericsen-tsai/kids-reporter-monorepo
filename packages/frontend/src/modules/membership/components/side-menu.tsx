@@ -24,10 +24,9 @@ function MembershipSideMenu() {
   const handleLogout = async () => {
     try {
       await logout()
+      router.push('/')
     } catch {
       toast.error('登出失敗')
-    } finally {
-      router.push('/')
     }
   }
 
