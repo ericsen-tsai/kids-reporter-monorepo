@@ -1,7 +1,7 @@
 import {
-  CreatePhotoMutation,
-  DeletePhotoMutation,
-} from '__generated__/operations/photo.generated'
+  CreateMemberAvatarMutation,
+  DeleteMemberAvatarMutation,
+} from '__generated__/operations/member-avatar.generated'
 import axios, { AxiosResponse } from 'axios'
 import { print } from 'graphql/language/printer'
 
@@ -9,9 +9,12 @@ import { API_URL, INTERNAL_API_URL } from '@/constants'
 import envVars from '@/environment-variables'
 import { sendGQLRequest } from '@/utils'
 
-import { CREATE_PHOTO_MUTATION, DELETE_PHOTO_MUTATION } from './graphql/photo'
+import {
+  CREATE_MEMBER_AVATAR_MUTATION,
+  DELETE_MEMBER_AVATAR_MUTATION,
+} from './graphql/member-avatar'
 
-export const uploadPhoto = async (
+export const uploadMemberAvatar = async (
   file: File,
   accessToken: string,
   fileName?: string
@@ -26,9 +29,10 @@ export const uploadPhoto = async (
 
   // Prepare operations with file set to null
   // Include name field (using filename without extension as default)
-  const newFileName = fileName || file.name.replace(/\.[^/.]+$/, '') || 'photo'
+  const newFileName =
+    fileName || file.name.replace(/\.[^/.]+$/, '') || 'memberAvatar'
   const operations = {
-    query: print(CREATE_PHOTO_MUTATION),
+    query: print(CREATE_MEMBER_AVATAR_MUTATION),
     variables: {
       data: {
         name: newFileName,
@@ -48,7 +52,7 @@ export const uploadPhoto = async (
   formData.append('map', JSON.stringify(map))
   formData.append('1', file)
 
-  const response: AxiosResponse<{ data: CreatePhotoMutation }> =
+  const response: AxiosResponse<{ data: CreateMemberAvatarMutation }> =
     await axios.post(url, formData, {
       headers: {
         ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
@@ -60,12 +64,15 @@ export const uploadPhoto = async (
   return response?.data?.data?.item
 }
 
-export const deletePhoto = async (photoId: string, accessToken: string) => {
-  const response = await sendGQLRequest<DeletePhotoMutation>(
+export const deleteMemberAvatar = async (
+  avatarId: string,
+  accessToken: string
+) => {
+  const response = await sendGQLRequest<DeleteMemberAvatarMutation>(
     {
-      query: DELETE_PHOTO_MUTATION,
+      query: DELETE_MEMBER_AVATAR_MUTATION,
       variables: {
-        where: { id: photoId },
+        where: { id: avatarId },
       },
     },
     {
@@ -73,5 +80,5 @@ export const deletePhoto = async (photoId: string, accessToken: string) => {
     }
   )
 
-  return response?.data?.data?.deletePhoto
+  return response?.data?.data?.deleteMemberAvatar
 }

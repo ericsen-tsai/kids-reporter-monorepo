@@ -13,9 +13,7 @@ export const GET_MEMBER_PROFILE_GQL = gql`
       essayQuestionCount
       avatar {
         id
-        resized {
-          medium
-        }
+        fileUrl
       }
       createdAt
     }

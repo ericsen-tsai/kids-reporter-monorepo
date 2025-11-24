@@ -150,7 +150,7 @@ export const useAuthStore = create<AuthState>()(
                 ...member,
                 avatar: {
                   id: member.avatar?.id ?? '',
-                  url: member.avatar?.resized?.medium ?? '',
+                  url: member.avatar?.fileUrl ?? '',
                 },
                 joinedAt: member.createdAt,
               },
@@ -196,7 +196,7 @@ export const useAuthStore = create<AuthState>()(
                   ...latest,
                   avatar: {
                     id: latest.avatar?.id ?? '',
-                    url: latest.avatar?.resized?.medium ?? '',
+                    url: latest.avatar?.fileUrl ?? '',
                   },
                   joinedAt: latest.createdAt,
                 },

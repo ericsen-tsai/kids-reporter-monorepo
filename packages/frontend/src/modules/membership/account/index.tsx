@@ -11,9 +11,9 @@ import { toast } from 'sonner'
 
 import { useUpdateMemberProfileMutation } from '@/api-utils/react-query/hooks/member'
 import {
-  useDeletePhotoMutation,
-  useUploadPhotoMutation,
-} from '@/api-utils/react-query/hooks/photos'
+  useDeleteMemberAvatarMutation,
+  useUploadMemberAvatarMutation,
+} from '@/api-utils/react-query/hooks/member-avatars'
 import { DEFAULT_TEXT_HOLDER } from '@/constants/input-field'
 import { useHydratedAuthStore } from '@/services/auth/use-hydrated-auth-store'
 import { getFormattedDate, log, LogLevel } from '@/utils'
@@ -56,11 +56,11 @@ function Account() {
     memberId: member?.id ?? '',
   })
 
-  const { mutateAsync: uploadPhoto } = useUploadPhotoMutation({
+  const { mutateAsync: uploadMemberAvatar } = useUploadMemberAvatarMutation({
     accessToken: tokens?.accessToken ?? '',
   })
 
-  const { mutateAsync: deletePhoto } = useDeletePhotoMutation({
+  const { mutateAsync: deleteMemberAvatar } = useDeleteMemberAvatarMutation({
     accessToken: tokens?.accessToken ?? '',
   })
 
@@ -83,7 +83,7 @@ function Account() {
         let avatarId: string | undefined
         if (isAvatarDirty && avatarFileRef.current) {
           // upload new avatar first
-          const newAvatar = await uploadPhoto({
+          const newAvatar = await uploadMemberAvatar({
             file: avatarFileRef.current,
             fileName: data.name ?? '',
           })
@@ -91,7 +91,7 @@ function Account() {
           // delete old avatar
           const oldAvatarId = member?.avatar?.id
           if (oldAvatarId) {
-            await deletePhoto(oldAvatarId)
+            await deleteMemberAvatar(oldAvatarId)
           }
           avatarId = newAvatar?.id
           avatarFileRef.current = null
@@ -132,8 +132,8 @@ function Account() {
       updateMemberProfile,
       member?.id,
       member?.avatar?.id,
-      uploadPhoto,
-      deletePhoto,
+      uploadMemberAvatar,
+      deleteMemberAvatar,
       fetchMember,
     ]
   )
