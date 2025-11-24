@@ -41,7 +41,7 @@ function Account() {
       name: member?.name ?? '',
       nickname: member?.nickname ?? '',
       contactEmail: member?.contactEmail ?? '',
-      avatarUrl: member?.avatar?.url ?? '',
+      avatarUrl: member?.avatar?.url,
     }
   }, [member])
 
@@ -82,14 +82,17 @@ function Account() {
         const isAvatarDirty = avatarUrlFieldState?.isDirty
         let avatarId: string | undefined
         if (isAvatarDirty && avatarFileRef.current) {
-          const oldAvatarId = member?.avatar?.id
-          if (oldAvatarId) {
-            await deletePhoto(oldAvatarId)
-          }
+          // upload new avatar first
           const newAvatar = await uploadPhoto({
             file: avatarFileRef.current,
             fileName: data.name ?? '',
           })
+
+          // delete old avatar
+          const oldAvatarId = member?.avatar?.id
+          if (oldAvatarId) {
+            await deletePhoto(oldAvatarId)
+          }
           avatarId = newAvatar?.id
           avatarFileRef.current = null
         }

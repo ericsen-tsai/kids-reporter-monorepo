@@ -1,8 +1,9 @@
 import {
   GetMemberProfileQuery,
   GetMemberProfileQueryVariables,
+  UpdateMemberProfileMutation,
+  UpdateMemberProfileMutationVariables,
 } from '__generated__/operations/member.generated'
-import { MemberUpdateInput } from '__generated__/types'
 
 import { sendGQLRequest } from '@/utils'
 
@@ -70,9 +71,9 @@ export const updateMemberProfile = async ({
 }: {
   memberId: string
   accessToken: string
-  data: MemberUpdateInput
+  data: UpdateMemberProfileMutationVariables['data']
 }) => {
-  const response = await sendGQLRequest<MemberUpdateInput>(
+  const response = await sendGQLRequest<UpdateMemberProfileMutation>(
     {
       query: UPDATE_MEMBER_PROFILE_GQL,
       variables: {
