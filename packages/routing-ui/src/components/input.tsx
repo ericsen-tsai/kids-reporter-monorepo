@@ -1,7 +1,7 @@
 'use client'
 
 import { cva } from 'class-variance-authority'
-import { forwardRef, useRef, useState } from 'react'
+import { forwardRef, useMemo, useRef, useState } from 'react'
 
 import { SearchIconSmall } from '../icons'
 import { cn } from '../utils/cn'
@@ -29,27 +29,58 @@ const CloseIcon = ({ className }: { className?: string }) => (
 
 const inputVariants = cva(
   // Base styles
-  'px-4 py-1.5 h-11 relative flex items-center border bg-neutral-100 prose-p1 transition-colors duration-200 hover:border-neutral-600 desktop:bg-neutral-white!',
+  'px-4 py-1.5 h-11 relative flex items-center border prose-p1 transition-colors duration-200 hover:border-neutral-600 desktop:bg-neutral-white',
   {
     variants: {
       state: {
         default: 'border-transparent',
-        hover: 'border-neutral-600',
-        focus: 'border-neutral-600',
-        active: 'border-neutral-600',
-        unfocus: 'border-transparent',
-        error: 'border-semantic-danger hover:border-semantic-danger',
+        focus: '',
+        active: '',
+        error: '',
+        disabled:
+          'bg-neutral-100 hover:border-neutral-400 desktop:bg-neutral-100',
       },
       mode: {
-        default: 'rounded-[12px] border-neutral-400',
-        search: 'rounded-full border-transparent',
+        default: 'rounded-[12px] border-neutral-400 bg-neutral-100',
+        search: 'rounded-full border-transparent desktop:border-neutral-600',
       },
     },
     compoundVariants: [
       {
         state: 'error',
         mode: 'default',
-        className: 'border-semantic-danger',
+        className: 'border-semantic-danger hover:border-semantic-danger',
+      },
+      {
+        state: 'default',
+        mode: 'default',
+        className: 'border-neutral-400',
+      },
+      {
+        state: 'focus',
+        mode: 'default',
+        className: 'border-neutral-600',
+      },
+      {
+        state: 'active',
+        mode: 'default',
+        className: 'border-neutral-600',
+      },
+
+      {
+        state: 'default',
+        mode: 'search',
+        className: 'bg-neutral-100',
+      },
+      {
+        state: 'focus',
+        mode: 'search',
+        className: 'border-neutral-600',
+      },
+      {
+        state: 'active',
+        mode: 'search',
+        className: 'border-neutral-600',
       },
     ],
     defaultVariants: {
@@ -85,6 +116,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       error,
       errorMessage,
       mode = 'default',
+      disabled,
       ...props
     },
     ref
@@ -97,15 +129,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const hasValue = currentValue.length > 0
 
     // Determine current state
-    const currentState = error
-      ? 'error'
-      : isFocused
-        ? 'focus'
-        : hasValue
-          ? isActive
-            ? 'active'
-            : 'unfocus'
-          : 'default'
+    const currentState = useMemo(() => {
+      if (error) return 'error'
+      if (disabled) return 'disabled'
+      if (isFocused) return 'focus'
+      if (hasValue) return isActive ? 'active' : 'default'
+      return 'default'
+    }, [error, disabled, isFocused, hasValue, isActive])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = e.target.value
@@ -171,7 +201,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             onBlur={handleBlur}
             placeholder={placeholder}
             className={cn(
-              'flex-1 flex-shrink-1 bg-transparent text-neutral-900 placeholder:prose-p1 placeholder:text-neutral-400 focus:outline-none disabled:bg-neutral-100 disabled:text-neutral-400',
+              'flex-1 flex-shrink-1 bg-transparent text-neutral-900 placeholder:prose-p1 placeholder:text-neutral-400 focus:outline-none disabled:text-neutral-400',
               isSearchMode && 'ml-2 max-w-[72%]'
             )}
             aria-describedby={
@@ -179,6 +209,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             }
             aria-invalid={!!errorMessage}
             ref={inputRef ?? innerInputRef}
+            disabled={disabled}
             {...props}
           />
           {errorMessage && (
