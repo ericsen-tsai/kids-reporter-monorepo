@@ -315,8 +315,6 @@ export const extendGraphqlSchema = graphql.extend(() => {
               })
             }
 
-            console.log({ _err })
-
             console.log(
               JSON.stringify({
                 severity: 'ERROR',
