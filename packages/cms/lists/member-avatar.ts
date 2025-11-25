@@ -8,11 +8,11 @@ import {
 } from '@keystone-6/core/fields'
 
 import config from '../config'
+import { allowAllRoles } from './utils/access-control-list'
 import {
-  allowAllRoles,
-  allowRoles,
-  RoleEnum,
-} from './utils/access-control-list'
+  makeMemberOwnedFilter,
+  memberOwnedOperationAccess,
+} from './utils/member-owned-access'
 
 const ALLOWED_IMAGE_TYPES = [
   'image/jpeg',
@@ -24,6 +24,8 @@ const ALLOWED_IMAGE_TYPES = [
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024 // 5MB
 
+const operationAccessControl = memberOwnedOperationAccess
+const filterAccessControl = makeMemberOwnedFilter('self')
 export default list({
   fields: {
     name: text({
@@ -74,49 +76,14 @@ export default list({
   access: {
     operation: {
       query: allowAllRoles(),
-      create: allowRoles([
-        RoleEnum.Owner,
-        RoleEnum.Admin,
-        RoleEnum.Editor,
-        RoleEnum.Contributor,
-        RoleEnum.Member,
-      ]),
-      update: allowRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
-      delete: allowRoles([
-        RoleEnum.Owner,
-        RoleEnum.Admin,
-        RoleEnum.Editor,
-        RoleEnum.Member,
-      ]),
+      create: operationAccessControl,
+      update: operationAccessControl,
+      delete: operationAccessControl,
     },
-    item: {
-      delete: async ({ session, item, context }) => {
-        const userRole = session?.data?.role
-
-        // Admins, Owners, and Editors can delete any avatar
-        if (
-          userRole === RoleEnum.Admin ||
-          userRole === RoleEnum.Owner ||
-          userRole === RoleEnum.Editor
-        ) {
-          return true
-        }
-
-        // Members can only delete their own avatars
-        const sessionMemberId = session?.data?.memberId?.toString()
-
-        if (!sessionMemberId) {
-          return false
-        }
-
-        const avatar = await context.sudo().query.MemberAvatar.findOne({
-          where: { id: item.id.toString() },
-          query: 'member { id }',
-        })
-        const memberId = avatar?.member?.id?.toString()
-
-        return sessionMemberId === memberId
-      },
+    filter: {
+      query: undefined,
+      update: filterAccessControl,
+      delete: filterAccessControl,
     },
   },
   hooks: {
