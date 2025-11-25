@@ -68,7 +68,7 @@ function EditUserAvatar({ name }: EditUserAvatarProps) {
 
         return (
           <div className="relative">
-            <div className="relative size-[136px] overflow-hidden rounded-full desktop:size-[168px]">
+            <div className="relative size-[136px] overflow-hidden rounded-full border-2 border-neutral-200 desktop:size-[168px]">
               <Image
                 src={avatarUrl || DEFAULT_AVATAR}
                 alt={name}
@@ -81,7 +81,7 @@ function EditUserAvatar({ name }: EditUserAvatarProps) {
               <button
                 type="button"
                 onClick={handleAvatarClick}
-                className="relative flex size-full cursor-pointer items-center justify-center"
+                className="relative flex size-full cursor-pointer items-center justify-center text-neutral-500 hover:text-red-400"
                 aria-label="上傳頭像"
               >
                 <input

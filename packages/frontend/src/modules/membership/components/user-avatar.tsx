@@ -7,7 +7,7 @@ type UserAvatarProps = {
 
 function UserAvatar({ avatar, name }: UserAvatarProps) {
   return (
-    <div className="relative size-[136px] overflow-hidden rounded-full desktop:size-[168px]">
+    <div className="relative size-[136px] overflow-hidden rounded-full border-2 border-neutral-200 desktop:size-[168px]">
       <Image
         src={avatar}
         alt={name}
