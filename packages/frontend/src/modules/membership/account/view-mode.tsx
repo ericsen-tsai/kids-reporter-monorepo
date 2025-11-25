@@ -11,7 +11,7 @@ type ViewModeProps = {
 
 function ViewMode({ name, nickname, id, email, joinedAt }: ViewModeProps) {
   return (
-    <div className="flex w-full flex-col gap-5">
+    <div className="flex w-full flex-col gap-6">
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between gap-4">
           <div className="flex flex-col gap-1">

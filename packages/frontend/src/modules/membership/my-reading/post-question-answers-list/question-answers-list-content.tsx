@@ -1,5 +1,6 @@
 import Link from 'next/link'
 
+import Divider from '@/components/divider'
 import { ArticleShortcutIcon, GroupIcon, LightbulbIcon } from '@/icons'
 
 import { PostQuestionAnswers } from '../../types'
@@ -58,7 +59,7 @@ function QuestionAnswersListContent({
           <ArticleShortcutIcon />
           <span>閱讀完整文章</span>
         </Link>
-        <div className="h-4 w-[2px] bg-neutral-900"></div>
+        <Divider direction="vertical" className="h-4 bg-neutral-900" />
         <Link
           href={href}
           className="flex items-center gap-1 text-neutral-900 hover:text-red-400 active:text-red-500"

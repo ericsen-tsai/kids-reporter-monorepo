@@ -3,6 +3,8 @@ import { cn } from '@kids-reporter/routing-ui'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+import Divider from '@/components/divider'
+
 import { MEMBERSHIP_MENU_ITEMS } from '../constants'
 
 function MembershipSideMenu() {
@@ -36,8 +38,7 @@ function MembershipSideMenu() {
         })}
       </div>
 
-      <div className="mx-auto h-[2px] w-[calc(100%-48px)] bg-neutral-200 tablet:w-[calc(100%-64px)] desktop:w-full" />
-
+      <Divider className="mx-auto w-[calc(100%-48px)] tablet:w-[calc(100%-64px)] desktop:w-full" />
       <Link
         href="/logout"
         className={cn(
