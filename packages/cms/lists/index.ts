@@ -4,6 +4,7 @@ import CallBaodaozaiIntro from './call-baodaozai-intro'
 import Category from './category'
 import EditorPicksSetting from './editor-picks-setting'
 import Member from './member'
+import MemberAvatar from './member-avatar'
 import { NewsReadingGroup, NewsReadingGroupItem } from './news-reading'
 import OnlineUser from './online-user'
 import PDF from './pdf'
@@ -42,6 +43,7 @@ export const listDefinition = {
   CallBaodaozai,
   OnlineUser,
   Member,
+  MemberAvatar,
   PostChoiceAnswer,
   PostChoiceQuestion,
   PostEssayAnswer,

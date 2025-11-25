@@ -6,6 +6,7 @@ import { config } from '@keystone-6/core'
 import { statelessSessions } from '@keystone-6/core/session'
 import type { SessionStrategy } from '@keystone-6/core/types'
 import cors from 'cors'
+import express from 'express'
 import jwt from 'jsonwebtoken'
 
 import appConfig from './config'
@@ -309,6 +310,13 @@ const authConfig = withAuth(
         app.get('/health_check', (req, res) => {
           res.status(200).json({ status: 'healthy' })
         })
+
+        if (envVar.nodeEnv !== 'production') {
+          app.use(
+            '/resized',
+            express.static(Path.resolve(appConfig.images.storagePath))
+          )
+        }
 
         const corsOpts = {
           origin: envVar.cors.allowOrigins,

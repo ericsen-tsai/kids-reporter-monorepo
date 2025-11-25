@@ -208,12 +208,19 @@ export function createGraphQLProxy({
     createProxyMiddleware({
       target: apiOrigin,
       changeOrigin: true,
-
       onProxyReq: (proxyReq, req, res) => {
         const mode: 'jwt' | 'cookie' = res.locals.authMode
 
-        // Always enforce Content-Type
-        proxyReq.setHeader('Content-Type', 'application/json')
+        // Preserve original Content-Type for multipart/form-data (file uploads)
+        // Only set to application/json for regular GraphQL requests
+        const originalContentType = req.get('Content-Type') || ''
+        if (originalContentType.includes('multipart/form-data')) {
+          // Preserve multipart/form-data with boundary for file uploads
+          proxyReq.setHeader('Content-Type', originalContentType)
+        } else {
+          // Set to application/json for regular GraphQL JSON requests
+          proxyReq.setHeader('Content-Type', 'application/json')
+        }
         proxyReq.setHeader('x-apollo-operation-name', '')
 
         if (mode === 'jwt') {

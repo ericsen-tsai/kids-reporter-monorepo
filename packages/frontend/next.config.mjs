@@ -7,6 +7,18 @@ const nextConfig = {
     styledComponents: true,
   },
   poweredByHeader: false, // Remove poweredby for security issue, ref: https://nextjs.org/docs/pages/api-reference/next-config-js/poweredByHeader
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'kids-storage.twreporter.org',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+    ],
+  },
 }
 export default nextConfig
 

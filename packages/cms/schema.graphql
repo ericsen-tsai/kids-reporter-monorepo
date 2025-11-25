@@ -1755,12 +1755,15 @@ input OnlineUserCreateInput {
 type Member {
   id: ID!
   name: String
+  nickname: String
   email: String
+  contactEmail: String
   twreporter_user_id: String
   role: String
   twoFactorAuth: JSON
   showBaodaozai: Boolean
   essayQuestionCount: Int
+  avatar: MemberAvatar
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1776,11 +1779,14 @@ input MemberWhereInput {
   NOT: [MemberWhereInput!]
   id: IDFilter
   name: StringFilter
+  nickname: StringFilter
   email: StringFilter
+  contactEmail: StringFilter
   twreporter_user_id: StringFilter
   role: StringFilter
   showBaodaozai: BooleanFilter
   essayQuestionCount: IntNullableFilter
+  avatar: MemberAvatarWhereInput
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -1788,7 +1794,9 @@ input MemberWhereInput {
 input MemberOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  nickname: OrderDirection
   email: OrderDirection
+  contactEmail: OrderDirection
   twreporter_user_id: OrderDirection
   role: OrderDirection
   showBaodaozai: OrderDirection
@@ -1799,13 +1807,22 @@ input MemberOrderByInput {
 
 input MemberUpdateInput {
   name: String
+  nickname: String
   email: String
+  contactEmail: String
   twreporter_user_id: String
   role: String
   showBaodaozai: Boolean
   essayQuestionCount: Int
+  avatar: MemberAvatarRelateToOneForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+input MemberAvatarRelateToOneForUpdateInput {
+  create: MemberAvatarCreateInput
+  connect: MemberAvatarWhereUniqueInput
+  disconnect: Boolean
 }
 
 input MemberUpdateArgs {
@@ -1815,13 +1832,85 @@ input MemberUpdateArgs {
 
 input MemberCreateInput {
   name: String
+  nickname: String
   email: String
+  contactEmail: String
   twreporter_user_id: String
   role: String
   showBaodaozai: Boolean
   essayQuestionCount: Int
+  avatar: MemberAvatarRelateToOneForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+input MemberAvatarRelateToOneForCreateInput {
+  create: MemberAvatarCreateInput
+  connect: MemberAvatarWhereUniqueInput
+}
+
+type MemberAvatar {
+  id: ID!
+  name: String
+  imageFile: ImageFieldOutput
+  member: Member
+  fileUrl: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input MemberAvatarWhereUniqueInput {
+  id: ID
+}
+
+input MemberAvatarWhereInput {
+  AND: [MemberAvatarWhereInput!]
+  OR: [MemberAvatarWhereInput!]
+  NOT: [MemberAvatarWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  member: MemberWhereInput
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input MemberAvatarOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input MemberAvatarUpdateInput {
+  name: String
+  imageFile: ImageFieldInput
+  member: MemberRelateToOneForUpdateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input MemberRelateToOneForUpdateInput {
+  create: MemberCreateInput
+  connect: MemberWhereUniqueInput
+  disconnect: Boolean
+}
+
+input MemberAvatarUpdateArgs {
+  where: MemberAvatarWhereUniqueInput!
+  data: MemberAvatarUpdateInput!
+}
+
+input MemberAvatarCreateInput {
+  name: String
+  imageFile: ImageFieldInput
+  member: MemberRelateToOneForCreateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input MemberRelateToOneForCreateInput {
+  create: MemberCreateInput
+  connect: MemberWhereUniqueInput
 }
 
 type PostChoiceAnswer {
@@ -2274,6 +2363,12 @@ type Mutation {
   updateMembers(data: [MemberUpdateArgs!]!): [Member]
   deleteMember(where: MemberWhereUniqueInput!): Member
   deleteMembers(where: [MemberWhereUniqueInput!]!): [Member]
+  createMemberAvatar(data: MemberAvatarCreateInput!): MemberAvatar
+  createMemberAvatars(data: [MemberAvatarCreateInput!]!): [MemberAvatar]
+  updateMemberAvatar(where: MemberAvatarWhereUniqueInput!, data: MemberAvatarUpdateInput!): MemberAvatar
+  updateMemberAvatars(data: [MemberAvatarUpdateArgs!]!): [MemberAvatar]
+  deleteMemberAvatar(where: MemberAvatarWhereUniqueInput!): MemberAvatar
+  deleteMemberAvatars(where: [MemberAvatarWhereUniqueInput!]!): [MemberAvatar]
   createPostChoiceAnswer(data: PostChoiceAnswerCreateInput!): PostChoiceAnswer
   createPostChoiceAnswers(data: [PostChoiceAnswerCreateInput!]!): [PostChoiceAnswer]
   updatePostChoiceAnswer(where: PostChoiceAnswerWhereUniqueInput!, data: PostChoiceAnswerUpdateInput!): PostChoiceAnswer
@@ -2386,6 +2481,9 @@ type Query {
   member(where: MemberWhereUniqueInput!): Member
   members(where: MemberWhereInput! = {}, orderBy: [MemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberWhereUniqueInput): [Member!]
   membersCount(where: MemberWhereInput! = {}): Int
+  memberAvatar(where: MemberAvatarWhereUniqueInput!): MemberAvatar
+  memberAvatars(where: MemberAvatarWhereInput! = {}, orderBy: [MemberAvatarOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberAvatarWhereUniqueInput): [MemberAvatar!]
+  memberAvatarsCount(where: MemberAvatarWhereInput! = {}): Int
   postChoiceAnswer(where: PostChoiceAnswerWhereUniqueInput!): PostChoiceAnswer
   postChoiceAnswers(where: PostChoiceAnswerWhereInput! = {}, orderBy: [PostChoiceAnswerOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostChoiceAnswerWhereUniqueInput): [PostChoiceAnswer!]
   postChoiceAnswersCount(where: PostChoiceAnswerWhereInput! = {}): Int

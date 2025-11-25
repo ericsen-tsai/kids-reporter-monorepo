@@ -26,8 +26,9 @@ function EditMode({ id, joinedAt }: EditModeProps) {
               control={control}
               render={({ field, fieldState }) => (
                 <Input
-                  value={field.value}
+                  value={field.value || ''}
                   onChange={(value) => field.onChange(value)}
+                  onBlur={field.onBlur}
                   placeholder="請輸入全名"
                   error={!!fieldState.error}
                   errorMessage={fieldState.error?.message}
@@ -51,8 +52,9 @@ function EditMode({ id, joinedAt }: EditModeProps) {
               control={control}
               render={({ field, fieldState }) => (
                 <Input
-                  value={field.value}
+                  value={field.value || ''}
                   onChange={(value) => field.onChange(value)}
+                  onBlur={field.onBlur}
                   placeholder="請輸入暱稱"
                   error={!!fieldState.error}
                   errorMessage={fieldState.error?.message}
@@ -93,12 +95,13 @@ function EditMode({ id, joinedAt }: EditModeProps) {
           <div className="flex w-full flex-col gap-1">
             <span className="prose-p1-bold text-neutral-900">聯絡信箱</span>
             <Controller
-              name="email"
+              name="contactEmail"
               control={control}
               render={({ field, fieldState }) => (
                 <Input
-                  value={field.value}
+                  value={field.value || ''}
                   onChange={(value) => field.onChange(value)}
+                  onBlur={field.onBlur}
                   placeholder="請輸入聯絡信箱"
                   error={!!fieldState.error}
                   errorMessage={fieldState.error?.message}

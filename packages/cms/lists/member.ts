@@ -2,6 +2,7 @@ import { graphql, list } from '@keystone-6/core'
 import {
   checkbox,
   integer,
+  relationship,
   text,
   timestamp,
   virtual,
@@ -21,9 +22,15 @@ export default list<ListType<'Member'>>({
     name: text({
       label: '稱呼',
     }),
+    nickname: text({
+      label: '暱稱',
+    }),
     email: text({
       label: 'Email',
       isIndexed: true,
+    }),
+    contactEmail: text({
+      label: '聯絡信箱',
     }),
     twreporter_user_id: text({
       label: 'membership_user.users.id',
@@ -91,6 +98,11 @@ export default list<ListType<'Member'>>({
     essayQuestionCount: integer({
       label: '思辨題數量',
       defaultValue: 1,
+    }),
+    avatar: relationship({
+      ref: 'MemberAvatar',
+      many: false,
+      label: '大頭照',
     }),
     createdAt: timestamp({
       defaultValue: { kind: 'now' },

@@ -3,12 +3,14 @@ import { useMediaQuery } from '@kids-reporter/routing-ui'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
+import { useHydratedAuthStore } from '@/services/auth/use-hydrated-auth-store'
+
 import MembershipSideMenu from '../components/side-menu'
 import UserAvatar from '../components/user-avatar'
-import { MEMBERSHIP_MENU_ITEMS, MOCK_USER } from '../constants'
+import { MEMBERSHIP_MENU_ITEMS } from '../constants'
 
 function Member() {
-  const user = MOCK_USER
+  const { member } = useHydratedAuthStore()
 
   const isMobile = useMediaQuery('(max-width: 768px)')
   const router = useRouter()
@@ -23,13 +25,16 @@ function Member() {
     <div className="w-full bg-neutral-100 desktop:px-12">
       <div className="mx-auto flex w-full max-w-300 flex-col items-center gap-8 pt-6 pb-40 tablet:grid tablet:grid-cols-12 tablet:items-start tablet:gap-6 tablet:pt-8 desktop:gap-8 desktop:pt-16 desktop:pb-50">
         <div className="flex w-full flex-col items-center gap-4 tablet:hidden">
-          <UserAvatar avatar={user.avatar} name={user.name} />
+          <UserAvatar
+            avatar={member?.avatar?.url ?? ''}
+            name={member?.name ?? ''}
+          />
           <div className="flex flex-col items-center gap-0">
             <h2 className="text-center prose-h5-small text-neutral-900">
-              {user.name}
+              {member?.name ?? ''}
             </h2>
             <p className="mt-0 text-center prose-p1 text-neutral-700">
-              {user.id}
+              {member?.id ?? ''}
             </p>
           </div>
         </div>

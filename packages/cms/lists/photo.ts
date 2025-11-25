@@ -6,7 +6,7 @@ import {
   timestamp,
   virtual,
 } from '@keystone-6/core/fields'
-import type { ListConfig } from '@keystone-6/core/types'
+import { ListType } from 'types'
 
 import config from '../config'
 import {
@@ -14,7 +14,8 @@ import {
   allowRoles,
   RoleEnum,
 } from './utils/access-control-list'
-const listConfigurations: ListConfig<any> = list({
+
+export default list<ListType<'Photo'>>({
   fields: {
     name: text({
       label: '標題',
@@ -90,8 +91,9 @@ const listConfigurations: ListConfig<any> = list({
           }
 
           Object.entries(resizedTargets).forEach(([key, value]) => {
+            const resizedFilename = `${filename}-${value}.webp`
             rtn[key] =
-              `${config.googleCloudStorage.origin}/resized/${filename}-${value}.webp`
+              `${config.googleCloudStorage.origin}/resized/${resizedFilename}`
           })
 
           rtn['original'] =
@@ -128,5 +130,3 @@ const listConfigurations: ListConfig<any> = list({
     },
   },
 })
-
-export default listConfigurations

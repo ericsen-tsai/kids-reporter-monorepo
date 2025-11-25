@@ -1,22 +1,30 @@
 import Divider from '@/components/divider'
-import { getFormattedDate } from '@/utils/get-formatted-date'
+import { NO_DATA_TEXT } from '@/constants/input-field'
 
 type ViewModeProps = {
   name: string
   nickname: string
   id: string
-  email: string
-  joinedAt: string
+  contactEmail: string
+  joinedDate: string
 }
 
-function ViewMode({ name, nickname, id, email, joinedAt }: ViewModeProps) {
+function ViewMode({
+  name,
+  nickname,
+  id,
+  contactEmail,
+  joinedDate,
+}: ViewModeProps) {
   return (
     <div className="flex w-full flex-col gap-6">
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between gap-4">
           <div className="flex flex-col gap-1">
             <span className="prose-p1-bold text-neutral-900">全名</span>
-            <span className="prose-p1 text-neutral-700">{name}</span>
+            <span className="prose-p1 text-neutral-700">
+              {name || NO_DATA_TEXT}
+            </span>
           </div>
         </div>
       </div>
@@ -27,7 +35,9 @@ function ViewMode({ name, nickname, id, email, joinedAt }: ViewModeProps) {
         <div className="flex items-center justify-between gap-4">
           <div className="flex flex-col gap-1">
             <span className="prose-p1-bold text-neutral-900">暱稱</span>
-            <span className="prose-p1 text-neutral-700">{nickname}</span>
+            <span className="prose-p1 text-neutral-700">
+              {nickname || NO_DATA_TEXT}
+            </span>
           </div>
         </div>
       </div>
@@ -38,7 +48,9 @@ function ViewMode({ name, nickname, id, email, joinedAt }: ViewModeProps) {
         <div className="flex items-center justify-between gap-4">
           <div className="flex flex-col gap-1">
             <span className="prose-p1-bold text-neutral-900">會員帳號</span>
-            <span className="prose-p1 text-neutral-700">{id}</span>
+            <span className="prose-p1 text-neutral-700">
+              {id || NO_DATA_TEXT}
+            </span>
           </div>
         </div>
       </div>
@@ -49,7 +61,9 @@ function ViewMode({ name, nickname, id, email, joinedAt }: ViewModeProps) {
         <div className="flex items-center justify-between gap-4">
           <div className="flex flex-col gap-1">
             <span className="prose-p1-bold text-neutral-900">聯絡信箱</span>
-            <span className="prose-p1 text-neutral-700">{email}</span>
+            <span className="prose-p1 text-neutral-700">
+              {contactEmail || NO_DATA_TEXT}
+            </span>
           </div>
         </div>
       </div>
@@ -61,7 +75,7 @@ function ViewMode({ name, nickname, id, email, joinedAt }: ViewModeProps) {
           <div className="flex flex-col gap-1">
             <span className="prose-p1-bold text-neutral-900">加入日期</span>
             <span className="prose-p1 text-neutral-700">
-              {getFormattedDate(joinedAt, '/')}
+              {joinedDate || NO_DATA_TEXT}
             </span>
           </div>
         </div>

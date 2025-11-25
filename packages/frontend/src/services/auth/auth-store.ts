@@ -23,6 +23,13 @@ type MemberProfile = {
   twreporter_user_id?: string
   showBaodaozai?: boolean
   essayQuestionCount?: number
+  nickname?: string
+  contactEmail?: string
+  avatar?: {
+    id: string
+    url: string
+  }
+  joinedAt?: string
 }
 
 type AuthTokens = {
@@ -139,7 +146,14 @@ export const useAuthStore = create<AuthState>()(
             }
 
             set({
-              member,
+              member: {
+                ...member,
+                avatar: {
+                  id: member.avatar?.id ?? '',
+                  url: member.avatar?.fileUrl ?? '',
+                },
+                joinedAt: member.createdAt,
+              },
               tokens: { accessToken: payload.accessToken, expiresAt },
               status: 'authenticated',
               error: undefined,
@@ -178,7 +192,14 @@ export const useAuthStore = create<AuthState>()(
 
             if (latest) {
               set({
-                member: latest,
+                member: {
+                  ...latest,
+                  avatar: {
+                    id: latest.avatar?.id ?? '',
+                    url: latest.avatar?.fileUrl ?? '',
+                  },
+                  joinedAt: latest.createdAt,
+                },
                 status: 'authenticated',
                 error: undefined,
               })
