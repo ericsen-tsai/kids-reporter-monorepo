@@ -2,6 +2,7 @@
 import { Input } from '@kids-reporter/routing-ui'
 import { Controller, useFormContext } from 'react-hook-form'
 
+import Divider from '@/components/divider'
 import { getFormattedDate } from '@/utils/get-formatted-date'
 
 import { AccountFormData } from '../types'
@@ -38,7 +39,7 @@ function EditMode({ id, joinedAt }: EditModeProps) {
         </div>
       </div>
 
-      <div className="h-px w-full bg-neutral-200" />
+      <Divider />
 
       {/* Nickname */}
       <div className="flex flex-col gap-1">
@@ -63,7 +64,7 @@ function EditMode({ id, joinedAt }: EditModeProps) {
         </div>
       </div>
 
-      <div className="h-px w-full bg-neutral-200" />
+      <Divider />
 
       {/* Member Account - Disabled */}
       <div className="flex flex-col gap-1">
@@ -84,7 +85,7 @@ function EditMode({ id, joinedAt }: EditModeProps) {
         </div>
       </div>
 
-      <div className="h-px w-full bg-neutral-200" />
+      <Divider />
 
       {/* Contact Email */}
       <div className="flex flex-col gap-1">
@@ -109,7 +110,7 @@ function EditMode({ id, joinedAt }: EditModeProps) {
         </div>
       </div>
 
-      <div className="h-px w-full bg-neutral-200" />
+      <Divider />
 
       {/* Join Date - Disabled */}
       <div className="flex flex-col gap-1">

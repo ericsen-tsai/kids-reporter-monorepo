@@ -1,3 +1,4 @@
+import Divider from '@/components/divider'
 import { getFormattedDate } from '@/utils/get-formatted-date'
 
 type ViewModeProps = {
@@ -20,7 +21,7 @@ function ViewMode({ name, nickname, id, email, joinedAt }: ViewModeProps) {
         </div>
       </div>
 
-      <div className="h-px w-full bg-neutral-200" />
+      <Divider />
 
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between gap-4">
@@ -31,7 +32,7 @@ function ViewMode({ name, nickname, id, email, joinedAt }: ViewModeProps) {
         </div>
       </div>
 
-      <div className="h-px w-full bg-neutral-200" />
+      <Divider />
 
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between gap-4">
@@ -42,7 +43,7 @@ function ViewMode({ name, nickname, id, email, joinedAt }: ViewModeProps) {
         </div>
       </div>
 
-      <div className="h-px w-full bg-neutral-200" />
+      <Divider />
 
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between gap-4">
@@ -53,7 +54,7 @@ function ViewMode({ name, nickname, id, email, joinedAt }: ViewModeProps) {
         </div>
       </div>
 
-      <div className="h-px w-full bg-neutral-200" />
+      <Divider />
 
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between gap-4">
