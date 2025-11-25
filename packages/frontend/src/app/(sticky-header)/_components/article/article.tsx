@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 import { useCallback, useMemo, useState } from 'react'
 
 import AuthorCard, { Author } from '@/components/author-card'
-import Divider from '@/components/divider'
+import DividerLegacy from '@/components/divider-legacy'
 import Tags from '@/components/tags'
 import { PostSummary } from '@/components/types'
 import {
@@ -426,7 +426,7 @@ const Article = ({
             startReadingContent={post?.opening ?? ''}
           />
           <Brief content={post?.brief} authors={authorsInBrief} theme={theme} />
-          <Divider />
+          <DividerLegacy />
           <div className="relative">
             <PostRenderer post={post} theme={theme} />
             {/* middle of the article content enters 50% of the viewport*/}

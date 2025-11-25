@@ -34,7 +34,11 @@ function Account() {
     },
   })
 
-  const { handleSubmit, reset } = methods
+  const {
+    handleSubmit,
+    reset,
+    formState: { isDirty },
+  } = methods
 
   const handleEdit = () => {
     setIsEditMode(true)
@@ -73,21 +77,22 @@ function Account() {
                   <div className="flex gap-2">
                     <Button
                       variant="secondary"
-                      size={32}
+                      size={36}
                       onClick={handleCancel}
                     >
                       取消
                     </Button>
                     <Button
                       variant="primary"
-                      size={32}
+                      size={36}
                       onClick={handleFormSubmit}
+                      disabled={!isDirty}
                     >
                       儲存
                     </Button>
                   </div>
                 ) : (
-                  <Button variant="primary" size={32} onClick={handleEdit}>
+                  <Button variant="primary" size={36} onClick={handleEdit}>
                     編輯
                   </Button>
                 )}

@@ -1,7 +1,7 @@
 'use client'
 import styled from 'styled-components'
 
-import { Divider } from '@/components/divider'
+import { DividerLegacy } from '@/components/divider-legacy'
 import { mediaQuery } from '@/utils/media-query'
 
 import { DraftRenderer, DraftRendererProp } from './draft-renderer'
@@ -19,7 +19,7 @@ export const Credits = ({ rawContentState, theme }: DraftRendererProp) => {
   )
 }
 
-const StyledHr = styled(Divider)`
+const StyledHr = styled(DividerLegacy)`
   margin-top: 70px;
   margin-bottom: 70px;
 
