@@ -12,6 +12,9 @@ const searchEngineID = process.env.SEARCH_ENGINE_ID || ''
 const mockIdToken = process.env.MOCK_ID_TOKEN || ''
 
 const loginUrl = process.env.NEXT_PUBLIC_LOGIN_URL || '/login'
+const loginWidgetUrl =
+  process.env.NEXT_PUBLIC_LOGIN_WIDGET_URL ||
+  'https://accounts.twreporter.org/signin-widget'
 
 const environmentVariables = {
   internalGqlEndpoint,
@@ -22,6 +25,7 @@ const environmentVariables = {
   searchEngineID,
   mockIdToken,
   loginUrl,
+  loginWidgetUrl,
 }
 
 export default environmentVariables
