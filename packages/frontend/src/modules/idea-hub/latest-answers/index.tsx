@@ -1,24 +1,31 @@
+'use client'
+
+import { cn } from '@kids-reporter/routing-ui'
+import { useMemo } from 'react'
+
+import { useAllPostEssayAnswersQuery } from '@/api-utils/react-query/hooks/post-essay-answer'
+import { DEFAULT_TEXT_HOLDER } from '@/constants/input-field'
+
 import AnswerCard from './answer-card'
+import AnswerCardSkeleton from './answer-card-skeleton'
 
 function LatestAnswers() {
-  const answers = [
-    {
-      content: '這是一個回答',
-      memberName: '張三2',
-      likesCount: 10,
-    },
-    {
-      content: '這是一個回答',
-      memberName: '張三3張三3張三3張三3張三3張三3張三3張三3張三3張三3',
-      likesCount: 100,
-    },
-    {
-      content:
-        '這是一個回答這是一個回答這是一個回答這是一個回答這是一個回答這是一個回答這是一個回答這是一個回答這是一個回答這是一個回答這是一個回答這是一個回答這是一個回答這是一個回答這是一個回答這是一個回答這是一個回答',
-      memberName: '張三4',
-      likesCount: 10,
-    },
-  ]
+  const { data: latestEssayAnswers = [], isPending: isLoading } =
+    useAllPostEssayAnswersQuery({
+      orderBy: [{ createdAt: 'desc' }],
+      take: 3,
+    })
+
+  const answers = useMemo(() => {
+    return latestEssayAnswers.map((answer) => ({
+      content: answer.content ?? '',
+      memberName:
+        answer.member?.nickname || answer.member?.name || DEFAULT_TEXT_HOLDER,
+      memberAvatar: answer.member?.avatar?.fileUrl ?? '',
+      likesCount: answer.likesCount ?? 0,
+    }))
+  }, [latestEssayAnswers])
+
   return (
     <div className="mt-10 mb-14 flex w-[calc(100%+48px)] flex-col gap-8 tablet:mb-16 tablet:w-full desktop:mt-18 desktop:mb-24 hd:mt-24 hd:mb-30">
       <div className="flex items-center gap-3 pl-8 tablet:pl-0">
@@ -27,15 +34,30 @@ function LatestAnswers() {
           最新回答
         </h3>
       </div>
-      <div className="flex gap-6 overflow-x-auto px-8 tablet:grid tablet:grid-cols-3 tablet:overflow-x-hidden tablet:px-0">
-        {answers.length > 0 ? (
+      <div
+        className={cn(
+          'flex gap-6 overflow-x-auto px-8 tablet:grid tablet:grid-cols-3 tablet:overflow-x-hidden tablet:px-0',
+          !isLoading && answers.length === 0 && 'tablet:grid-cols-1'
+        )}
+      >
+        {isLoading && (
+          <>
+            {[1, 2, 3].map((index) => (
+              <div key={index} className="flex-1">
+                <AnswerCardSkeleton />
+              </div>
+            ))}
+          </>
+        )}
+        {!isLoading &&
+          answers.length > 0 &&
           answers.map((answer) => (
             <div key={answer.content} className="flex-1">
               <AnswerCard {...answer} />
             </div>
-          ))
-        ) : (
-          <div className="flex w-full items-center justify-center py-12">
+          ))}
+        {!isLoading && answers.length === 0 && (
+          <div className="flex w-full items-center justify-center py-12 text-center">
             <p className="prose-p1 text-neutral-500">尚無回答</p>
           </div>
         )}

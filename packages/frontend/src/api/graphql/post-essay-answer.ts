@@ -15,6 +15,30 @@ export const GET_POST_ESSAY_ANSWER_QUERY = gql`
   }
 `
 
+export const GET_ALL_POST_ESSAY_ANSWERS_QUERY = gql`
+  query GetAllPostEssayAnswers(
+    $orderBy: [PostEssayAnswerOrderByInput!]
+    $take: Int
+  ) {
+    postEssayAnswers(orderBy: $orderBy, take: $take) {
+      id
+      question {
+        id
+      }
+      member {
+        id
+        avatar {
+          fileUrl
+        }
+        nickname
+        name
+      }
+      content
+      likesCount
+    }
+  }
+`
+
 export const CREATE_POST_ESSAY_ANSWER_MUTATION = gql`
   mutation CreatePostEssayAnswer($data: PostEssayAnswerCreateInput!) {
     createPostEssayAnswer(data: $data) {
