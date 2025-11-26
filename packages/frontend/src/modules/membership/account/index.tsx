@@ -41,7 +41,7 @@ function Account() {
       name: member?.name ?? '',
       nickname: member?.nickname ?? '',
       contactEmail: member?.contactEmail ?? '',
-      avatarUrl: member?.avatar?.url,
+      ...(member?.avatar?.url ? { avatarUrl: member.avatar.url } : {}),
     }
   }, [member])
 
