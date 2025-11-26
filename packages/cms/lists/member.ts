@@ -33,7 +33,7 @@ export default list<ListType<'Member'>>({
       label: '聯絡信箱',
     }),
     twreporter_user_id: text({
-      label: 'membership_user.users.id',
+      label: 'TWReporter Membership ID',
       validation: { isRequired: true },
       isIndexed: 'unique',
       ui: {
@@ -44,7 +44,7 @@ export default list<ListType<'Member'>>({
           fieldMode: 'read',
         },
         listView: {
-          fieldMode: 'hidden',
+          fieldMode: 'read',
         },
       },
       access: {
@@ -115,7 +115,7 @@ export default list<ListType<'Member'>>({
   },
   ui: {
     listView: {
-      initialColumns: ['id', 'name', 'email'],
+      initialColumns: ['id', 'twreporter_user_id', 'name', 'email'],
     },
   },
   db: {
