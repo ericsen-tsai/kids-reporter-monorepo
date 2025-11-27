@@ -44,7 +44,7 @@ export function useAllPostEssayAnswersQuery({
       POST_ESSAY_ANSWERS_QUERY_KEY,
       'all-members',
       'all-posts',
-      ...(orderBy ? orderBy.map((order) => order.toString()) : []),
+      ...(orderBy ? [JSON.stringify(orderBy)] : []),
       ...(take ? [take] : []),
     ],
     queryFn: () => getAllPostEssayAnswers(orderBy, take),

@@ -32,7 +32,7 @@ function AnswerCard({
               sizes="40px"
             />
           </div>
-          <span className="truncate prose-p2-bold text-nowrap text-neutral-900">
+          <span className="truncate prose-p2-bold text-neutral-900">
             {memberName || '暱稱'}
           </span>
         </div>

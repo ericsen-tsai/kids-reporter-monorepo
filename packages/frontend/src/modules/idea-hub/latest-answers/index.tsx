@@ -18,6 +18,7 @@ function LatestAnswers() {
 
   const answers = useMemo(() => {
     return latestEssayAnswers.map((answer) => ({
+      id: answer.id,
       content: answer.content ?? '',
       memberName:
         answer.member?.nickname || answer.member?.name || DEFAULT_TEXT_HOLDER,
@@ -52,7 +53,7 @@ function LatestAnswers() {
         {!isLoading &&
           answers.length > 0 &&
           answers.map((answer) => (
-            <div key={answer.content} className="flex-1">
+            <div key={answer.id} className="flex-1">
               <AnswerCard {...answer} />
             </div>
           ))}
