@@ -1996,6 +1996,8 @@ input PostChoiceQuestionRelateToOneForCreateInput {
 type PostChoiceQuestion {
   id: ID!
   post: Post
+  answers(where: PostChoiceAnswerWhereInput! = {}, orderBy: [PostChoiceAnswerOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostChoiceAnswerWhereUniqueInput): [PostChoiceAnswer!]
+  answersCount(where: PostChoiceAnswerWhereInput! = {}): Int
   title: String
   options: JSON
   reason: String
@@ -2013,10 +2015,17 @@ input PostChoiceQuestionWhereInput {
   NOT: [PostChoiceQuestionWhereInput!]
   id: IDFilter
   post: PostWhereInput
+  answers: PostChoiceAnswerManyRelationFilter
   title: StringFilter
   reason: StringFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
+}
+
+input PostChoiceAnswerManyRelationFilter {
+  every: PostChoiceAnswerWhereInput
+  some: PostChoiceAnswerWhereInput
+  none: PostChoiceAnswerWhereInput
 }
 
 input PostChoiceQuestionOrderByInput {
@@ -2029,6 +2038,7 @@ input PostChoiceQuestionOrderByInput {
 
 input PostChoiceQuestionUpdateInput {
   post: PostRelateToOneForUpdateInput
+  answers: PostChoiceAnswerRelateToManyForUpdateInput
   title: String
   options: JSON
   reason: String
@@ -2042,6 +2052,13 @@ input PostRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
+input PostChoiceAnswerRelateToManyForUpdateInput {
+  disconnect: [PostChoiceAnswerWhereUniqueInput!]
+  set: [PostChoiceAnswerWhereUniqueInput!]
+  create: [PostChoiceAnswerCreateInput!]
+  connect: [PostChoiceAnswerWhereUniqueInput!]
+}
+
 input PostChoiceQuestionUpdateArgs {
   where: PostChoiceQuestionWhereUniqueInput!
   data: PostChoiceQuestionUpdateInput!
@@ -2049,6 +2066,7 @@ input PostChoiceQuestionUpdateArgs {
 
 input PostChoiceQuestionCreateInput {
   post: PostRelateToOneForCreateInput
+  answers: PostChoiceAnswerRelateToManyForCreateInput
   title: String
   options: JSON
   reason: String
@@ -2059,6 +2077,11 @@ input PostChoiceQuestionCreateInput {
 input PostRelateToOneForCreateInput {
   create: PostCreateInput
   connect: PostWhereUniqueInput
+}
+
+input PostChoiceAnswerRelateToManyForCreateInput {
+  create: [PostChoiceAnswerCreateInput!]
+  connect: [PostChoiceAnswerWhereUniqueInput!]
 }
 
 type PostEssayAnswer {
@@ -2134,6 +2157,8 @@ type PostEssayQuestion {
   id: ID!
   post: Post
   title: String
+  answers(where: PostEssayAnswerWhereInput! = {}, orderBy: [PostEssayAnswerOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostEssayAnswerWhereUniqueInput): [PostEssayAnswer!]
+  answersCount(where: PostEssayAnswerWhereInput! = {}): Int
   hint: String
   createdAt: DateTime
   updatedAt: DateTime
@@ -2150,9 +2175,16 @@ input PostEssayQuestionWhereInput {
   id: IDFilter
   post: PostWhereInput
   title: StringFilter
+  answers: PostEssayAnswerManyRelationFilter
   hint: StringFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
+}
+
+input PostEssayAnswerManyRelationFilter {
+  every: PostEssayAnswerWhereInput
+  some: PostEssayAnswerWhereInput
+  none: PostEssayAnswerWhereInput
 }
 
 input PostEssayQuestionOrderByInput {
@@ -2166,9 +2198,17 @@ input PostEssayQuestionOrderByInput {
 input PostEssayQuestionUpdateInput {
   post: PostRelateToOneForUpdateInput
   title: String
+  answers: PostEssayAnswerRelateToManyForUpdateInput
   hint: String
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+input PostEssayAnswerRelateToManyForUpdateInput {
+  disconnect: [PostEssayAnswerWhereUniqueInput!]
+  set: [PostEssayAnswerWhereUniqueInput!]
+  create: [PostEssayAnswerCreateInput!]
+  connect: [PostEssayAnswerWhereUniqueInput!]
 }
 
 input PostEssayQuestionUpdateArgs {
@@ -2179,9 +2219,15 @@ input PostEssayQuestionUpdateArgs {
 input PostEssayQuestionCreateInput {
   post: PostRelateToOneForCreateInput
   title: String
+  answers: PostEssayAnswerRelateToManyForCreateInput
   hint: String
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+input PostEssayAnswerRelateToManyForCreateInput {
+  create: [PostEssayAnswerCreateInput!]
+  connect: [PostEssayAnswerWhereUniqueInput!]
 }
 
 type PostEssayAnswerLike {

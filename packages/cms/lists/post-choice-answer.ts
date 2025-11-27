@@ -23,11 +23,8 @@ export default list<ListType<'PostChoiceAnswer'>>({
   fields: {
     question: relationship({
       label: '單選題',
-      ref: 'PostChoiceQuestion',
+      ref: 'PostChoiceQuestion.answers',
       many: false,
-      ui: {
-        hideCreate: true,
-      },
     }),
     [memberFieldName]: relationship({
       label: '會員',

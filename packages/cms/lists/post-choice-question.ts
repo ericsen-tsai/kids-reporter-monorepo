@@ -24,6 +24,14 @@ export default list<ListType<'PostChoiceQuestion'>>({
         hideCreate: true,
       },
     }),
+    answers: relationship({
+      label: '答案',
+      ref: 'PostChoiceAnswer.question',
+      many: true,
+      ui: {
+        hideCreate: true,
+      },
+    }),
     title: text({
       label: '題目標題',
       validation: { isRequired: true },
