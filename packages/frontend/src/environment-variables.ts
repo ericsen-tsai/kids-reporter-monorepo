@@ -16,6 +16,8 @@ const loginWidgetUrl =
   process.env.NEXT_PUBLIC_LOGIN_WIDGET_URL ||
   'https://accounts.twreporter.org/signin-widget'
 
+const nodeEnv = process.env.NODE_ENV
+
 const environmentVariables = {
   internalGqlEndpoint,
   gqlEndpoint,
@@ -26,6 +28,7 @@ const environmentVariables = {
   mockIdToken,
   loginUrl,
   loginWidgetUrl,
+  nodeEnv,
 }
 
 export default environmentVariables
