@@ -37,14 +37,14 @@ function LatestAnswers() {
       </div>
       <div
         className={cn(
-          'flex gap-6 overflow-x-auto px-6 tablet:grid tablet:grid-cols-3 tablet:overflow-x-hidden tablet:px-0',
+          'flex snap-x snap-mandatory scroll-pr-6 scroll-pl-6 gap-6 overflow-x-auto px-6 tablet:grid tablet:snap-none tablet:grid-cols-3 tablet:overflow-x-hidden tablet:px-0',
           !isLoading && answers.length === 0 && 'tablet:grid-cols-1'
         )}
       >
         {isLoading && (
           <>
             {[1, 2, 3].map((index) => (
-              <div key={index} className="flex-1">
+              <div key={index} className="flex-1 snap-start">
                 <AnswerCardSkeleton />
               </div>
             ))}
@@ -53,7 +53,7 @@ function LatestAnswers() {
         {!isLoading &&
           answers.length > 0 &&
           answers.map((answer) => (
-            <div key={answer.id} className="flex-1">
+            <div key={answer.id} className="flex-1 snap-start">
               <AnswerCard {...answer} />
             </div>
           ))}
