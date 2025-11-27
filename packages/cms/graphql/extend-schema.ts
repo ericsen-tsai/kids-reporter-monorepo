@@ -72,7 +72,7 @@ export const extendGraphqlSchema = graphql.extend(() => {
             })
 
             const body = {
-              model: 'gpt-4o-mini',
+              model: 'gpt-5.1',
               messages: [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: generateUserPrompt(plainContent) },
