@@ -1,11 +1,10 @@
 import { MemberUpdateInput } from '__generated__/types'
 import errors from '@twreporter/errors'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useUpdateMemberProfileMutation } from '@/api-utils/react-query/hooks/member'
 import { BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT } from '@/constants/baodaozai-question-count'
 import useDebounceValue from '@/hooks/use-debounce-value'
-import { MemberProfile } from '@/services/auth/auth-store'
 import { useHydratedAuthStore } from '@/services/auth/use-hydrated-auth-store'
 import { log, LogLevel } from '@/utils'
 
@@ -13,84 +12,118 @@ function useOptimisticUpdateMemberReadingSettings() {
   const {
     member,
     tokens,
-    setAuth,
     hydrated: isFetchedMember,
     fetchMember,
   } = useHydratedAuthStore()
 
-  const isInitialMountRef = useRef(true)
-  const previousHydratedValuesRef = useRef<{
+  // Local state for UI management
+  const [localShowBaodaozai, setLocalShowBaodaozai] = useState<
+    boolean | undefined
+  >(undefined)
+  const [localEssayQuestionCount, setLocalEssayQuestionCount] = useState<
+    number | undefined
+  >(undefined)
+
+  // Store original values for rollback on error
+  const originalValuesRef = useRef<{
     showBaodaozai: boolean | undefined
     essayQuestionCount: number | undefined
   } | null>(null)
 
+  // Debounce local state values
   const debouncedShowBaodaozai = useDebounceValue<boolean | undefined>(
-    member?.showBaodaozai,
+    localShowBaodaozai,
     1000
   )
 
   const debouncedEssayQuestionCount = useDebounceValue<number | undefined>(
-    member?.essayQuestionCount ?? BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT,
+    localEssayQuestionCount,
     1000
   )
-
-  const updateMemberProfileDataRef = useRef<MemberProfile | null>(null)
 
   const { mutateAsync: updateMemberProfile, ...rest } =
     useUpdateMemberProfileMutation({
       accessToken: tokens?.accessToken ?? '',
       memberId: member?.id ?? '',
-      options: {
-        onSuccess: (memberData) => {
-          if (memberData) {
-            previousHydratedValuesRef.current = {
-              showBaodaozai: memberData.showBaodaozai,
-              essayQuestionCount: memberData.essayQuestionCount,
-            }
-          }
-        },
-      },
     })
 
-  const optimisticUpdateMemberReadingSettings = useCallback(
-    async (
-      data: Pick<MemberUpdateInput, 'showBaodaozai' | 'essayQuestionCount'>
-    ) => {
-      const memberId = member?.id
-      if (!memberId) {
-        return
+  // Initialize and sync local state from member data
+  useEffect(() => {
+    if (!isFetchedMember) {
+      return
+    }
+
+    const memberShowBaodaozai = member?.showBaodaozai
+    const memberEssayQuestionCount =
+      member?.essayQuestionCount ?? BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT
+
+    if (localShowBaodaozai === undefined && memberShowBaodaozai !== undefined) {
+      setLocalShowBaodaozai(memberShowBaodaozai)
+      setLocalEssayQuestionCount(memberEssayQuestionCount)
+      originalValuesRef.current = {
+        showBaodaozai: memberShowBaodaozai,
+        essayQuestionCount: memberEssayQuestionCount,
       }
-      updateMemberProfileDataRef.current = { ...member }
+    }
+  }, [
+    isFetchedMember,
+    localShowBaodaozai,
+    member?.essayQuestionCount,
+    member?.showBaodaozai,
+  ])
 
-      setAuth({
-        member: {
-          ...member,
-          id: memberId,
-          ...(data.showBaodaozai !== undefined
-            ? { showBaodaozai: data.showBaodaozai }
-            : {}),
-          ...(data.essayQuestionCount !== undefined
-            ? { essayQuestionCount: data.essayQuestionCount }
-            : {}),
-        },
-      })
-    },
-    [member, setAuth]
-  )
+  // Handle debounced API calls
+  useEffect(() => {
+    if (
+      !isFetchedMember ||
+      originalValuesRef.current === null ||
+      debouncedShowBaodaozai === undefined ||
+      debouncedEssayQuestionCount === undefined
+    ) {
+      return
+    }
 
-  const handleUpdateMemberReadingSettings = useCallback(
-    async (
-      data: Pick<MemberUpdateInput, 'showBaodaozai' | 'essayQuestionCount'>
-    ) => {
+    // Check if debounced values differ from original values
+    const originalValues = originalValuesRef.current
+    const hasShowBaodaozaiChanged =
+      debouncedShowBaodaozai !== originalValues.showBaodaozai
+    const hasEssayQuestionCountChanged =
+      debouncedEssayQuestionCount !== originalValues.essayQuestionCount
+
+    if (!hasShowBaodaozaiChanged && !hasEssayQuestionCountChanged) {
+      return
+    }
+
+    // Store previous original values for rollback on error
+
+    const updateData: Pick<
+      MemberUpdateInput,
+      'showBaodaozai' | 'essayQuestionCount'
+    > = {
+      ...(hasShowBaodaozaiChanged
+        ? { showBaodaozai: debouncedShowBaodaozai }
+        : {}),
+      ...(hasEssayQuestionCountChanged
+        ? { essayQuestionCount: debouncedEssayQuestionCount }
+        : {}),
+    }
+
+    const previousOriginalValues = { ...originalValuesRef.current }
+
+    const updateAndFetchMemberProfile = async () => {
       try {
-        await updateMemberProfile({ data })
+        const currentValues = {
+          showBaodaozai: debouncedShowBaodaozai,
+          essayQuestionCount: debouncedEssayQuestionCount,
+        }
+        originalValuesRef.current = currentValues
+        await updateMemberProfile({ data: updateData })
         await fetchMember()
       } catch (_error) {
-        if (updateMemberProfileDataRef.current) {
-          setAuth({
-            member: updateMemberProfileDataRef.current,
-          })
-        }
+        originalValuesRef.current = previousOriginalValues
+        setLocalShowBaodaozai(previousOriginalValues.showBaodaozai)
+        setLocalEssayQuestionCount(previousOriginalValues.essayQuestionCount)
+
         const err = errors.helpers.wrap(
           _error,
           'HandleUpdateMemberReadingSettingsError',
@@ -103,65 +136,33 @@ function useOptimisticUpdateMemberReadingSettings() {
         })
         log(LogLevel.ERROR, msg)
       }
-    },
-    [fetchMember, updateMemberProfile, setAuth]
-  )
-
-  // Store initial values after hydration and update after successful mutations
-  useEffect(() => {
-    if (!isFetchedMember) {
-      return
     }
 
-    // Store initial values on first hydration
-    if (previousHydratedValuesRef.current === null) {
-      previousHydratedValuesRef.current = {
-        showBaodaozai: member?.showBaodaozai,
-        essayQuestionCount: member?.essayQuestionCount,
-      }
-    }
-  }, [isFetchedMember, member])
-
-  useEffect(() => {
-    if (!isFetchedMember) {
-      return
-    }
-
-    // Skip on initial mount
-    if (isInitialMountRef.current) {
-      isInitialMountRef.current = false
-      return
-    }
-
-    // Skip if initial hydrated values haven't been set yet
-    if (previousHydratedValuesRef.current === null) {
-      return
-    }
-
-    // Skip if debounced values match initial hydrated values (no actual change)
-    const initialValues = previousHydratedValuesRef.current
-    const hasShowBaodaozaiChanged =
-      debouncedShowBaodaozai !== initialValues.showBaodaozai
-    const hasEssayQuestionCountChanged =
-      debouncedEssayQuestionCount !== initialValues.essayQuestionCount
-
-    if (!hasShowBaodaozaiChanged && !hasEssayQuestionCountChanged) {
-      return
-    }
-
-    handleUpdateMemberReadingSettings({
-      showBaodaozai: debouncedShowBaodaozai,
-      essayQuestionCount: debouncedEssayQuestionCount,
-    })
+    updateAndFetchMemberProfile()
   }, [
     debouncedShowBaodaozai,
     debouncedEssayQuestionCount,
-    handleUpdateMemberReadingSettings,
     isFetchedMember,
+    updateMemberProfile,
+    fetchMember,
   ])
+
+  const optimisticUpdateMemberReadingSettings = useCallback(
+    (data: Pick<MemberUpdateInput, 'showBaodaozai' | 'essayQuestionCount'>) => {
+      if (data.showBaodaozai !== undefined) {
+        setLocalShowBaodaozai(data.showBaodaozai)
+      }
+      if (data.essayQuestionCount !== undefined) {
+        setLocalEssayQuestionCount(data.essayQuestionCount)
+      }
+    },
+    []
+  )
 
   return {
     optimisticUpdateMemberReadingSettings,
+    localShowBaodaozai,
+    localEssayQuestionCount,
     ...rest,
   }
 }

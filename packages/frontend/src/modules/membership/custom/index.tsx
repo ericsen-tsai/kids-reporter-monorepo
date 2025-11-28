@@ -4,15 +4,17 @@ import { HeaderMobileBackButtonHrefSetter } from '@kids-reporter/routing-ui'
 import Checkbox from '@/components/checkbox'
 import Switch from '@/components/switch'
 import { BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT } from '@/constants/baodaozai-question-count'
-import { useHydratedAuthStore } from '@/services/auth/use-hydrated-auth-store'
 
 import MembershipSideMenu from '../components/side-menu'
 import useOptimisticUpdateMemberReadingSettings from './hooks/use-optimistic-update-member-profile'
 
 function Custom() {
-  const { member } = useHydratedAuthStore()
-  const { optimisticUpdateMemberReadingSettings } =
-    useOptimisticUpdateMemberReadingSettings()
+  const {
+    optimisticUpdateMemberReadingSettings,
+    localShowBaodaozai,
+    localEssayQuestionCount,
+  } = useOptimisticUpdateMemberReadingSettings()
+
   return (
     <div className="mx-auto w-full bg-neutral-100 pt-6 pb-40 tablet:pt-8 desktop:px-12 desktop:pt-16 desktop:pb-50">
       <div className="mx-auto w-full max-w-300 tablet:grid tablet:grid-cols-12 tablet:gap-6 desktop:gap-8">
@@ -37,10 +39,10 @@ function Custom() {
               <div className="flex flex-col items-center gap-1">
                 <span className="prose-p2 text-neutral-700">開啟</span>
                 <Switch
-                  checked={member?.showBaodaozai ?? false}
+                  checked={localShowBaodaozai ?? false}
                   onChange={() =>
                     optimisticUpdateMemberReadingSettings({
-                      showBaodaozai: !member?.showBaodaozai,
+                      showBaodaozai: !localShowBaodaozai,
                     })
                   }
                 />
@@ -64,7 +66,7 @@ function Custom() {
                     <Checkbox
                       key={count}
                       checked={
-                        (member?.essayQuestionCount ??
+                        (localEssayQuestionCount ??
                           BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT) === count
                       }
                       onChange={() =>

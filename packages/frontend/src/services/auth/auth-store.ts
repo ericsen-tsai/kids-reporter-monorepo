@@ -95,6 +95,9 @@ const sessionJSONStorage = createJSONStorage<PersistedAuthState>(() =>
   typeof window === 'undefined' ? noopStorage : window.sessionStorage
 )
 
+// AbortController for managing fetchMember race conditions
+let fetchMemberAbortController: AbortController | null = null
+
 export const useAuthStore = create<AuthState>()(
   subscribeWithSelector(
     persist(
@@ -194,13 +197,24 @@ export const useAuthStore = create<AuthState>()(
             return
           }
 
+          // Abort previous request if exists
+          if (fetchMemberAbortController) {
+            fetchMemberAbortController.abort()
+          }
+
+          // Create new abort controller for this request
+          fetchMemberAbortController = new AbortController()
+          const currentAbortController = fetchMemberAbortController
+
           try {
             const latest = await getMemberProfileByMemberId({
               memberId: member.id,
               accessToken: tokens.accessToken,
+              abortSignal: currentAbortController.signal,
             })
 
-            if (latest) {
+            // Only update if this request wasn't aborted
+            if (!currentAbortController.signal.aborted && latest) {
               set({
                 member: {
                   ...latest,
@@ -215,11 +229,20 @@ export const useAuthStore = create<AuthState>()(
               })
             }
           } catch (_err) {
+            // Ignore abort errors
+            if (_err instanceof Error && _err.name === 'AbortError') {
+              return
+            }
             const err = _err instanceof Error ? _err : new Error(String(_err))
             log(
               LogLevel.ERROR,
               '[auth-store] fetchMember failed: ' + err.message
             )
+          } finally {
+            // Clear abort controller if this was the current one
+            if (fetchMemberAbortController === currentAbortController) {
+              fetchMemberAbortController = null
+            }
           }
         },
         setAuth({ member, tokens }) {
@@ -231,6 +254,11 @@ export const useAuthStore = create<AuthState>()(
           })
         },
         clearAuth() {
+          // Abort any pending fetchMember request
+          if (fetchMemberAbortController) {
+            fetchMemberAbortController.abort()
+            fetchMemberAbortController = null
+          }
           set({
             member: undefined,
             tokens: undefined,
