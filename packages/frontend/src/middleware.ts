@@ -4,6 +4,7 @@ import { ACCESS_TOKEN_ENDPOINT, STATUS_CODES } from '@/constants'
 import { ID_TOKEN_COOKIE_NAME } from '@/services/auth/constants'
 
 import { PROTECTED_ROUTES } from './constants/route'
+import envVars from './environment-variables'
 import { AXIOS_TIMEOUT } from './utils'
 
 function isProtectedRoute(pathname: string): boolean {
@@ -47,7 +48,9 @@ export async function middleware(request: NextRequest) {
   const idToken = request.cookies.get(ID_TOKEN_COOKIE_NAME)?.value
 
   if (!idToken) {
-    return NextResponse.redirect(`${origin}${basePath}`)
+    return NextResponse.redirect(
+      `${origin}${basePath}${envVars.loginUrl}?destination=${encodeURIComponent(request.url)}`
+    )
   }
 
   const isValid = await validateIdToken(request)
