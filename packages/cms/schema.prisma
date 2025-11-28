@@ -428,6 +428,7 @@ model PostEssayAnswer {
 
   @@index([questionId])
   @@index([memberId])
+  @@index([createdAt])
 }
 
 model PostEssayQuestion {
