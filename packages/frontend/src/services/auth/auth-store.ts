@@ -13,10 +13,14 @@ import {
   getMemberProfileByMemberId,
   getMemberProfileByTwreporterUserId,
 } from '@/api/member'
-import { ACCESS_TOKEN_ENDPOINT, STATUS_CODES } from '@/constants'
+import {
+  ACCESS_TOKEN_ENDPOINT,
+  LOGOUT_ENDPOINT,
+  STATUS_CODES,
+} from '@/constants'
 import { AXIOS_TIMEOUT, log, LogLevel } from '@/utils'
 
-type MemberProfile = {
+export type MemberProfile = {
   id: string
   name?: string
   email?: string
@@ -51,8 +55,14 @@ type AuthState = {
   error?: string
   exchangeTokenAndPopulateMember: () => Promise<void>
   fetchMember: () => Promise<void>
-  setAuth: (payload: { member: MemberProfile; tokens: AuthTokens }) => void
+  setAuth: (
+    payload: Partial<{
+      member: MemberProfile
+      tokens: AuthTokens
+    }>
+  ) => void
   clearAuth: () => void
+  logout: () => Promise<void>
 }
 
 type AccessTokenResponse = {
@@ -84,6 +94,9 @@ const noopStorage: Storage = {
 const sessionJSONStorage = createJSONStorage<PersistedAuthState>(() =>
   typeof window === 'undefined' ? noopStorage : window.sessionStorage
 )
+
+// AbortController for managing fetchMember race conditions
+let fetchMemberAbortController: AbortController | null = null
 
 export const useAuthStore = create<AuthState>()(
   subscribeWithSelector(
@@ -184,13 +197,24 @@ export const useAuthStore = create<AuthState>()(
             return
           }
 
+          // Abort previous request if exists
+          if (fetchMemberAbortController) {
+            fetchMemberAbortController.abort()
+          }
+
+          // Create new abort controller for this request
+          fetchMemberAbortController = new AbortController()
+          const currentAbortController = fetchMemberAbortController
+
           try {
             const latest = await getMemberProfileByMemberId({
               memberId: member.id,
               accessToken: tokens.accessToken,
+              abortSignal: currentAbortController.signal,
             })
 
-            if (latest) {
+            // Only update if this request wasn't aborted
+            if (!currentAbortController.signal.aborted && latest) {
               set({
                 member: {
                   ...latest,
@@ -205,28 +229,49 @@ export const useAuthStore = create<AuthState>()(
               })
             }
           } catch (_err) {
+            // Ignore abort errors
+            if (_err instanceof Error && _err.name === 'AbortError') {
+              return
+            }
             const err = _err instanceof Error ? _err : new Error(String(_err))
             log(
               LogLevel.ERROR,
               '[auth-store] fetchMember failed: ' + err.message
             )
+          } finally {
+            // Clear abort controller if this was the current one
+            if (fetchMemberAbortController === currentAbortController) {
+              fetchMemberAbortController = null
+            }
           }
         },
         setAuth({ member, tokens }) {
           set({
-            member,
-            tokens,
+            ...(member ? { member } : {}),
+            ...(tokens ? { tokens } : {}),
             status: 'authenticated',
             error: undefined,
           })
         },
         clearAuth() {
+          // Abort any pending fetchMember request
+          if (fetchMemberAbortController) {
+            fetchMemberAbortController.abort()
+            fetchMemberAbortController = null
+          }
           set({
             member: undefined,
             tokens: undefined,
             status: 'idle',
             error: undefined,
           })
+        },
+        async logout() {
+          await axios.post(LOGOUT_ENDPOINT, null, {
+            timeout: AXIOS_TIMEOUT,
+            withCredentials: true,
+          })
+          get().clearAuth()
         },
       }),
       {

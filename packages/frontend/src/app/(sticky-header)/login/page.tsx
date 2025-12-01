@@ -1,4 +1,5 @@
 import envVars from '@/environment-variables'
+import Login from '@/modules/login'
 
 const defaultDestination = 'https://kids.twreporter.org'
 const allowedDestinationOrigins = new Set([
@@ -11,39 +12,42 @@ const allowedDestinationOrigins = new Set([
     : []),
 ])
 
-function sanitizeDestination(rawDestination?: string) {
+function sanitizeDestination(rawDestination?: string): {
+  destination: string
+  isSubpath: boolean
+} {
   if (!rawDestination) {
-    return defaultDestination
+    return { destination: defaultDestination, isSubpath: false }
   }
 
   try {
     const parsed = new URL(rawDestination)
     if (allowedDestinationOrigins.has(parsed.origin)) {
-      return parsed.toString()
+      return {
+        destination: parsed.toString(),
+        isSubpath: parsed.pathname !== '/',
+      }
     }
   } catch {
     // fall through to default destination
   }
 
-  return defaultDestination
+  return { destination: defaultDestination, isSubpath: false }
 }
 
-export default async function Login({
+async function LoginPage({
   searchParams,
 }: {
   searchParams: {
     destination?: string
   }
 }) {
-  const destination = sanitizeDestination(searchParams.destination)
+  const { destination, isSubpath } = sanitizeDestination(
+    searchParams.destination
+  )
   const iframeSrc = `${envVars.loginWidgetUrl}?destination=${encodeURIComponent(destination)}`
 
-  return (
-    <iframe
-      className="h-screen w-full"
-      src={iframeSrc}
-      title="Login widget"
-      allow="clipboard-read; clipboard-write"
-    />
-  )
+  return <Login iframeSrc={iframeSrc} showToastToLogin={isSubpath} />
 }
+
+export default LoginPage

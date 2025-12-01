@@ -41,9 +41,11 @@ export const getMemberProfileByTwreporterUserId = async ({
 export const getMemberProfileByMemberId = async ({
   memberId,
   accessToken,
+  abortSignal,
 }: {
   memberId: string
   accessToken: string
+  abortSignal?: AbortSignal
 }) => {
   const variables: GetMemberProfileQueryVariables = {
     where: {
@@ -58,6 +60,7 @@ export const getMemberProfileByMemberId = async ({
     },
     {
       authToken: accessToken,
+      signal: abortSignal,
     }
   )
 
