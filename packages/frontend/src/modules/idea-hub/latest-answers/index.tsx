@@ -16,16 +16,14 @@ function LatestAnswers() {
       take: 3,
     })
 
-  const answers = useMemo(() => {
-    return latestEssayAnswers.map((answer) => ({
-      id: answer.id,
-      content: answer.content ?? '',
-      memberName:
-        answer.member?.nickname || answer.member?.name || DEFAULT_TEXT_HOLDER,
-      memberAvatar: answer.member?.avatar?.fileUrl ?? '',
-      likesCount: answer.likesCount ?? 0,
-    }))
-  }, [latestEssayAnswers])
+  const answers = latestEssayAnswers.map((answer) => ({
+    id: answer.id,
+    content: answer.content ?? '',
+    memberName:
+      answer.member?.nickname || answer.member?.name || DEFAULT_TEXT_HOLDER,
+    memberAvatar: answer.member?.avatar?.fileUrl ?? '',
+    likesCount: answer.likesCount ?? 0,
+  }))
 
   return (
     <div className="mt-10 mb-14 flex w-[calc(100%+48px)] flex-col gap-8 tablet:mb-16 tablet:w-full desktop:mt-18 desktop:mb-24 hd:mt-24 hd:mb-30">
