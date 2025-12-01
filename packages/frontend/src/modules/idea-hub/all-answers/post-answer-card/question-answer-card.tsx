@@ -1,0 +1,92 @@
+import Image from 'next/image'
+
+import { DEFAULT_AVATAR } from '@/constants'
+import { LightbulbIcon, StarIcon } from '@/icons/miscellaneous'
+
+import { PostWithTwoTopLikesAnswersPerQuestionReturnType } from '../../types'
+
+type QuestionAnswerCardProps = {
+  question: PostWithTwoTopLikesAnswersPerQuestionReturnType['posts'][number]['questions'][number]
+}
+
+const MAX_VISIBLE_ANSWERS = 2
+
+function QuestionAnswerCard({ question }: QuestionAnswerCardProps) {
+  const visibleAnswers = question.answers.slice(0, MAX_VISIBLE_ANSWERS)
+  const hasMoreAnswers = question.answers.length > MAX_VISIBLE_ANSWERS
+
+  return (
+    <div className="flex w-full flex-col overflow-hidden rounded-2xl border-2 border-neutral-200 bg-white">
+      {/* Question Section */}
+      <div
+        className="flex gap-4 bg-blue-100 px-4 py-4"
+        style={{ borderRadius: '12px 12px 0px 0px' }}
+      >
+        <div className="flex items-start gap-2">
+          <div className="flex items-center">
+            <LightbulbIcon />
+          </div>
+          <p className="prose-p1-bold text-neutral-900">{question.title}</p>
+        </div>
+      </div>
+
+      {/* Answers Section */}
+      <div className="flex flex-col gap-4 px-4 py-4">
+        {visibleAnswers.map((answer, index) => {
+          const memberDisplayName =
+            answer.member?.nickname || answer.member?.name || '暱稱'
+          return (
+            <div key={answer.id}>
+              <div className="flex flex-col gap-2">
+                {/* Answer Header */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="relative size-10 flex-shrink-0 overflow-hidden rounded-full">
+                      <Image
+                        src={answer.member?.avatar?.fileUrl || DEFAULT_AVATAR}
+                        alt={memberDisplayName}
+                        className="size-full bg-white object-cover"
+                        fill
+                        sizes="40px"
+                      />
+                    </div>
+                    <span className="prose-p2-bold text-neutral-900">
+                      {memberDisplayName}
+                    </span>
+                  </div>
+                  <div className="flex w-14 items-center gap-1">
+                    <StarIcon />
+                    <span className="prose-p2-medium text-neutral-600">
+                      {answer.likesCount > 99
+                        ? '99+'
+                        : answer.likesCount.toString()}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Answer Content */}
+                <p className="prose-p1-bold text-neutral-900">
+                  {answer.content}
+                </p>
+              </div>
+
+              {/* Divider between answers (except last visible answer) */}
+              {index < visibleAnswers.length - 1 && (
+                <div className="mt-4 h-0 border-t-2 border-neutral-200" />
+              )}
+            </div>
+          )
+        })}
+
+        {/* Show More Button */}
+        {hasMoreAnswers && (
+          <button className="mt-2 flex w-full cursor-pointer items-center justify-center px-5 py-1 prose-p1 text-neutral-600 hover:text-red-400 active:text-red-500">
+            顯示更多
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default QuestionAnswerCard
