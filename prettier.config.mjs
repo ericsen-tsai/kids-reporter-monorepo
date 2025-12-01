@@ -7,12 +7,4 @@ export default {
   trailingComma: 'es5',
   bracketSpacing: true,
   arrowParens: 'always',
-  overrides: [
-    {
-      files: '*.graphql',
-      options: {
-        tabWidth: 2,
-      },
-    },
-  ],
 }
