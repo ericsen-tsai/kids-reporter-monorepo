@@ -1,7 +1,6 @@
 'use client'
 
 import { cn } from '@kids-reporter/routing-ui'
-import { useMemo } from 'react'
 
 import { useAllPostEssayAnswersQuery } from '@/api-utils/react-query/hooks/post-essay-answer'
 import { DEFAULT_TEXT_HOLDER } from '@/constants/input-field'
