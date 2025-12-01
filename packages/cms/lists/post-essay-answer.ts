@@ -85,6 +85,7 @@ export default list<ListType<'PostEssayAnswer'>>({
     }),
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
+      isIndexed: true,
       ui: {
         createView: { fieldMode: 'hidden' },
         listView: { fieldMode: 'hidden' },
