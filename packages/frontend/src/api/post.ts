@@ -5,6 +5,8 @@ import {
   GetPostMetaQueryVariables,
   GetPostQuery,
   GetPostQueryVariables,
+  GetPostsEssayAnswersWithLikesQuery,
+  GetPostsEssayAnswersWithLikesQueryVariables,
 } from '__generated__/operations/post.generated'
 
 import { sendGQLRequest } from '@/utils'
@@ -13,6 +15,7 @@ import {
   GET_LATEST_POSTS_GQL,
   GET_POST_GQL,
   GET_POST_META_GQL,
+  GET_POSTS_ESSAY_ANSWERS_WITH_LIKES_GQL,
 } from './graphql/post'
 
 export const getLatestPosts = async (
@@ -41,4 +44,14 @@ export const getPostMeta = async (
     variables,
   })
   return response?.data?.data?.post
+}
+
+export const getPostsEssayAnswersWithLikes = async (
+  variables: GetPostsEssayAnswersWithLikesQueryVariables
+) => {
+  const response = await sendGQLRequest<GetPostsEssayAnswersWithLikesQuery>({
+    query: GET_POSTS_ESSAY_ANSWERS_WITH_LIKES_GQL,
+    variables,
+  })
+  return response?.data?.data?.posts
 }

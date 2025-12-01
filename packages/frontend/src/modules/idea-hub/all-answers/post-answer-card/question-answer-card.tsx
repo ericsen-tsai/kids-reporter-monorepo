@@ -36,8 +36,8 @@ function QuestionAnswerCard({ question }: QuestionAnswerCardProps) {
             <div key={answer.id}>
               <div className="flex flex-col gap-2">
                 {/* Answer Header */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
+                <div className="flex w-full items-center justify-between gap-2">
+                  <div className="flex min-w-0 flex-1 items-center gap-2">
                     <div className="relative size-10 flex-shrink-0 overflow-hidden rounded-full">
                       <Image
                         src={answer.member?.avatar?.fileUrl || DEFAULT_AVATAR}
@@ -47,7 +47,7 @@ function QuestionAnswerCard({ question }: QuestionAnswerCardProps) {
                         sizes="40px"
                       />
                     </div>
-                    <span className="prose-p2-bold text-neutral-900">
+                    <span className="truncate prose-p2-bold text-neutral-900">
                       {memberDisplayName}
                     </span>
                   </div>
