@@ -421,6 +421,7 @@ model PostEssayAnswer {
   member                          Member?               @relation("PostEssayAnswer_member", fields: [memberId], references: [id])
   memberId                        String?               @map("member")
   content                         String                @default("")
+  likesCount                      Int                   @default(0)
   compositeKey                    String?               @unique
   createdAt                       DateTime?             @default(now())
   updatedAt                       DateTime?             @updatedAt

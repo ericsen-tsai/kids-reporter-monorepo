@@ -1,5 +1,5 @@
-import { graphql, list } from '@keystone-6/core'
-import { relationship, text, timestamp, virtual } from '@keystone-6/core/fields'
+import { list } from '@keystone-6/core'
+import { integer, relationship, text, timestamp } from '@keystone-6/core/fields'
 
 import type { ListType } from '../types/keystone-list-types'
 import { allowRoles, RoleEnum } from './utils/access-control-list'
@@ -41,24 +41,26 @@ export default list<ListType<'PostEssayAnswer'>>({
       label: '內容',
       validation: { isRequired: true },
     }),
-    likesCount: virtual({
-      field: graphql.field({
-        type: graphql.Int,
-        async resolve(item, args, context) {
-          const answerId = item.id
-
-          // Intentionally bypasses PostEssayAnswerLike list ACL via Prisma.
-          // Make sure this resolver already enforced authorization.
-          const count = await context.sudo().db.PostEssayAnswerLike.count({
-            where: { answer: { id: { equals: answerId.toString() } } },
-          })
-
-          return count ?? 0
-        },
-      }),
+    likesCount: integer({
+      label: '按讚數',
+      defaultValue: 0,
+      db: {
+        isNullable: false,
+      },
       ui: {
         itemView: { fieldMode: 'read' },
         listView: { fieldMode: 'read' },
+        createView: { fieldMode: 'hidden' },
+      },
+      graphql: {
+        omit: {
+          create: true,
+          update: true,
+        },
+      },
+      access: {
+        create: () => false,
+        update: () => false,
       },
     }),
     compositeKey: text({

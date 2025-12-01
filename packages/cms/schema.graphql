@@ -2085,6 +2085,7 @@ input PostEssayAnswerWhereInput {
   question: PostEssayQuestionWhereInput
   member: MemberWhereInput
   content: StringFilter
+  likesCount: IntFilter
   compositeKey: StringNullableFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
@@ -2093,6 +2094,7 @@ input PostEssayAnswerWhereInput {
 input PostEssayAnswerOrderByInput {
   id: OrderDirection
   content: OrderDirection
+  likesCount: OrderDirection
   compositeKey: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
