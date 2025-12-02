@@ -69,15 +69,20 @@ function AllAnswers() {
                         id: answer.member.id,
                         name: answer.member.name || '',
                         nickname: answer.member.nickname || '',
+                        email: answer.member.email || '',
                         avatar: answer.member.avatar
-                          ? { fileUrl: answer.member.avatar.fileUrl || '' }
-                          : { fileUrl: '' },
+                          ? {
+                              fileUrl: answer.member.avatar.fileUrl || '',
+                              id: answer.member.avatar.id || '',
+                            }
+                          : { fileUrl: '', id: '' },
                       }
                     : {
                         id: '',
                         name: '',
                         nickname: '',
-                        avatar: { fileUrl: '' },
+                        email: '',
+                        avatar: { fileUrl: '', id: '' },
                       },
                 })) || [],
             }))
