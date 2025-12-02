@@ -267,11 +267,32 @@ export const useAuthStore = create<AuthState>()(
           })
         },
         async logout() {
-          await axios.post(LOGOUT_ENDPOINT, null, {
-            timeout: AXIOS_TIMEOUT,
-            withCredentials: true,
-          })
-          get().clearAuth()
+          set({ status: 'loading' })
+          try {
+            await axios.post(LOGOUT_ENDPOINT, null, {
+              timeout: AXIOS_TIMEOUT,
+              withCredentials: true,
+            })
+            get().clearAuth()
+          } catch (_err) {
+            const annotatedErr = errors.helpers.wrap(
+              _err,
+              'AuthStoreError',
+              'Error to logout'
+            )
+
+            const msg = errors.helpers.printAll(annotatedErr, {
+              withStack: true,
+              withPayload: true,
+            })
+
+            log(LogLevel.ERROR, msg)
+
+            set({
+              status: 'error',
+              error: '登出失敗，請稍後再試。',
+            })
+          }
         },
       }),
       {
