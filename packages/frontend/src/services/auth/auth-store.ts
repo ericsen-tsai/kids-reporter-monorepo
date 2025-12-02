@@ -47,6 +47,7 @@ type AuthStatus =
   | 'unauthenticated'
   | 'authenticated'
   | 'error'
+  | 'logged_out'
 
 type AuthState = {
   member?: MemberProfile
@@ -61,7 +62,7 @@ type AuthState = {
       tokens: AuthTokens
     }>
   ) => void
-  clearAuth: () => void
+  clearAuth: ({ nextStatus }: { nextStatus: AuthStatus }) => void
   logout: () => Promise<void>
 }
 
@@ -253,7 +254,7 @@ export const useAuthStore = create<AuthState>()(
             error: undefined,
           })
         },
-        clearAuth() {
+        clearAuth({ nextStatus = 'idle' }: { nextStatus: AuthStatus }) {
           // Abort any pending fetchMember request
           if (fetchMemberAbortController) {
             fetchMemberAbortController.abort()
@@ -262,7 +263,7 @@ export const useAuthStore = create<AuthState>()(
           set({
             member: undefined,
             tokens: undefined,
-            status: 'idle',
+            status: nextStatus,
             error: undefined,
           })
         },
@@ -273,7 +274,7 @@ export const useAuthStore = create<AuthState>()(
               timeout: AXIOS_TIMEOUT,
               withCredentials: true,
             })
-            get().clearAuth()
+            get().clearAuth({ nextStatus: 'logged_out' })
           } catch (_err) {
             const annotatedErr = errors.helpers.wrap(
               _err,
