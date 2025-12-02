@@ -16,7 +16,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       return
     }
 
-    if (status === 'loading') {
+    if (status === 'loading' || status === 'logged_out') {
       return
     }
 
