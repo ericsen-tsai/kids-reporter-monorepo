@@ -69,7 +69,7 @@ function PostAnswerCard({ post }: PostAnswerCardProps) {
 
       {/* Questions Section */}
       <div className="z-10 flex flex-col gap-4 px-4 pb-4">
-        {post.questions.map((question) => (
+        {post.postEssayQuestions.map((question) => (
           <QuestionAnswerCard key={question.id} question={question} />
         ))}
       </div>

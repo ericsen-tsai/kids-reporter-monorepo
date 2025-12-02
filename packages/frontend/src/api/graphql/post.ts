@@ -189,7 +189,7 @@ export const GET_POSTS_ESSAY_ANSWERS_WITH_LIKES_GQL = gql`
       slug
       heroImage {
         resized {
-          small
+          medium
         }
       }
       subSubcategoriesOrdered {

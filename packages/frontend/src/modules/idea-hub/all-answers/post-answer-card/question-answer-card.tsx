@@ -6,7 +6,7 @@ import { LightbulbIcon, StarIcon } from '@/icons/miscellaneous'
 import { PostWithTwoTopLikesAnswersPerQuestionReturnType } from '../../types'
 
 type QuestionAnswerCardProps = {
-  question: PostWithTwoTopLikesAnswersPerQuestionReturnType['posts'][number]['questions'][number]
+  question: PostWithTwoTopLikesAnswersPerQuestionReturnType['posts'][number]['postEssayQuestions'][number]
 }
 
 const MAX_VISIBLE_ANSWERS = 2

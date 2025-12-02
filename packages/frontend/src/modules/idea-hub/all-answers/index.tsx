@@ -62,18 +62,23 @@ function AllAnswers() {
                   id: answer.id,
                   content: answer.content || '',
                   likesCount: answer.likesCount || 0,
-                  createdAt: null,
-                  updatedAt: null,
+                  createdAt: '',
+                  updatedAt: '',
                   member: answer.member
                     ? {
                         id: answer.member.id,
-                        name: answer.member.name || null,
-                        nickname: answer.member.nickname || null,
+                        name: answer.member.name || '',
+                        nickname: answer.member.nickname || '',
                         avatar: answer.member.avatar
                           ? { fileUrl: answer.member.avatar.fileUrl || '' }
-                          : null,
+                          : { fileUrl: '' },
                       }
-                    : null,
+                    : {
+                        id: '',
+                        name: '',
+                        nickname: '',
+                        avatar: { fileUrl: '' },
+                      },
                 })) || [],
             }))
             .filter((question) => question.answers.length > 0) || []
@@ -83,19 +88,18 @@ function AllAnswers() {
 
         allPosts.push({
           id: post.id || post.slug || '',
-          slug: post.slug || null,
-          title: post.title || null,
-          publishedDate: null,
+          slug: post.slug || '',
+          title: post.title || '',
           heroImage: {
             resized: {
-              medium: post.heroImage?.resized?.small || null,
+              medium: post.heroImage?.resized?.medium || '',
             },
           },
           subSubcategoriesOrdered:
             post.subSubcategoriesOrdered?.map((cat) => ({
-              name: cat?.name || null,
+              name: cat?.name || '',
             })) || [],
-          questions: questionsWithAnswers,
+          postEssayQuestions: questionsWithAnswers,
         })
       })
     })
