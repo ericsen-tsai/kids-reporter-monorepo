@@ -578,6 +578,134 @@ export const extendGraphqlSchema = graphql.extend(() => {
           }
         },
       }),
+      getMemberEssayAnswersHasLiked: graphql.field({
+        type: graphql.list(
+          graphql.object<{
+            answerId: string
+            hasLiked: boolean
+            likeId: string
+          }>()({
+            name: 'getMemberEssayAnswersHasLiked',
+            fields: {
+              answerId: graphql.field({ type: graphql.ID }),
+              hasLiked: graphql.field({ type: graphql.Boolean }),
+              likeId: graphql.field({ type: graphql.ID }),
+            },
+          })
+        ),
+        args: {
+          memberId: graphql.arg({ type: graphql.nonNull(graphql.ID) }),
+          answerIds: graphql.arg({ type: graphql.list(graphql.ID) }),
+        },
+        async resolve(root, args, ctx: Context) {
+          const { memberId, answerIds } = args
+
+          const session = ctx.session
+          const isUnauthorized = !session
+          const isForbidden = ![RoleEnum.Admin, RoleEnum.Member].includes(
+            session?.data?.role ?? ''
+          )
+          if (isUnauthorized || isForbidden) {
+            const errorMessage = isUnauthorized
+              ? 'Unauthorized to get member essay answers has like'
+              : 'Forbidden to get member essay answers has like'
+
+            const errorCode = isUnauthorized ? 'UNAUTHENTICATED' : 'FORBIDDEN'
+
+            console.log(
+              JSON.stringify({
+                severity: 'WARNING',
+                message: errorMessage,
+                context: {
+                  function: 'getMemberEssayAnswersHasLike',
+                  memberId,
+                  answerIds,
+                  errorCode,
+                },
+              })
+            )
+
+            throw new GraphQLError(errorMessage, {
+              extensions: {
+                code: errorCode,
+                http: {
+                  status: isUnauthorized ? 401 : 403,
+                },
+              },
+            })
+          }
+
+          if (!answerIds || answerIds.length === 0) {
+            return []
+          }
+
+          try {
+            const validAnswerIds = answerIds.filter(
+              (id): id is string => id !== null && id !== undefined
+            )
+
+            const essayAnswers = (await ctx.query.PostEssayAnswerLike.findMany({
+              where: {
+                member: { id: { equals: memberId } },
+                answer: { id: { in: validAnswerIds } },
+              },
+              query: `
+                id
+                answer {
+                  id
+                }
+              `,
+            })) as { id: number; answer: { id: number } }[]
+
+            const result = validAnswerIds.map((id) => {
+              const answer = essayAnswers.find(
+                (a) => a.answer?.id?.toString() === id
+              )
+              return {
+                answerId: id,
+                hasLiked: answer ? true : false,
+                likeId: answer?.id?.toString() ?? '',
+              }
+            })
+
+            return result
+          } catch (err) {
+            let errorMessage = 'getMemberEssayAnswersHasLike failed'
+            if (err instanceof AxiosError) {
+              const annotatedErr = _errors.helpers.annotateAxiosError(err)
+              errorMessage = _errors.helpers.printAll(annotatedErr, {
+                withStack: true,
+                withPayload: true,
+              })
+            }
+
+            console.log(
+              JSON.stringify({
+                severity: 'ERROR',
+                message: errorMessage,
+                context: {
+                  function: 'getMemberEssayAnswersHasLiked',
+                  memberId,
+                  answerIds,
+                  error: errorMessage,
+                },
+              })
+            )
+
+            throw new GraphQLError(
+              'Internal server error while checking member essay answers has liked',
+              {
+                extensions: {
+                  code: 'INTERNAL_SERVER_ERROR',
+                  http: {
+                    status: 500,
+                  },
+                },
+              }
+            )
+          }
+        },
+      }),
     },
     type: {},
   }

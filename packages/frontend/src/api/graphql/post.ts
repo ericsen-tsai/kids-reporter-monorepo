@@ -218,3 +218,29 @@ export const GET_POSTS_ESSAY_ANSWERS_WITH_LIKES_GQL = gql`
     }
   }
 `
+
+export const GET_POST_ESSAY_QUESTIONS_GQL = gql`
+  query GetPostEssayQuestions($where: PostWhereUniqueInput!) {
+    post(where: $where) {
+      id
+      slug
+      heroImage {
+        resized {
+          medium
+        }
+      }
+      postEssayQuestions {
+        id
+        title
+        hint
+      }
+      subSubcategoriesOrdered {
+        name
+      }
+      postEssayQuestions {
+        id
+        title
+      }
+    }
+  }
+`

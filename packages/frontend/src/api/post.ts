@@ -1,6 +1,7 @@
 import {
   GetLatestPostsQuery,
   GetLatestPostsQueryVariables,
+  GetPostEssayQuestionsQuery,
   GetPostMetaQuery,
   GetPostMetaQueryVariables,
   GetPostQuery,
@@ -13,6 +14,7 @@ import { sendGQLRequest } from '@/utils'
 
 import {
   GET_LATEST_POSTS_GQL,
+  GET_POST_ESSAY_QUESTIONS_GQL,
   GET_POST_GQL,
   GET_POST_META_GQL,
   GET_POSTS_ESSAY_ANSWERS_WITH_LIKES_GQL,
@@ -54,4 +56,16 @@ export const getPostsEssayAnswersWithLikes = async (
     variables,
   })
   return response?.data?.data?.posts
+}
+
+export const getPostEssayQuestionsByPostSlug = async ({
+  slug,
+}: {
+  slug: string
+}) => {
+  const response = await sendGQLRequest<GetPostEssayQuestionsQuery>({
+    query: GET_POST_ESSAY_QUESTIONS_GQL,
+    variables: { where: { slug } },
+  })
+  return response?.data?.data?.post
 }

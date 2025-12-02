@@ -2532,6 +2532,13 @@ type Query {
   authenticatedItem: AuthenticatedItem
   searchTWReporterPosts(keywords: String!): [JSON]
   getMemberPostsWithAnswers(memberId: ID!, take: Int = 5, cursor: String): JSON
+  getMemberEssayAnswersHasLiked(memberId: ID!, answerIds: [ID]): [getMemberEssayAnswersHasLiked]
+}
+
+type getMemberEssayAnswersHasLiked {
+  answerId: ID
+  hasLiked: Boolean
+  likeId: ID
 }
 
 union AuthenticatedItem = User
