@@ -20,7 +20,7 @@ function EmailSubscription() {
           <MembershipSideMenu />
         </div>
         <div className="flex flex-1 flex-col px-6 tablet:col-span-10 tablet:px-8 desktop:col-span-8 desktop:px-0">
-          <h1 className="mb-6 prose-h4-large font-swei text-neutral-900 desktop:mb-8">
+          <h1 className="mb-6 prose-h4-small font-swei text-neutral-900 desktop:mb-8 desktop:prose-h4-large">
             訂閱電子報
           </h1>
           <div className="flex flex-col gap-5 rounded-2xl bg-white p-6 tablet:gap-6 tablet:p-8 hd:flex-row hd:items-center">

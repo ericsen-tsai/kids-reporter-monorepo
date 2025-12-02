@@ -2,6 +2,7 @@
 import { HeaderMobileBackButtonHrefSetter } from '@kids-reporter/routing-ui'
 
 import Checkbox from '@/components/checkbox'
+import Divider from '@/components/divider'
 import Switch from '@/components/switch'
 import { BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT } from '@/constants/baodaozai-question-count'
 
@@ -23,7 +24,7 @@ function Custom() {
           <MembershipSideMenu />
         </div>
         <div className="flex flex-1 flex-col px-6 tablet:col-span-10 tablet:px-8 desktop:col-span-8 desktop:px-0">
-          <h1 className="mb-6 prose-h4-large font-swei text-neutral-900 desktop:mb-8">
+          <h1 className="mb-6 prose-h4-small font-swei text-neutral-900 desktop:mb-8 desktop:prose-h4-large">
             閱讀設定
           </h1>
           <div className="flex w-full flex-col gap-6">
@@ -49,7 +50,7 @@ function Custom() {
               </div>
             </div>
 
-            <div className="h-px w-full bg-neutral-200" />
+            <Divider />
 
             <div className="flex w-full flex-col gap-4">
               <div className="flex flex-col gap-1">

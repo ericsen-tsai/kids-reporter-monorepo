@@ -173,7 +173,7 @@ function Account() {
           <div className="flex w-full gap-9 tablet:col-span-10 hd:gap-13">
             <div className="flex flex-1 flex-col px-6 tablet:px-8 desktop:px-0">
               <div className="mb-6 flex items-center justify-between desktop:mb-8">
-                <h1 className="prose-h4-large font-family-swei text-neutral-900">
+                <h1 className="prose-h4-small font-family-swei text-neutral-900 desktop:prose-h4-large">
                   個人資料
                 </h1>
                 {isEditMode ? (
