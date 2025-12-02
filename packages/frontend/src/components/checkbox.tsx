@@ -1,3 +1,5 @@
+import { cn } from '@kids-reporter/routing-ui'
+
 type CheckboxProps = {
   checked: boolean
   onChange: (value: string) => void
@@ -7,7 +9,7 @@ type CheckboxProps = {
 
 function Checkbox({ checked, onChange, label, value }: CheckboxProps) {
   return (
-    <label className="flex cursor-pointer items-center gap-2">
+    <label className="group flex cursor-pointer items-center gap-2">
       <input
         type="radio"
         value={value}
@@ -17,11 +19,12 @@ function Checkbox({ checked, onChange, label, value }: CheckboxProps) {
         className="hidden"
       />
       <div
-        className={`flex h-4 w-4 items-center justify-center rounded-[2px] border-2 transition-colors ${
+        className={cn(
+          'flex h-4 w-4 items-center justify-center rounded-[2px] border-2 transition-colors',
           checked
-            ? 'border-red-400 bg-red-400'
-            : 'border-neutral-700 bg-transparent'
-        }`}
+            ? 'border-red-400 bg-red-400 group-hover:border-red-500 group-hover:bg-red-500'
+            : 'border-neutral-700 bg-transparent group-hover:border-neutral-900'
+        )}
       >
         {checked && (
           <svg
@@ -41,7 +44,9 @@ function Checkbox({ checked, onChange, label, value }: CheckboxProps) {
           </svg>
         )}
       </div>
-      <span className="prose-p1 text-neutral-700">{label}</span>
+      <span className="prose-p1 text-neutral-700 group-hover:text-neutral-900">
+        {label}
+      </span>
     </label>
   )
 }
