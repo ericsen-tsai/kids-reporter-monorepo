@@ -44,8 +44,7 @@ function EmailSubscription() {
                   </span>
                 </div>
                 <p className="prose-p1 text-neutral-700">
-                  兒少新聞平台<span className="underline">《少年報導者》</span>
-                  的最新專題和活動消息，就讓可愛的報導仔來告訴你！
+                  兒少新聞平台《少年報導者》的最新專題和活動消息，就讓可愛的報導仔來告訴你！
                 </p>
               </div>
             </div>
