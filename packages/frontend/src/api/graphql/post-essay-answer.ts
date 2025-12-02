@@ -28,10 +28,12 @@ export const GET_ALL_POST_ESSAY_ANSWERS_QUERY = gql`
       member {
         id
         avatar {
+          id
           fileUrl
         }
         nickname
         name
+        email
       }
       content
       likesCount

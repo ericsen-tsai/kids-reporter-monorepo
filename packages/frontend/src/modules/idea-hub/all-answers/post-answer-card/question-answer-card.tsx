@@ -4,6 +4,7 @@ import { DEFAULT_AVATAR } from '@/constants'
 import { LightbulbIcon, StarIcon } from '@/icons/miscellaneous'
 
 import { PostWithTwoTopLikesAnswersPerQuestionReturnType } from '../../types'
+import { getMemberDisplayName } from '../../utils'
 
 type QuestionAnswerCardProps = {
   question: PostWithTwoTopLikesAnswersPerQuestionReturnType['posts'][number]['postEssayQuestions'][number]
@@ -30,8 +31,7 @@ function QuestionAnswerCard({ question }: QuestionAnswerCardProps) {
       {/* Answers Section */}
       <div className="flex flex-col gap-4 px-4 py-4">
         {visibleAnswers.map((answer, index) => {
-          const memberDisplayName =
-            answer.member?.nickname || answer.member?.name || '暱稱'
+          const memberDisplayName = getMemberDisplayName(answer.member)
           return (
             <div key={answer.id}>
               <div className="flex flex-col gap-2">

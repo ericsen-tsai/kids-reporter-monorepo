@@ -205,10 +205,12 @@ export const GET_POSTS_ESSAY_ANSWERS_WITH_LIKES_GQL = gql`
           member {
             id
             avatar {
+              id
               fileUrl
             }
             name
             nickname
+            email
           }
           likesCount
         }
