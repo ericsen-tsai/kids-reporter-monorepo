@@ -2085,6 +2085,7 @@ input PostEssayAnswerWhereInput {
   question: PostEssayQuestionWhereInput
   member: MemberWhereInput
   content: StringFilter
+  likesCount: IntFilter
   compositeKey: StringNullableFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
@@ -2093,6 +2094,7 @@ input PostEssayAnswerWhereInput {
 input PostEssayAnswerOrderByInput {
   id: OrderDirection
   content: OrderDirection
+  likesCount: OrderDirection
   compositeKey: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
@@ -2213,23 +2215,6 @@ input PostEssayAnswerLikeOrderByInput {
   compositeKey: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
-}
-
-input PostEssayAnswerLikeUpdateInput {
-  answer: PostEssayAnswerRelateToOneForUpdateInput
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input PostEssayAnswerRelateToOneForUpdateInput {
-  create: PostEssayAnswerCreateInput
-  connect: PostEssayAnswerWhereUniqueInput
-  disconnect: Boolean
-}
-
-input PostEssayAnswerLikeUpdateArgs {
-  where: PostEssayAnswerLikeWhereUniqueInput!
-  data: PostEssayAnswerLikeUpdateInput!
 }
 
 input PostEssayAnswerLikeCreateInput {
@@ -2395,8 +2380,6 @@ type Mutation {
   deletePostEssayQuestions(where: [PostEssayQuestionWhereUniqueInput!]!): [PostEssayQuestion]
   createPostEssayAnswerLike(data: PostEssayAnswerLikeCreateInput!): PostEssayAnswerLike
   createPostEssayAnswerLikes(data: [PostEssayAnswerLikeCreateInput!]!): [PostEssayAnswerLike]
-  updatePostEssayAnswerLike(where: PostEssayAnswerLikeWhereUniqueInput!, data: PostEssayAnswerLikeUpdateInput!): PostEssayAnswerLike
-  updatePostEssayAnswerLikes(data: [PostEssayAnswerLikeUpdateArgs!]!): [PostEssayAnswerLike]
   deletePostEssayAnswerLike(where: PostEssayAnswerLikeWhereUniqueInput!): PostEssayAnswerLike
   deletePostEssayAnswerLikes(where: [PostEssayAnswerLikeWhereUniqueInput!]!): [PostEssayAnswerLike]
   endSession: Boolean!

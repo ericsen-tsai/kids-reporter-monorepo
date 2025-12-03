@@ -1,5 +1,6 @@
 import { list } from '@keystone-6/core'
 import { relationship, text, timestamp } from '@keystone-6/core/fields'
+import { GraphQLError } from 'graphql'
 
 import type { ListType } from '../types/keystone-list-types'
 import { allowRoles, RoleEnum } from './utils/access-control-list'
@@ -29,7 +30,6 @@ export default list<ListType<'PostEssayAnswerLike'>>({
       graphql: {
         omit: {
           create: true,
-          update: true,
         },
       },
     }),
@@ -47,7 +47,6 @@ export default list<ListType<'PostEssayAnswerLike'>>({
       graphql: {
         omit: {
           create: true,
-          update: true,
         },
       },
       access: {
@@ -91,19 +90,22 @@ export default list<ListType<'PostEssayAnswerLike'>>({
     operation: {
       query: operationAccessControl,
       create: allowRoles([RoleEnum.Member]),
-      update: allowRoles([RoleEnum.Member]),
+      update: () => false,
       delete: operationAccessControl,
     },
     filter: {
       query: filterAccessControl,
-      update: filterAccessControl,
       delete: filterAccessControl,
+    },
+  },
+  graphql: {
+    omit: {
+      update: true,
     },
   },
   hooks: {
     resolveInput: async ({ resolvedData, item, context, operation }) => {
       const answerId = resolvedData.answer?.connect?.id ?? item?.answerId
-      const memberId = item?.memberId?.toString()
 
       const sessionMemberId = context.session?.data?.memberId?.toString()
 
@@ -118,10 +120,6 @@ export default list<ListType<'PostEssayAnswerLike'>>({
             id: sessionMemberId,
           },
         }
-      } else if (operation === 'update') {
-        if (sessionMemberId !== memberId) {
-          throw new Error('You cannot edit the like for another member.')
-        }
       }
 
       if (answerId) {
@@ -129,6 +127,53 @@ export default list<ListType<'PostEssayAnswerLike'>>({
       }
 
       return resolvedData
+    },
+    afterOperation: async ({ operation, item, originalItem, context }) => {
+      const assertExecuteSucceeded = (result: unknown) => {
+        // NOTE: Keystone v6 wraps Prisma calls and can return a GraphQLError
+        // instead of throwing (see keystonejs/keystone#9250). Until v6 pulls in
+        // PR #9476, explicitly detect GraphQLError so the afterOperation surfaces
+        // an actionable exception.
+        if (result instanceof GraphQLError) {
+          const debugInfo = result.extensions?.debug as
+            | { message?: string }
+            | undefined
+          const errorMsg =
+            debugInfo?.message?.trim() ??
+            `Unknown error during likesCount update (op=${operation}, answerId=${item?.answerId ?? originalItem?.answerId ?? 'n/a'})`
+
+          // TODO: throw and also enqueue a PubSub message to retry computing likesCount.
+          throw new Error(
+            `Update PostEssayAnswer failed with the following errors: ${errorMsg}`
+          )
+        }
+      }
+
+      const incrementLikesCount = async (answerId?: number | string | null) => {
+        if (!answerId) return
+        // Atomic row update in Postgres to avoid race conditions on concurrent likes
+        const result = await context.prisma
+          .$executeRaw`UPDATE "PostEssayAnswer" SET "likesCount" = "likesCount" + 1 WHERE "id" = ${Number(answerId)}`
+        assertExecuteSucceeded(result)
+      }
+
+      const decrementLikesCount = async (answerId?: number | string | null) => {
+        if (!answerId) return
+        // Atomic row update in Postgres to avoid race conditions on concurrent unlikes
+        const result = await context.prisma
+          .$executeRaw`UPDATE "PostEssayAnswer" SET "likesCount" = "likesCount" - 1 WHERE "id" = ${Number(answerId)} AND "likesCount" > 0`
+        assertExecuteSucceeded(result)
+      }
+
+      if (operation === 'create') {
+        await incrementLikesCount(item?.answerId)
+        return
+      }
+
+      if (operation === 'delete') {
+        await decrementLikesCount(originalItem?.answerId)
+        return
+      }
     },
   },
 })
