@@ -7,13 +7,7 @@ import {
   UpdatePostChoiceAnswerMutationVariables,
 } from '__generated__/operations/post-choice-answer.generated'
 
-import { sendGQLRequest } from '@/utils/send-gql-request'
-
-import {
-  CREATE_POST_CHOICE_ANSWER_MUTATION,
-  GET_POST_CHOICE_ANSWER_QUERY,
-  UPDATE_POST_CHOICE_ANSWER_MUTATION,
-} from './graphql/post-choice-answer'
+import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export const getPostChoiceAnswersByMemberId = async (
   memberId: string,
@@ -27,30 +21,24 @@ export const getPostChoiceAnswersByMemberId = async (
     },
   }
 
-  const response = await sendGQLRequest<GetPostChoiceAnswersQuery>(
-    {
-      query: GET_POST_CHOICE_ANSWER_QUERY,
-      variables,
-    },
-    {
-      authToken: accessToken,
-    }
-  )
+  const response = await sendRestGqlRequest<GetPostChoiceAnswersQuery>({
+    operation: 'post-choice-answers',
+    method: 'GET',
+    variables,
+    authToken: accessToken,
+  })
   return response?.data?.data?.postChoiceAnswers ?? []
 }
 export const createPostChoiceAnswer = async (
   variables: CreatePostChoiceAnswerMutationVariables,
   accessToken: string
 ) => {
-  const response = await sendGQLRequest<CreatePostChoiceAnswerMutation>(
-    {
-      query: CREATE_POST_CHOICE_ANSWER_MUTATION,
-      variables,
-    },
-    {
-      authToken: accessToken,
-    }
-  )
+  const response = await sendRestGqlRequest<CreatePostChoiceAnswerMutation>({
+    operation: 'create-post-choice-answer',
+    method: 'POST',
+    variables,
+    authToken: accessToken,
+  })
   return response?.data?.data?.createPostChoiceAnswer
 }
 
@@ -58,14 +46,11 @@ export const updatePostChoiceAnswer = async (
   variables: UpdatePostChoiceAnswerMutationVariables,
   accessToken: string
 ) => {
-  const response = await sendGQLRequest<UpdatePostChoiceAnswerMutation>(
-    {
-      query: UPDATE_POST_CHOICE_ANSWER_MUTATION,
-      variables,
-    },
-    {
-      authToken: accessToken,
-    }
-  )
+  const response = await sendRestGqlRequest<UpdatePostChoiceAnswerMutation>({
+    operation: 'update-post-choice-answer',
+    method: 'POST',
+    variables,
+    authToken: accessToken,
+  })
   return response?.data?.data?.updatePostChoiceAnswer
 }

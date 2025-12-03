@@ -5,12 +5,7 @@ import {
   UpdateMemberProfileMutationVariables,
 } from '__generated__/operations/member.generated'
 
-import { sendGQLRequest } from '@/utils'
-
-import {
-  GET_MEMBER_PROFILE_GQL,
-  UPDATE_MEMBER_PROFILE_GQL,
-} from './graphql/member'
+import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export const getMemberProfileByTwreporterUserId = async ({
   twreporterUserId,
@@ -25,15 +20,12 @@ export const getMemberProfileByTwreporterUserId = async ({
     },
   }
 
-  const response = await sendGQLRequest<GetMemberProfileQuery>(
-    {
-      query: GET_MEMBER_PROFILE_GQL,
-      variables,
-    },
-    {
-      authToken: accessToken,
-    }
-  )
+  const response = await sendRestGqlRequest<GetMemberProfileQuery>({
+    operation: 'member-profile',
+    method: 'GET',
+    variables,
+    authToken: accessToken,
+  })
 
   return response?.data?.data?.member
 }
@@ -53,16 +45,13 @@ export const getMemberProfileByMemberId = async ({
     },
   }
 
-  const response = await sendGQLRequest<GetMemberProfileQuery>(
-    {
-      query: GET_MEMBER_PROFILE_GQL,
-      variables,
-    },
-    {
-      authToken: accessToken,
-      signal: abortSignal,
-    }
-  )
+  const response = await sendRestGqlRequest<GetMemberProfileQuery>({
+    operation: 'member-profile',
+    method: 'GET',
+    variables,
+    authToken: accessToken,
+    signal: abortSignal,
+  })
 
   return response?.data?.data?.member
 }
@@ -76,18 +65,15 @@ export const updateMemberProfile = async ({
   accessToken: string
   data: UpdateMemberProfileMutationVariables['data']
 }) => {
-  const response = await sendGQLRequest<UpdateMemberProfileMutation>(
-    {
-      query: UPDATE_MEMBER_PROFILE_GQL,
-      variables: {
-        where: { id: memberId },
-        data,
-      },
+  const response = await sendRestGqlRequest<UpdateMemberProfileMutation>({
+    operation: 'update-member-profile',
+    method: 'POST',
+    variables: {
+      where: { id: memberId },
+      data,
     },
-    {
-      authToken: accessToken,
-    }
-  )
+    authToken: accessToken,
+  })
 
   return response?.data?.data
 }

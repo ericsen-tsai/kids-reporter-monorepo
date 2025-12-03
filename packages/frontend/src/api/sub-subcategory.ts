@@ -3,15 +3,14 @@ import {
   GetSubSubcategoryPostsQueryVariables,
 } from '__generated__/operations/sub-subcategory.generated'
 
-import { sendGQLRequest } from '@/utils'
-
-import { GET_SUB_SUBCATEGORY_POSTS_GQL } from './graphql/sub-subcategory'
+import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export const getSubSubcategoryPosts = async (
   variables: GetSubSubcategoryPostsQueryVariables
 ) => {
-  const response = await sendGQLRequest<GetSubSubcategoryPostsQuery>({
-    query: GET_SUB_SUBCATEGORY_POSTS_GQL,
+  const response = await sendRestGqlRequest<GetSubSubcategoryPostsQuery>({
+    operation: 'sub-subcategory-posts',
+    method: 'GET',
     variables,
   })
   return response?.data?.data?.subSubcategory
