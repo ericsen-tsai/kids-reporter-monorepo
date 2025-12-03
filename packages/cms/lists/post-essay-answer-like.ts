@@ -30,7 +30,6 @@ export default list<ListType<'PostEssayAnswerLike'>>({
       graphql: {
         omit: {
           create: true,
-          update: true,
         },
       },
     }),
@@ -48,7 +47,6 @@ export default list<ListType<'PostEssayAnswerLike'>>({
       graphql: {
         omit: {
           create: true,
-          update: true,
         },
       },
       access: {
@@ -92,19 +90,22 @@ export default list<ListType<'PostEssayAnswerLike'>>({
     operation: {
       query: operationAccessControl,
       create: allowRoles([RoleEnum.Member]),
-      update: allowRoles([RoleEnum.Member]),
+      update: () => false,
       delete: operationAccessControl,
     },
     filter: {
       query: filterAccessControl,
-      update: filterAccessControl,
       delete: filterAccessControl,
+    },
+  },
+  graphql: {
+    omit: {
+      update: true,
     },
   },
   hooks: {
     resolveInput: async ({ resolvedData, item, context, operation }) => {
       const answerId = resolvedData.answer?.connect?.id ?? item?.answerId
-      const memberId = item?.memberId?.toString()
 
       const sessionMemberId = context.session?.data?.memberId?.toString()
 
@@ -119,10 +120,6 @@ export default list<ListType<'PostEssayAnswerLike'>>({
             id: sessionMemberId,
           },
         }
-      } else if (operation === 'update') {
-        if (sessionMemberId !== memberId) {
-          throw new Error('You cannot edit the like for another member.')
-        }
       }
 
       if (answerId) {
@@ -131,13 +128,7 @@ export default list<ListType<'PostEssayAnswerLike'>>({
 
       return resolvedData
     },
-    afterOperation: async ({
-      operation,
-      item,
-      originalItem,
-      resolvedData,
-      context,
-    }) => {
+    afterOperation: async ({ operation, item, originalItem, context }) => {
       const assertExecuteSucceeded = (result: unknown) => {
         // NOTE: Keystone v6 wraps Prisma calls and can return a GraphQLError
         // instead of throwing (see keystonejs/keystone#9250). Until v6 pulls in
@@ -182,23 +173,6 @@ export default list<ListType<'PostEssayAnswerLike'>>({
       if (operation === 'delete') {
         await decrementLikesCount(originalItem?.answerId)
         return
-      }
-
-      if (operation === 'update') {
-        const answerConnectId = resolvedData.answer?.connect?.id
-        const disconnectValue = resolvedData.answer?.disconnect
-        const answerDisconnectId =
-          disconnectValue === true
-            ? (originalItem?.answerId ?? item?.answerId)
-            : undefined
-
-        // An update may both connect a new answer and disconnect the previous one;
-        // run increment/decrement in parallel without a transaction since each
-        // statement is atomic and Promise.all will surface any failure.
-        await Promise.all([
-          incrementLikesCount(answerConnectId),
-          decrementLikesCount(answerDisconnectId),
-        ])
       }
     },
   },
