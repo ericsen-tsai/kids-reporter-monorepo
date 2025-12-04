@@ -18,10 +18,7 @@ function QuestionAnswerCard({ question }: QuestionAnswerCardProps) {
   return (
     <div className="flex w-full flex-col overflow-hidden rounded-2xl border-2 border-neutral-200 bg-white">
       {/* Question Section */}
-      <div
-        className="flex gap-4 bg-blue-100 px-4 py-4"
-        style={{ borderRadius: '12px 12px 0px 0px' }}
-      >
+      <div className="flex gap-4 rounded-t-xl bg-blue-100 px-4 py-4">
         <div className="flex items-start gap-2">
           <div className="flex items-center">
             <LightbulbIcon />

@@ -1,7 +1,7 @@
 function QuestionAnswerSkeleton() {
   return (
-    <div className="z-10 flex w-full flex-col gap-4 overflow-hidden rounded-2xl bg-neutral-white">
-      <div className="flex w-full flex-col gap-2 bg-neutral-200 px-4 pt-4 pb-4">
+    <div className="z-10 flex w-full flex-col gap-4 overflow-hidden rounded-2xl border-2 border-neutral-200 bg-neutral-white">
+      <div className="flex w-full flex-col gap-2 bg-neutral-200 px-4 py-4">
         <div className="h-6 w-full animate-pulse rounded bg-neutral-300" />
         <div className="h-6 w-[200px] animate-pulse rounded bg-neutral-300" />
       </div>
@@ -10,7 +10,7 @@ function QuestionAnswerSkeleton() {
           <div className="size-10 flex-shrink-0 animate-pulse rounded-full bg-neutral-300" />
           <div className="h-[25px] w-14 animate-pulse rounded bg-neutral-300" />
         </div>
-        <div className="flex flex-col gap-2 border-b border-neutral-300 pb-4">
+        <div className="flex flex-col gap-2 border-b border-neutral-200 pb-4">
           <div className="h-6 w-full animate-pulse rounded bg-neutral-300" />
           <div className="h-6 w-[200px] animate-pulse rounded bg-neutral-300" />
         </div>
@@ -40,7 +40,7 @@ function PostAnswerCardSkeleton() {
             background:
               'linear-gradient(0deg, #F8F8F8 0%, rgba(248, 248, 248, 0.00) 100%)',
           }}
-        ></div>
+        />
       </div>
 
       <div className="z-10 flex flex-col gap-4 px-5 py-6">
