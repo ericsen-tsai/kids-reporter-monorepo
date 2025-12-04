@@ -160,7 +160,7 @@ function AllAnswers() {
             aria-hidden="true"
           />
         )}
-        {posts.length === 0 && (
+        {!isLoading && posts.length === 0 && (
           <div className="flex w-full items-center justify-center py-12 text-center">
             <p className="prose-p1 text-neutral-500">尚無回答</p>
           </div>
