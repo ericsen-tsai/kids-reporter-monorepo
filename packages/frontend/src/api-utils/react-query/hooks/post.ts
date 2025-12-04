@@ -15,14 +15,12 @@ export function useGetPostsEssayAnswersWithLikesInfinityQuery({
   take,
   answerOrderBy,
   answerTake,
-  pageSize,
   where,
 }: {
   orderBy: PostOrderByInput[]
   take: number
   answerOrderBy: PostEssayAnswerOrderByInput[]
   answerTake: number
-  pageSize: number
   where: PostWhereInput
 }) {
   return useInfiniteQuery({
@@ -30,7 +28,6 @@ export function useGetPostsEssayAnswersWithLikesInfinityQuery({
       POSTS_ESSAY_ANSWERS_WITH_LIKES_QUERY_KEY,
       orderBy,
       take,
-      pageSize,
       where,
       answerOrderBy,
       answerTake,

@@ -25,7 +25,6 @@ function AllAnswers() {
       take: PAGE_SIZE,
       answerOrderBy: [{ likesCount: 'desc' }] as PostEssayAnswerOrderByInput[],
       answerTake: ANSWER_TAKE,
-      pageSize: PAGE_SIZE,
       where: {
         postEssayQuestions: {
           some: {
@@ -58,41 +57,37 @@ function AllAnswers() {
               title: question.title || '',
               hint: question.hint || '',
               answers:
-                question.answers?.map((answer) => ({
-                  id: answer.id,
-                  content: answer.content || '',
-                  likesCount: answer.likesCount || 0,
-                  createdAt: '',
-                  updatedAt: '',
-                  member: answer.member
-                    ? {
-                        id: answer.member.id,
-                        name: answer.member.name || '',
-                        nickname: answer.member.nickname || '',
-                        email: answer.member.email || '',
-                        avatar: answer.member.avatar
-                          ? {
-                              fileUrl: answer.member.avatar.fileUrl || '',
-                              id: answer.member.avatar.id || '',
-                            }
-                          : { fileUrl: '', id: '' },
-                      }
-                    : {
-                        id: '',
-                        name: '',
-                        nickname: '',
-                        email: '',
-                        avatar: { fileUrl: '', id: '' },
+                question.answers?.map((answer) => {
+                  const member = answer?.member
+                  return {
+                    id: answer.id,
+                    content: answer.content || '',
+                    likesCount: answer.likesCount || 0,
+                    member: {
+                      id: member?.id || '',
+                      name: member?.name || '',
+                      nickname: member?.nickname || '',
+                      email: member?.email || '',
+                      avatar: {
+                        fileUrl: member?.avatar?.fileUrl || '',
+                        id: member?.avatar?.id || '',
                       },
-                })) || [],
+                    },
+                  }
+                }) ?? [],
             }))
             .filter((question) => question.answers.length > 0) || []
 
         // Only include posts that have at least one question with answers
         if (questionsWithAnswers.length === 0) return
-
+        const postId = post.id || post.slug
+        if (!postId) {
+          throw new Error(
+            'Post is missing both id and slug. Data integrity issue detected.'
+          )
+        }
         allPosts.push({
-          id: post.id || post.slug || '',
+          id: postId,
           slug: post.slug || '',
           title: post.title || '',
           heroImage: {
@@ -153,18 +148,18 @@ function AllAnswers() {
         ref={scrollContainerRef}
         className="flex scrollbar-thin snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 tablet:scroll-px-8 tablet:px-8 desktop:scroll-px-12 desktop:px-12 hd:scroll-pr-14 hd:scroll-pl-[calc(50vw-600px+64px)] hd:pr-14 hd:pl-[calc(50vw-600px+64px)]"
       >
-        {posts.map((post, index) => (
+        {posts.map((post) => (
           <div key={post.id} className="flex-shrink-0 snap-start">
-            {index === posts.length - 1 && (
-              <div
-                ref={loadMoreRef}
-                className="h-1 w-1 flex-shrink-0"
-                aria-hidden="true"
-              />
-            )}
             <PostAnswerCard post={post} />
           </div>
         ))}
+        {hasNextPage && (
+          <div
+            ref={loadMoreRef}
+            className="h-1 w-1 flex-shrink-0"
+            aria-hidden="true"
+          />
+        )}
         {posts.length === 0 && (
           <div className="flex w-full items-center justify-center py-12 text-center">
             <p className="prose-p1 text-neutral-500">尚無回答</p>
