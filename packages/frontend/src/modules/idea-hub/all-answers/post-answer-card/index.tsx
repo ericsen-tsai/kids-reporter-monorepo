@@ -9,9 +9,10 @@ import QuestionAnswerCard from './question-answer-card'
 
 type PostAnswerCardProps = {
   post: PostWithTwoTopLikesAnswersPerQuestion['posts'][number]
+  onOpenModal: (postSlug: string) => void
 }
 
-function PostAnswerCard({ post }: PostAnswerCardProps) {
+function PostAnswerCard({ post, onOpenModal }: PostAnswerCardProps) {
   const heroImageUrl = post.heroImage?.resized?.medium || FALLBACK_IMG
   const firstCategory = post.subSubcategoriesOrdered?.[0]?.name || ''
 
@@ -70,7 +71,12 @@ function PostAnswerCard({ post }: PostAnswerCardProps) {
       {/* Questions Section */}
       <div className="z-10 flex flex-col gap-4 px-4 pb-4">
         {post.postEssayQuestions.map((question) => (
-          <QuestionAnswerCard key={question.id} question={question} />
+          <QuestionAnswerCard
+            key={question.id}
+            question={question}
+            postSlug={post.slug}
+            onOpenModal={onOpenModal}
+          />
         ))}
       </div>
     </div>

@@ -4,9 +4,10 @@ import {
   PostEssayAnswerOrderByInput,
   PostOrderByInput,
 } from '__generated__/types'
-import { useEffect, useMemo, useRef } from 'react'
+import { memo, useEffect, useMemo, useRef, useState } from 'react'
+import { toast } from 'sonner'
 
-import { useGetPostsEssayAnswersWithLikesInfinityQuery } from '@/api-utils/react-query/hooks/post'
+import { usePostsEssayAnswersWithLikesInfinityQuery } from '@/api-utils/react-query/hooks/post'
 
 import { PostWithTwoTopLikesAnswersPerQuestion } from '../types'
 import PostAnswerCard from './post-answer-card'
@@ -15,12 +16,18 @@ import PostAnswerCardSkeleton from './post-answer-card-skeleton'
 const PAGE_SIZE = 5
 const ANSWER_TAKE = 2
 
-function AllAnswers() {
+type AllAnswersProps = {
+  onOpenModal: (postSlug: string) => void
+}
+
+function AllAnswers({ onOpenModal }: AllAnswersProps) {
   const loadMoreRef = useRef<HTMLDivElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const titleRef = useRef<HTMLDivElement>(null)
+  const [hasShownToast, setHasShownToast] = useState(false)
 
   const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } =
-    useGetPostsEssayAnswersWithLikesInfinityQuery({
+    usePostsEssayAnswersWithLikesInfinityQuery({
       orderBy: [{ publishedDate: 'desc' }] as PostOrderByInput[],
       take: PAGE_SIZE,
       answerOrderBy: [{ likesCount: 'desc' }] as PostEssayAnswerOrderByInput[],
@@ -133,11 +140,36 @@ function AllAnswers() {
     return () => observer.disconnect()
   }, [hasNextPage, isFetchingNextPage, fetchNextPage])
 
+  useEffect(() => {
+    if (hasShownToast || !titleRef.current) return
+
+    const handleScroll = () => {
+      if (hasShownToast || !titleRef.current) return
+
+      const titleRect = titleRef.current.getBoundingClientRect()
+      const threshold = 120
+      if (titleRect.top < threshold) {
+        console.log('trigger!')
+        toast.success('向左滑動可以看到更多文章喔！')
+        setHasShownToast(true)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [hasShownToast])
+
   const showLoading = isLoading || isFetchingNextPage
 
   return (
     <div className="mt-10 mb-14 flex w-[calc(100%+48px)] flex-col gap-8 tablet:mb-16 tablet:w-[calc(100%+64px)] desktop:mt-18 desktop:mb-24 desktop:w-[calc(100%+96px)] hd:mt-24 hd:mb-30 hd:w-screen">
-      <div className="flex items-center gap-3 pl-6 tablet:pl-8 desktop:pl-12 hd:pl-[calc(50vw-600px+64px)]">
+      <div
+        ref={titleRef}
+        className="flex items-center gap-3 pl-6 tablet:pl-8 desktop:pl-12 hd:pl-[calc(50vw-600px+64px)]"
+      >
         <div className="h-8 w-1.5 rounded-md bg-blue-400" />
         <h3 className="prose-h3-small font-swei text-neutral-900 desktop:prose-h3-large">
           所有回答
@@ -149,7 +181,7 @@ function AllAnswers() {
       >
         {posts.map((post) => (
           <div key={post.id} className="flex-shrink-0 snap-start">
-            <PostAnswerCard post={post} />
+            <PostAnswerCard post={post} onOpenModal={onOpenModal} />
           </div>
         ))}
         {hasNextPage && (
@@ -181,4 +213,4 @@ function AllAnswers() {
   )
 }
 
-export default AllAnswers
+export default memo(AllAnswers)
