@@ -76,7 +76,7 @@ function ModalQuestionCard({
 
   useEffect(() => {
     const element = loadMoreRef.current
-    if (!element || !hasNextPage || isFetchingNextPage) return
+    if (!element || !hasNextPage || isFetchingNextPage || !isTablet) return
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -95,7 +95,7 @@ function ModalQuestionCard({
     observer.observe(element)
 
     return () => observer.disconnect()
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage, isTablet])
 
   const renderTitle = useCallback(() => {
     return (
@@ -199,12 +199,23 @@ function ModalQuestionCard({
               )
             })}
 
-            {hasNextPage && <div ref={loadMoreRef} className="h-10" />}
+            {isTablet && hasNextPage && (
+              <div ref={loadMoreRef} className="h-10" />
+            )}
             {isFetchingNextPage && (
               <>
                 <Divider className="my-4" />
                 <ModalAnswerItemSkeleton />
               </>
+            )}
+            {!isTablet && hasNextPage && !isFetchingNextPage && (
+              <button
+                onClick={() => fetchNextPage()}
+                className="mt-2 flex w-full cursor-pointer items-center justify-center px-5 py-1 prose-p1 text-neutral-600 hover:text-red-400 active:text-red-500 disabled:cursor-not-allowed disabled:text-neutral-400"
+                disabled={isFetchingNextPage}
+              >
+                顯示更多
+              </button>
             )}
           </div>
         </AccordionContent>
