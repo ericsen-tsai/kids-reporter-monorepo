@@ -24,6 +24,9 @@ export const GET_ALL_POST_ESSAY_ANSWERS_QUERY = gql`
       id
       question {
         id
+        post {
+          slug
+        }
       }
       member {
         id

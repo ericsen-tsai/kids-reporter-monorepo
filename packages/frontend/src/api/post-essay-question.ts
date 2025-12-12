@@ -1,7 +1,6 @@
 import { GetEssayQuestionEssayAnswersQuery } from '__generated__/operations/post-essay-question.generated'
 import {
   PostEssayAnswerOrderByInput,
-  PostEssayQuestionOrderByInput,
   PostEssayQuestionWhereUniqueInput,
 } from '__generated__/types'
 
@@ -11,22 +10,23 @@ import { GET_ESSAY_QUESTION_ESSAY_ANSWERS_GQL } from './graphql/post-essay-quest
 
 export const getPostEssayQuestionEssayAnswers = async ({
   where,
-  orderBy,
-  take,
-  skip,
   answerOrderBy,
   answerTake,
+  answerSkip,
 }: {
   where: PostEssayQuestionWhereUniqueInput
-  orderBy: PostEssayQuestionOrderByInput[]
-  take: number
-  skip: number
   answerOrderBy: PostEssayAnswerOrderByInput[]
   answerTake: number
+  answerSkip: number
 }) => {
   const response = await sendGQLRequest<GetEssayQuestionEssayAnswersQuery>({
     query: GET_ESSAY_QUESTION_ESSAY_ANSWERS_GQL,
-    variables: { where, orderBy, take, skip, answerOrderBy, answerTake },
+    variables: {
+      where,
+      answerOrderBy,
+      answerTake,
+      answerSkip,
+    },
   })
   return response?.data?.data?.postEssayQuestion?.answers ?? []
 }

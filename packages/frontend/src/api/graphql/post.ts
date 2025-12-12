@@ -224,6 +224,7 @@ export const GET_POST_ESSAY_QUESTIONS_GQL = gql`
     post(where: $where) {
       id
       slug
+      title
       heroImage {
         resized {
           medium
@@ -236,10 +237,6 @@ export const GET_POST_ESSAY_QUESTIONS_GQL = gql`
       }
       subSubcategoriesOrdered {
         name
-      }
-      postEssayQuestions {
-        id
-        title
       }
     }
   }

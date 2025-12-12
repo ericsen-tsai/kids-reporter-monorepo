@@ -13,7 +13,7 @@ import {
 export const POSTS_ESSAY_ANSWERS_WITH_LIKES_QUERY_KEY =
   'posts-essay-answers-with-likes'
 
-export function useGetPostsEssayAnswersWithLikesInfinityQuery({
+export function usePostsEssayAnswersWithLikesInfinityQuery({
   orderBy,
   take,
   answerOrderBy,
@@ -55,7 +55,7 @@ export function useGetPostsEssayAnswersWithLikesInfinityQuery({
 export const POST_ESSAY_QUESTIONS_BY_POST_SLUG_QUERY_KEY =
   'post-essay-questions-by-post-slug'
 
-export function useGetPostEssayQuestionsByPostSlugQuery({
+export function usePostEssayQuestionsByPostSlugQuery({
   slug,
 }: {
   slug: string
