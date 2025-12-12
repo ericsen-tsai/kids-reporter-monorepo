@@ -29,3 +29,26 @@ export const makeMemberOwnedFilter =
     }
     return { [relationKey]: { id: { equals: memberID } } }
   }
+
+export const memberOwnedPrivateFieldQueryAccess = ({
+  session,
+  item,
+}: {
+  session?: Session
+  item: Record<string, unknown>
+}) => {
+  const role = session?.data?.role
+  if (role === RoleEnum.Admin) {
+    return true
+  }
+  const memberId =
+    session?.data && 'memberId' in session.data
+      ? session.data.memberId
+      : undefined
+
+  if (memberId === item.id) {
+    return true
+  }
+
+  return false
+}

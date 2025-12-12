@@ -9,9 +9,11 @@ import {
 } from '@keystone-6/core/fields'
 
 import type { ListType } from '../types/keystone-list-types'
+import { allowAllRoles } from './utils/access-control-list'
 import {
   makeMemberOwnedFilter,
   memberOwnedOperationAccess,
+  memberOwnedPrivateFieldQueryAccess,
 } from './utils/member-owned-access'
 
 const operationAccessControl = memberOwnedOperationAccess
@@ -31,6 +33,9 @@ export default list<ListType<'Member'>>({
     }),
     contactEmail: text({
       label: '聯絡信箱',
+      access: {
+        read: memberOwnedPrivateFieldQueryAccess,
+      },
     }),
     twreporter_user_id: text({
       label: 'TWReporter Membership ID',
@@ -48,6 +53,7 @@ export default list<ListType<'Member'>>({
         },
       },
       access: {
+        read: memberOwnedPrivateFieldQueryAccess,
         create: () => false,
         update: () => false,
       },
@@ -66,6 +72,7 @@ export default list<ListType<'Member'>>({
         },
       },
       access: {
+        read: memberOwnedPrivateFieldQueryAccess,
         create: () => false,
         update: () => false,
       },
@@ -94,10 +101,16 @@ export default list<ListType<'Member'>>({
     showBaodaozai: checkbox({
       label: '是否顯示報導仔',
       defaultValue: true,
+      access: {
+        read: memberOwnedPrivateFieldQueryAccess,
+      },
     }),
     essayQuestionCount: integer({
       label: '思辨題數量',
       defaultValue: 1,
+      access: {
+        read: memberOwnedPrivateFieldQueryAccess,
+      },
     }),
     avatar: relationship({
       ref: 'MemberAvatar',
@@ -106,10 +119,16 @@ export default list<ListType<'Member'>>({
     }),
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
+      access: {
+        read: memberOwnedPrivateFieldQueryAccess,
+      },
     }),
     updatedAt: timestamp({
       db: {
         updatedAt: true,
+      },
+      access: {
+        read: memberOwnedPrivateFieldQueryAccess,
       },
     }),
   },
@@ -125,13 +144,12 @@ export default list<ListType<'Member'>>({
   },
   access: {
     operation: {
-      query: operationAccessControl,
+      query: allowAllRoles(),
       create: operationAccessControl,
       update: operationAccessControl,
       delete: operationAccessControl,
     },
     filter: {
-      query: filterAccessControl,
       update: filterAccessControl,
       delete: filterAccessControl,
     },

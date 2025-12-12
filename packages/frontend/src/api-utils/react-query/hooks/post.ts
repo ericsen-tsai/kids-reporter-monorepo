@@ -63,5 +63,6 @@ export function usePostEssayQuestionsByPostSlugQuery({
   return useQuery({
     queryKey: [POST_ESSAY_QUESTIONS_BY_POST_SLUG_QUERY_KEY, slug],
     queryFn: () => getPostEssayQuestionsByPostSlug({ slug }),
+    enabled: !!slug,
   })
 }
