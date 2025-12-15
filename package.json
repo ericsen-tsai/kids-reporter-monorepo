@@ -57,7 +57,8 @@
   },
   "resolutions": {
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "next": "14.2.35"
   },
   "version": "0.0.0",
   "packageManager": "yarn@4.9.4"
