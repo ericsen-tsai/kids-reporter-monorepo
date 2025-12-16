@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { FALLBACK_IMG } from '@/constants'
-import { ArticleShortcutIconLarge } from '@/icons'
+import { ArticleShortcutIconLarge, CornerOutIcon } from '@/icons'
 
 import { PostWithTwoTopLikesAnswersPerQuestion } from '../../types'
 import QuestionAnswerCard from './question-answer-card'
@@ -48,13 +48,20 @@ function PostAnswerCard({ post, onOpenModal }: PostAnswerCardProps) {
               </span>
             </div>
           </div>
-
-          <Link
-            href={post.slug ? `/article/${post.slug}` : ''}
-            className="flex size-10 items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:text-red-400 active:text-red-500"
-          >
-            <ArticleShortcutIconLarge />
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link
+              href={post.slug ? `/article/${post.slug}` : ''}
+              className="flex size-10 items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:text-red-400 active:text-red-500"
+            >
+              <ArticleShortcutIconLarge />
+            </Link>
+            <button
+              onClick={() => onOpenModal(post.slug)}
+              className="flex size-10 cursor-pointer items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:text-red-400 active:text-red-500"
+            >
+              <CornerOutIcon />
+            </button>
+          </div>
         </div>
 
         {/* Title */}
