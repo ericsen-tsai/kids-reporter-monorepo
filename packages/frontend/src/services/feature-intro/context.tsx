@@ -8,10 +8,13 @@ import {
   useState,
 } from 'react'
 
+import { FEATURE_INTRO_DIALOG_SEEN_KEY } from './constants'
+
 type FeatureIntroDialogContextType = {
-  isDialogOpen: boolean
+  isDialogOpen: boolean | undefined
   openDialog: () => void
   closeDialog: () => void
+  canShowBaodaozai: boolean
 }
 
 const FeatureIntroDialogContext = createContext<
@@ -23,7 +26,9 @@ export function FeatureIntroDialogProvider({
 }: {
   children: ReactNode
 }) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean | undefined>(
+    undefined
+  )
   const openDialog = useCallback(() => setIsDialogOpen(true), [])
   const closeDialog = useCallback(() => setIsDialogOpen(false), [])
 
@@ -32,6 +37,10 @@ export function FeatureIntroDialogProvider({
       isDialogOpen,
       openDialog,
       closeDialog,
+      canShowBaodaozai:
+        (isDialogOpen !== undefined && !isDialogOpen) ||
+        (typeof localStorage !== 'undefined' &&
+          localStorage.getItem(FEATURE_INTRO_DIALOG_SEEN_KEY) === 'true'),
     }),
     [isDialogOpen, openDialog, closeDialog]
   )

@@ -75,6 +75,15 @@ function AllSiteBaodaozaiEventTrigger({
     return config[id]
   }, [id, content, openFeatureIntroDialog])
 
+  const { canShowBaodaozai } = useFeatureIntroDialogContext()
+
+  const disabled = useMemo(() => {
+    if (!canShowBaodaozai) {
+      return true
+    }
+    return id === 'show-intro' && !isFirstRenderAtTop
+  }, [canShowBaodaozai, id, isFirstRenderAtTop])
+
   if (!eventConfig) {
     console.warn(
       `No configuration found for baodaozai event trigger with id: ${id}`
@@ -85,7 +94,7 @@ function AllSiteBaodaozaiEventTrigger({
   return (
     <BaodaozaiEventTrigger
       id={id}
-      disabled={id === 'show-intro' && !isFirstRenderAtTop}
+      disabled={disabled}
       once={false}
       {...eventConfig}
     />
