@@ -4,6 +4,7 @@ import { useIsAtTop } from '@kids-reporter/routing-ui'
 import { ComponentProps, useEffect, useMemo, useState } from 'react'
 
 import BaodaozaiEventTrigger from '@/services/call-baodaozai/components/baodaozai-event-trigger'
+import { useFeatureIntroDialogContext } from '@/services/feature-intro'
 
 type EventId = 'show-intro' | 'hide-intro'
 
@@ -19,7 +20,9 @@ type AllSiteBaodaozaiEventTriggerProps = {
 
 function createBaodaozaiEventConfig({
   content,
+  confirmAction,
 }: {
+  confirmAction: () => void
   content?: string
 }): Record<EventId, EventConfig> {
   return {
@@ -27,9 +30,9 @@ function createBaodaozaiEventConfig({
       dialogState: {
         isOpen: true,
         content: content || '',
-        hideCancelButton: true,
-        confirmText: '知道了',
-        confirmAction: () => {},
+        confirmText: '開始介紹',
+        confirmAction,
+        cancelText: '跳過',
       },
       baodaozaiState: {
         isActive: true,
@@ -39,9 +42,9 @@ function createBaodaozaiEventConfig({
     'hide-intro': {
       dialogState: {
         isOpen: false,
-        hideCancelButton: true,
-        confirmText: '知道了',
-        confirmAction: () => {},
+        confirmText: '開始介紹',
+        confirmAction,
+        cancelText: '跳過',
       },
       baodaozaiState: {
         isActive: false,
@@ -57,7 +60,7 @@ function AllSiteBaodaozaiEventTrigger({
 }: AllSiteBaodaozaiEventTriggerProps) {
   const isAtTop = useIsAtTop(35)
   const [isFirstRenderAtTop, setIsFirstRenderAtTop] = useState(isAtTop)
-
+  const { openDialog: openFeatureIntroDialog } = useFeatureIntroDialogContext()
   useEffect(() => {
     if (!isAtTop && isFirstRenderAtTop) {
       setIsFirstRenderAtTop(false)
@@ -65,9 +68,12 @@ function AllSiteBaodaozaiEventTrigger({
   }, [isAtTop, isFirstRenderAtTop])
 
   const eventConfig = useMemo(() => {
-    const config = createBaodaozaiEventConfig({ content })
+    const config = createBaodaozaiEventConfig({
+      content,
+      confirmAction: openFeatureIntroDialog,
+    })
     return config[id]
-  }, [id, content])
+  }, [id, content, openFeatureIntroDialog])
 
   if (!eventConfig) {
     console.warn(
