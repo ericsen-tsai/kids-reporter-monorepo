@@ -89,7 +89,9 @@ function AllAnswers({ onOpenModal }: AllAnswersProps) {
         const postId = post.id || post.slug
         if (!postId) {
           throw new Error(
-            'Post is missing both id and slug. Data integrity issue detected.'
+            `Post is missing both id and slug. Data integrity issue detected. Post title: ${
+              post.title ?? 'N/A'
+            }.`
           )
         }
         allPosts.push({
@@ -149,7 +151,6 @@ function AllAnswers({ onOpenModal }: AllAnswersProps) {
       const titleRect = titleRef.current.getBoundingClientRect()
       const threshold = 120
       if (titleRect.top < threshold) {
-        console.log('trigger!')
         toast.success('向左滑動可以看到更多文章喔！')
         setHasShownToast(true)
       }

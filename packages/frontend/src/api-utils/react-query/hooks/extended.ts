@@ -14,12 +14,12 @@ export function useGetMemberPostsWithAnswersInfinityQuery({
   take = 5,
 }: Omit<GetMemberPostsWithAnswersQueryVariables, 'nextCursor'> & {
   accessToken: string
+  memberId: string
 }) {
   return useInfiniteQuery({
     queryKey: [MEMBER_POSTS_WITH_ANSWERS_QUERY_KEY, memberId, take],
     queryFn: ({ pageParam }) =>
       getMemberPostsWithAnswers({
-        memberId,
         take,
         nextCursor: pageParam ?? undefined,
         accessToken,
@@ -46,7 +46,6 @@ export function useGetMemberEssayAnswersHasLikedQuery({
     queryKey: [MEMBER_ESSAY_ANSWERS_HAS_LIKED_QUERY_KEY, memberId, answerIds],
     queryFn: () =>
       getMemberEssayAnswersHasLiked({
-        memberId,
         answerIds,
         accessToken,
       }),

@@ -26,6 +26,8 @@ function AnswerCard({
     <div
       className="flex min-h-[182px] w-75 cursor-pointer flex-col justify-between rounded-2xl border-2 border-neutral-200 bg-white p-5 transition-colors hover:border-neutral-300 tablet:w-full"
       onClick={onClick}
+      role="button"
+      aria-label={`View answer: ${content}`}
     >
       <p className="line-clamp-3 prose-p1-bold text-neutral-900">{content}</p>
       <div className="flex items-center justify-between gap-2">

@@ -2531,8 +2531,8 @@ type Query {
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   searchTWReporterPosts(keywords: String!): [JSON]
-  getMemberPostsWithAnswers(memberId: ID!, take: Int = 5, cursor: String): JSON
-  getMemberEssayAnswersHasLiked(memberId: ID!, answerIds: [ID]): [getMemberEssayAnswersHasLiked]
+  getMemberPostsWithAnswers(take: Int = 5, cursor: String): JSON
+  getMemberEssayAnswersHasLiked(answerIds: [ID]): [getMemberEssayAnswersHasLiked]
 }
 
 type getMemberEssayAnswersHasLiked {

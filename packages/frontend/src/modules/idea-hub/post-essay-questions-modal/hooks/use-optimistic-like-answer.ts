@@ -7,6 +7,10 @@ import {
   useGetMemberEssayAnswersHasLikedQuery,
 } from '@/api-utils/react-query/hooks/extended'
 import {
+  POST_ESSAY_ANSWERS_QUERY_KEY,
+  useAllPostEssayAnswersQuery,
+} from '@/api-utils/react-query/hooks/post-essay-answer'
+import {
   useCreatePostEssayAnswerLikeMutation,
   useDeletePostEssayAnswerLikeMutation,
 } from '@/api-utils/react-query/hooks/post-essay-answer-like'
@@ -46,6 +50,14 @@ function useOptimisticLikeAnswer({
         answerTake,
       ]
 
+      const allPostEssayAnswersQueryKey = [
+        POST_ESSAY_ANSWERS_QUERY_KEY,
+        'all-members',
+        'all-posts',
+        answerOrderBy,
+        answerTake,
+      ]
+
       const hasLikedQueryKey = [
         MEMBER_ESSAY_ANSWERS_HAS_LIKED_QUERY_KEY,
         memberId,
@@ -55,6 +67,12 @@ function useOptimisticLikeAnswer({
       // Optimistically update answers query
       await queryClient.cancelQueries({ queryKey: answersQueryKey })
       const previousAnswersData = queryClient.getQueryData(answersQueryKey)
+
+      // Optimistically update all post essay answers query
+      await queryClient.cancelQueries({ queryKey: allPostEssayAnswersQueryKey })
+      const previousAllPostEssayAnswersData = queryClient.getQueryData(
+        allPostEssayAnswersQueryKey
+      )
 
       // Optimistically update hasLiked query
       await queryClient.cancelQueries({ queryKey: hasLikedQueryKey })
@@ -86,6 +104,26 @@ function useOptimisticLikeAnswer({
               })
             ),
           }
+        }
+      )
+
+      // Optimistically update all post essay answers query
+      queryClient.setQueryData(
+        allPostEssayAnswersQueryKey,
+        (old: ReturnType<typeof useAllPostEssayAnswersQuery>['data']) => {
+          if (!Array.isArray(old)) return old
+
+          return old.map((answer) => {
+            if (answer.id.toString() === answerId) {
+              return {
+                ...answer,
+                likesCount: hasLiked
+                  ? Math.max(0, (answer.likesCount ?? 0) - 1)
+                  : (answer.likesCount ?? 0) + 1,
+              }
+            }
+            return answer
+          })
         }
       )
 
@@ -150,6 +188,12 @@ function useOptimisticLikeAnswer({
         if (previousAnswersData) {
           queryClient.setQueryData(answersQueryKey, previousAnswersData)
         }
+        if (previousAllPostEssayAnswersData) {
+          queryClient.setQueryData(
+            allPostEssayAnswersQueryKey,
+            previousAllPostEssayAnswersData
+          )
+        }
         if (previousHasLikedData) {
           queryClient.setQueryData(hasLikedQueryKey, previousHasLikedData)
         }
@@ -157,6 +201,7 @@ function useOptimisticLikeAnswer({
       } finally {
         // Invalidate to refetch fresh data
         queryClient.invalidateQueries({ queryKey: answersQueryKey })
+        queryClient.invalidateQueries({ queryKey: allPostEssayAnswersQueryKey })
         queryClient.invalidateQueries({ queryKey: hasLikedQueryKey })
       }
     },

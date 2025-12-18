@@ -213,6 +213,8 @@ function ModalQuestionCard({
                 onClick={() => fetchNextPage()}
                 className="mt-2 flex w-full cursor-pointer items-center justify-center px-5 py-1 prose-p1 text-neutral-600 hover:text-red-400 active:text-red-500 disabled:cursor-not-allowed disabled:text-neutral-400"
                 disabled={isFetchingNextPage}
+                type="button"
+                aria-label={`Show more answers for this question: ${questionTitle}`}
               >
                 顯示更多
               </button>

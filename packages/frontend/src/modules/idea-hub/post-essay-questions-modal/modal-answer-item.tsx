@@ -88,6 +88,8 @@ function ModalAnswerItem({
               onClick={handleLikeClick}
               disabled={!memberId || !accessToken || isPending}
               className="flex w-14 cursor-pointer items-center gap-1 disabled:cursor-not-allowed"
+              type="button"
+              aria-label={`${hasLiked ? 'Unlike' : 'Like'} answer: ${answer.content ?? ''}`}
             >
               {isLoggedIn && hasLiked && (
                 <StarIcon className="text-yellow-400" />

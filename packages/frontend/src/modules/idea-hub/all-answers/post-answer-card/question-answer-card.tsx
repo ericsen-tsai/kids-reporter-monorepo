@@ -81,6 +81,8 @@ function QuestionAnswerCard({
         {hasMoreAnswers && (
           <button
             onClick={() => onOpenModal(postSlug)}
+            type="button"
+            aria-label={`Show more answers for this question: ${question.title}`}
             className="mt-2 flex w-full cursor-pointer items-center justify-center px-5 py-1 prose-p1 text-neutral-600 hover:text-red-400 active:text-red-500"
           >
             顯示更多
