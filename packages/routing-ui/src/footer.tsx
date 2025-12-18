@@ -112,7 +112,7 @@ const Footer = ({
 
             <div className="text-center prose-p3 text-neutral-white desktop:order-1 desktop:text-left">
               <p className="desktop:inline">
-                衛部救字第1131363879號｜勸募期間 2025/1/1~12/31
+                衛部救字第1141363741號｜勸募期間 2026/1/1~12/31
                 <span className="hidden desktop:inline">｜</span>
               </p>
               <p className="desktop:inline">
