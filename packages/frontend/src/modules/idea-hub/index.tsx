@@ -1,5 +1,6 @@
 import { IdeaHubIcon, IdeaHubIconLarge } from '@/icons/miscellaneous'
 
+import AllAnswers from './all-answers'
 import LatestAnswers from './latest-answers'
 
 function IdeaHub() {
@@ -18,6 +19,7 @@ function IdeaHub() {
         看看大家的觀點，一起想，一起長大！
       </span>
       <LatestAnswers />
+      <AllAnswers />
     </div>
   )
 }

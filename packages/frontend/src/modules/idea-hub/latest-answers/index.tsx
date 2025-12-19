@@ -34,7 +34,7 @@ function LatestAnswers() {
       </div>
       <div
         className={cn(
-          'flex snap-x snap-mandatory scroll-pr-6 scroll-pl-6 gap-6 overflow-x-auto px-6 tablet:grid tablet:snap-none tablet:grid-cols-3 tablet:overflow-x-hidden tablet:px-0',
+          'flex scrollbar-thin snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 tablet:grid tablet:snap-none tablet:grid-cols-3 tablet:overflow-x-hidden tablet:px-0',
           !isLoading && answers.length === 0 && 'tablet:grid-cols-1'
         )}
       >
