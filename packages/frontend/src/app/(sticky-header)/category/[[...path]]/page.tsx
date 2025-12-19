@@ -1,5 +1,7 @@
 import { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
+// @ts-ignore `@twreporter/errors` does not have tyepscript definition file yet
+import errors from '@twreporter/errors'
 import PostList from '@/app/components/post-list'
 import Navigator from './navigator'
 import Pagination from '@/app/components/pagination'
@@ -40,50 +42,73 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const categorySlug = params.path?.[0]
   const subcategorySlug = params.path?.[1] ?? ''
-
-  const res = await sendGQLRequest({
-    query,
-    variables: {
-      categoryWhere: {
-        slug: categorySlug,
-      },
-      subcategoryWhere: {
-        slug: {
-          equals: subcategorySlug,
-        },
-      },
-    },
-  })
-
-  const category = res?.data?.data?.category
-
-  if (!category) {
-    log(
-      LogLevel.INFO,
-      `Category metadata not found. URL path is: /${params.path.join('/')}`
-    )
+  if (!categorySlug) {
+    log(LogLevel.WARNING, `Incorrect category path! ${params.path}`)
     return {}
   }
+  try {
+    const res = await sendGQLRequest({
+      query,
+      variables: {
+        categoryWhere: {
+          slug: categorySlug,
+        },
+        subcategoryWhere: {
+          slug: {
+            equals: subcategorySlug,
+          },
+        },
+      },
+    })
 
-  const title =
-    category?.subcategories?.[0]?.ogTitle ||
-    category?.ogTitle ||
-    '分類: 少年報導者 The Reporter for Kids'
-  const description =
-    category?.subcategories?.[0]?.ogDescription ||
-    category?.ogDescription ||
-    GENERAL_DESCRIPTION
+    const category = res?.data?.data?.category
 
-  return {
-    title,
-    description,
-    openGraph: {
+    if (!category) {
+      log(
+        LogLevel.INFO,
+        `Category metadata not found. URL path is: /${params.path.join('/')}`
+      )
+      return {}
+    }
+
+    const title =
+      category?.subcategories?.[0]?.ogTitle ||
+      category?.ogTitle ||
+      '分類: 少年報導者 The Reporter for Kids'
+    const description =
+      category?.subcategories?.[0]?.ogDescription ||
+      category?.ogDescription ||
+      GENERAL_DESCRIPTION
+
+    return {
       title,
       description,
-      images:
-        category?.subcategories?.[0]?.ogImage?.resized?.medium ??
-        category?.ogImage?.resized?.medium,
-    },
+      openGraph: {
+        title,
+        description,
+        images:
+          category?.subcategories?.[0]?.ogImage?.resized?.medium ??
+          category?.ogImage?.resized?.medium,
+      },
+    }
+  } catch (err) {
+    const annotatedErr = errors.helpers.wrap(
+      err,
+      'CategoryMetadataError',
+      'Error fetching category metadata'
+    )
+    console.log(
+      JSON.stringify({
+        severity: 'ERROR',
+        message: errors.helpers.printAll(
+          annotatedErr,
+          { withStack: true, withPayload: true },
+          0,
+          0
+        ),
+      })
+    )
+    return {}
   }
 }
 
