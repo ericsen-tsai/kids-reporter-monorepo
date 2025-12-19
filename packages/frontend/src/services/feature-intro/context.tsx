@@ -39,7 +39,8 @@ export function FeatureIntroDialogProvider({
       closeDialog,
       canShowBaodaozai:
         (isDialogOpen !== undefined && !isDialogOpen) ||
-        (typeof localStorage !== 'undefined' &&
+        (typeof window !== 'undefined' &&
+          typeof localStorage !== 'undefined' &&
           localStorage.getItem(FEATURE_INTRO_DIALOG_SEEN_KEY) === 'true'),
     }),
     [isDialogOpen, openDialog, closeDialog]

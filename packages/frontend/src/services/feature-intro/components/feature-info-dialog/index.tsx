@@ -94,6 +94,7 @@ function FeatureIntroDialog() {
               size={44}
               onClick={handleNext}
               className="w-30 desktop:order-[-1]"
+              aria-label={step === totalSteps ? '完成' : '下一步'}
             >
               {step === totalSteps ? '完成' : '下一步'}
             </Button>
