@@ -521,6 +521,21 @@ const listConfigurations: ListConfig<any> = list({
         listView: { fieldMode: 'hidden' },
       },
     }),
+    copyPostContent: virtual({
+      field: () =>
+        graphql.field({
+          type: graphql.JSON,
+          async resolve(item: Record<string, any>) {
+            return { postId: item.id }
+          },
+        }),
+      ui: {
+        views: './lists/views/copy-post-content',
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldPosition: 'sidebar' },
+        listView: { fieldMode: 'hidden' },
+      },
+    }),
   },
   ui: {
     label: 'Posts',
