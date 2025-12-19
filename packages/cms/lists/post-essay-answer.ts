@@ -19,6 +19,9 @@ export default list<ListType<'PostEssayAnswer'>>({
       label: '思辨題',
       ref: 'PostEssayQuestion.answers',
       many: false,
+      ui: {
+        hideCreate: true,
+      },
     }),
     [memberFieldName]: relationship({
       label: '會員',
