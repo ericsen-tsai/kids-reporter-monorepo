@@ -2,5 +2,5 @@ import { GetPostsEssayAnswersWithLikesQuery } from '__generated__/operations/pos
 
 import { RecursiveNonNullable } from '@/types/utils'
 
-export type PostWithTwoTopLikesAnswersPerQuestionReturnType =
+export type PostWithTwoTopLikesAnswersPerQuestion =
   RecursiveNonNullable<GetPostsEssayAnswersWithLikesQuery>

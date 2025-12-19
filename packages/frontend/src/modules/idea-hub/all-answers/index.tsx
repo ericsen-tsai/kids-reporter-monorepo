@@ -8,7 +8,7 @@ import { useEffect, useMemo, useRef } from 'react'
 
 import { useGetPostsEssayAnswersWithLikesInfinityQuery } from '@/api-utils/react-query/hooks/post'
 
-import { PostWithTwoTopLikesAnswersPerQuestionReturnType } from '../types'
+import { PostWithTwoTopLikesAnswersPerQuestion } from '../types'
 import PostAnswerCard from './post-answer-card'
 import PostAnswerCardSkeleton from './post-answer-card-skeleton'
 
@@ -40,8 +40,7 @@ function AllAnswers() {
   const posts = useMemo(() => {
     if (!data?.pages) return []
 
-    const allPosts: PostWithTwoTopLikesAnswersPerQuestionReturnType['posts'] =
-      []
+    const allPosts: PostWithTwoTopLikesAnswersPerQuestion['posts'] = []
 
     data.pages.forEach((page) => {
       if (!page) return

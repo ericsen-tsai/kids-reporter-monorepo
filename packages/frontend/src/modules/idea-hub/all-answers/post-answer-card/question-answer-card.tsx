@@ -3,11 +3,11 @@ import Image from 'next/image'
 import { DEFAULT_AVATAR } from '@/constants'
 import { LightbulbIcon, StarIcon } from '@/icons/miscellaneous'
 
-import { PostWithTwoTopLikesAnswersPerQuestionReturnType } from '../../types'
+import { PostWithTwoTopLikesAnswersPerQuestion } from '../../types'
 import { getMemberDisplayName } from '../../utils'
 
 type QuestionAnswerCardProps = {
-  question: PostWithTwoTopLikesAnswersPerQuestionReturnType['posts'][number]['postEssayQuestions'][number]
+  question: PostWithTwoTopLikesAnswersPerQuestion['posts'][number]['postEssayQuestions'][number]
 }
 
 const MAX_VISIBLE_ANSWERS = 2
