@@ -271,12 +271,11 @@ export function createGraphQLProxy({
         const mode: 'jwt' | 'cookie' = res.locals.authMode
 
         // Renew only for cookie mode (headless flow)
-        if (mode === 'cookie' && statusCode === 401) {
+        if (mode === 'cookie' && (statusCode === 401 || statusCode === 403)) {
           console.log(
             JSON.stringify({
               severity: 'DEBUG',
-              message:
-                '401 from Keystone with cookie auth; try renewing headless session token',
+              message: `${statusCode} from Keystone with cookie auth; try renewing headless session token`,
               ...res?.locals?.globalLogFields,
             })
           )
