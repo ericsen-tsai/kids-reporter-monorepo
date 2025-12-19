@@ -173,3 +173,48 @@ export const GET_POST_META_GQL = gql`
     }
   }
 `
+
+export const GET_POSTS_ESSAY_ANSWERS_WITH_LIKES_GQL = gql`
+  query GetPostsEssayAnswersWithLikes(
+    $orderBy: [PostOrderByInput!]!
+    $take: Int
+    $skip: Int
+    $answerOrderBy: [PostEssayAnswerOrderByInput!]!
+    $answerTake: Int
+    $where: PostWhereInput!
+  ) {
+    posts(orderBy: $orderBy, take: $take, skip: $skip, where: $where) {
+      id
+      title
+      slug
+      heroImage {
+        resized {
+          medium
+        }
+      }
+      subSubcategoriesOrdered {
+        name
+      }
+      postEssayQuestions {
+        id
+        title
+        hint
+        answers(orderBy: $answerOrderBy, take: $answerTake) {
+          id
+          content
+          member {
+            id
+            avatar {
+              id
+              fileUrl
+            }
+            name
+            nickname
+            email
+          }
+          likesCount
+        }
+      }
+    }
+  }
+`

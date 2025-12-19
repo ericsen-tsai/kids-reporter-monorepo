@@ -30,6 +30,14 @@ export default list<ListType<'PostEssayQuestion'>>({
         isRequired: true,
       },
     }),
+    answers: relationship({
+      label: '答案',
+      ref: 'PostEssayAnswer.question',
+      many: true,
+      ui: {
+        hideCreate: true,
+      },
+    }),
     hint: text({
       label: '提示',
     }),

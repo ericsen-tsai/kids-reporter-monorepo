@@ -3,8 +3,8 @@
 import { cn } from '@kids-reporter/routing-ui'
 
 import { useAllPostEssayAnswersQuery } from '@/api-utils/react-query/hooks/post-essay-answer'
-import { DEFAULT_TEXT_HOLDER } from '@/constants/input-field'
 
+import { getMemberDisplayName } from '../utils'
 import AnswerCard from './answer-card'
 import AnswerCardSkeleton from './answer-card-skeleton'
 
@@ -18,8 +18,7 @@ function LatestAnswers() {
   const answers = latestEssayAnswers.map((answer) => ({
     id: answer.id,
     content: answer.content ?? '',
-    memberName:
-      answer.member?.nickname || answer.member?.name || DEFAULT_TEXT_HOLDER,
+    memberName: getMemberDisplayName(answer.member),
     memberAvatar: answer.member?.avatar?.fileUrl ?? '',
     likesCount: answer.likesCount ?? 0,
   }))

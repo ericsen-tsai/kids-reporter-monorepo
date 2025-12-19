@@ -17,7 +17,7 @@ export default list<ListType<'PostEssayAnswer'>>({
   fields: {
     question: relationship({
       label: '思辨題',
-      ref: 'PostEssayQuestion',
+      ref: 'PostEssayQuestion.answers',
       many: false,
       ui: {
         hideCreate: true,

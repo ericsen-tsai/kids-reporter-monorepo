@@ -4,11 +4,11 @@ import Link from 'next/link'
 import { FALLBACK_IMG } from '@/constants'
 import { ArticleShortcutIconLarge } from '@/icons'
 
-import { PostWithTwoTopLikesAnswersPerQuestionReturnType } from '../../types'
+import { PostWithTwoTopLikesAnswersPerQuestion } from '../../types'
 import QuestionAnswerCard from './question-answer-card'
 
 type PostAnswerCardProps = {
-  post: PostWithTwoTopLikesAnswersPerQuestionReturnType['posts'][number]
+  post: PostWithTwoTopLikesAnswersPerQuestion['posts'][number]
 }
 
 function PostAnswerCard({ post }: PostAnswerCardProps) {
@@ -69,7 +69,7 @@ function PostAnswerCard({ post }: PostAnswerCardProps) {
 
       {/* Questions Section */}
       <div className="z-10 flex flex-col gap-4 px-4 pb-4">
-        {post.questions.map((question) => (
+        {post.postEssayQuestions.map((question) => (
           <QuestionAnswerCard key={question.id} question={question} />
         ))}
       </div>

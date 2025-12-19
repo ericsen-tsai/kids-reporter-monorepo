@@ -21,19 +21,19 @@ function AnswerCard({
   return (
     <div className="flex min-h-[182px] w-75 flex-col justify-between rounded-2xl border-2 border-neutral-200 bg-white p-5 tablet:w-full">
       <p className="line-clamp-3 prose-p1-bold text-neutral-900">{content}</p>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         <div className="flex flex-1 items-center gap-2 truncate">
           <div className="relative size-10 flex-shrink-0 overflow-hidden rounded-full">
             <Image
               src={memberAvatar || DEFAULT_AVATAR}
-              alt={memberName || '使用者'}
+              alt={memberName}
               className="size-full bg-white object-cover"
               fill
               sizes="40px"
             />
           </div>
           <span className="truncate prose-p2-bold text-neutral-900">
-            {memberName || '暱稱'}
+            {memberName}
           </span>
         </div>
         <div className="flex w-14 items-center gap-1">
