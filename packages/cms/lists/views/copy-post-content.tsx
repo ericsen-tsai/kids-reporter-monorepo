@@ -8,31 +8,73 @@ import { convertFromRaw } from 'draft-js'
 import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
-const CheckboxContainer = styled.label`
+const MultiSelectContainer = styled.div`
+  margin-top: 12px;
+  margin-bottom: 12px;
+  position: relative;
+`
+
+const SelectButton = styled.button`
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e1e5e9;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  color: #1a202c;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &:hover {
+    border-color: #cbd5e0;
+  }
+  &:focus {
+    outline: none;
+    border-color: #3182ce;
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+  }
+`
+
+const SelectDropdown = styled.div<{ isOpen: boolean }>`
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  margin-bottom: 4px;
+  background: white;
+  border: 1px solid #e1e5e9;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+  display: ${(props) => (props.isOpen ? 'block' : 'none')};
+`
+
+const OptionItem = styled.label`
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 0;
+  padding: 8px 12px;
   cursor: pointer;
   user-select: none;
+  &:hover {
+    background-color: #f7fafc;
+  }
 `
 
 const CheckboxInput = styled.input`
   cursor: pointer;
 `
 
-const CheckboxLabel = styled.span`
+const OptionLabel = styled.span`
   font-size: 14px;
-  white-space: nowrap;
 `
 
-const FieldsContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  row-gap: 4px;
-  column-gap: 8px;
-  margin-top: 12px;
-  margin-bottom: 12px;
+const PlaceholderText = styled.span<{ hasSelection: boolean }>`
+  color: ${(props) => (props.hasSelection ? '#1a202c' : '#718096')};
 `
 
 type FieldKey =
@@ -90,7 +132,9 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
     new Set(Object.keys(fieldLabels) as FieldKey[])
   )
   const [copied, setCopied] = useState(false)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     return () => {
@@ -99,6 +143,25 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
       }
     }
   }, [])
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false)
+      }
+    }
+
+    if (isDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isDropdownOpen])
 
   const toggleField = (field: FieldKey) => {
     setSelectedFields((prev) => {
@@ -110,6 +173,16 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
       }
       return next
     })
+  }
+
+  const getDisplayText = () => {
+    if (selectedFields.size === 0) {
+      return '選擇要複製的欄位...'
+    }
+    if (selectedFields.size === Object.keys(fieldLabels).length) {
+      return '已選擇所有欄位'
+    }
+    return `已選擇 ${selectedFields.size} 個欄位`
   }
 
   const formatContent = () => {
@@ -217,22 +290,33 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
   return (
     <FieldContainer>
       <FieldLabel>複製文章內容</FieldLabel>
-      <FieldsContainer>
-        {(Object.keys(fieldLabels) as FieldKey[]).map((field) => {
-          const checkboxId = `copy-post-content-${field}`
-          return (
-            <CheckboxContainer key={field}>
-              <CheckboxInput
-                type="checkbox"
-                checked={selectedFields.has(field)}
-                onChange={() => toggleField(field)}
-                id={checkboxId}
-              />
-              <CheckboxLabel>{fieldLabels[field]}</CheckboxLabel>
-            </CheckboxContainer>
-          )
-        })}
-      </FieldsContainer>
+      <MultiSelectContainer ref={dropdownRef}>
+        <SelectButton
+          type="button"
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        >
+          <PlaceholderText hasSelection={selectedFields.size > 0}>
+            {getDisplayText()}
+          </PlaceholderText>
+          <span>{isDropdownOpen ? '▲' : '▼'}</span>
+        </SelectButton>
+        <SelectDropdown isOpen={isDropdownOpen}>
+          {(Object.keys(fieldLabels) as FieldKey[]).map((field) => {
+            const checkboxId = `copy-post-content-${field}`
+            return (
+              <OptionItem key={field}>
+                <CheckboxInput
+                  type="checkbox"
+                  checked={selectedFields.has(field)}
+                  onChange={() => toggleField(field)}
+                  id={checkboxId}
+                />
+                <OptionLabel>{fieldLabels[field]}</OptionLabel>
+              </OptionItem>
+            )
+          })}
+        </SelectDropdown>
+      </MultiSelectContainer>
       <Box marginTop="medium">
         <Button onClick={handleCopy} disabled={selectedFields.size === 0}>
           <ClipboardIcon size="small" />

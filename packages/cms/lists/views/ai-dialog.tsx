@@ -176,7 +176,6 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
       <FieldLabel>
         {vendor}
         {value.label}
-        {'(依據內文欄位)'}
       </FieldLabel>
       <MsgContainer>
         {msgsJSX}
