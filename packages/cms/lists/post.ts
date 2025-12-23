@@ -561,7 +561,11 @@ const listConfigurations: ListConfig<any> = list({
         listView: { fieldMode: 'hidden' },
       },
       graphql: {
-        omit: true,
+        omit: {
+          read: false,
+          update: true,
+          create: true,
+        },
       },
     }),
   },
