@@ -314,7 +314,10 @@ export const extendGraphqlSchema = graphql.extend(() => {
 
             return posts || []
           } catch (_err) {
-            let errorMessage = 'searchTWReporterPosts failed'
+            const err = _err instanceof Error ? _err : new Error(String(_err))
+            let errorMessage =
+              err.stack || err.message || 'searchTWReporterPosts failed'
+
             if (_err instanceof AxiosError) {
               const annotatedErr = _errors.helpers.annotateAxiosError(_err)
               errorMessage = _errors.helpers.printAll(annotatedErr, {
@@ -323,6 +326,7 @@ export const extendGraphqlSchema = graphql.extend(() => {
               })
             }
 
+            // GCP structured logging
             console.log(
               JSON.stringify({
                 severity: 'ERROR',
@@ -544,10 +548,13 @@ export const extendGraphqlSchema = graphql.extend(() => {
               posts,
               nextCursor,
             }
-          } catch (err) {
-            let errorMessage = 'memberPostsWithAnswers failed'
-            if (err instanceof AxiosError) {
-              const annotatedErr = _errors.helpers.annotateAxiosError(err)
+          } catch (_err) {
+            const err = _err instanceof Error ? _err : new Error(String(_err))
+            let errorMessage =
+              err.stack || err.message || 'getMemberPostsWithAnswers failed'
+
+            if (_err instanceof AxiosError) {
+              const annotatedErr = _errors.helpers.annotateAxiosError(_err)
               errorMessage = _errors.helpers.printAll(annotatedErr, {
                 withStack: true,
                 withPayload: true,
@@ -557,11 +564,12 @@ export const extendGraphqlSchema = graphql.extend(() => {
             console.log(
               JSON.stringify({
                 severity: 'ERROR',
-                message: 'memberPostsWithAnswers failed',
+                message: errorMessage,
                 context: {
-                  function: 'memberPostsWithAnswers',
+                  function: 'getMemberPostsWithAnswers',
                   memberId,
-                  error: errorMessage,
+                  take,
+                  cursor,
                 },
               })
             )
@@ -674,10 +682,13 @@ export const extendGraphqlSchema = graphql.extend(() => {
             })
 
             return result
-          } catch (err) {
-            let errorMessage = 'getMemberEssayAnswersHasLike failed'
-            if (err instanceof AxiosError) {
-              const annotatedErr = _errors.helpers.annotateAxiosError(err)
+          } catch (_err) {
+            const err = _err instanceof Error ? _err : new Error(String(_err))
+            let errorMessage =
+              err.stack || err.message || 'getMemberEssayAnswersHasLiked failed'
+
+            if (_err instanceof AxiosError) {
+              const annotatedErr = _errors.helpers.annotateAxiosError(_err)
               errorMessage = _errors.helpers.printAll(annotatedErr, {
                 withStack: true,
                 withPayload: true,
