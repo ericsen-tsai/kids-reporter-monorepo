@@ -1,8 +1,15 @@
-import { GetMemberPostsWithAnswersQueryVariables } from '__generated__/operations/extended.generated'
+import {
+  GetMemberEssayAnswersHasLikedQuery,
+  GetMemberEssayAnswersHasLikedQueryVariables,
+  GetMemberPostsWithAnswersQueryVariables,
+} from '__generated__/operations/extended.generated'
 
 import { sendGQLRequest } from '@/utils/send-gql-request'
 
-import { GET_MEMBER_POSTS_WITH_ANSWERS_GQL } from './graphql/extended'
+import {
+  GET_MEMBER_ESSAY_ANSWERS_HAS_LIKED_GQL,
+  GET_MEMBER_POSTS_WITH_ANSWERS_GQL,
+} from './graphql/extended'
 
 export type GetMemberPostsWithAnswersQuerySchema = {
   getMemberPostsWithAnswers: {
@@ -61,4 +68,21 @@ export const getMemberPostsWithAnswers = async (
     }
   )
   return response?.data?.data?.getMemberPostsWithAnswers
+}
+
+export const getMemberEssayAnswersHasLiked = async (
+  variables: GetMemberEssayAnswersHasLikedQueryVariables & {
+    accessToken: string
+  }
+) => {
+  const response = await sendGQLRequest<GetMemberEssayAnswersHasLikedQuery>(
+    {
+      query: GET_MEMBER_ESSAY_ANSWERS_HAS_LIKED_GQL,
+      variables,
+    },
+    {
+      authToken: variables.accessToken,
+    }
+  )
+  return response?.data?.data?.getMemberEssayAnswersHasLiked
 }

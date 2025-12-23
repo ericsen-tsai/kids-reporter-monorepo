@@ -4,15 +4,21 @@ import { DEFAULT_AVATAR } from '@/constants'
 import { LightbulbIcon, StarIcon } from '@/icons/miscellaneous'
 
 import { PostWithTwoTopLikesAnswersPerQuestion } from '../../types'
-import { getMemberDisplayName } from '../../utils'
+import { getDisplayLikesCount, getMemberDisplayName } from '../../utils'
 
 type QuestionAnswerCardProps = {
   question: PostWithTwoTopLikesAnswersPerQuestion['posts'][number]['postEssayQuestions'][number]
+  postSlug: string
+  onOpenModal: (postSlug: string) => void
 }
 
 const MAX_VISIBLE_ANSWERS = 2
 
-function QuestionAnswerCard({ question }: QuestionAnswerCardProps) {
+function QuestionAnswerCard({
+  question,
+  postSlug,
+  onOpenModal,
+}: QuestionAnswerCardProps) {
   const visibleAnswers = question.answers.slice(0, MAX_VISIBLE_ANSWERS)
   const hasMoreAnswers = question.answers.length > MAX_VISIBLE_ANSWERS
 
@@ -35,7 +41,6 @@ function QuestionAnswerCard({ question }: QuestionAnswerCardProps) {
           return (
             <div key={answer.id}>
               <div className="flex flex-col gap-2">
-                {/* Answer Header */}
                 <div className="flex w-full items-center justify-between gap-2">
                   <div className="flex min-w-0 flex-1 items-center gap-2">
                     <div className="relative size-10 flex-shrink-0 overflow-hidden rounded-full">
@@ -51,17 +56,14 @@ function QuestionAnswerCard({ question }: QuestionAnswerCardProps) {
                       {memberDisplayName}
                     </span>
                   </div>
-                  <div className="flex w-14 items-center gap-1">
+                  <div className="flex w-14 items-center gap-1 text-neutral-600">
                     <StarIcon />
-                    <span className="prose-p2-medium text-neutral-600">
-                      {answer.likesCount > 99
-                        ? '99+'
-                        : answer.likesCount.toString()}
+                    <span className="prose-p2-medium">
+                      {getDisplayLikesCount(answer.likesCount)}
                     </span>
                   </div>
                 </div>
 
-                {/* Answer Content */}
                 <p className="prose-p1-bold text-neutral-900">
                   {answer.content}
                 </p>
@@ -77,7 +79,12 @@ function QuestionAnswerCard({ question }: QuestionAnswerCardProps) {
 
         {/* Show More Button */}
         {hasMoreAnswers && (
-          <button className="mt-2 flex w-full cursor-pointer items-center justify-center px-5 py-1 prose-p1 text-neutral-600 hover:text-red-400 active:text-red-500">
+          <button
+            onClick={() => onOpenModal(postSlug)}
+            type="button"
+            aria-label={`Show more answers for this question: ${question.title}`}
+            className="mt-2 flex w-full cursor-pointer items-center justify-center px-5 py-1 prose-p1 text-neutral-600 hover:text-red-400 active:text-red-500"
+          >
             顯示更多
           </button>
         )}

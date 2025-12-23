@@ -5,15 +5,14 @@ import {
 } from '@kids-reporter/routing-ui'
 import { useEffect, useMemo, useState } from 'react'
 
-import { useGetMemberPostsWithAnswersInfinityQuery } from '@/api-utils/react-query/hooks/extended'
+import { DEFAULT_PAGE_ITEM_COUNT } from '@/api-utils/react-query/constants'
+import { useMemberPostsWithAnswersInfinityQuery } from '@/api-utils/react-query/hooks/extended'
 import { ArrowLeft, ArrowRight } from '@/icons'
 import { useHydratedAuthStore } from '@/services/auth/use-hydrated-auth-store'
 
 import MembershipSideMenu from '../components/side-menu'
 import PostQuestionAnswersList from './post-question-answers-list'
 import { parseMemberPostsWithAnswersToPostQuestionAnswers } from './utils'
-
-const PAGE_ITEM_COUNT = 5
 
 function MyReading() {
   const [currentPage, setCurrentPage] = useState(1)
@@ -23,9 +22,9 @@ function MyReading() {
     isLoading,
     fetchNextPage,
     hasNextPage,
-  } = useGetMemberPostsWithAnswersInfinityQuery({
+  } = useMemberPostsWithAnswersInfinityQuery({
     memberId: member?.id ?? '',
-    take: PAGE_ITEM_COUNT,
+    take: DEFAULT_PAGE_ITEM_COUNT,
     accessToken: tokens?.accessToken ?? '',
   })
 

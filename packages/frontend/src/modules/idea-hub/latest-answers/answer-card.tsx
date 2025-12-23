@@ -1,13 +1,18 @@
+'use client'
+
 import Image from 'next/image'
 
 import { DEFAULT_AVATAR } from '@/constants'
 import { StarIcon } from '@/icons/miscellaneous'
+
+import { getDisplayLikesCount } from '../utils'
 
 type AnswerCardProps = {
   content: string
   memberName: string
   memberAvatar?: string
   likesCount: number
+  onClick?: () => void
 }
 
 function AnswerCard({
@@ -15,11 +20,15 @@ function AnswerCard({
   memberName,
   memberAvatar,
   likesCount,
+  onClick,
 }: AnswerCardProps) {
-  const displayLikesCount = likesCount > 99 ? '99+' : likesCount.toString()
-
   return (
-    <div className="flex min-h-[182px] w-75 flex-col justify-between rounded-2xl border-2 border-neutral-200 bg-white p-5 tablet:w-full">
+    <div
+      className="flex min-h-[182px] w-75 cursor-pointer flex-col justify-between rounded-2xl border-2 border-neutral-200 bg-white p-5 transition-colors hover:border-neutral-300 tablet:w-full"
+      onClick={onClick}
+      role="button"
+      aria-label={`View answer: ${content}`}
+    >
       <p className="line-clamp-3 prose-p1-bold text-neutral-900">{content}</p>
       <div className="flex items-center justify-between gap-2">
         <div className="flex flex-1 items-center gap-2 truncate">
@@ -39,7 +48,7 @@ function AnswerCard({
         <div className="flex w-14 items-center gap-1">
           <StarIcon />
           <span className="prose-p2-medium text-neutral-600">
-            {displayLikesCount}
+            {getDisplayLikesCount(likesCount)}
           </span>
         </div>
       </div>

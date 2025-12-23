@@ -1,6 +1,7 @@
 'use client'
 
 import { cn } from '@kids-reporter/routing-ui'
+import { memo } from 'react'
 
 import { useAllPostEssayAnswersQuery } from '@/api-utils/react-query/hooks/post-essay-answer'
 
@@ -8,20 +9,32 @@ import { getMemberDisplayName } from '../utils'
 import AnswerCard from './answer-card'
 import AnswerCardSkeleton from './answer-card-skeleton'
 
-function LatestAnswers() {
+type LatestAnswersProps = {
+  onOpenModal: (postSlug: string) => void
+}
+
+function LatestAnswers({ onOpenModal }: LatestAnswersProps) {
   const { data: latestEssayAnswers = [], isPending: isLoading } =
     useAllPostEssayAnswersQuery({
       orderBy: [{ createdAt: 'desc' }],
       take: 3,
     })
 
-  const answers = latestEssayAnswers.map((answer) => ({
-    id: answer.id,
-    content: answer.content ?? '',
-    memberName: getMemberDisplayName(answer.member),
-    memberAvatar: answer.member?.avatar?.fileUrl ?? '',
-    likesCount: answer.likesCount ?? 0,
-  }))
+  const answers = latestEssayAnswers.map((answer) => {
+    const question = answer.question
+    return {
+      id: answer.id,
+      content: answer.content ?? '',
+      memberName: getMemberDisplayName(answer.member),
+      memberAvatar: answer.member?.avatar?.fileUrl ?? '',
+      likesCount: answer.likesCount ?? 0,
+      postSlug: question?.post?.slug ?? '',
+    }
+  })
+
+  const handleAnswerCardClick = (postSlug: string) => {
+    onOpenModal(postSlug)
+  }
 
   return (
     <div className="mt-10 mb-14 flex w-[calc(100%+48px)] flex-col gap-8 tablet:mb-16 tablet:w-full desktop:mt-18 desktop:mb-24 hd:mt-24 hd:mb-30">
@@ -50,7 +63,10 @@ function LatestAnswers() {
           answers.length > 0 &&
           answers.map((answer) => (
             <div key={answer.id} className="flex-1 snap-start">
-              <AnswerCard {...answer} />
+              <AnswerCard
+                {...answer}
+                onClick={() => handleAnswerCardClick(answer.postSlug)}
+              />
             </div>
           ))}
         {!isLoading && answers.length === 0 && (
@@ -63,4 +79,4 @@ function LatestAnswers() {
   )
 }
 
-export default LatestAnswers
+export default memo(LatestAnswers)

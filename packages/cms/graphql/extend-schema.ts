@@ -1,6 +1,6 @@
 import { graphql } from '@keystone-6/core'
 import { Prisma } from '@prisma/client'
-// @ts-ignore `@twreporter/errors` does not have tyepscript definition file yet
+// @ts-ignore `@twreporter/errors` does not have typescript definition file yet
 import _errors from '@twreporter/errors'
 import axios, { AxiosError } from 'axios'
 import { convertFromRaw } from 'draft-js'
@@ -314,7 +314,10 @@ export const extendGraphqlSchema = graphql.extend(() => {
 
             return posts || []
           } catch (_err) {
-            let errorMessage = 'searchTWReporterPosts failed'
+            const err = _err instanceof Error ? _err : new Error(String(_err))
+            let errorMessage =
+              err.stack || err.message || 'searchTWReporterPosts failed'
+
             if (_err instanceof AxiosError) {
               const annotatedErr = _errors.helpers.annotateAxiosError(_err)
               errorMessage = _errors.helpers.printAll(annotatedErr, {
@@ -323,6 +326,7 @@ export const extendGraphqlSchema = graphql.extend(() => {
               })
             }
 
+            // GCP structured logging
             console.log(
               JSON.stringify({
                 severity: 'ERROR',
@@ -351,15 +355,17 @@ export const extendGraphqlSchema = graphql.extend(() => {
       getMemberPostsWithAnswers: graphql.field({
         type: graphql.JSON,
         args: {
-          memberId: graphql.arg({ type: graphql.nonNull(graphql.ID) }),
           take: graphql.arg({ type: graphql.Int, defaultValue: 5 }),
           cursor: graphql.arg({ type: graphql.String }),
         },
         async resolve(root, args, ctx: Context) {
-          const { memberId, take = 5, cursor } = args
-
+          const { take = 5, cursor } = args
+          const memberId =
+            ctx.session?.data && 'memberId' in ctx.session.data
+              ? ctx.session?.data?.memberId
+              : null
           const session = ctx.session
-          const isUnauthorized = !session
+          const isUnauthorized = !session || !memberId
           const isForbidden = ![RoleEnum.Admin, RoleEnum.Member].includes(
             session?.data?.role ?? ''
           )
@@ -542,10 +548,13 @@ export const extendGraphqlSchema = graphql.extend(() => {
               posts,
               nextCursor,
             }
-          } catch (err) {
-            let errorMessage = 'memberPostsWithAnswers failed'
-            if (err instanceof AxiosError) {
-              const annotatedErr = _errors.helpers.annotateAxiosError(err)
+          } catch (_err) {
+            const err = _err instanceof Error ? _err : new Error(String(_err))
+            let errorMessage =
+              err.stack || err.message || 'getMemberPostsWithAnswers failed'
+
+            if (_err instanceof AxiosError) {
+              const annotatedErr = _errors.helpers.annotateAxiosError(_err)
               errorMessage = _errors.helpers.printAll(annotatedErr, {
                 withStack: true,
                 withPayload: true,
@@ -555,17 +564,153 @@ export const extendGraphqlSchema = graphql.extend(() => {
             console.log(
               JSON.stringify({
                 severity: 'ERROR',
-                message: 'memberPostsWithAnswers failed',
+                message: errorMessage,
                 context: {
-                  function: 'memberPostsWithAnswers',
+                  function: 'getMemberPostsWithAnswers',
                   memberId,
-                  error: errorMessage,
+                  take,
+                  cursor,
                 },
               })
             )
 
             throw new GraphQLError(
               'Internal server error while fetching member posts with answers',
+              {
+                extensions: {
+                  code: 'INTERNAL_SERVER_ERROR',
+                  http: {
+                    status: 500,
+                  },
+                },
+              }
+            )
+          }
+        },
+      }),
+      getMemberEssayAnswersHasLiked: graphql.field({
+        type: graphql.list(
+          graphql.object<{
+            essayAnswerId: string
+            hasLiked: boolean
+            essayAnswerLikeId: string
+          }>()({
+            name: 'getMemberEssayAnswersHasLikedResult',
+            fields: {
+              essayAnswerId: graphql.field({ type: graphql.ID }),
+              hasLiked: graphql.field({ type: graphql.Boolean }),
+              essayAnswerLikeId: graphql.field({ type: graphql.ID }),
+            },
+          })
+        ),
+        args: {
+          essayAnswerIds: graphql.arg({ type: graphql.list(graphql.ID) }),
+        },
+        async resolve(root, args, ctx: Context) {
+          const { essayAnswerIds } = args
+          const memberId =
+            ctx.session?.data && 'memberId' in ctx.session.data
+              ? ctx.session?.data?.memberId
+              : null
+
+          const session = ctx.session
+          const isUnauthorized = !session || !memberId
+          const isForbidden = ![RoleEnum.Admin, RoleEnum.Member].includes(
+            session?.data?.role ?? ''
+          )
+          if (isUnauthorized || isForbidden) {
+            const errorMessage = isUnauthorized
+              ? 'Unauthorized to check if member has liked essay answers'
+              : 'Forbidden to check if member has liked essay answers'
+
+            const errorCode = isUnauthorized ? 'UNAUTHENTICATED' : 'FORBIDDEN'
+
+            console.log(
+              JSON.stringify({
+                severity: 'WARNING',
+                message: errorMessage,
+                context: {
+                  function: 'getMemberEssayAnswersHasLiked',
+                  memberId,
+                  essayAnswerIds,
+                  errorCode,
+                },
+              })
+            )
+
+            throw new GraphQLError(errorMessage, {
+              extensions: {
+                code: errorCode,
+                http: {
+                  status: isUnauthorized ? 401 : 403,
+                },
+              },
+            })
+          }
+
+          if (!essayAnswerIds || essayAnswerIds.length === 0) {
+            return []
+          }
+
+          try {
+            const validEssayAnswerIds = essayAnswerIds.filter(
+              (id): id is string => id !== null && id !== undefined
+            )
+
+            const essayAnswerLikes =
+              (await ctx.query.PostEssayAnswerLike.findMany({
+                where: {
+                  member: { id: { equals: memberId } },
+                  answer: { id: { in: validEssayAnswerIds } },
+                },
+                query: `
+                id
+                answer {
+                  id
+                }
+              `,
+              })) as { id: number; answer: { id: number } }[]
+
+            const result = validEssayAnswerIds.map((id) => {
+              const answer = essayAnswerLikes.find(
+                (a) => a.answer?.id?.toString() === id
+              )
+              return {
+                essayAnswerId: id,
+                hasLiked: !!answer,
+                essayAnswerLikeId: answer?.id?.toString() ?? '',
+              }
+            })
+
+            return result
+          } catch (_err) {
+            const err = _err instanceof Error ? _err : new Error(String(_err))
+            let errorMessage =
+              err.stack || err.message || 'getMemberEssayAnswersHasLiked failed'
+
+            if (_err instanceof AxiosError) {
+              const annotatedErr = _errors.helpers.annotateAxiosError(_err)
+              errorMessage = _errors.helpers.printAll(annotatedErr, {
+                withStack: true,
+                withPayload: true,
+              })
+            }
+
+            console.log(
+              JSON.stringify({
+                severity: 'ERROR',
+                message: errorMessage,
+                context: {
+                  function: 'getMemberEssayAnswersHasLiked',
+                  memberId,
+                  essayAnswerIds,
+                  error: errorMessage,
+                },
+              })
+            )
+
+            throw new GraphQLError(
+              'Internal server error while checking member essay answers has liked',
               {
                 extensions: {
                   code: 'INTERNAL_SERVER_ERROR',

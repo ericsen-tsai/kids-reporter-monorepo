@@ -12,7 +12,7 @@ import {
   updatePostEssayAnswer,
 } from '@/api/post-essay-answer'
 
-export const POST_ESSAY_ANSWERS_QUERY_KEY = 'post-essay-answers'
+const POST_ESSAY_ANSWERS_QUERY_KEY = 'post-essay-answers'
 
 export function usePostEssayAnswersQuery({
   memberId,
@@ -24,13 +24,20 @@ export function usePostEssayAnswersQuery({
   postSlug?: string
 }) {
   return useQuery({
-    queryKey: [POST_ESSAY_ANSWERS_QUERY_KEY, memberId, postSlug ?? 'all-posts'],
+    queryKey: usePostEssayAnswersQuery.getQueryKey({ memberId, postSlug }),
     queryFn: () =>
       getPostEssayAnswersByMemberId(memberId, accessToken, postSlug),
     enabled: !!memberId && !!accessToken,
     staleTime: Infinity,
   })
 }
+usePostEssayAnswersQuery.getQueryKey = ({
+  memberId,
+  postSlug,
+}: {
+  memberId: string
+  postSlug?: string
+}) => [POST_ESSAY_ANSWERS_QUERY_KEY, memberId, postSlug ?? 'all-posts']
 
 export function useAllPostEssayAnswersQuery({
   orderBy,
@@ -40,17 +47,25 @@ export function useAllPostEssayAnswersQuery({
   take?: number
 }) {
   return useQuery({
-    queryKey: [
-      POST_ESSAY_ANSWERS_QUERY_KEY,
-      'all-members',
-      'all-posts',
-      ...(orderBy ? [JSON.stringify(orderBy)] : []),
-      ...(take ? [take] : []),
-    ],
+    queryKey: useAllPostEssayAnswersQuery.getQueryKey({ orderBy, take }),
     queryFn: () => getAllPostEssayAnswers(orderBy, take),
     staleTime: Infinity,
   })
 }
+
+useAllPostEssayAnswersQuery.getQueryKey = ({
+  orderBy,
+  take,
+}: {
+  orderBy?: PostEssayAnswerOrderByInput[]
+  take?: number
+}) => [
+  POST_ESSAY_ANSWERS_QUERY_KEY,
+  'all-members',
+  'all-posts',
+  ...(orderBy ? [orderBy] : []),
+  ...(take ? [take] : []),
+]
 
 export function useCreatePostEssayAnswerMutation({
   accessToken,

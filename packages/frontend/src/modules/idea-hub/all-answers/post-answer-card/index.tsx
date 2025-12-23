@@ -2,16 +2,17 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { FALLBACK_IMG } from '@/constants'
-import { ArticleShortcutIconLarge } from '@/icons'
+import { ArticleShortcutIconLarge, CornerOutIcon } from '@/icons'
 
 import { PostWithTwoTopLikesAnswersPerQuestion } from '../../types'
 import QuestionAnswerCard from './question-answer-card'
 
 type PostAnswerCardProps = {
   post: PostWithTwoTopLikesAnswersPerQuestion['posts'][number]
+  onOpenModal: (postSlug: string) => void
 }
 
-function PostAnswerCard({ post }: PostAnswerCardProps) {
+function PostAnswerCard({ post, onOpenModal }: PostAnswerCardProps) {
   const heroImageUrl = post.heroImage?.resized?.medium || FALLBACK_IMG
   const firstCategory = post.subSubcategoriesOrdered?.[0]?.name || ''
 
@@ -47,13 +48,20 @@ function PostAnswerCard({ post }: PostAnswerCardProps) {
               </span>
             </div>
           </div>
-
-          <Link
-            href={post.slug ? `/article/${post.slug}` : ''}
-            className="flex size-10 items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:text-red-400 active:text-red-500"
-          >
-            <ArticleShortcutIconLarge />
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link
+              href={post.slug ? `/article/${post.slug}` : ''}
+              className="flex size-10 items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:text-red-400 active:text-red-500"
+            >
+              <ArticleShortcutIconLarge />
+            </Link>
+            <button
+              onClick={() => onOpenModal(post.slug)}
+              className="flex size-10 cursor-pointer items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:text-red-400 active:text-red-500"
+            >
+              <CornerOutIcon />
+            </button>
+          </div>
         </div>
 
         {/* Title */}
@@ -70,7 +78,12 @@ function PostAnswerCard({ post }: PostAnswerCardProps) {
       {/* Questions Section */}
       <div className="z-10 flex flex-col gap-4 px-4 pb-4">
         {post.postEssayQuestions.map((question) => (
-          <QuestionAnswerCard key={question.id} question={question} />
+          <QuestionAnswerCard
+            key={question.id}
+            question={question}
+            postSlug={post.slug}
+            onOpenModal={onOpenModal}
+          />
         ))}
       </div>
     </div>
