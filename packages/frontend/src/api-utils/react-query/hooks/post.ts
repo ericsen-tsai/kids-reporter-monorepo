@@ -1,14 +1,16 @@
+import { GetPostsEssayAnswersWithLikesQuery } from '__generated__/operations/post.generated'
 import {
   PostEssayAnswerOrderByInput,
   PostOrderByInput,
   PostWhereInput,
 } from '__generated__/types'
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { InfiniteData, useInfiniteQuery, useQuery } from '@tanstack/react-query'
 
 import {
   getPostEssayQuestionsByPostSlug,
   getPostsEssayAnswersWithLikes,
 } from '@/api/post'
+import { PostWithTwoTopLikesAnswersPerQuestion } from '@/modules/idea-hub/types'
 
 const POSTS_ESSAY_ANSWERS_WITH_LIKES_QUERY_KEY =
   'posts-essay-answers-with-likes'
@@ -19,12 +21,16 @@ export function usePostsEssayAnswersWithLikesInfinityQuery({
   answerOrderBy,
   answerTake,
   where,
+  select,
 }: {
   orderBy: PostOrderByInput[]
   take: number
   answerOrderBy: PostEssayAnswerOrderByInput[]
   answerTake: number
   where: PostWhereInput
+  select?: (
+    data: InfiniteData<GetPostsEssayAnswersWithLikesQuery['posts']>
+  ) => PostWithTwoTopLikesAnswersPerQuestion['posts']
 }) {
   return useInfiniteQuery({
     queryKey: usePostsEssayAnswersWithLikesInfinityQuery.getQueryKey({
@@ -48,6 +54,7 @@ export function usePostsEssayAnswersWithLikesInfinityQuery({
       return hasNextPage ? lastPageParam + take : undefined
     },
     initialPageParam: 0,
+    select,
   })
 }
 
