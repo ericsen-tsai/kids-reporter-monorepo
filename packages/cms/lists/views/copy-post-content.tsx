@@ -6,7 +6,7 @@ import { Box } from '@keystone-ui/core'
 import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
 import { ClipboardIcon } from '@keystone-ui/icons/icons/ClipboardIcon'
 import { convertFromRaw } from 'draft-js'
-import { useCallback, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 const CheckboxContainer = styled.label`
@@ -57,6 +57,22 @@ const fieldLabels: Record<FieldKey, string> = {
   postEssayQuestions: '思辨題組',
 }
 
+type ChoiceQuestionOption = {
+  content: string
+  isCorrectAnswer: boolean
+}
+
+type PostChoiceQuestion = {
+  title: string
+  options: ChoiceQuestionOption[]
+  reason: string | null
+}
+
+type PostEssayQuestion = {
+  title: string
+  hint: string | null
+}
+
 const GET_POST = gql`
   query GetPost($id: ID!) {
     post(where: { id: $id }) {
@@ -86,6 +102,7 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
     new Set(Object.keys(fieldLabels) as FieldKey[])
   )
   const [copied, setCopied] = useState(false)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const { data, loading, error } = useQuery(GET_POST, {
     variables: { id: postId },
@@ -93,6 +110,14 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
   })
 
   const post = data?.post
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
 
   const toggleField = (field: FieldKey) => {
     setSelectedFields((prev) => {
@@ -106,7 +131,7 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
     })
   }
 
-  const formatContent = useCallback(() => {
+  const formatContent = () => {
     if (!post) return ''
 
     const parts: string[] = []
@@ -150,18 +175,20 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
       post.postChoiceQuestions.length > 0
     ) {
       parts.push('## 選擇題組')
-      post.postChoiceQuestions.forEach((q: any, index: number) => {
-        parts.push(`\n### ${index + 1}. ${q.title}`)
-        if (q.options && Array.isArray(q.options)) {
-          q.options.forEach((opt: any) => {
-            const marker = opt.isCorrectAnswer ? '- [x]' : '- [ ]'
-            parts.push(`${marker} ${opt.content || ''}`)
-          })
+      post.postChoiceQuestions.forEach(
+        (q: PostChoiceQuestion, index: number) => {
+          parts.push(`\n### ${index + 1}. ${q.title}`)
+          if (q.options && Array.isArray(q.options)) {
+            q.options.forEach((opt: ChoiceQuestionOption) => {
+              const marker = opt.isCorrectAnswer ? '- [x]' : '- [ ]'
+              parts.push(`${marker} ${opt.content || ''}`)
+            })
+          }
+          if (q.reason) {
+            parts.push(`\n**原因：** ${q.reason}`)
+          }
         }
-        if (q.reason) {
-          parts.push(`\n**原因：** ${q.reason}`)
-        }
-      })
+      )
     }
 
     if (
@@ -170,7 +197,7 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
       post.postEssayQuestions.length > 0
     ) {
       parts.push('## 思辨題組')
-      post.postEssayQuestions.forEach((q: any, index: number) => {
+      post.postEssayQuestions.forEach((q: PostEssayQuestion, index: number) => {
         parts.push(`\n### ${index + 1}. ${q.title}`)
         if (q.hint) {
           parts.push(`\n**提示：** ${q.hint}`)
@@ -179,7 +206,7 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
     }
 
     return parts.join('\n\n')
-  }, [post, selectedFields])
+  }
 
   const handleCopy = async () => {
     const content = formatContent()
@@ -190,7 +217,10 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
     try {
       await navigator.clipboard.writeText(content)
       setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+      timeoutRef.current = setTimeout(() => setCopied(false), 2000)
     } catch (err) {
       console.error('Failed to copy:', err)
     }
@@ -209,16 +239,20 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
     <FieldContainer>
       <FieldLabel>複製文章內容</FieldLabel>
       <FieldsContainer>
-        {(Object.keys(fieldLabels) as FieldKey[]).map((field) => (
-          <CheckboxContainer key={field}>
-            <CheckboxInput
-              type="checkbox"
-              checked={selectedFields.has(field)}
-              onChange={() => toggleField(field)}
-            />
-            <CheckboxLabel>{fieldLabels[field]}</CheckboxLabel>
-          </CheckboxContainer>
-        ))}
+        {(Object.keys(fieldLabels) as FieldKey[]).map((field) => {
+          const checkboxId = `copy-post-content-${field}`
+          return (
+            <CheckboxContainer key={field}>
+              <CheckboxInput
+                type="checkbox"
+                checked={selectedFields.has(field)}
+                onChange={() => toggleField(field)}
+                id={checkboxId}
+              />
+              <CheckboxLabel>{fieldLabels[field]}</CheckboxLabel>
+            </CheckboxContainer>
+          )
+        })}
       </FieldsContainer>
       {loading && <Box marginTop="small">載入中...</Box>}
       {error && (
