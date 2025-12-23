@@ -1,4 +1,3 @@
-import { gql, useQuery } from '@keystone-6/core/admin-ui/apollo'
 import { controller } from '@keystone-6/core/fields/types/virtual/views'
 import { FieldProps } from '@keystone-6/core/types'
 import { Button } from '@keystone-ui/button'
@@ -73,43 +72,25 @@ type PostEssayQuestion = {
   hint: string | null
 }
 
-const GET_POST = gql`
-  query GetPost($id: ID!) {
-    post(where: { id: $id }) {
-      id
-      title
-      subtitle
-      brief
-      content
-      ogDescription
-      opening
-      postChoiceQuestions {
-        title
-        options
-        reason
-      }
-      postEssayQuestions {
-        title
-        hint
-      }
-    }
-  }
-`
+type PostData = {
+  id: string
+  title: string | null
+  subtitle: string | null
+  brief: any
+  content: any
+  ogDescription: string | null
+  opening: string | null
+  postChoiceQuestions: PostChoiceQuestion[]
+  postEssayQuestions: PostEssayQuestion[]
+}
 
 export const Field = ({ value }: FieldProps<typeof controller>) => {
-  const postId = value?.postId
+  const post = value as PostData | null
   const [selectedFields, setSelectedFields] = useState<Set<FieldKey>>(
     new Set(Object.keys(fieldLabels) as FieldKey[])
   )
   const [copied, setCopied] = useState(false)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  const { data, loading, error } = useQuery(GET_POST, {
-    variables: { id: postId },
-    skip: !postId,
-  })
-
-  const post = data?.post
 
   useEffect(() => {
     return () => {
@@ -175,20 +156,18 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
       post.postChoiceQuestions.length > 0
     ) {
       parts.push('## 選擇題組')
-      post.postChoiceQuestions.forEach(
-        (q: PostChoiceQuestion, index: number) => {
-          parts.push(`\n### ${index + 1}. ${q.title}`)
-          if (q.options && Array.isArray(q.options)) {
-            q.options.forEach((opt: ChoiceQuestionOption) => {
-              const marker = opt.isCorrectAnswer ? '- [x]' : '- [ ]'
-              parts.push(`${marker} ${opt.content || ''}`)
-            })
-          }
-          if (q.reason) {
-            parts.push(`\n**原因：** ${q.reason}`)
-          }
+      post.postChoiceQuestions.forEach((q, index: number) => {
+        parts.push(`\n### ${index + 1}. ${q.title}`)
+        if (q.options && Array.isArray(q.options)) {
+          q.options.forEach((opt: ChoiceQuestionOption) => {
+            const marker = opt.isCorrectAnswer ? '- [x]' : '- [ ]'
+            parts.push(`${marker} ${opt.content || ''}`)
+          })
         }
-      )
+        if (q.reason) {
+          parts.push(`\n**原因：** ${q.reason}`)
+        }
+      })
     }
 
     if (
@@ -197,7 +176,7 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
       post.postEssayQuestions.length > 0
     ) {
       parts.push('## 思辨題組')
-      post.postEssayQuestions.forEach((q: PostEssayQuestion, index: number) => {
+      post.postEssayQuestions.forEach((q, index: number) => {
         parts.push(`\n### ${index + 1}. ${q.title}`)
         if (q.hint) {
           parts.push(`\n**提示：** ${q.hint}`)
@@ -226,7 +205,7 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
     }
   }
 
-  if (!postId) {
+  if (!post) {
     return (
       <FieldContainer>
         <FieldLabel>複製文章內容</FieldLabel>
@@ -254,17 +233,8 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
           )
         })}
       </FieldsContainer>
-      {loading && <Box marginTop="small">載入中...</Box>}
-      {error && (
-        <Box marginTop="small">
-          載入錯誤：{error instanceof Error ? error.message : String(error)}
-        </Box>
-      )}
       <Box marginTop="medium">
-        <Button
-          onClick={handleCopy}
-          disabled={selectedFields.size === 0 || loading || !!error || !post}
-        >
+        <Button onClick={handleCopy} disabled={selectedFields.size === 0}>
           <ClipboardIcon size="small" />
           {copied ? '已複製' : '複製選取的內容'}
         </Button>

@@ -525,8 +525,33 @@ const listConfigurations: ListConfig<any> = list({
       field: () =>
         graphql.field({
           type: graphql.JSON,
-          async resolve(item: Record<string, any>) {
-            return { postId: item.id }
+          async resolve(
+            item: Record<string, any>,
+            args,
+            context: KeystoneContext
+          ) {
+            const post = await context.query.Post.findOne({
+              where: { id: item.id },
+              query: `
+                id
+                title
+                subtitle
+                brief
+                content
+                ogDescription
+                opening
+                postChoiceQuestions {
+                  title
+                  options
+                  reason
+                }
+                postEssayQuestions {
+                  title
+                  hint
+                }
+              `,
+            })
+            return post
           },
         }),
       ui: {
