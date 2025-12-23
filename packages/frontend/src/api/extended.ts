@@ -1,4 +1,5 @@
 import {
+  GetMemberEssayAnswersHasLikedQuery,
   GetMemberEssayAnswersHasLikedQueryVariables,
   GetMemberPostsWithAnswersQueryVariables,
 } from '__generated__/operations/extended.generated'
@@ -74,12 +75,7 @@ export const getMemberEssayAnswersHasLiked = async (
     accessToken: string
   }
 ) => {
-  const response = await sendGQLRequest<{
-    getMemberEssayAnswersHasLiked: {
-      answerId: string
-      hasLiked: boolean
-    }[]
-  }>(
+  const response = await sendGQLRequest<GetMemberEssayAnswersHasLikedQuery>(
     {
       query: GET_MEMBER_ESSAY_ANSWERS_HAS_LIKED_GQL,
       variables,

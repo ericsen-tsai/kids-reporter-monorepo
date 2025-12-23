@@ -17,7 +17,7 @@ function useOptimisticLikeAnswer({
   questionId,
   answerOrderBy,
   answerTake,
-  answerIds,
+  essayAnswerIds,
 }: {
   answerId: string
   memberId: string
@@ -25,7 +25,7 @@ function useOptimisticLikeAnswer({
   questionId: string
   answerOrderBy: PostEssayAnswerOrderByInput[]
   answerTake: number
-  answerIds: string[]
+  essayAnswerIds: string[]
 }) {
   const queryClient = useQueryClient()
 
@@ -50,7 +50,7 @@ function useOptimisticLikeAnswer({
       const hasLikedQueryKey =
         useGetMemberEssayAnswersHasLikedQuery.getQueryKey({
           memberId,
-          answerIds,
+          essayAnswerIds,
         })
 
       // Optimistically update answers query
@@ -125,13 +125,13 @@ function useOptimisticLikeAnswer({
           if (!Array.isArray(old)) return old
 
           const existingIndex = old.findIndex(
-            (item) => item.answerId === answerId
+            (item) => item?.essayAnswerId === answerId
           )
 
           if (existingIndex >= 0) {
             // Update existing entry
             return old.map((item) => {
-              if (item.answerId === answerId) {
+              if (item?.essayAnswerId === answerId) {
                 return {
                   ...item,
                   hasLiked: !hasLiked,
@@ -144,7 +144,7 @@ function useOptimisticLikeAnswer({
             return [
               ...old,
               {
-                answerId,
+                essayAnswerId: answerId,
                 hasLiked: !hasLiked,
               },
             ]
@@ -199,7 +199,7 @@ function useOptimisticLikeAnswer({
       answerOrderBy,
       answerTake,
       memberId,
-      answerIds,
+      essayAnswerIds,
       queryClient,
       answerId,
       deleteMutation,

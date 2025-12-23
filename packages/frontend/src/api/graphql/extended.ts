@@ -7,9 +7,9 @@ export const GET_MEMBER_POSTS_WITH_ANSWERS_GQL = gql`
 `
 
 export const GET_MEMBER_ESSAY_ANSWERS_HAS_LIKED_GQL = gql`
-  query GetMemberEssayAnswersHasLiked($answerIds: [ID!]!) {
-    getMemberEssayAnswersHasLiked(answerIds: $answerIds) {
-      answerId
+  query GetMemberEssayAnswersHasLiked($essayAnswerIds: [ID!]!) {
+    getMemberEssayAnswersHasLiked(essayAnswerIds: $essayAnswerIds) {
+      essayAnswerId
       hasLiked
     }
   }

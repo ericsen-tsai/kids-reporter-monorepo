@@ -46,31 +46,31 @@ const MEMBER_ESSAY_ANSWERS_HAS_LIKED_QUERY_KEY =
 
 export function useGetMemberEssayAnswersHasLikedQuery({
   memberId,
-  answerIds,
+  essayAnswerIds,
   accessToken,
 }: {
   memberId: string
-  answerIds: string[]
+  essayAnswerIds: string[]
   accessToken: string
 }) {
   return useQuery({
     queryKey: useGetMemberEssayAnswersHasLikedQuery.getQueryKey({
       memberId,
-      answerIds,
+      essayAnswerIds,
     }),
     queryFn: () =>
       getMemberEssayAnswersHasLiked({
-        answerIds,
+        essayAnswerIds,
         accessToken,
       }),
-    enabled: !!memberId && !!accessToken && answerIds.length > 0,
+    enabled: !!memberId && !!accessToken && essayAnswerIds.length > 0,
   })
 }
 
 useGetMemberEssayAnswersHasLikedQuery.getQueryKey = ({
   memberId,
-  answerIds,
+  essayAnswerIds,
 }: {
   memberId: string
-  answerIds: string[]
-}) => [MEMBER_ESSAY_ANSWERS_HAS_LIKED_QUERY_KEY, memberId, answerIds]
+  essayAnswerIds: string[]
+}) => [MEMBER_ESSAY_ANSWERS_HAS_LIKED_QUERY_KEY, memberId, essayAnswerIds]

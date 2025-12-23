@@ -24,7 +24,7 @@ type ModalAnswerItemProps = {
   accessToken: string
   questionId: string
   answerOrderBy: PostEssayAnswerOrderByInput[]
-  answerIds: string[]
+  essayAnswerIds: string[]
   isLast: boolean
 }
 
@@ -35,7 +35,7 @@ function ModalAnswerItem({
   accessToken,
   questionId,
   answerOrderBy,
-  answerIds,
+  essayAnswerIds,
   isLast,
 }: ModalAnswerItemProps) {
   const { toggleLike, isPending } = useOptimisticLikeAnswer({
@@ -45,7 +45,7 @@ function ModalAnswerItem({
     questionId,
     answerOrderBy,
     answerTake: QUESTION_ANSWER_ITEM_TAKE,
-    answerIds,
+    essayAnswerIds,
   })
 
   const isLoggedIn = !!memberId && !!accessToken

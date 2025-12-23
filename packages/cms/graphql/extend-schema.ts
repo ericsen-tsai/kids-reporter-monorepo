@@ -583,23 +583,23 @@ export const extendGraphqlSchema = graphql.extend(() => {
       getMemberEssayAnswersHasLiked: graphql.field({
         type: graphql.list(
           graphql.object<{
-            answerId: string
+            essayAnswerId: string
             hasLiked: boolean
-            likeId: string
+            essayAnswerLikeId: string
           }>()({
-            name: 'getMemberEssayAnswersHasLiked',
+            name: 'getMemberEssayAnswersHasLikedResult',
             fields: {
-              answerId: graphql.field({ type: graphql.ID }),
+              essayAnswerId: graphql.field({ type: graphql.ID }),
               hasLiked: graphql.field({ type: graphql.Boolean }),
-              likeId: graphql.field({ type: graphql.ID }),
+              essayAnswerLikeId: graphql.field({ type: graphql.ID }),
             },
           })
         ),
         args: {
-          answerIds: graphql.arg({ type: graphql.list(graphql.ID) }),
+          essayAnswerIds: graphql.arg({ type: graphql.list(graphql.ID) }),
         },
         async resolve(root, args, ctx: Context) {
-          const { answerIds } = args
+          const { essayAnswerIds } = args
           const memberId =
             ctx.session?.data && 'memberId' in ctx.session.data
               ? ctx.session?.data?.memberId
@@ -624,7 +624,7 @@ export const extendGraphqlSchema = graphql.extend(() => {
                 context: {
                   function: 'getMemberEssayAnswersHasLiked',
                   memberId,
-                  answerIds,
+                  essayAnswerIds,
                   errorCode,
                 },
               })
@@ -640,19 +640,19 @@ export const extendGraphqlSchema = graphql.extend(() => {
             })
           }
 
-          if (!answerIds || answerIds.length === 0) {
+          if (!essayAnswerIds || essayAnswerIds.length === 0) {
             return []
           }
 
           try {
-            const validAnswerIds = answerIds.filter(
+            const validEssayAnswerIds = essayAnswerIds.filter(
               (id): id is string => id !== null && id !== undefined
             )
 
             const essayAnswers = (await ctx.query.PostEssayAnswerLike.findMany({
               where: {
                 member: { id: { equals: memberId } },
-                answer: { id: { in: validAnswerIds } },
+                answer: { id: { in: validEssayAnswerIds } },
               },
               query: `
                 id
@@ -662,14 +662,14 @@ export const extendGraphqlSchema = graphql.extend(() => {
               `,
             })) as { id: number; answer: { id: number } }[]
 
-            const result = validAnswerIds.map((id) => {
+            const result = validEssayAnswerIds.map((id) => {
               const answer = essayAnswers.find(
                 (a) => a.answer?.id?.toString() === id
               )
               return {
-                answerId: id,
+                essayAnswerId: id,
                 hasLiked: !!answer,
-                likeId: answer?.id?.toString() ?? '',
+                essayAnswerLikeId: answer?.id?.toString() ?? '',
               }
             })
 
@@ -691,7 +691,7 @@ export const extendGraphqlSchema = graphql.extend(() => {
                 context: {
                   function: 'getMemberEssayAnswersHasLiked',
                   memberId,
-                  answerIds,
+                  essayAnswerIds,
                   error: errorMessage,
                 },
               })

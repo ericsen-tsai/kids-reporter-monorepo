@@ -47,21 +47,25 @@ function ModalQuestionCard({
     return data?.pages.flatMap((page) => page) ?? []
   }, [data])
 
-  const answerIds = useMemo(
+  const essayAnswerIds = useMemo(
     () => answers.map((answer) => answer.id.toString()),
     [answers]
   )
 
-  const { data: hasLikedData = [] } = useGetMemberEssayAnswersHasLikedQuery({
+  const { data: hasLikedData } = useGetMemberEssayAnswersHasLikedQuery({
     memberId,
-    answerIds,
+    essayAnswerIds,
     accessToken,
   })
 
   const hasLikedMap = useMemo(() => {
     const map = new Map<string, boolean>()
+    if (!hasLikedData) return map
     hasLikedData.forEach((item) => {
-      map.set(item.answerId, item.hasLiked)
+      const essayAnswerId = item?.essayAnswerId ?? ''
+      const hasLiked = item?.hasLiked ?? false
+      if (!essayAnswerId) return
+      map.set(essayAnswerId, hasLiked)
     })
     return map
   }, [hasLikedData])
@@ -193,7 +197,7 @@ function ModalQuestionCard({
                   accessToken={accessToken}
                   questionId={questionId}
                   answerOrderBy={answerOrderBy}
-                  answerIds={answerIds}
+                  essayAnswerIds={essayAnswerIds}
                   isLast={index === answers.length - 1}
                 />
               )
