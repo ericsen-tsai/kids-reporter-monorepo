@@ -2,22 +2,13 @@ import { PostEssayAnswerOrderByInput } from '__generated__/types'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback } from 'react'
 
-import {
-  MEMBER_ESSAY_ANSWERS_HAS_LIKED_QUERY_KEY,
-  useGetMemberEssayAnswersHasLikedQuery,
-} from '@/api-utils/react-query/hooks/extended'
-import {
-  POST_ESSAY_ANSWERS_QUERY_KEY,
-  useAllPostEssayAnswersQuery,
-} from '@/api-utils/react-query/hooks/post-essay-answer'
+import { useGetMemberEssayAnswersHasLikedQuery } from '@/api-utils/react-query/hooks/extended'
+import { useAllPostEssayAnswersQuery } from '@/api-utils/react-query/hooks/post-essay-answer'
 import {
   useCreatePostEssayAnswerLikeMutation,
   useDeletePostEssayAnswerLikeMutation,
 } from '@/api-utils/react-query/hooks/post-essay-answer-like'
-import {
-  POST_ESSAY_QUESTION_ESSAY_ANSWERS_INFINITY_QUERY_KEY,
-  usePostEssayQuestionEssayAnswersInfinityQuery,
-} from '@/api-utils/react-query/hooks/post-essay-question'
+import { usePostEssayQuestionEssayAnswersInfinityQuery } from '@/api-utils/react-query/hooks/post-essay-question'
 
 function useOptimisticLikeAnswer({
   answerId,
@@ -43,26 +34,24 @@ function useOptimisticLikeAnswer({
 
   const toggleLike = useCallback(
     async (hasLiked: boolean) => {
-      const answersQueryKey = [
-        POST_ESSAY_QUESTION_ESSAY_ANSWERS_INFINITY_QUERY_KEY,
-        questionId,
-        answerOrderBy,
-        answerTake,
-      ]
+      const answersQueryKey =
+        usePostEssayQuestionEssayAnswersInfinityQuery.getQueryKey({
+          questionId,
+          answerOrderBy,
+          answerTake,
+        })
 
-      const allPostEssayAnswersQueryKey = [
-        POST_ESSAY_ANSWERS_QUERY_KEY,
-        'all-members',
-        'all-posts',
-        answerOrderBy,
-        answerTake,
-      ]
+      const allPostEssayAnswersQueryKey =
+        useAllPostEssayAnswersQuery.getQueryKey({
+          orderBy: answerOrderBy,
+          take: answerTake,
+        })
 
-      const hasLikedQueryKey = [
-        MEMBER_ESSAY_ANSWERS_HAS_LIKED_QUERY_KEY,
-        memberId,
-        answerIds,
-      ]
+      const hasLikedQueryKey =
+        useGetMemberEssayAnswersHasLikedQuery.getQueryKey({
+          memberId,
+          answerIds,
+        })
 
       // Optimistically update answers query
       await queryClient.cancelQueries({ queryKey: answersQueryKey })

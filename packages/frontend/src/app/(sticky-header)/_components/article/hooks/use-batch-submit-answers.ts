@@ -2,15 +2,14 @@ import { useQueryClient } from '@tanstack/react-query'
 import errors from '@twreporter/errors'
 import { useCallback } from 'react'
 
-import { MEMBER_POSTS_WITH_ANSWERS_QUERY_KEY } from '@/api-utils/react-query/hooks/extended'
+import { DEFAULT_PAGE_ITEM_COUNT } from '@/api-utils/react-query/constants'
+import { useMemberPostsWithAnswersInfinityQuery } from '@/api-utils/react-query/hooks/extended'
 import {
-  POST_CHOICE_ANSWERS_QUERY_KEY,
   useCreatePostChoiceAnswerMutation,
   usePostChoiceAnswersQuery,
   useUpdatePostChoiceAnswerMutation,
 } from '@/api-utils/react-query/hooks/post-choice-answer'
 import {
-  POST_ESSAY_ANSWERS_QUERY_KEY,
   useCreatePostEssayAnswerMutation,
   usePostEssayAnswersQuery,
   useUpdatePostEssayAnswerMutation,
@@ -31,15 +30,18 @@ function useBatchSubmitAnswers({
 
   const handleInvalidateAnswers = useCallback(() => {
     queryClient.invalidateQueries({
-      queryKey: [POST_ESSAY_ANSWERS_QUERY_KEY, memberId],
+      queryKey: usePostEssayAnswersQuery.getQueryKey({ memberId, postSlug }),
     })
     queryClient.invalidateQueries({
-      queryKey: [POST_CHOICE_ANSWERS_QUERY_KEY, memberId],
+      queryKey: usePostChoiceAnswersQuery.getQueryKey({ memberId, postSlug }),
     })
     queryClient.invalidateQueries({
-      queryKey: [MEMBER_POSTS_WITH_ANSWERS_QUERY_KEY, memberId],
+      queryKey: useMemberPostsWithAnswersInfinityQuery.getQueryKey({
+        memberId,
+        take: DEFAULT_PAGE_ITEM_COUNT,
+      }),
     })
-  }, [queryClient, memberId])
+  }, [queryClient, memberId, postSlug])
 
   const { data: essayAnswers } = usePostEssayAnswersQuery({
     memberId,

@@ -22,17 +22,21 @@ export function usePostChoiceAnswersQuery({
   postSlug?: string
 }) {
   return useQuery({
-    queryKey: [
-      POST_CHOICE_ANSWERS_QUERY_KEY,
-      memberId,
-      postSlug ?? 'all-posts',
-    ],
+    queryKey: usePostChoiceAnswersQuery.getQueryKey({ memberId, postSlug }),
     queryFn: () =>
       getPostChoiceAnswersByMemberId(memberId, accessToken, postSlug),
     enabled: !!memberId && !!accessToken,
     staleTime: Infinity,
   })
 }
+
+usePostChoiceAnswersQuery.getQueryKey = ({
+  memberId,
+  postSlug,
+}: {
+  memberId: string
+  postSlug?: string
+}) => [POST_CHOICE_ANSWERS_QUERY_KEY, memberId, postSlug ?? 'all-posts']
 
 export function useCreatePostChoiceAnswerMutation({
   accessToken,

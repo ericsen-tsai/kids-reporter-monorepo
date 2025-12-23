@@ -6,9 +6,9 @@ import {
   getMemberPostsWithAnswers,
 } from '@/api/extended'
 
-export const MEMBER_POSTS_WITH_ANSWERS_QUERY_KEY = 'member-posts-with-answers'
+const MEMBER_POSTS_WITH_ANSWERS_QUERY_KEY = 'member-posts-with-answers'
 
-export function useGetMemberPostsWithAnswersInfinityQuery({
+export function useMemberPostsWithAnswersInfinityQuery({
   accessToken,
   memberId,
   take = 5,
@@ -17,7 +17,10 @@ export function useGetMemberPostsWithAnswersInfinityQuery({
   memberId: string
 }) {
   return useInfiniteQuery({
-    queryKey: [MEMBER_POSTS_WITH_ANSWERS_QUERY_KEY, memberId, take],
+    queryKey: useMemberPostsWithAnswersInfinityQuery.getQueryKey({
+      memberId,
+      take,
+    }),
     queryFn: ({ pageParam }) =>
       getMemberPostsWithAnswers({
         take,
@@ -30,7 +33,15 @@ export function useGetMemberPostsWithAnswersInfinityQuery({
   })
 }
 
-export const MEMBER_ESSAY_ANSWERS_HAS_LIKED_QUERY_KEY =
+useMemberPostsWithAnswersInfinityQuery.getQueryKey = ({
+  memberId,
+  take,
+}: {
+  memberId: string
+  take: number
+}) => [MEMBER_POSTS_WITH_ANSWERS_QUERY_KEY, memberId, take]
+
+const MEMBER_ESSAY_ANSWERS_HAS_LIKED_QUERY_KEY =
   'member-essay-answers-has-liked'
 
 export function useGetMemberEssayAnswersHasLikedQuery({
@@ -43,7 +54,10 @@ export function useGetMemberEssayAnswersHasLikedQuery({
   accessToken: string
 }) {
   return useQuery({
-    queryKey: [MEMBER_ESSAY_ANSWERS_HAS_LIKED_QUERY_KEY, memberId, answerIds],
+    queryKey: useGetMemberEssayAnswersHasLikedQuery.getQueryKey({
+      memberId,
+      answerIds,
+    }),
     queryFn: () =>
       getMemberEssayAnswersHasLiked({
         answerIds,
@@ -52,3 +66,11 @@ export function useGetMemberEssayAnswersHasLikedQuery({
     enabled: !!memberId && !!accessToken && answerIds.length > 0,
   })
 }
+
+useGetMemberEssayAnswersHasLikedQuery.getQueryKey = ({
+  memberId,
+  answerIds,
+}: {
+  memberId: string
+  answerIds: string[]
+}) => [MEMBER_ESSAY_ANSWERS_HAS_LIKED_QUERY_KEY, memberId, answerIds]

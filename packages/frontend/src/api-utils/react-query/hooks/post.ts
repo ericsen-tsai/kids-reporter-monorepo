@@ -10,7 +10,7 @@ import {
   getPostsEssayAnswersWithLikes,
 } from '@/api/post'
 
-export const POSTS_ESSAY_ANSWERS_WITH_LIKES_QUERY_KEY =
+const POSTS_ESSAY_ANSWERS_WITH_LIKES_QUERY_KEY =
   'posts-essay-answers-with-likes'
 
 export function usePostsEssayAnswersWithLikesInfinityQuery({
@@ -27,14 +27,13 @@ export function usePostsEssayAnswersWithLikesInfinityQuery({
   where: PostWhereInput
 }) {
   return useInfiniteQuery({
-    queryKey: [
-      POSTS_ESSAY_ANSWERS_WITH_LIKES_QUERY_KEY,
+    queryKey: usePostsEssayAnswersWithLikesInfinityQuery.getQueryKey({
       orderBy,
       take,
       where,
       answerOrderBy,
       answerTake,
-    ],
+    }),
     queryFn: ({ pageParam }) =>
       getPostsEssayAnswersWithLikes({
         orderBy,
@@ -52,7 +51,28 @@ export function usePostsEssayAnswersWithLikesInfinityQuery({
   })
 }
 
-export const POST_ESSAY_QUESTIONS_BY_POST_SLUG_QUERY_KEY =
+usePostsEssayAnswersWithLikesInfinityQuery.getQueryKey = ({
+  orderBy,
+  take,
+  where,
+  answerOrderBy,
+  answerTake,
+}: {
+  orderBy: PostOrderByInput[]
+  take: number
+  where: PostWhereInput
+  answerOrderBy: PostEssayAnswerOrderByInput[]
+  answerTake: number
+}) => [
+  POSTS_ESSAY_ANSWERS_WITH_LIKES_QUERY_KEY,
+  orderBy,
+  take,
+  where,
+  answerOrderBy,
+  answerTake,
+]
+
+const POST_ESSAY_QUESTIONS_BY_POST_SLUG_QUERY_KEY =
   'post-essay-questions-by-post-slug'
 
 export function usePostEssayQuestionsByPostSlugQuery({
@@ -61,8 +81,14 @@ export function usePostEssayQuestionsByPostSlugQuery({
   slug: string
 }) {
   return useQuery({
-    queryKey: [POST_ESSAY_QUESTIONS_BY_POST_SLUG_QUERY_KEY, slug],
+    queryKey: usePostEssayQuestionsByPostSlugQuery.getQueryKey({ slug }),
     queryFn: () => getPostEssayQuestionsByPostSlug({ slug }),
     enabled: !!slug,
   })
 }
+
+usePostEssayQuestionsByPostSlugQuery.getQueryKey = ({
+  slug,
+}: {
+  slug: string
+}) => [POST_ESSAY_QUESTIONS_BY_POST_SLUG_QUERY_KEY, slug]

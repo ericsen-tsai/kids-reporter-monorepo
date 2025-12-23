@@ -3,7 +3,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { getPostEssayQuestionEssayAnswers } from '@/api/post-essay-question'
 
-export const POST_ESSAY_QUESTION_ESSAY_ANSWERS_INFINITY_QUERY_KEY =
+const POST_ESSAY_QUESTION_ESSAY_ANSWERS_INFINITY_QUERY_KEY =
   'post-essay-questions'
 
 export function usePostEssayQuestionEssayAnswersInfinityQuery({
@@ -16,12 +16,11 @@ export function usePostEssayQuestionEssayAnswersInfinityQuery({
   answerTake: number
 }) {
   return useInfiniteQuery({
-    queryKey: [
-      POST_ESSAY_QUESTION_ESSAY_ANSWERS_INFINITY_QUERY_KEY,
+    queryKey: usePostEssayQuestionEssayAnswersInfinityQuery.getQueryKey({
       questionId,
       answerOrderBy,
       answerTake,
-    ],
+    }),
     queryFn: ({ pageParam }) =>
       getPostEssayQuestionEssayAnswers({
         where: { id: questionId },
@@ -36,3 +35,18 @@ export function usePostEssayQuestionEssayAnswersInfinityQuery({
     initialPageParam: 0,
   })
 }
+
+usePostEssayQuestionEssayAnswersInfinityQuery.getQueryKey = ({
+  questionId,
+  answerOrderBy,
+  answerTake,
+}: {
+  questionId: string
+  answerOrderBy: PostEssayAnswerOrderByInput[]
+  answerTake: number
+}) => [
+  POST_ESSAY_QUESTION_ESSAY_ANSWERS_INFINITY_QUERY_KEY,
+  questionId,
+  answerOrderBy,
+  answerTake,
+]
