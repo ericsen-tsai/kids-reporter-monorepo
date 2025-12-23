@@ -22,6 +22,7 @@ export const GET_ESSAY_QUESTION_ESSAY_ANSWERS_GQL = gql`
           }
           name
           nickname
+          email
         }
         likesCount
       }
