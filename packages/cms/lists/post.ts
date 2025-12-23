@@ -560,6 +560,9 @@ const listConfigurations: ListConfig<any> = list({
         itemView: { fieldPosition: 'sidebar' },
         listView: { fieldMode: 'hidden' },
       },
+      graphql: {
+        omit: true,
+      },
     }),
   },
   ui: {

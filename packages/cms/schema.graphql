@@ -216,7 +216,6 @@ type Post {
   listPreview: String
   onlineUsers: JSON
   generateQuestions: JSON
-  copyPostContent: JSON
 }
 
 input PostWhereUniqueInput {
