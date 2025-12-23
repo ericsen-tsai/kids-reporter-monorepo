@@ -521,6 +521,49 @@ const listConfigurations: ListConfig<any> = list({
         listView: { fieldMode: 'hidden' },
       },
     }),
+    copyPostContent: virtual({
+      field: () =>
+        graphql.field({
+          type: graphql.JSON,
+          async resolve(
+            item: Record<string, any>,
+            args,
+            context: KeystoneContext
+          ) {
+            const post = await context.query.Post.findOne({
+              where: { id: item.id },
+              query: `
+                id
+                title
+                subtitle
+                brief
+                content
+                ogDescription
+                opening
+                postChoiceQuestions {
+                  title
+                  options
+                  reason
+                }
+                postEssayQuestions {
+                  title
+                  hint
+                }
+              `,
+            })
+            return post
+          },
+        }),
+      ui: {
+        views: './lists/views/copy-post-content',
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldPosition: 'sidebar' },
+        listView: { fieldMode: 'hidden' },
+      },
+      graphql: {
+        omit: true,
+      },
+    }),
   },
   ui: {
     label: 'Posts',
