@@ -657,21 +657,22 @@ export const extendGraphqlSchema = graphql.extend(() => {
               (id): id is string => id !== null && id !== undefined
             )
 
-            const essayAnswers = (await ctx.query.PostEssayAnswerLike.findMany({
-              where: {
-                member: { id: { equals: memberId } },
-                answer: { id: { in: validEssayAnswerIds } },
-              },
-              query: `
+            const essayAnswerLikes =
+              (await ctx.query.PostEssayAnswerLike.findMany({
+                where: {
+                  member: { id: { equals: memberId } },
+                  answer: { id: { in: validEssayAnswerIds } },
+                },
+                query: `
                 id
                 answer {
                   id
                 }
               `,
-            })) as { id: number; answer: { id: number } }[]
+              })) as { id: number; answer: { id: number } }[]
 
             const result = validEssayAnswerIds.map((id) => {
-              const answer = essayAnswers.find(
+              const answer = essayAnswerLikes.find(
                 (a) => a.answer?.id?.toString() === id
               )
               return {
