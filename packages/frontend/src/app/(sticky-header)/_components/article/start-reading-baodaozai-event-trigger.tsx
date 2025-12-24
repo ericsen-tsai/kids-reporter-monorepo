@@ -1,6 +1,6 @@
 'use client'
 import { useIsAtTop } from '@kids-reporter/routing-ui'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useFeatureIntroDialogContext } from '@/services/feature-intro'
 
@@ -15,14 +15,9 @@ function StartReadingBaodaozaiEventTrigger({
 }: StartReadingBaodaozaiEventTriggerProps) {
   const isAtTop = useIsAtTop(35)
   const [isFirstRenderAtTop, setIsFirstRenderAtTop] = useState(isAtTop)
-  const { canShowBaodaozai } = useFeatureIntroDialogContext()
+  const { isFinishedIntro } = useFeatureIntroDialogContext()
 
-  const disabled = useMemo(() => {
-    if (!canShowBaodaozai) {
-      return true
-    }
-    return !isFirstRenderAtTop
-  }, [canShowBaodaozai, isFirstRenderAtTop])
+  const disabled = !isFinishedIntro || !isFirstRenderAtTop
 
   useEffect(() => {
     if (!isAtTop && isFirstRenderAtTop) {

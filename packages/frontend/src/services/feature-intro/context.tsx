@@ -14,7 +14,7 @@ type FeatureIntroDialogContextType = {
   isDialogOpen: boolean | undefined
   openDialog: () => void
   closeDialog: () => void
-  canShowBaodaozai: boolean
+  isFinishedIntro: boolean
 }
 
 const FeatureIntroDialogContext = createContext<
@@ -37,7 +37,7 @@ export function FeatureIntroDialogProvider({
       isDialogOpen,
       openDialog,
       closeDialog,
-      canShowBaodaozai:
+      isFinishedIntro:
         (isDialogOpen !== undefined && !isDialogOpen) ||
         (typeof window !== 'undefined' &&
           typeof localStorage !== 'undefined' &&

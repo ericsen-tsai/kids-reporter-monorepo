@@ -2,7 +2,7 @@
 
 import { Button, useMediaQuery } from '@kids-reporter/routing-ui'
 import Image from 'next/image'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Dialog, DialogContent, DialogTitle } from '@/components/dialog'
 import { CheckCircleIcon } from '@/icons'
@@ -46,10 +46,8 @@ function FeatureIntroDialog() {
   const isTablet = useMediaQuery('(min-width: 768px)')
   const isDesktop = useMediaQuery('(min-width: 1024px)')
 
-  const currentImageSrc = useMemo(() => {
-    const size = isTablet ? 'm' : isDesktop ? 'l' : 's'
-    return `/assets/images/feature-intro/onboarding_${step}_${size}.svg`
-  }, [isDesktop, isTablet, step])
+  const size = isDesktop ? 'l' : isTablet ? 'm' : 's'
+  const currentImageSrc = `/assets/images/feature-intro/onboarding_${step}_${size}.svg`
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleClose}>

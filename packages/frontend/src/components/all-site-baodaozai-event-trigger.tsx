@@ -75,14 +75,10 @@ function AllSiteBaodaozaiEventTrigger({
     return config[id]
   }, [id, content, openFeatureIntroDialog])
 
-  const { canShowBaodaozai } = useFeatureIntroDialogContext()
+  const { isFinishedIntro } = useFeatureIntroDialogContext()
 
-  const disabled = useMemo(() => {
-    if (!canShowBaodaozai) {
-      return true
-    }
-    return id === 'show-intro' && !isFirstRenderAtTop
-  }, [canShowBaodaozai, id, isFirstRenderAtTop])
+  const disabled =
+    !isFinishedIntro || (id === 'show-intro' && !isFirstRenderAtTop)
 
   if (!eventConfig) {
     console.warn(
