@@ -1,5 +1,5 @@
 'use client'
-import { cn } from '@kids-reporter/routing-ui'
+import { cn, useMediaQuery } from '@kids-reporter/routing-ui'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { STICKY_HEADER_HEIGHT } from '@/constants'
@@ -150,6 +150,8 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
     }
   }, [isExpanded])
 
+  const isDesktop = useMediaQuery('(min-width: 1024px)')
+
   if (indexes.length === 0) {
     return null
   }
@@ -162,32 +164,73 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
     >
       <button
         type="button"
-        onClick={() => {
-          setIsExpanded(!isExpanded)
-        }}
+        onClick={
+          isDesktop
+            ? undefined
+            : () => {
+                setIsExpanded(!isExpanded)
+              }
+        }
+        onMouseEnter={
+          isDesktop
+            ? () => {
+                setIsExpanded(true)
+              }
+            : undefined
+        }
         aria-label={isExpanded ? '關閉目錄' : '開啟目錄'}
         aria-expanded={isExpanded}
         className={cn(
-          'fixed top-[144px] left-0 w-8 cursor-pointer transition-transform delay-100 duration-100 ease-in-out',
-          isExpanded ? 'translate-x-[200px]' : 'translate-x-0'
+          'fixed top-[80px] left-0 w-8 cursor-pointer transition-transform delay-100 duration-100 ease-in-out desktop:top-1/2 desktop:-translate-y-1/2',
+          isExpanded
+            ? 'translate-x-[200px] desktop:translate-x-0'
+            : 'translate-x-0'
         )}
       >
-        <div
-          className={cn(
-            'absolute top-0 left-0 flex h-24 w-8 flex-col items-center justify-center gap-2.5 rounded-r-[20px] bg-neutral-black/8 px-[9px] py-[26px] text-sm leading-[1.6] text-neutral-700 backdrop-blur-xs transition-all duration-100 ease-in-out hover:text-red-400',
-            isExpanded && 'bg-neutral-200'
-          )}
-        >
-          索
-          <br />引
-        </div>
+        {!isDesktop && (
+          <div
+            className={cn(
+              'absolute top-0 left-0 flex h-24 w-8 flex-col items-center justify-center gap-2.5 rounded-r-[20px] bg-neutral-black/8 px-[9px] py-[26px] text-sm leading-[1.6] text-neutral-700 backdrop-blur-xs transition-all duration-100 ease-in-out hover:text-red-400',
+              isExpanded && 'bg-neutral-200'
+            )}
+          >
+            索
+            <br />引
+          </div>
+        )}
+        {isDesktop && (
+          <div className="flex flex-col gap-2 pr-10 pl-4">
+            {[{ key: TABLET_OF_CONTENT_BACK_TO_TOP_KEY }, ...indexes].map(
+              ({ key }) => (
+                <div
+                  key={key}
+                  className={cn(
+                    'h-[3px] w-4 rounded-sm bg-neutral-black/10',
+                    currentActiveIndex === makeAnchorKey(key) && 'bg-red-400'
+                  )}
+                ></div>
+              )
+            )}
+          </div>
+        )}
       </button>
       <div
         role="list"
         className={cn(
-          'fixed top-0 left-0 flex h-screen w-[200px] flex-col justify-center gap-2 bg-neutral-100 px-5 py-6 shadow-[0px_2px_12px_0px_rgba(0,0,0,0.2)] transition-transform delay-100 duration-100 ease-in-out',
-          isExpanded ? 'translate-x-0' : '-translate-x-[200px]'
+          'fixed top-0 left-0 flex h-screen w-[200px] flex-col justify-center gap-2 bg-neutral-100 px-5 py-6 shadow-[0px_2px_12px_0px_rgba(0,0,0,0.2)] transition-transform delay-100 duration-100 ease-in-out desktop:left-4',
+          isExpanded ? 'translate-x-0' : '-translate-x-[200px]',
+          'desktop:top-1/2 desktop:h-auto desktop:min-h-75 desktop:-translate-y-1/2 desktop:rounded-[20px] desktop:px-5 desktop:py-6',
+          isExpanded && isDesktop
+            ? 'desktop:translate-x-0'
+            : 'desktop:-translate-x-[240px]'
         )}
+        onMouseLeave={
+          isDesktop
+            ? () => {
+                setIsExpanded(false)
+              }
+            : undefined
+        }
       >
         <button
           type="button"
@@ -203,6 +246,8 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
           }
           className={cn(
             'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-all duration-100 ease-in-out',
+            // Desktop/HD: match Figma design
+            'desktop:rounded desktop:px-1 desktop:py-[1px] desktop:font-medium',
             currentActiveIndex ===
               makeAnchorKey(TABLET_OF_CONTENT_BACK_TO_TOP_KEY) &&
               'font-bold text-red-400'
@@ -224,8 +269,10 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
             }
             className={cn(
               'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-all duration-100 ease-in-out',
+              // Desktop/HD: match Figma design
+              'desktop:rounded desktop:px-1 desktop:py-[1px] desktop:font-medium',
               currentActiveIndex === makeAnchorKey(key) &&
-                'font-bold text-red-400'
+                'font-bold text-red-400 desktop:font-bold'
             )}
           >
             {label}
