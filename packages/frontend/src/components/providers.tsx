@@ -7,6 +7,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { getQueryClient } from '@/api-utils/react-query/get-query-client'
 import { POPULAR_KEYWORDS } from '@/constants'
 import { AuthProvider } from '@/services/auth/auth-provider'
+import { FeatureIntroDialogProvider } from '@/services/feature-intro'
 
 import StyledComponentsRegistry from './registry'
 
@@ -20,7 +21,9 @@ function Providers({ children }: { children: React.ReactNode }) {
     <StyledComponentsRegistry>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <HeaderProvider keywords={keywords}>{children}</HeaderProvider>
+          <HeaderProvider keywords={keywords}>
+            <FeatureIntroDialogProvider>{children}</FeatureIntroDialogProvider>
+          </HeaderProvider>
         </AuthProvider>
         <ReactQueryDevtools
           initialIsOpen={false}

@@ -2,6 +2,8 @@
 import { useIsAtTop } from '@kids-reporter/routing-ui'
 import { useEffect, useState } from 'react'
 
+import { useFeatureIntroDialogContext } from '@/services/feature-intro'
+
 import ArticleBaodaozaiEventTrigger from './article-baodaozai-event-trigger'
 
 type StartReadingBaodaozaiEventTriggerProps = {
@@ -13,6 +15,9 @@ function StartReadingBaodaozaiEventTrigger({
 }: StartReadingBaodaozaiEventTriggerProps) {
   const isAtTop = useIsAtTop(35)
   const [isFirstRenderAtTop, setIsFirstRenderAtTop] = useState(isAtTop)
+  const { isFinishedIntro } = useFeatureIntroDialogContext()
+
+  const disabled = !isFinishedIntro || !isFirstRenderAtTop
 
   useEffect(() => {
     if (!isAtTop && isFirstRenderAtTop) {
@@ -23,7 +28,7 @@ function StartReadingBaodaozaiEventTrigger({
   return (
     <ArticleBaodaozaiEventTrigger
       id="show-start-reading"
-      disabled={!isFirstRenderAtTop}
+      disabled={disabled}
       startReadingContent={content}
     />
   )

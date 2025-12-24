@@ -7,6 +7,7 @@ import localFont from 'next/font/local'
 
 import Providers from '@/components/providers'
 import { Toaster } from '@/components/toaster'
+import FeatureIntroDialog from '@/services/feature-intro/components/feature-info-dialog'
 
 const GTM_ID = 'GTM-T37WZJ44'
 
@@ -31,6 +32,7 @@ export default async function RootLayout({
       <GoogleTagManager gtmId={GTM_ID} />
       <body>
         <Providers>
+          <FeatureIntroDialog />
           {children}
           <Footer />
           <Toaster />
