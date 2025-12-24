@@ -10,10 +10,10 @@ import {
   OG_SUFFIX,
 } from '@/constants'
 import { BAODAOZAI_QUESTION_COUNT } from '@/constants/baodaozai-question-count'
+import TableOfContentSideMenu from '@/modules/article/components/table-of-content-side-menu'
 import { log, LogLevel } from '@/utils'
 
 import Article from '../../_components/article/article'
-import { TOC, TOCIndex } from '../../_components/article/table-of-content'
 
 const topicRelatedPostsNum = 5
 const postEssayQuestionsTake = BAODAOZAI_QUESTION_COUNT
@@ -97,7 +97,7 @@ export default async function PostPage({
 
   // Traverse entityMap to find indexes of TOC
   const entityMap = post.content?.entityMap
-  const tocIndexes: TOCIndex[] = []
+  const tocIndexes: { key: string; label: string }[] = []
   Object.keys(entityMap)?.forEach((key) => {
     const entity = entityMap[key]
     const data = entity?.data
@@ -112,7 +112,7 @@ export default async function PostPage({
   return (
     <main className="mx-auto flex max-w-(--breakpoint-2xl) flex-col items-center">
       <HeaderPostTitleSetter postTitle={post?.title} />
-      {tocIndexes.length > 0 && <TOC indexes={tocIndexes} />}
+      {tocIndexes.length > 0 && <TableOfContentSideMenu indexes={tocIndexes} />}
       {post && <Article post={post} slug={slug} />}
     </main>
   )
