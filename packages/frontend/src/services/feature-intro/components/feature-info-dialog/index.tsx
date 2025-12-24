@@ -37,7 +37,8 @@ function FeatureIntroDialog() {
   }
 
   useEffect(() => {
-    const hasSeenDialog = localStorage.getItem(FEATURE_INTRO_DIALOG_SEEN_KEY)
+    const hasSeenDialog =
+      localStorage.getItem(FEATURE_INTRO_DIALOG_SEEN_KEY) === 'true'
     if (!hasSeenDialog) {
       openDialog()
     }

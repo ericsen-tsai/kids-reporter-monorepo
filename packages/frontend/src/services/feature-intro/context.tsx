@@ -32,18 +32,23 @@ export function FeatureIntroDialogProvider({
   const openDialog = useCallback(() => setIsDialogOpen(true), [])
   const closeDialog = useCallback(() => setIsDialogOpen(false), [])
 
+  const isFinishedIntro = useMemo(() => {
+    return (
+      (isDialogOpen !== undefined && !isDialogOpen) ||
+      (typeof window !== 'undefined' &&
+        typeof localStorage !== 'undefined' &&
+        localStorage.getItem(FEATURE_INTRO_DIALOG_SEEN_KEY) === 'true')
+    )
+  }, [isDialogOpen])
+
   const contextValue = useMemo(
     () => ({
       isDialogOpen,
       openDialog,
       closeDialog,
-      isFinishedIntro:
-        (isDialogOpen !== undefined && !isDialogOpen) ||
-        (typeof window !== 'undefined' &&
-          typeof localStorage !== 'undefined' &&
-          localStorage.getItem(FEATURE_INTRO_DIALOG_SEEN_KEY) === 'true'),
+      isFinishedIntro,
     }),
-    [isDialogOpen, openDialog, closeDialog]
+    [isDialogOpen, openDialog, closeDialog, isFinishedIntro]
   )
 
   return (
