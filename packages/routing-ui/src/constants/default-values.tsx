@@ -95,6 +95,11 @@ export const ADDITIONAL_MENU_ITEMS: MenuItem[] = [
     subItems: [],
   },
   {
+    label: '小讀者觀點大集合',
+    href: '/idea-hub',
+    subItems: [],
+  },
+  {
     label: '投稿專區',
     href: 'https://forms.gle/49AEG8kFj7QWjgij8',
     subItems: [],
