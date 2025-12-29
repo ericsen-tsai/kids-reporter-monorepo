@@ -12,15 +12,16 @@ import {
   ToolbarShareIcon,
   ToolbarTopicIcon,
 } from '@/icons/miscellaneous'
+import PostEssayQuestionsModal from '@/modules/idea-hub/post-essay-questions-modal'
 
 import { SHARE_ICONS } from '../constants'
 
-type ToolbarProp = {
+type MobileToolbarProp = {
   topicURL: string
   onCheckAnswerClick: () => void
 }
 
-function MobileToolbar({ topicURL, onCheckAnswerClick }: ToolbarProp) {
+function MobileToolbar({ topicURL, onCheckAnswerClick }: MobileToolbarProp) {
   const [isSharePanelOpen, setIsSharePanelOpen] = useState(false)
   const scrollLevel = useScrollLevel()
   const { onFontSizeChange } = useArticleContext()
@@ -141,7 +142,12 @@ function MobileToolbar({ topicURL, onCheckAnswerClick }: ToolbarProp) {
   )
 }
 
-function DesktopToolbar({ topicURL, onCheckAnswerClick }: ToolbarProp) {
+type DesktopToolbarProp = {
+  topicURL: string
+  onCheckAnswerClick: () => void
+}
+
+function DesktopToolbar({ topicURL, onCheckAnswerClick }: DesktopToolbarProp) {
   const [isSharePanelOpen, setIsSharePanelOpen] = useState(false)
   const { onFontSizeChange, fontSize } = useArticleContext()
   const toolbarRef = useRef<HTMLDivElement>(null)
@@ -284,22 +290,36 @@ function DesktopToolbar({ topicURL, onCheckAnswerClick }: ToolbarProp) {
   )
 }
 
-function Toolbar({ topicURL, onCheckAnswerClick }: ToolbarProp) {
+type ToolbarProp = {
+  topicURL: string
+  postSlug: string
+}
+
+function Toolbar({ topicURL, postSlug }: ToolbarProp) {
+  const [isPostEssayQuestionsModalOpen, setIsPostEssayQuestionsModalOpen] =
+    useState(false)
   return (
-    <div className="fixed bottom-8 left-8 z-1000 tablet:bottom-8 tablet:left-1/2 tablet:-translate-x-1/2 desktop:sticky desktop:top-[calc(50vh+148px)] desktop:left-12 desktop:z-[999] desktop:flex desktop:h-0 desktop:translate-x-0 desktop:items-end hd:left-20">
-      <div className="desktop:hidden">
-        <MobileToolbar
-          topicURL={topicURL}
-          onCheckAnswerClick={onCheckAnswerClick}
-        />
+    <>
+      <div className="fixed bottom-8 left-8 z-1000 tablet:bottom-8 tablet:left-1/2 tablet:-translate-x-1/2 desktop:sticky desktop:top-[calc(50vh+148px)] desktop:left-12 desktop:z-[999] desktop:flex desktop:h-0 desktop:translate-x-0 desktop:items-end hd:left-20">
+        <div className="desktop:hidden">
+          <MobileToolbar
+            topicURL={topicURL}
+            onCheckAnswerClick={() => setIsPostEssayQuestionsModalOpen(true)}
+          />
+        </div>
+        <div className="hidden desktop:block">
+          <DesktopToolbar
+            topicURL={topicURL}
+            onCheckAnswerClick={() => setIsPostEssayQuestionsModalOpen(true)}
+          />
+        </div>
       </div>
-      <div className="hidden desktop:block">
-        <DesktopToolbar
-          topicURL={topicURL}
-          onCheckAnswerClick={onCheckAnswerClick}
-        />
-      </div>
-    </div>
+      <PostEssayQuestionsModal
+        open={isPostEssayQuestionsModalOpen}
+        onClose={() => setIsPostEssayQuestionsModalOpen(false)}
+        postSlug={postSlug}
+      />
+    </>
   )
 }
 

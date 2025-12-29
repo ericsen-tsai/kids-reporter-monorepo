@@ -399,7 +399,7 @@ const Article = ({
             handleImgModalClose,
           }}
         >
-          <Toolbar topicURL={topicURL ?? '#'} onCheckAnswerClick={() => {}} />
+          <Toolbar topicURL={topicURL ?? '#'} postSlug={slug} />
           {topicBreadCrumb}
           <ImageModal
             isOpen={isImgModalOpen}
