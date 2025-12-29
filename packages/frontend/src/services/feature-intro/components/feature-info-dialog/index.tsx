@@ -52,7 +52,11 @@ function FeatureIntroDialog() {
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleClose}>
-      <DialogContent className="top-1/2 left-1/2 mx-auto h-min w-[327px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[30px] bg-neutral-100 tablet:h-min tablet:w-[480px] desktop:flex desktop:h-min desktop:w-[864px] desktop:flex-row hd:h-min">
+      <DialogContent
+        className="top-1/2 left-1/2 mx-auto h-min w-[calc(100vw-48px)] max-w-120 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[30px] bg-neutral-white tablet:h-min tablet:w-[480px] tablet:max-w-none desktop:flex desktop:h-min desktop:w-[864px] desktop:flex-row hd:h-min"
+        onInteractOutside={(e) => e.preventDefault()}
+        onEscapeKeyDown={(e) => e.preventDefault()}
+      >
         <DialogTitle className="sr-only">Feature Intro</DialogTitle>
 
         <div className="relative h-[240px] w-full tablet:h-[280px] desktop:order-2 desktop:h-[480px] desktop:w-[384px]">
@@ -65,10 +69,10 @@ function FeatureIntroDialog() {
           />
         </div>
 
-        <div className="flex min-h-[338px] flex-col gap-5 px-6 pt-6 pb-6 tablet:min-h-[322px] tablet:gap-6 tablet:px-8 tablet:pt-8 tablet:pb-8 desktop:order-1 desktop:min-h-[480px] desktop:flex-1 desktop:gap-8">
+        <div className="flex min-h-[338px] flex-col gap-5 px-6 pt-6 pb-6 tablet:min-h-[322px] tablet:gap-6 tablet:px-8 tablet:pt-8 tablet:pb-8 desktop:order-1 desktop:min-h-[480px] desktop:min-w-120 desktop:flex-1 desktop:gap-8 desktop:py-14 desktop:pl-12">
           <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-1">
-              <h2 className="prose-h3-small font-swei text-neutral-900">
+              <h2 className="prose-h3-small font-swei text-neutral-900 desktop:prose-h3-large">
                 {currentConfig.title}
               </h2>
               <p className="prose-p1 text-neutral-700">
