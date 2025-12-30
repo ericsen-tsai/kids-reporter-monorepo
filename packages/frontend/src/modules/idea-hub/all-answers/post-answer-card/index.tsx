@@ -41,8 +41,8 @@ function PostAnswerCard({ post, onOpenModal }: PostAnswerCardProps) {
       {/* Article Meta Overlay */}
       <div className="z-10 flex flex-col gap-2 px-5 py-4">
         <div className="flex justify-between">
-          <div className="flex items-center px-1">
-            <div className="rounded-[30px] bg-red-400 px-3 py-[3px]">
+          <div className="flex items-center">
+            <div className="flex rounded-[30px] bg-red-400 px-3 py-[3px]">
               <span className="prose-p2 text-white">{firstCategory}</span>
             </div>
           </div>
@@ -63,7 +63,7 @@ function PostAnswerCard({ post, onOpenModal }: PostAnswerCardProps) {
         </div>
 
         {/* Title */}
-        <h3 className="line-clamp-3 px-1 prose-p1-bold text-white text-shadow-[0px_1px_4px_0px_rgba(0,0,0,0.6)] desktop:prose-h6-small">
+        <h3 className="line-clamp-3 prose-p1-bold text-white text-shadow-[0px_1px_4px_0px_rgba(0,0,0,0.6)] desktop:prose-h6-small">
           {post.title ?? ''}
         </h3>
       </div>
