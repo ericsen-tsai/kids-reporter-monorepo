@@ -110,7 +110,7 @@ function ModalQuestionCard({
         <div
           className={cn(
             'min-w-0 flex-1 overflow-hidden transition-all duration-300 ease-in-out',
-            isAnyCardScrolled ? 'max-h-[1.6em]' : 'max-h-auto'
+            isAnyCardScrolled ? 'max-h-[1.8em]' : 'max-h-auto'
           )}
         >
           <p
@@ -208,7 +208,7 @@ function ModalQuestionCard({
             )}
             {isFetchingNextPage && (
               <>
-                <Divider className="my-4" />
+                <Divider />
                 <ModalAnswerItemSkeleton />
               </>
             )}

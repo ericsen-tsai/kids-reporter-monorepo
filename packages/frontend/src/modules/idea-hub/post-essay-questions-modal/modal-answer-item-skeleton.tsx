@@ -1,4 +1,4 @@
-function ModalAnswerListSkeleton() {
+function ModalAnswerItemSkeleton() {
   return (
     <div className="min-w-0">
       <div className="flex min-w-0 flex-col gap-2 rounded-[12px]">
@@ -21,4 +21,4 @@ function ModalAnswerListSkeleton() {
   )
 }
 
-export default ModalAnswerListSkeleton
+export default ModalAnswerItemSkeleton

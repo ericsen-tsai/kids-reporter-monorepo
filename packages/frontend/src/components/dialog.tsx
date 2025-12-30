@@ -61,8 +61,8 @@ function DialogContent({
         data-slot="dialog-content"
         className={cn(
           'bg-background fixed z-1002 flex flex-col gap-4 duration-200',
-          // Mobile: full screen with 16px from top
-          'top-4 right-0 left-0 h-[calc(100vh-16px)] w-screen',
+          // Mobile: full screen with 16px from top, extends to bottom for safe area insets
+          'top-4 right-0 bottom-0 left-0 w-screen',
           'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-bottom data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-bottom',
           // Tablet: w-[calc(100vw-64px)] h-[calc(100vh-112px)] (32px padding each side, 56px padding top/bottom)
           'right-auto rounded-t-[30px] tablet:top-[50%] tablet:bottom-auto tablet:left-[50%] tablet:h-[calc(100vh-112px)] tablet:w-[calc(100vw-64px)] tablet:translate-x-[-50%] tablet:translate-y-[-50%] tablet:rounded-[30px] tablet:data-[state=closed]:zoom-out-95 tablet:data-[state=open]:zoom-in-95',

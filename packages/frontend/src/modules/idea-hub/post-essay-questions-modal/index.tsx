@@ -142,25 +142,23 @@ function PostEssayQuestionsModal({
 
             <div
               ref={headerTitleNodeRef}
-              className="relative z-20 flex w-full flex-col gap-2 overflow-hidden rounded-t-3xl px-6 pt-4"
+              className="relative z-20 flex w-full flex-col gap-2 overflow-hidden rounded-t-3xl px-6 pt-6"
             >
-              <div className="flex w-full min-w-0 items-start justify-between gap-10">
+              <div className="flex w-full min-w-0 items-center justify-between gap-10">
                 <div className="flex min-w-0 flex-1 items-start gap-2 overflow-hidden">
-                  <div className="flex-shrink-0 rounded-[30px] bg-red-400 px-3 py-1">
-                    <span className="prose-p2-medium text-white">
-                      {firstCategory}
-                    </span>
+                  <div className="mt-1 flex flex-shrink-0 rounded-[30px] bg-red-400 px-3 py-1">
+                    <span className="prose-p2 text-white">{firstCategory}</span>
                   </div>
                   <div className="hidden min-w-0 flex-1 py-1 tablet:block">
                     <div
                       className={cn(
                         'overflow-hidden transition-all duration-300 ease-in-out',
                         isAnyQuestionCardScrolled
-                          ? 'max-h-[1.6em]'
-                          : 'max-h-[4.8em]'
+                          ? 'max-h-[1.8em]'
+                          : 'max-h-[5.4em]'
                       )}
                     >
-                      <h3 className="line-clamp-3 w-full prose-p1-bold text-white">
+                      <h3 className="line-clamp-3 w-full prose-p1-bold text-white text-shadow-[0px_1px_4px_0px_rgba(0,0,0,0.6)] desktop:prose-h6-small">
                         {post?.title ?? ''}
                       </h3>
                     </div>
@@ -170,11 +168,11 @@ function PostEssayQuestionsModal({
                 <div className="flex items-center justify-center gap-4">
                   <Link
                     href={`/article/${postSlug}`}
-                    className="flex size-10 items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:text-red-400 active:text-red-500"
+                    className="flex size-10 items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:bg-neutral-white/50"
                   >
                     <ArticleShortcutIconLarge />
                   </Link>
-                  <DialogClose className="flex size-10 cursor-pointer items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:text-red-400 active:text-red-500">
+                  <DialogClose className="flex size-10 cursor-pointer items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:bg-neutral-white/50">
                     <XIcon />
                     <span className="sr-only">Close</span>
                   </DialogClose>
@@ -183,7 +181,7 @@ function PostEssayQuestionsModal({
               <div
                 className={cn(
                   'overflow-hidden transition-all duration-300 ease-in-out tablet:hidden',
-                  isContainerScrolled ? 'max-h-[1.6em]' : 'max-h-[4.8em]'
+                  isContainerScrolled ? 'max-h-[1.8em]' : 'max-h-[5.4em]'
                 )}
               >
                 <h3
@@ -206,7 +204,7 @@ function PostEssayQuestionsModal({
                 className="flex min-h-0 flex-1 flex-col"
                 defaultValue={defaultAccordionValue}
               >
-                <div className="flex flex-col gap-4 px-6 pb-4 tablet:h-full tablet:flex-row tablet:items-start tablet:overflow-x-auto tablet:pb-0 hd:overflow-x-hidden">
+                <div className="flex flex-col gap-4 px-6 pb-4 tablet:h-full tablet:flex-row tablet:items-start tablet:overflow-x-auto tablet:pb-6 hd:overflow-x-hidden">
                   {post?.postEssayQuestions?.map((question) => (
                     <ModalQuestionCard
                       key={question.id}

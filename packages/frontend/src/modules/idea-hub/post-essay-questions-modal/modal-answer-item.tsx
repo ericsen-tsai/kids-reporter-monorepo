@@ -65,7 +65,7 @@ function ModalAnswerItem({
         <div className="flex min-w-0 flex-col gap-2 rounded-[12px]">
           <div className="flex min-w-0 items-center justify-between gap-2">
             <div className="flex max-w-full min-w-0 flex-1 items-center gap-2 overflow-hidden">
-              <div className="relative size-10 flex-shrink-0 overflow-hidden rounded-full">
+              <div className="relative size-10 flex-shrink-0 overflow-hidden rounded-full border-2 border-neutral-200">
                 <Image
                   src={answer.member?.avatar?.fileUrl || DEFAULT_AVATAR}
                   alt={
@@ -91,12 +91,15 @@ function ModalAnswerItem({
               type="button"
               aria-label={`${hasLiked ? 'Unlike' : 'Like'} answer: ${answer.content ?? ''}`}
             >
-              {isLoggedIn && hasLiked && (
-                <StarIcon className="text-yellow-400" />
-              )}
-              {isLoggedIn && !hasLiked && <StarIconUnfilled />}
-              {!isLoggedIn && <StarIcon />}
-              <span className="prose-p2-medium text-neutral-600">
+              <div className="flex flex-1 items-center justify-center text-neutral-600">
+                {isLoggedIn && hasLiked && (
+                  <StarIcon className="text-yellow-400" />
+                )}
+                {isLoggedIn && !hasLiked && <StarIconUnfilled />}
+                {!isLoggedIn && <StarIcon />}
+              </div>
+
+              <span className="w-7 text-left prose-p2 text-neutral-600">
                 {getDisplayLikesCount(answer.likesCount)}
               </span>
             </button>
@@ -106,7 +109,7 @@ function ModalAnswerItem({
           </p>
         </div>
       </div>
-      {!isLast && <Divider className="my-4" />}
+      {!isLast && <Divider />}
     </>
   )
 }
