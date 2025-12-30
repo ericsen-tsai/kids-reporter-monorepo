@@ -32,7 +32,7 @@ function AnswerCard({
       <p className="line-clamp-3 prose-p1-bold text-neutral-900">{content}</p>
       <div className="flex items-center justify-between gap-2">
         <div className="flex flex-1 items-center gap-2 truncate">
-          <div className="relative size-10 flex-shrink-0 overflow-hidden rounded-full">
+          <div className="relative size-10 flex-shrink-0 overflow-hidden rounded-full border-2 border-neutral-200">
             <Image
               src={memberAvatar || DEFAULT_AVATAR}
               alt={memberName}

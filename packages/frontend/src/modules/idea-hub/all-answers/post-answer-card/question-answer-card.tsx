@@ -43,7 +43,7 @@ function QuestionAnswerCard({
               <div className="flex flex-col gap-2">
                 <div className="flex w-full items-center justify-between gap-2">
                   <div className="flex min-w-0 flex-1 items-center gap-2">
-                    <div className="relative size-10 flex-shrink-0 overflow-hidden rounded-full">
+                    <div className="relative size-10 flex-shrink-0 overflow-hidden rounded-full border-2 border-neutral-200">
                       <Image
                         src={answer.member?.avatar?.fileUrl || DEFAULT_AVATAR}
                         alt={memberDisplayName}

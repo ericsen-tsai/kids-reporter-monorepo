@@ -65,7 +65,7 @@ function ModalAnswerItem({
         <div className="flex min-w-0 flex-col gap-2 rounded-[12px]">
           <div className="flex min-w-0 items-center justify-between gap-2">
             <div className="flex max-w-full min-w-0 flex-1 items-center gap-2 overflow-hidden">
-              <div className="relative size-10 flex-shrink-0 overflow-hidden rounded-full">
+              <div className="relative size-10 flex-shrink-0 overflow-hidden rounded-full border-2 border-neutral-200">
                 <Image
                   src={answer.member?.avatar?.fileUrl || DEFAULT_AVATAR}
                   alt={
