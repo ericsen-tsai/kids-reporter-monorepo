@@ -37,7 +37,7 @@ function LatestAnswers({ onOpenModal }: LatestAnswersProps) {
   }
 
   return (
-    <div className="mt-10 mb-14 flex w-[calc(100%+48px)] flex-col gap-8 tablet:mb-16 tablet:w-full desktop:mt-18 desktop:mb-24 hd:mt-24 hd:mb-30">
+    <div className="mt-6 mb-14 flex w-[calc(100%+48px)] flex-col gap-6 tablet:mt-8 tablet:mb-16 tablet:w-full tablet:gap-8 desktop:mt-14 desktop:mb-24 desktop:gap-10 hd:mt-20 hd:mb-30">
       <div className="flex items-center gap-3 pl-6 tablet:pl-0">
         <div className="h-8 w-1.5 rounded-md bg-yellow-400" />
         <h3 className="prose-h3-small font-swei text-neutral-900 desktop:prose-h3-large">
@@ -46,7 +46,7 @@ function LatestAnswers({ onOpenModal }: LatestAnswersProps) {
       </div>
       <div
         className={cn(
-          'flex scrollbar-thin snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 tablet:grid tablet:snap-none tablet:grid-cols-3 tablet:overflow-x-hidden tablet:px-0',
+          'flex scrollbar-thin snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 tablet:grid tablet:snap-none tablet:grid-cols-3 tablet:overflow-x-hidden tablet:px-0 desktop:gap-8',
           !isLoading && answers.length === 0 && 'tablet:grid-cols-1'
         )}
       >
