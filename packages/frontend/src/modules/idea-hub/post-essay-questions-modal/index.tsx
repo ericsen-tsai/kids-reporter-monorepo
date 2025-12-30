@@ -142,9 +142,9 @@ function PostEssayQuestionsModal({
 
             <div
               ref={headerTitleNodeRef}
-              className="relative z-20 flex w-full flex-col gap-2 overflow-hidden rounded-t-3xl px-6 pt-4"
+              className="relative z-20 flex w-full flex-col gap-2 overflow-hidden rounded-t-3xl px-6 pt-6"
             >
-              <div className="flex w-full min-w-0 items-start justify-between gap-10">
+              <div className="flex w-full min-w-0 items-center justify-between gap-10">
                 <div className="flex min-w-0 flex-1 items-start gap-2 overflow-hidden">
                   <div className="flex-shrink-0 rounded-[30px] bg-red-400 px-3 py-1">
                     <span className="prose-p2 text-white">{firstCategory}</span>
@@ -158,7 +158,7 @@ function PostEssayQuestionsModal({
                           : 'max-h-[4.8em]'
                       )}
                     >
-                      <h3 className="line-clamp-3 w-full prose-p1-bold text-white">
+                      <h3 className="line-clamp-3 w-full prose-p1-bold text-white text-shadow-[0px_1px_4px_0px_rgba(0,0,0,0.6)] desktop:prose-h6-small">
                         {post?.title ?? ''}
                       </h3>
                     </div>

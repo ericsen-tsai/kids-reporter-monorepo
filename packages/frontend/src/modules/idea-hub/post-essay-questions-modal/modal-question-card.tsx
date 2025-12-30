@@ -208,7 +208,7 @@ function ModalQuestionCard({
             )}
             {isFetchingNextPage && (
               <>
-                <Divider className="my-4" />
+                <Divider />
                 <ModalAnswerItemSkeleton />
               </>
             )}

@@ -109,7 +109,7 @@ function ModalAnswerItem({
           </p>
         </div>
       </div>
-      {!isLast && <Divider className="my-4" />}
+      {!isLast && <Divider />}
     </>
   )
 }
