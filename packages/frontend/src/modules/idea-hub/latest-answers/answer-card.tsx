@@ -45,9 +45,9 @@ function AnswerCard({
             {memberName}
           </span>
         </div>
-        <div className="flex w-14 items-center gap-1">
+        <div className="flex w-14 items-center gap-1 text-neutral-600">
           <StarIcon />
-          <span className="prose-p2-medium text-neutral-600">
+          <span className="w-7 prose-p2">
             {getDisplayLikesCount(likesCount)}
           </span>
         </div>

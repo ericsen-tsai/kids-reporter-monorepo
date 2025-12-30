@@ -91,12 +91,15 @@ function ModalAnswerItem({
               type="button"
               aria-label={`${hasLiked ? 'Unlike' : 'Like'} answer: ${answer.content ?? ''}`}
             >
-              {isLoggedIn && hasLiked && (
-                <StarIcon className="text-yellow-400" />
-              )}
-              {isLoggedIn && !hasLiked && <StarIconUnfilled />}
-              {!isLoggedIn && <StarIcon />}
-              <span className="prose-p2-medium text-neutral-600">
+              <div className="flex flex-1 items-center justify-center text-neutral-600">
+                {isLoggedIn && hasLiked && (
+                  <StarIcon className="text-yellow-400" />
+                )}
+                {isLoggedIn && !hasLiked && <StarIconUnfilled />}
+                {!isLoggedIn && <StarIcon />}
+              </div>
+
+              <span className="w-7 text-left prose-p2 text-neutral-600">
                 {getDisplayLikesCount(answer.likesCount)}
               </span>
             </button>

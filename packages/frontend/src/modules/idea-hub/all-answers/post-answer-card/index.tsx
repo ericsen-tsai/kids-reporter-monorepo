@@ -43,9 +43,7 @@ function PostAnswerCard({ post, onOpenModal }: PostAnswerCardProps) {
         <div className="flex justify-between">
           <div className="flex items-center px-1">
             <div className="rounded-[30px] bg-red-400 px-3 py-[3px]">
-              <span className="prose-p2-medium text-white">
-                {firstCategory}
-              </span>
+              <span className="prose-p2 text-white">{firstCategory}</span>
             </div>
           </div>
           <div className="flex items-center gap-4">

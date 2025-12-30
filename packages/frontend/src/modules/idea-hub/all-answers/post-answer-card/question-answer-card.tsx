@@ -58,7 +58,7 @@ function QuestionAnswerCard({
                   </div>
                   <div className="flex w-14 items-center gap-1 text-neutral-600">
                     <StarIcon />
-                    <span className="prose-p2-medium">
+                    <span className="w-7 prose-p2">
                       {getDisplayLikesCount(answer.likesCount)}
                     </span>
                   </div>

@@ -147,9 +147,7 @@ function PostEssayQuestionsModal({
               <div className="flex w-full min-w-0 items-start justify-between gap-10">
                 <div className="flex min-w-0 flex-1 items-start gap-2 overflow-hidden">
                   <div className="flex-shrink-0 rounded-[30px] bg-red-400 px-3 py-1">
-                    <span className="prose-p2-medium text-white">
-                      {firstCategory}
-                    </span>
+                    <span className="prose-p2 text-white">{firstCategory}</span>
                   </div>
                   <div className="hidden min-w-0 flex-1 py-1 tablet:block">
                     <div
