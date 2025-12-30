@@ -168,11 +168,11 @@ function PostEssayQuestionsModal({
                 <div className="flex items-center justify-center gap-4">
                   <Link
                     href={`/article/${postSlug}`}
-                    className="flex size-10 items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:text-red-400 active:text-red-500"
+                    className="flex size-10 items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:bg-neutral-white/50"
                   >
                     <ArticleShortcutIconLarge />
                   </Link>
-                  <DialogClose className="flex size-10 cursor-pointer items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:text-red-400 active:text-red-500">
+                  <DialogClose className="flex size-10 cursor-pointer items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:bg-neutral-white/50">
                     <XIcon />
                     <span className="sr-only">Close</span>
                   </DialogClose>

@@ -39,7 +39,7 @@ function PostAnswerCard({ post, onOpenModal }: PostAnswerCardProps) {
         <div className="absolute inset-0 z-0 bg-black/30 backdrop-blur-[4px]" />
       </div>
       {/* Article Meta Overlay */}
-      <div className="z-10 flex flex-col gap-3 px-5 py-4">
+      <div className="z-10 flex flex-col gap-2 px-5 py-4">
         <div className="flex justify-between">
           <div className="flex items-center px-1">
             <div className="rounded-[30px] bg-red-400 px-3 py-[3px]">
@@ -49,13 +49,13 @@ function PostAnswerCard({ post, onOpenModal }: PostAnswerCardProps) {
           <div className="flex items-center gap-4">
             <Link
               href={post.slug ? `/article/${post.slug}` : ''}
-              className="flex size-10 items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:text-red-400 active:text-red-500"
+              className="flex size-10 items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:bg-neutral-white/50"
             >
               <ArticleShortcutIconLarge />
             </Link>
             <button
               onClick={() => onOpenModal(post.slug)}
-              className="flex size-10 cursor-pointer items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:text-red-400 active:text-red-500"
+              className="flex size-10 cursor-pointer items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:bg-neutral-white/50"
             >
               <CornerOutIcon />
             </button>
@@ -63,12 +63,7 @@ function PostAnswerCard({ post, onOpenModal }: PostAnswerCardProps) {
         </div>
 
         {/* Title */}
-        <h3
-          className="line-clamp-3 px-1 prose-p1-bold text-white"
-          style={{
-            textShadow: '0px 1px 4px 0px rgba(0, 0, 0, 0.6)',
-          }}
-        >
+        <h3 className="line-clamp-3 px-1 prose-p1-bold text-white text-shadow-[0px_1px_4px_0px_rgba(0,0,0,0.6)] desktop:prose-h6-small">
           {post.title ?? ''}
         </h3>
       </div>
