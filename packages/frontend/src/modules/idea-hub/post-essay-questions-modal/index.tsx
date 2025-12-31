@@ -96,7 +96,6 @@ function PostEssayQuestionsModal({
   }, [isMobile, isAccordionScrolled])
 
   const isContainerScrolled = isAccordionScrolled || isAnyQuestionCardScrolled
-
   const defaultAccordionValue = useMemo(() => {
     return (
       post?.postEssayQuestions?.map((question) => question.id.toString()) ?? []
@@ -158,7 +157,12 @@ function PostEssayQuestionsModal({
                           : 'max-h-[5.4em]'
                       )}
                     >
-                      <h3 className="line-clamp-3 w-full prose-p1-bold text-white text-shadow-[0px_1px_4px_0px_rgba(0,0,0,0.6)] desktop:prose-h6-small">
+                      <h3
+                        className={cn(
+                          'line-clamp-3 w-full prose-p1-bold text-white text-shadow-[0px_1px_4px_0px_rgba(0,0,0,0.6)] desktop:prose-h6-small',
+                          isAnyQuestionCardScrolled && 'line-clamp-1'
+                        )}
+                      >
                         {post?.title ?? ''}
                       </h3>
                     </div>
