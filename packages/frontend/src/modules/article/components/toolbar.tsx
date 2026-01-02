@@ -1,10 +1,11 @@
 'use client'
 import { cn, ScrollLevel, useScrollLevel } from '@kids-reporter/routing-ui'
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useArticleContext } from '@/app/(sticky-header)/_components/article/article-context'
 import { FontSizeLevel } from '@/constants'
+import useClickOutside from '@/hooks/use-click-outside'
 import {
   ToolbarCheckAnswerIcon,
   ToolbarFontIcon,
@@ -39,25 +40,13 @@ function MobileToolbar({ topicURL, onCheckAnswerClick }: MobileToolbarProp) {
     }
   }, [isHidden])
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        toolbarRef.current &&
-        !toolbarRef.current.contains(event.target as Node) &&
-        isSharePanelOpen
-      ) {
-        setIsSharePanelOpen(false)
-      }
-    }
-
+  const handleClickOutside = useCallback(() => {
     if (isSharePanelOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
+      setIsSharePanelOpen(false)
     }
   }, [isSharePanelOpen])
+
+  useClickOutside(toolbarRef, handleClickOutside)
 
   return (
     <div
@@ -156,25 +145,13 @@ function DesktopToolbar({ topicURL, onCheckAnswerClick }: DesktopToolbarProp) {
     setIsSharePanelOpen(!isSharePanelOpen)
   }
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        toolbarRef.current &&
-        !toolbarRef.current.contains(event.target as Node) &&
-        isSharePanelOpen
-      ) {
-        setIsSharePanelOpen(false)
-      }
-    }
-
+  const handleClickOutside = useCallback(() => {
     if (isSharePanelOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
+      setIsSharePanelOpen(false)
     }
   }, [isSharePanelOpen])
+
+  useClickOutside(toolbarRef, handleClickOutside)
 
   return (
     <div className="flex w-16 flex-col items-center gap-3" ref={toolbarRef}>
