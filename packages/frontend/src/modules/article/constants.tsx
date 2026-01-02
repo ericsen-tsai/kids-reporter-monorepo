@@ -20,7 +20,7 @@ export const SHARE_ICONS = [
       const location =
         'https://www.facebook.com/sharer/sharer.php?' +
         `u=${encodeURIComponent(currentURL)}`
-      window.open(location, '_blank')
+      window.open(location, '_blank', 'noopener,noreferrer')
     },
   },
   {
@@ -29,7 +29,7 @@ export const SHARE_ICONS = [
     onClick: () => {
       const currentURL = window.location.href
       const location = `https://www.threads.net/intent/post?text=${encodeURIComponent(currentURL)}`
-      window.open(location, '_blank')
+      window.open(location, '_blank', 'noopener,noreferrer')
     },
   },
   {
@@ -40,7 +40,7 @@ export const SHARE_ICONS = [
       const location = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(
         currentURL
       )}`
-      window.open(location, '_blank')
+      window.open(location, '_blank', 'noopener,noreferrer')
     },
   },
   {

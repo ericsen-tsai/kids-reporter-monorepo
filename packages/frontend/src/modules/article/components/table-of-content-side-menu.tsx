@@ -235,7 +235,7 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
           aria-current={
             currentActiveIndex ===
             makeAnchorKey(TABLE_OF_CONTENT_BACK_TO_TOP_KEY)
-              ? 'true'
+              ? 'location'
               : undefined
           }
           className={cn(
@@ -259,7 +259,7 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
               handleClickAnchorIndex(key)
             }}
             aria-current={
-              currentActiveIndex === makeAnchorKey(key) ? 'true' : undefined
+              currentActiveIndex === makeAnchorKey(key) ? 'location' : undefined
             }
             className={cn(
               'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-all duration-100 ease-in-out',
