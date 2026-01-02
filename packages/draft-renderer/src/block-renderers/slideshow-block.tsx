@@ -271,7 +271,7 @@ const SlidesFlexBox = styled.div<{
           ${getTranslateX(mockup.mobile, translateXUint) / getContainerWidth(mockup.mobile)} * 100%
         );
     }
-    ${mediaQuery.mediumOnly} {
+    ${mediaQuery.mediumAndDesktopOnly} {
       transform: translateX(
           ${getTranslateX(mockup.desktop, translateXUint) / getContainerWidth(mockup.desktop)} * 100%
         );
@@ -295,7 +295,7 @@ const SlideFlexItem = styled.div`
       `calc(${mockup.mobile.slide.paddingRight} / ${getContainerWidth(mockup.mobile)}*100%)`};
   }
 
-  ${mediaQuery.mediumOnly} {
+  ${mediaQuery.mediumAndDesktopOnly} {
     flex-basis: ${getSlideWidth(mockup.desktop)}px;
     padding-right: ${mockup.desktop.slide.paddingRight}px;
   }
@@ -330,7 +330,7 @@ const SlideshowFlexBox = styled.div`
     width: 100%;
   }
 
-  ${mediaQuery.mediumOnly} {
+  ${mediaQuery.mediumAndDesktopOnly} {
     width: ${mockup.desktop.container.width}px;
   }
 

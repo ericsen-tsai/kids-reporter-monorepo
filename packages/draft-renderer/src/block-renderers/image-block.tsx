@@ -174,7 +174,13 @@ export function ImageInArticleBody({
 export const InfoBoxContainer = styled.div<{ $alignment?: string }>`
   /* reset browser default styles */
   figure {
-    margin: 0 0 27px 0;
+    margin: 20px 0;
+  }
+
+  ${mediaQuery.mediumAbove} {
+    figure {
+      margin: 32px 0;
+    }
   }
 
   ${(props) => {

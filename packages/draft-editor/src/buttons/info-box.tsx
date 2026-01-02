@@ -12,6 +12,7 @@ import { editableAnnotationDecorator } from '../entity-decorators/annotation'
 import { editableLinkDecorator } from '../entity-decorators/link'
 import { RichTextEditor } from '../rich-text-editor'
 import buttonNames from './bt-names'
+import { Checkbox } from './form/checkbox'
 import { Select } from './form/select'
 
 const disabledButtons = [
@@ -35,13 +36,14 @@ enum InfoBoxTypeEnum {
 
 enum InfoBoxLabelEnum {
   newsChargeStation = '新聞充電器',
-  headerBorder = '無線框版',
-  boxBorder = '有線框版',
+  headerBorder = '藍底版（有標題設計）',
+  boxBorder = '灰底版',
 }
 
 export type InfoBoxInputValue = {
   type: InfoBoxTypeEnum
   rawContentState: RawDraftContentState
+  showBaodaozai?: boolean
 }
 
 type InfoBoxInputType = {
@@ -49,6 +51,7 @@ type InfoBoxInputType = {
   onConfirm: (arg0: {
     type: InfoBoxTypeEnum
     rawContentState: RawDraftContentState
+    showBaodaozai?: boolean
   }) => void
   onCancel: () => void
   inputValue: InfoBoxInputValue
@@ -56,11 +59,11 @@ type InfoBoxInputType = {
 
 export function InfoBoxInput(props: InfoBoxInputType) {
   const { isOpen, onConfirm, onCancel, inputValue } = props
-
   const contentState = convertFromRaw(inputValue.rawContentState)
   const [inputValueState, setInputValueState] = useState({
     type: inputValue.type,
     editorState: EditorState.createWithContent(contentState),
+    showBaodaozai: inputValue.showBaodaozai,
   })
 
   return (
@@ -82,6 +85,7 @@ export function InfoBoxInput(props: InfoBoxInputType) {
                 rawContentState: convertToRaw(
                   inputValueState.editorState.getCurrentContent()
                 ),
+                showBaodaozai: inputValueState.showBaodaozai,
               })
             },
           },
@@ -108,9 +112,23 @@ export function InfoBoxInput(props: InfoBoxInputType) {
             setInputValueState({
               type: infoBoxType as InfoBoxTypeEnum,
               editorState: inputValueState.editorState,
+              showBaodaozai: inputValueState.showBaodaozai,
             })
           }}
         />
+        {inputValueState.type !== InfoBoxTypeEnum.newsChargeStation && (
+          <Checkbox
+            label="是否顯示報導仔圖片"
+            checked={inputValueState.showBaodaozai ?? false}
+            onChange={(checked) => {
+              setInputValueState({
+                type: inputValueState.type,
+                editorState: inputValueState.editorState,
+                showBaodaozai: checked,
+              })
+            }}
+          />
+        )}
         <RichTextEditor
           decorators={[editableAnnotationDecorator, editableLinkDecorator]}
           disabledButtons={disabledButtons}
@@ -119,6 +137,7 @@ export function InfoBoxInput(props: InfoBoxInputType) {
             setInputValueState({
               type: inputValueState.type,
               editorState,
+              showBaodaozai: inputValueState.showBaodaozai,
             })
           }}
         />
@@ -140,9 +159,11 @@ export const InfoBoxButton = (props: InfoBoxButtonProps) => {
   const onChange = ({
     type,
     rawContentState,
+    showBaodaozai,
   }: {
     type: InfoBoxTypeEnum
     rawContentState: RawDraftContentState
+    showBaodaozai?: boolean
   }) => {
     const contentState = editorState.getCurrentContent()
 
@@ -153,6 +174,7 @@ export const InfoBoxButton = (props: InfoBoxButtonProps) => {
       {
         type,
         rawContentState,
+        showBaodaozai,
       }
     )
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey()
@@ -180,6 +202,7 @@ export const InfoBoxButton = (props: InfoBoxButtonProps) => {
           inputValue={{
             type: InfoBoxTypeEnum.newsChargeStation,
             rawContentState: { blocks: [], entityMap: {} },
+            showBaodaozai: true,
           }}
         />
       )}
