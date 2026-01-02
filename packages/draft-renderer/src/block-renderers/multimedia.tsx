@@ -93,7 +93,7 @@ const Caption = styled.figcaption`
     }
   }
 
-  ${mediaQuery.mediumOnly} {
+  ${mediaQuery.mediumAndDesktopOnly} {
     width: ${mockup.desktop.caption.width}px;
     padding: 15px 0 15px 0;
   }

@@ -53,7 +53,7 @@ const SvgBlock = styled.div`
     }
   }
 
-  ${mediaQuery.mediumOnly} {
+  ${mediaQuery.mediumAndDesktopOnly} {
     svg {
       width: 25px;
       margin-right: 15px;
