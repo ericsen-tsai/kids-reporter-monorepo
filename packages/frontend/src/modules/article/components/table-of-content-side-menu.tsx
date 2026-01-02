@@ -5,9 +5,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { STICKY_HEADER_HEIGHT } from '@/constants'
 
 import {
-  TABLET_OF_CONTENT_ANCHOR_PREFIX,
-  TABLET_OF_CONTENT_BACK_TO_TOP_KEY,
-  TABLET_OF_CONTENT_INDEX_PREFIX,
+  TABLE_OF_CONTENT_ANCHOR_PREFIX,
+  TABLE_OF_CONTENT_BACK_TO_TOP_KEY,
+  TABLE_OF_CONTENT_INDEX_PREFIX,
 } from '../constants'
 
 type TableOfContentSideMenuProps = {
@@ -15,16 +15,16 @@ type TableOfContentSideMenuProps = {
 }
 
 function makeAnchorIndexKey(key: string) {
-  return `${TABLET_OF_CONTENT_INDEX_PREFIX}-${key}`
+  return `${TABLE_OF_CONTENT_INDEX_PREFIX}-${key}`
 }
 
 function makeAnchorKey(key: string) {
-  return `${TABLET_OF_CONTENT_ANCHOR_PREFIX}-${key}`
+  return `${TABLE_OF_CONTENT_ANCHOR_PREFIX}-${key}`
 }
 
 function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
   const [currentActiveIndex, setCurrentActiveIndex] = useState<string | null>(
-    makeAnchorKey(TABLET_OF_CONTENT_BACK_TO_TOP_KEY)
+    makeAnchorKey(TABLE_OF_CONTENT_BACK_TO_TOP_KEY)
   )
   const [isExpanded, setIsExpanded] = useState(false)
   const anchorRefs = useRef<HTMLSpanElement[]>([])
@@ -62,7 +62,7 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
 
     const elementToKeyMap = new Map<HTMLElement, string>()
     anchors.forEach((anchor) => {
-      const key = anchor.id.replace(`${TABLET_OF_CONTENT_ANCHOR_PREFIX}-`, '')
+      const key = anchor.id.replace(`${TABLE_OF_CONTENT_ANCHOR_PREFIX}-`, '')
       elementToKeyMap.set(anchor, key)
     })
 
@@ -77,9 +77,7 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
 
       if (visibleEntries.length === 0) {
         if (window.scrollY < STICKY_HEADER_HEIGHT) {
-          setCurrentActiveIndex(
-            makeAnchorKey(TABLET_OF_CONTENT_BACK_TO_TOP_KEY)
-          )
+          setCurrentActiveIndex(makeAnchorKey(TABLE_OF_CONTENT_BACK_TO_TOP_KEY))
         }
         return
       }
@@ -118,7 +116,7 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
 
     const handleScroll = () => {
       if (window.scrollY < STICKY_HEADER_HEIGHT) {
-        setCurrentActiveIndex(makeAnchorKey(TABLET_OF_CONTENT_BACK_TO_TOP_KEY))
+        setCurrentActiveIndex(makeAnchorKey(TABLE_OF_CONTENT_BACK_TO_TOP_KEY))
       }
     }
 
@@ -197,7 +195,7 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
           <br />引
         </div>
         <div className="hidden flex-col gap-2 pr-10 pl-4 desktop:flex">
-          {[{ key: TABLET_OF_CONTENT_BACK_TO_TOP_KEY }, ...indexes].map(
+          {[{ key: TABLE_OF_CONTENT_BACK_TO_TOP_KEY }, ...indexes].map(
             ({ key }) => (
               <div
                 key={key}
@@ -236,7 +234,7 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
           }}
           aria-current={
             currentActiveIndex ===
-            makeAnchorKey(TABLET_OF_CONTENT_BACK_TO_TOP_KEY)
+            makeAnchorKey(TABLE_OF_CONTENT_BACK_TO_TOP_KEY)
               ? 'true'
               : undefined
           }
@@ -245,7 +243,7 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
             // Desktop/HD: match Figma design
             'desktop:rounded desktop:px-1 desktop:py-[1px] desktop:font-medium',
             currentActiveIndex ===
-              makeAnchorKey(TABLET_OF_CONTENT_BACK_TO_TOP_KEY) &&
+              makeAnchorKey(TABLE_OF_CONTENT_BACK_TO_TOP_KEY) &&
               'font-bold text-red-400'
           )}
         >
