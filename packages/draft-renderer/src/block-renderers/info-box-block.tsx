@@ -116,7 +116,10 @@ function HeaderBorder({
       {children}
       {showBaodaozai && (
         <HeaderBorderLogoContainer>
-          <HeaderBorderLogo src="https://www.unpkg.com/@kids-reporter/draft-renderer/public/images/info-box-blocksy-child-1-yellow.png" />
+          <HeaderBorderLogo
+            src="https://www.unpkg.com/@kids-reporter/draft-renderer/public/images/info-box-blocksy-child-1-yellow.png"
+            alt="黃色報導仔"
+          />
         </HeaderBorderLogoContainer>
       )}
     </HeaderBorderContainer>
@@ -151,7 +154,10 @@ function BoxBorder({
     <BoxBorderContainer>
       {children}
       {showBaodaozai && (
-        <BoxBorderLogo src="https://www.unpkg.com/@kids-reporter/draft-renderer/public/images/info-box-blocksy-child-2-blue.png" />
+        <BoxBorderLogo
+          src="https://www.unpkg.com/@kids-reporter/draft-renderer/public/images/info-box-blocksy-child-2-blue.png"
+          alt="藍色報導仔"
+        />
       )}
     </BoxBorderContainer>
   )
@@ -170,11 +176,14 @@ const EditorContainer = styled.div`
   position: relative;
 `
 
-function covertFromRawWithoutUnstyledTrailingBlocks(
+function convertFromRawWithoutUnstyledTrailingBlocks(
   rawContentState: RawDraftContentState
 ) {
   const contentState = convertFromRaw(rawContentState)
   const blocks = contentState.getBlocksAsArray()
+  if (blocks.length === 0) {
+    return contentState
+  }
   const lastBlock = blocks[blocks.length - 1]
   if (lastBlock.getText().trim() !== '') {
     return contentState
@@ -183,13 +192,13 @@ function covertFromRawWithoutUnstyledTrailingBlocks(
   const newRawContentState = convertToRaw(
     ContentState.createFromBlockArray(newBlocks)
   )
-  return covertFromRawWithoutUnstyledTrailingBlocks(newRawContentState)
+  return convertFromRawWithoutUnstyledTrailingBlocks(newRawContentState)
 }
 
 export function InfoBoxInArticleBody({ className, data }: InfoBoxBlockProps) {
   const { type, rawContentState, showBaodaozai = true } = data
   const contentState =
-    covertFromRawWithoutUnstyledTrailingBlocks(rawContentState)
+    convertFromRawWithoutUnstyledTrailingBlocks(rawContentState)
   const editorState = EditorState.createWithContent(contentState, decorator)
   let Component
   let blockRenderMap = blockRenderMaps.infoBox.default

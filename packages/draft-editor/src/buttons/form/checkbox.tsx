@@ -10,7 +10,6 @@ const CheckboxBlock = styled.div`
 const Label = styled.label`
   display: flex;
   align-items: center;
-  margin: 10px 0;
   font-weight: 600;
   cursor: pointer;
 `
