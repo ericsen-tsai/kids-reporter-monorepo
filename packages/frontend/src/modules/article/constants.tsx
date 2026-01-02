@@ -44,17 +44,18 @@ export const SHARE_ICONS = [
     },
   },
   {
-    icon: (
-      <div className="flex aspect-square w-10 cursor-pointer appearance-none flex-col items-center justify-center rounded-full bg-neutral-600">
-        <LinkIcon />
-      </div>
-    ),
+    icon: <LinkIcon />,
     label: 'Link',
     onClick: () => {
       const currentURL = window.location.href
-      navigator.clipboard.writeText(currentURL).then(() => {
-        toast.success('已複製文章網址')
-      })
+      navigator.clipboard
+        .writeText(currentURL)
+        .then(() => {
+          toast.success('已複製文章網址')
+        })
+        .catch(() => {
+          toast.error('複製文章網址失敗')
+        })
     },
   },
 ]
