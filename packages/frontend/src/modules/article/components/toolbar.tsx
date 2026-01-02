@@ -53,8 +53,8 @@ function MobileToolbar({ topicURL, onCheckAnswerClick }: MobileToolbarProp) {
       className={cn(
         'z-1001 flex flex-col items-center transition-all duration-400 print:hidden',
         {
-          'pointer-events-none translate-y-10 opacity-0': isHidden,
-          'translate-y-0 opacity-100': !isHidden,
+          'pointer-events-none max-h-0 translate-y-10 opacity-0': isHidden,
+          'max-h-50 translate-y-0 opacity-100': !isHidden,
         }
       )}
     >
