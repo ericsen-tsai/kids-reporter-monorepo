@@ -101,7 +101,7 @@ function AllAnswers({ onOpenModal }: AllAnswersProps) {
   const showLoading = isLoading || isFetchingNextPage
 
   return (
-    <div className="flex w-[calc(100%+48px)] flex-col gap-6 bg-neutral-100 pt-10 pb-14 tablet:w-[calc(100%+64px)] tablet:gap-8 tablet:pt-12 tablet:pb-16 desktop:w-[calc(100%+96px)] desktop:gap-10 desktop:pt-18 desktop:pb-24 hd:w-screen hd:pt-24 hd:pb-30">
+    <div className="flex w-[calc(100%+48px)] flex-col gap-6 bg-neutral-100 pt-10 pb-12 tablet:w-[calc(100%+64px)] tablet:gap-8 tablet:pt-12 tablet:pb-14 desktop:w-[calc(100%+96px)] desktop:gap-10 desktop:pt-18 desktop:pb-22 hd:w-screen hd:pt-24 hd:pb-28">
       <div
         ref={titleRef}
         className="flex items-center gap-3 pl-6 tablet:pl-8 desktop:pl-12 hd:pl-[calc(50vw-600px+64px)]"
@@ -113,7 +113,7 @@ function AllAnswers({ onOpenModal }: AllAnswersProps) {
       </div>
       <div
         ref={scrollContainerRef}
-        className="flex scrollbar-thin snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 tablet:scroll-px-8 tablet:px-8 desktop:scroll-px-12 desktop:gap-8 desktop:px-12 hd:scroll-pr-14 hd:scroll-pl-[calc(50vw-600px+64px)] hd:pr-14 hd:pl-[calc(50vw-600px+64px)]"
+        className="flex scrollbar-thin snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 pb-2 tablet:scroll-px-8 tablet:px-8 desktop:scroll-px-12 desktop:gap-8 desktop:px-12 hd:scroll-pr-14 hd:scroll-pl-[calc(50vw-600px+64px)] hd:pr-14 hd:pl-[calc(50vw-600px+64px)]"
       >
         {posts?.map((post) => (
           <div key={post.id} className="flex-shrink-0 snap-start">
