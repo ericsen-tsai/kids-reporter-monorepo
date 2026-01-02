@@ -300,7 +300,7 @@ function Toolbar({ topicURL, postSlug }: ToolbarProp) {
     useState(false)
   return (
     <>
-      <div className="fixed bottom-8 left-8 z-1000 tablet:bottom-8 tablet:left-1/2 tablet:-translate-x-1/2 desktop:sticky desktop:top-[calc(50vh+148px)] desktop:left-12 desktop:z-[999] desktop:flex desktop:h-0 desktop:translate-x-0 desktop:items-end hd:left-20">
+      <div className="fixed bottom-6 left-6 z-1000 tablet:bottom-8 tablet:left-1/2 tablet:-translate-x-1/2 desktop:sticky desktop:top-[calc(50vh+148px)] desktop:left-12 desktop:z-[999] desktop:flex desktop:h-0 desktop:translate-x-0 desktop:items-end hd:left-20">
         <div className="desktop:hidden">
           <MobileToolbar
             topicURL={topicURL}

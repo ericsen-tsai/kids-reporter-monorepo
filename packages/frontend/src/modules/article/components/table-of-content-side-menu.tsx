@@ -187,32 +187,28 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
             : 'translate-x-0'
         )}
       >
-        {!isDesktop && (
-          <div
-            className={cn(
-              'absolute top-0 left-0 flex h-24 w-8 flex-col items-center justify-center gap-2.5 rounded-r-[20px] bg-neutral-black/8 px-[9px] py-[26px] text-sm leading-[1.6] text-neutral-700 backdrop-blur-xs transition-all duration-100 ease-in-out hover:text-red-400',
-              isExpanded && 'bg-neutral-200'
-            )}
-          >
-            索
-            <br />引
-          </div>
-        )}
-        {isDesktop && (
-          <div className="flex flex-col gap-2 pr-10 pl-4">
-            {[{ key: TABLET_OF_CONTENT_BACK_TO_TOP_KEY }, ...indexes].map(
-              ({ key }) => (
-                <div
-                  key={key}
-                  className={cn(
-                    'h-[3px] w-4 rounded-sm bg-neutral-black/10',
-                    currentActiveIndex === makeAnchorKey(key) && 'bg-red-400'
-                  )}
-                ></div>
-              )
-            )}
-          </div>
-        )}
+        <div
+          className={cn(
+            'absolute top-0 left-0 flex h-24 w-8 flex-col items-center justify-center gap-2.5 rounded-r-[20px] bg-neutral-black/8 px-[9px] py-[26px] text-sm leading-[1.6] text-neutral-700 backdrop-blur-xs transition-all duration-100 ease-in-out hover:text-red-400 desktop:hidden',
+            isExpanded && 'bg-neutral-200'
+          )}
+        >
+          索
+          <br />引
+        </div>
+        <div className="hidden flex-col gap-2 pr-10 pl-4 desktop:flex">
+          {[{ key: TABLET_OF_CONTENT_BACK_TO_TOP_KEY }, ...indexes].map(
+            ({ key }) => (
+              <div
+                key={key}
+                className={cn(
+                  'h-[3px] w-4 rounded-sm bg-neutral-black/10',
+                  currentActiveIndex === makeAnchorKey(key) && 'bg-red-400'
+                )}
+              ></div>
+            )
+          )}
+        </div>
       </button>
       <div
         role="list"

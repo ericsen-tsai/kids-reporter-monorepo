@@ -92,7 +92,7 @@ function Baodaozai() {
       </div>
       <button
         className={cn(
-          'absolute right-0 z-12 transition-all duration-1000 tablet:right-0',
+          'absolute -right-2 z-12 transition-all duration-1000 tablet:right-0 tablet:bottom-0',
           !dialogProps.isOpen && 'cursor-pointer',
           isActive && 'right-6 tablet:right-6 desktop:right-8',
           dialogProps.isOpen && 'right-9 z-10'
