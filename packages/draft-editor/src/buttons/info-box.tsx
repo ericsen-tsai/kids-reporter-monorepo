@@ -109,11 +109,10 @@ export function InfoBoxInput(props: InfoBoxInputType) {
             },
           ]}
           onChange={(infoBoxType) => {
-            setInputValueState({
+            setInputValueState((prev) => ({
+              ...prev,
               type: infoBoxType as InfoBoxTypeEnum,
-              editorState: inputValueState.editorState,
-              showBaodaozai: inputValueState.showBaodaozai,
-            })
+            }))
           }}
         />
         {inputValueState.type !== InfoBoxTypeEnum.newsChargeStation && (
@@ -121,11 +120,10 @@ export function InfoBoxInput(props: InfoBoxInputType) {
             label="是否顯示報導仔圖片"
             checked={inputValueState.showBaodaozai ?? false}
             onChange={(checked) => {
-              setInputValueState({
-                type: inputValueState.type,
-                editorState: inputValueState.editorState,
+              setInputValueState((prev) => ({
+                ...prev,
                 showBaodaozai: checked,
-              })
+              }))
             }}
           />
         )}
@@ -134,11 +132,10 @@ export function InfoBoxInput(props: InfoBoxInputType) {
           disabledButtons={disabledButtons}
           editorState={inputValueState.editorState}
           onChange={(editorState: EditorState) => {
-            setInputValueState({
-              type: inputValueState.type,
+            setInputValueState((prev) => ({
+              ...prev,
               editorState,
-              showBaodaozai: inputValueState.showBaodaozai,
-            })
+            }))
           }}
         />
       </Drawer>

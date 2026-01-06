@@ -2,7 +2,6 @@ import {
   ContentBlock,
   ContentState,
   convertFromRaw,
-  convertToRaw,
   Editor,
   EditorState,
   RawDraftContentState,
@@ -180,19 +179,35 @@ function convertFromRawWithoutUnstyledTrailingBlocks(
   rawContentState: RawDraftContentState
 ) {
   const contentState = convertFromRaw(rawContentState)
-  const blocks = contentState.getBlocksAsArray()
-  if (blocks.length === 0) {
+  const originalBlocks = contentState.getBlocksAsArray()
+
+  if (originalBlocks.length === 0) {
     return contentState
   }
-  const lastBlock = blocks[blocks.length - 1]
-  if (lastBlock.getText().trim() !== '') {
+
+  let lastNonEmptyBlockIndex = originalBlocks.length - 1
+
+  // Find the index of the last block that is not an empty 'unstyled' block.
+  while (
+    lastNonEmptyBlockIndex >= 0 &&
+    originalBlocks[lastNonEmptyBlockIndex].getText().trim() === '' &&
+    originalBlocks[lastNonEmptyBlockIndex].getType() === 'unstyled'
+  ) {
+    lastNonEmptyBlockIndex--
+  }
+
+  // If no blocks were removed, return the original contentState.
+  if (lastNonEmptyBlockIndex === originalBlocks.length - 1) {
     return contentState
   }
-  const newBlocks = blocks.slice(0, -1)
-  const newRawContentState = convertToRaw(
-    ContentState.createFromBlockArray(newBlocks)
+
+  const newBlocks = originalBlocks.slice(0, lastNonEmptyBlockIndex + 1)
+
+  // Create a new ContentState from the trimmed blocks, preserving the entityMap.
+  return ContentState.createFromBlockArray(
+    newBlocks,
+    contentState.getEntityMap()
   )
-  return convertFromRawWithoutUnstyledTrailingBlocks(newRawContentState)
 }
 
 export function InfoBoxInArticleBody({ className, data }: InfoBoxBlockProps) {
