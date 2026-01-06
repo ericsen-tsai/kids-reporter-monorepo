@@ -3,6 +3,7 @@ import { cn, useMediaQuery } from '@kids-reporter/routing-ui'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { STICKY_HEADER_HEIGHT } from '@/constants'
+import useClickOutside from '@/hooks/use-click-outside'
 
 import {
   TABLE_OF_CONTENT_ANCHOR_PREFIX,
@@ -128,25 +129,13 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
     }
   }, [indexes])
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        menuContainerRef.current &&
-        !menuContainerRef.current.contains(event.target as Node) &&
-        isExpanded
-      ) {
-        setIsExpanded(false)
-      }
-    }
-
+  const handleClickOutside = useCallback(() => {
     if (isExpanded) {
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
+      setIsExpanded(false)
     }
   }, [isExpanded])
+
+  useClickOutside(menuContainerRef, handleClickOutside)
 
   const isDesktop = useMediaQuery('(min-width: 1024px)')
 
