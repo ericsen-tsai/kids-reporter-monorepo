@@ -10,6 +10,10 @@ import { operations } from '../graphql/operations.js'
 const errors = _errors.default
 const statusCodes = consts.statusCodes
 const MAX_LOG_BODY_BYTES = 1024
+const CLIENT_GQL_ERROR_CODES = new Set([
+  'BAD_USER_INPUT',
+  'GRAPHQL_VALIDATION_FAILED',
+])
 
 const logResponse = (
   res: express.Response,
@@ -130,11 +134,21 @@ export function createGqlRestRouter({
           const gqlPayload = gqlRes?.data
 
           if (gqlPayload?.errors?.length) {
-            return logResponse(res, statusCodes.internalServerError, {
-              status: 'error',
-              message: 'CMS GraphQL responded with errors',
-              errors: gqlPayload.errors,
-            })
+            const hasClientError = gqlPayload.errors.some(
+              (error: { extensions?: { code?: string } }) =>
+                CLIENT_GQL_ERROR_CODES.has(error?.extensions?.code ?? '')
+            )
+            return logResponse(
+              res,
+              hasClientError
+                ? statusCodes.badRequest
+                : statusCodes.internalServerError,
+              {
+                status: 'error',
+                message: 'CMS GraphQL responded with errors',
+                errors: gqlPayload.errors,
+              }
+            )
           }
 
           return logResponse(res, statusCodes.ok, {
