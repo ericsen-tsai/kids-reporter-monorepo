@@ -20,7 +20,7 @@ type ArticleSummaryProps = {
   subSubcategoryName: string
   subSubcategoryURL: string
   publishedDate: string
-  content: RawDraftContentState
+  content: RawDraftContentState | undefined
   authors: AuthorGroup[]
   fontSizeLevel: FontSizeLevel
 }
@@ -53,7 +53,9 @@ function ArticleSummary({
           fontSizeLevel === FontSizeLevel.LARGE && 'text-[22.5px]'
         )}
       >
-        <ArticleIntroductionDraftRenderer rawContentState={content} />
+        {content && (
+          <ArticleIntroductionDraftRenderer rawContentState={content} />
+        )}
       </div>
 
       <Divider className="bg-neutral-400" />

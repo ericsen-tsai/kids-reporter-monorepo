@@ -18,7 +18,7 @@ import PostEssayQuestionsModal from '@/modules/idea-hub/post-essay-questions-mod
 import { ARTICLE_WIDGET_SCROLL_DOWN_DISTANCE, SHARE_ICONS } from '../constants'
 
 type MobileToolbarProp = {
-  topicURL: string
+  topicURL?: string
   onCheckAnswerClick: () => void
 }
 
@@ -87,18 +87,20 @@ function MobileToolbar({ topicURL, onCheckAnswerClick }: MobileToolbarProp) {
           })}
         </div>
         <div className="relative z-3 flex h-14 flex-row items-center justify-end gap-2 rounded-[60px] bg-neutral-white px-4 py-2 text-center shadow-[var(--shadow-baodaozai-card)]">
-          <Link
-            className="flex w-[50px] cursor-pointer flex-col items-center justify-center border-none bg-transparent"
-            href={topicURL}
-            aria-label="Go to topic"
-          >
-            <div className="flex h-6 w-6 items-center justify-center text-neutral-600">
-              <ToolbarTopicIcon />
-            </div>
-            <span className="prose-p4 text-neutral-900 [text-shadow:-1px_-1px_0_white,1px_-1px_0_white,-1px_1px_0_white,1px_1px_0_white]">
-              前往專題
-            </span>
-          </Link>
+          {topicURL && (
+            <Link
+              className="flex w-[50px] cursor-pointer flex-col items-center justify-center border-none bg-transparent"
+              href={topicURL}
+              aria-label="Go to topic"
+            >
+              <div className="flex h-6 w-6 items-center justify-center text-neutral-600">
+                <ToolbarTopicIcon />
+              </div>
+              <span className="prose-p4 text-neutral-900 [text-shadow:-1px_-1px_0_white,1px_-1px_0_white,-1px_1px_0_white,1px_1px_0_white]">
+                前往專題
+              </span>
+            </Link>
+          )}
           <button
             className="flex w-[50px] cursor-pointer flex-col items-center justify-center border-none bg-transparent"
             onClick={onCheckAnswerClick}
@@ -142,7 +144,7 @@ function MobileToolbar({ topicURL, onCheckAnswerClick }: MobileToolbarProp) {
 }
 
 type DesktopToolbarProp = {
-  topicURL: string
+  topicURL?: string
   onCheckAnswerClick: () => void
 }
 
@@ -166,18 +168,20 @@ function DesktopToolbar({ topicURL, onCheckAnswerClick }: DesktopToolbarProp) {
   return (
     <div className="flex w-16 flex-col items-center gap-3" ref={toolbarRef}>
       <div className="relative flex w-full flex-col items-center gap-3 rounded-full bg-neutral-100 py-3">
-        <Link
-          href={topicURL}
-          className="group relative flex aspect-square w-10 cursor-pointer items-center justify-center rounded-full border-none bg-blue-400 p-2 text-neutral-white transition-colors duration-200 hover:bg-blue-500"
-          aria-label="Go to topic"
-        >
-          <div className="relative z-1">
-            <ToolbarTopicIcon />
-          </div>
-          <span className="pointer-events-none absolute left-15 z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-opacity duration-200 [text-shadow:-1px_-1px_0_white,1px_-1px_0_white,-1px_1px_0_white,1px_1px_0_white] group-hover:pointer-events-auto group-hover:opacity-100">
-            前往專題
-          </span>
-        </Link>
+        {topicURL && (
+          <Link
+            href={topicURL}
+            className="group relative flex aspect-square w-10 cursor-pointer items-center justify-center rounded-full border-none bg-blue-400 p-2 text-neutral-white transition-colors duration-200 hover:bg-blue-500"
+            aria-label="Go to topic"
+          >
+            <div className="relative z-1">
+              <ToolbarTopicIcon />
+            </div>
+            <span className="pointer-events-none absolute left-15 z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-opacity duration-200 [text-shadow:-1px_-1px_0_white,1px_-1px_0_white,-1px_1px_0_white,1px_1px_0_white] group-hover:pointer-events-auto group-hover:opacity-100">
+              前往專題
+            </span>
+          </Link>
+        )}
         <button
           className="group relative flex aspect-square w-10 cursor-pointer appearance-none items-center justify-center rounded-full border-none bg-yellow-400 p-2 text-neutral-white transition-colors duration-200 hover:bg-yellow-500"
           onClick={onCheckAnswerClick}
@@ -278,7 +282,7 @@ function DesktopToolbar({ topicURL, onCheckAnswerClick }: DesktopToolbarProp) {
 }
 
 type ToolbarProp = {
-  topicURL: string
+  topicURL?: string
   postSlug: string
 }
 
