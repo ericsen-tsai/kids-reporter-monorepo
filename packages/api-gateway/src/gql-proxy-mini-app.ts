@@ -1,149 +1,15 @@
-// @ts-ignore `@twreporter/errors` does not have tyepscript definition file yet
+// @ts-ignore `@twreporter/errors` does not have typescript definition file yet
 import _errors from '@twreporter/errors'
-import axios from 'axios'
 import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 
 import consts from './constants.js'
+import { isBearerAuth, TokenManager } from './graphql/auth.js'
 
 // @twreporter/errors is a cjs module, therefore, we need to use its default property
 const errors = _errors.default
 
 const statusCodes = consts.statusCodes
-
-class TokenManager {
-  // Singleton
-  static instance?: TokenManager
-  private email: string
-  private password: string
-  private apiEndpoint: string
-  private token: string
-  private expiredAt?: number // timestamp
-
-  constructor(
-    email: string,
-    password: string,
-    apiEndpoint = 'http://localhost:3000/api/graphql'
-  ) {
-    this.email = email
-    this.password = password
-    this.apiEndpoint = apiEndpoint
-    this.token = ''
-
-    if (TokenManager.instance) {
-      return TokenManager.instance
-    }
-
-    TokenManager.instance = this
-  }
-
-  /**
-   *  This function will return a cache token if token is existed and not expired.
-   */
-  async getToken() {
-    if (this.token && this.expiredAt && this.expiredAt >= Date.now()) {
-      return this.token
-    }
-
-    // fetch token
-    try {
-      const sessionToken = await this._fetchToken()
-      this.token = sessionToken
-
-      // @TODO expiry time should be returned by API
-      // So far, we set expiry time as one hour later
-      this.expiredAt = Date.now() + 3600 * 1000
-
-      return this.token
-    } catch (err) {
-      const annotatedErr = errors.helpers.wrap(
-        err,
-        'TokenManangerError',
-        'Fail to get session token',
-        {
-          accoutEmail: this.email,
-        }
-      )
-      throw annotatedErr
-    }
-  }
-
-  /**
-   *  This function will return a new token.
-   */
-  async renewToken() {
-    try {
-      const sessionToken = await this._fetchToken()
-      this.token = sessionToken
-
-      // @TODO expiry time should be returned by API
-      // So far, we set expiry time as one hour later
-      this.expiredAt = Date.now() + 3600 * 1000
-      return this.token
-    } catch (err) {
-      const annotatedErr = errors.helpers.wrap(
-        err,
-        'TokenManangerError',
-        'Fail to renew session token',
-        {
-          accoutEmail: this.email,
-        }
-      )
-      throw annotatedErr
-    }
-  }
-
-  async _fetchToken() {
-    const gqlQuery = `
-      mutation AuthenticateUserWithPassword($email: String!, $password: String!) {
-        authenticateUserWithPassword(email: $email, password: $password) {
-          ... on UserAuthenticationWithPasswordSuccess {
-            sessionToken
-          }
-          ... on UserAuthenticationWithPasswordFailure {
-            message
-          }
-        }
-      }
-    `
-
-    let axiosRes
-    // fetch token
-    try {
-      axiosRes = await axios.post(this.apiEndpoint, {
-        query: gqlQuery,
-        variables: {
-          email: this.email,
-          password: this.password,
-        },
-      })
-    } catch (err) {
-      throw errors.helpers.annotateAxiosError(err)
-    }
-
-    const authenticationResult =
-      axiosRes.data?.data?.authenticateUserWithPassword
-    const errorMessage = authenticationResult?.message
-    if (errorMessage) {
-      throw new Error(errorMessage)
-    }
-
-    const sessionToken = authenticationResult?.sessionToken
-    if (!sessionToken) {
-      throw new Error(
-        'Session token "' + sessionToken + '" is not a valid string'
-      )
-    }
-
-    return sessionToken
-  }
-}
-
-// helpers
-const isBearerAuth = (req: express.Request) => {
-  const auth = req.get('authorization') || ''
-  return auth.startsWith('Bearer ')
-}
 
 /**
  *  This function creates a `GraphQLProxy` mini app.

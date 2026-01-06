@@ -1,4 +1,4 @@
-// @ts-ignore `@twreporter/errors` does not have tyepscript definition file yet
+// @ts-ignore `@twreporter/errors` does not have typescript definition file yet
 import _errors from '@twreporter/errors'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
@@ -8,6 +8,7 @@ import { createAuthMiniApp } from './auth-mini-app.js'
 import consts from './constants.js'
 import { createGraphQLProxy } from './gql-proxy-mini-app.js'
 import middlewareCreator from './middlewares/index.js'
+import { createGqlRestRouter } from './routes/gql-rest.js'
 
 // @twreporter/errors is a cjs module, therefore, we need to use its default property
 const errors = _errors.default
@@ -53,6 +54,8 @@ export function createApp({
     cookieParser()
   )
 
+  // RESTful GraphQL mini app
+  app.use(createGqlRestRouter(gql))
   // mini app: GraphQL API
   app.use(createGraphQLProxy(gql))
 
