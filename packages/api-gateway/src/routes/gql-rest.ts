@@ -9,6 +9,53 @@ import { operations } from '../graphql/operations.js'
 
 const errors = _errors.default
 const statusCodes = consts.statusCodes
+const MAX_LOG_BODY_BYTES = 1024
+
+const logResponse = (
+  res: express.Response,
+  status: number,
+  payload: unknown
+) => {
+  let serialized = ''
+  let serializeError: string | undefined
+  try {
+    serialized = JSON.stringify(payload)
+  } catch (err) {
+    serialized = '"[unserializable payload]"'
+    serializeError = (err as Error).message
+  }
+
+  const byteLength = Buffer.byteLength(serialized, 'utf8')
+  const errorInfo = serializeError
+    ? { unserializable: true, serializeError }
+    : null
+  let bodyForLog: unknown = errorInfo
+  if (!bodyForLog) {
+    if (status === statusCodes.ok) {
+      bodyForLog = { byteLength }
+    } else if (byteLength > MAX_LOG_BODY_BYTES) {
+      bodyForLog = {
+        truncated: true,
+        byteLength,
+        preview: serialized.slice(0, MAX_LOG_BODY_BYTES),
+      }
+    } else {
+      bodyForLog = payload
+    }
+  }
+
+  console.log(
+    JSON.stringify({
+      severity: 'INFO',
+      message: 'GraphQL REST response',
+      status,
+      body: bodyForLog,
+      ...res?.locals?.globalLogFields,
+    })
+  )
+
+  return res.status(status).json(payload)
+}
 
 export function createGqlRestRouter({
   apiOrigin,
@@ -37,7 +84,7 @@ export function createGqlRestRouter({
         try {
           variables = op.buildVariables(req)
         } catch (err) {
-          return res.status(statusCodes.badRequest).json({
+          return logResponse(res, statusCodes.badRequest, {
             status: 'fail',
             data: {
               message: 'buildVariables fails. ' + (err as Error).message,
@@ -54,7 +101,7 @@ export function createGqlRestRouter({
             auth: op.auth,
           })
         } catch (err) {
-          return res.status(statusCodes.badRequest).json({
+          return logResponse(res, statusCodes.badRequest, {
             status: 'fail',
             data: {
               message: 'buildAuthContext fails. ' + (err as Error).message,
@@ -83,14 +130,14 @@ export function createGqlRestRouter({
           const gqlPayload = gqlRes?.data
 
           if (gqlPayload?.errors?.length) {
-            return res.status(statusCodes.internalServerError).json({
+            return logResponse(res, statusCodes.internalServerError, {
               status: 'error',
               message: 'CMS GraphQL responded with errors',
               errors: gqlPayload.errors,
             })
           }
 
-          return res.status(statusCodes.ok).json({
+          return logResponse(res, statusCodes.ok, {
             status: 'success',
             data: gqlPayload?.data ?? {},
           })
@@ -110,7 +157,7 @@ export function createGqlRestRouter({
               ...res?.locals?.globalLogFields,
             })
           )
-          return res.status(statusCodes.internalServerError).json({
+          return logResponse(res, statusCodes.internalServerError, {
             status: 'error',
             message: 'Failed to process request',
           })
@@ -122,14 +169,14 @@ export function createGqlRestRouter({
   router.all('/api/rest/:operation', (req, res) => {
     const op = operations[req.params.operation]
     if (!op) {
-      return res.status(statusCodes.badRequest).json({
+      return logResponse(res, statusCodes.badRequest, {
         status: 'fail',
         data: {
           message: `Unknown operation: '${req.params.operation}'. Available operations: [${Object.keys(operations).join(', ')}]`,
         },
       })
     }
-    return res.status(statusCodes.methodNotAllowed).json({
+    return logResponse(res, statusCodes.methodNotAllowed, {
       status: 'fail',
       data: { message: `Use ${op.method}` },
     })
