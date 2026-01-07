@@ -54,8 +54,8 @@ export function createApp({
     cookieParser()
   )
 
-  // Set the global JSON body limit to 100KB
-  app.use(express.json({ limit: '100kb' }))
+  // Set the global JSON body limit to 1MB to support typical GraphQL payloads
+  app.use(express.json({ limit: '1mb' }))
 
   // RESTful GraphQL mini app
   app.use(createGqlRestRouter(gql))

@@ -151,6 +151,7 @@ export function createGraphQLProxy({
         if (bodyData && !proxyReq.headersSent) {
           proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData))
           proxyReq.write(bodyData)
+          proxyReq.end()
         }
       },
       // end onProxyReq
