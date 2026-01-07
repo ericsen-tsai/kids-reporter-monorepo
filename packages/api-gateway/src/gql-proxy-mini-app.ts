@@ -110,7 +110,7 @@ export function createGraphQLProxy({
                 req: {
                   headers: {
                     authorization: '[REDACTED]',
-                    'content-type': 'application/json',
+                    'content-type': proxyReq.getHeader('Content-Type'),
                   },
                 },
               },
@@ -138,7 +138,7 @@ export function createGraphQLProxy({
                 req: {
                   headers: {
                     cookie: '[REDACTED]',
-                    'content-type': 'application/json',
+                    'content-type': proxyReq.getHeader('Content-Type'),
                   },
                 },
               },
