@@ -80,14 +80,22 @@ export function createGraphQLProxy({
         // Preserve original Content-Type for multipart/form-data (file uploads)
         // Only set to application/json for regular GraphQL requests
         const originalContentType = req.get('Content-Type') || ''
-        if (originalContentType.includes('multipart/form-data')) {
+        const isMultipart = originalContentType.includes('multipart/form-data')
+        if (isMultipart) {
           // Preserve multipart/form-data with boundary for file uploads
           proxyReq.setHeader('Content-Type', originalContentType)
         } else {
-          // Set to application/json for regular GraphQL JSON requests
+          // Force JSON for regular GraphQL requests
           proxyReq.setHeader('Content-Type', 'application/json')
         }
         proxyReq.setHeader('x-apollo-operation-name', '')
+
+        const bodyData =
+          !isMultipart && req.body
+            ? typeof req.body === 'string'
+              ? req.body
+              : JSON.stringify(req.body)
+            : null
 
         if (mode === 'jwt') {
           // Forward Authorization header
@@ -108,37 +116,44 @@ export function createGraphQLProxy({
               },
             })
           )
-          return
-        }
+        } else {
+          const originalCookie = req.get('Cookie') || ''
+          // Cookie mode: attach keystonejs-session token
+          const sessionToken = res.locals.sessionToken || ''
+          const cookie = originalCookie
+            ? `${originalCookie};keystonejs-session=${sessionToken}`
+            : `keystonejs-session=${sessionToken}`
 
-        const originalCookie = req.get('Cookie') || ''
-        // Cookie mode: attach keystonejs-session token
-        const sessionToken = res.locals.sessionToken || ''
-        const cookie = originalCookie
-          ? `${originalCookie};keystonejs-session=${sessionToken}`
-          : `keystonejs-session=${sessionToken}`
+          proxyReq.setHeader('Cookie', cookie)
+          // Ensure Authorization is not present to avoid ambiguity
+          proxyReq.removeHeader?.('Authorization')
 
-        proxyReq.setHeader('Cookie', cookie)
-        // Ensure Authorization is not present to avoid ambiguity
-        proxyReq.removeHeader?.('Authorization')
-
-        console.log(
-          JSON.stringify({
-            severity: 'DEBUG',
-            message:
-              'Proxy with keystonejs-session to ' + apiOrigin + proxyReq.path,
-            ...res?.locals?.globalLogFields,
-            debugPayload: {
-              req: {
-                headers: {
-                  cookie: '[REDACTED]',
-                  'content-type': 'application/json',
+          console.log(
+            JSON.stringify({
+              severity: 'DEBUG',
+              message:
+                'Proxy with keystonejs-session to ' + apiOrigin + proxyReq.path,
+              ...res?.locals?.globalLogFields,
+              debugPayload: {
+                req: {
+                  headers: {
+                    cookie: '[REDACTED]',
+                    'content-type': 'application/json',
+                  },
                 },
               },
-            },
-          })
-        )
+            })
+          )
+        }
+
+        // If body was already parsed by express.json,
+        // re-attach it so the upstream server doesn't hang waiting for bytes.
+        if (bodyData && !proxyReq.headersSent) {
+          proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData))
+          proxyReq.write(bodyData)
+        }
       },
+      // end onProxyReq
 
       onProxyRes: async (proxyRes, req, res) => {
         const statusCode = proxyRes.statusCode
