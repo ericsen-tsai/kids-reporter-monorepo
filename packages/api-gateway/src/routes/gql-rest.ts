@@ -69,7 +69,6 @@ export function createGqlRestRouter({
   headlessAccount: { email: string; password: string }
 }) {
   const router = express.Router()
-  router.use(express.json({ limit: '1mb' }))
 
   // Register method-specific handlers for each operation
   Object.entries(operations).forEach(([operationName, op]) => {
