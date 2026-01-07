@@ -1,7 +1,7 @@
 import { GetPostQuery } from '__generated__/operations/post.generated'
 import { cn, useMediaQuery } from '@kids-reporter/routing-ui'
 import dynamic from 'next/dynamic'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import { FALLBACK_IMG, FontSizeLevel } from '@/constants'
 
@@ -32,14 +32,11 @@ function HeroImage({
       ? `${image.imageFile.width}/${image.imageFile.height}`
       : '16/9'
 
-  const commonImgProps = useMemo(
-    () => ({
-      sizes: '(min-width: 1100px) 1000px, 90vw',
-      srcSet: `${image?.resized?.small} 320w, ${image?.resized?.medium} 500w, ${image?.resized?.large} 1000w`,
-      src: image?.resized?.medium ?? FALLBACK_IMG,
-    }),
-    [image]
-  )
+  const commonImgProps = {
+    sizes: '(min-width: 1100px) 1000px, 90vw',
+    srcSet: `${image?.resized?.small} 320w, ${image?.resized?.medium} 500w, ${image?.resized?.large} 1000w`,
+    src: image?.resized?.medium ?? FALLBACK_IMG,
+  }
 
   return (
     <figure className="mx-auto pt-10 pb-12">
@@ -55,22 +52,28 @@ function HeroImage({
             aria-hidden="true"
           />
         )}
-        <ImageWithFallback
-          className={cn('max-w-full object-contain', isLoading && 'opacity-0')}
-          {...commonImgProps}
-          style={{
-            width: 'inherit',
-            height: 'auto',
-            aspectRatio: aspectRatio,
-            cursor: isDesktop ? 'zoom-in' : 'default',
-          }}
-          loading="eager"
-          fetchPriority="high"
-          onLoad={() => setIsLoading(false)}
-          onClick={
-            isDesktop ? () => onImageModalOpen(commonImgProps) : undefined
-          }
-        />
+        {image && (
+          <ImageWithFallback
+            className={cn(
+              'max-w-full object-contain',
+              isLoading && 'opacity-0'
+            )}
+            {...commonImgProps}
+            style={{
+              width: 'inherit',
+              height: 'auto',
+              aspectRatio: aspectRatio,
+              cursor: isDesktop ? 'zoom-in' : 'default',
+            }}
+            loading="eager"
+            fetchPriority="high"
+            onLoad={() => setIsLoading(false)}
+            onError={() => setIsLoading(false)}
+            onClick={
+              isDesktop ? () => onImageModalOpen(commonImgProps) : undefined
+            }
+          />
+        )}
       </div>
       <figcaption
         className={cn(
