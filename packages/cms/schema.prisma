@@ -57,6 +57,7 @@ model Post {
   ogDescription                              String               @default("")
   ogImage                                    Photo?               @relation("Post_ogImage", fields: [ogImageId], references: [id])
   ogImageId                                  Int?                 @map("ogImage")
+  opening                                    String               @default("")
   multipleChoiceQuestionsJSON                Json?                @default("[]")
   essayQuestionsJSON                         Json?                @default("[]")
   opening                                    String               @default("")
