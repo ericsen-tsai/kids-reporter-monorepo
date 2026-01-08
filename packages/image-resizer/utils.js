@@ -1,7 +1,8 @@
-import { config } from './configs.js'
 import { IncomingWebhook } from '@slack/webhook'
 // @ts-ignore `@twreporter/errors` does not have tyepscript definition file yet
 import _errors from '@twreporter/errors'
+
+import { config } from './configs.js'
 
 // @twreporter/errors is a cjs module, therefore, we need to use its default property
 export const errors = _errors.default

@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import styled from 'styled-components'
+
 import { Dropdown } from './dropdown'
 
 const ArticleBodyContainer = styled.div`

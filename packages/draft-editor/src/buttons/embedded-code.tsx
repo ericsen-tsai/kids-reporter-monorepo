@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react'
-import { AtomicBlockUtils, EditorState } from 'draft-js'
-import styled from 'styled-components'
+import { TextArea, TextInput } from '@keystone-ui/fields'
 import { Drawer, DrawerController } from '@keystone-ui/modals'
-import { TextInput, TextArea } from '@keystone-ui/fields'
+import { AtomicBlockUtils, EditorState } from 'draft-js'
+import React, { useRef, useState } from 'react'
+import styled from 'styled-components'
+
 import { AlignSelector } from './selector/align-selector'
 
 enum AlignOption {

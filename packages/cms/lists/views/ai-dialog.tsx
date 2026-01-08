@@ -1,15 +1,15 @@
-import React, { useState } from 'react'
+import { controller } from '@keystone-6/core/fields/types/virtual/views'
+import { FieldProps } from '@keystone-6/core/types'
+import { Button } from '@keystone-ui/button'
+import { FieldContainer, FieldLabel, TextArea } from '@keystone-ui/fields'
+import { ArrowRightIcon } from '@keystone-ui/icons/icons/ArrowRightIcon'
+import { ClipboardIcon } from '@keystone-ui/icons/icons/ClipboardIcon'
+import { Tooltip } from '@keystone-ui/tooltip'
 import axios from 'axios'
-import styled from 'styled-components'
 import copyToClipboard from 'clipboard-copy'
 import { convertFromRaw } from 'draft-js'
-import { FieldProps } from '@keystone-6/core/types'
-import { FieldLabel, FieldContainer, TextArea } from '@keystone-ui/fields'
-import { Button } from '@keystone-ui/button'
-import { Tooltip } from '@keystone-ui/tooltip'
-import { ClipboardIcon } from '@keystone-ui/icons/icons/ClipboardIcon'
-import { ArrowRightIcon } from '@keystone-ui/icons/icons/ArrowRightIcon'
-import { controller } from '@keystone-6/core/fields/types/virtual/views'
+import { useState } from 'react'
+import styled from 'styled-components'
 
 const Row = styled.div`
   width: 100%;
@@ -76,8 +76,8 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${value.openAIKey}`,
-        'OpenAI-Organization': 'org-AFIRbr9PIQpDnVRPSuxABZJO',
-        'OpenAI-Project': 'proj_8OZHy9Z26Vr3p8mDUcXE7Oby',
+        'OpenAI-Organization': value.openAIOrganization,
+        'OpenAI-Project': value.openAIProject,
       },
     })
 
@@ -111,7 +111,7 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
     await askChatGPT()
   }
 
-  const handlePrompt = (event) => {
+  const handlePrompt = (event: any) => {
     setPrompt(event.target.value)
   }
 
@@ -176,7 +176,6 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
       <FieldLabel>
         {vendor}
         {value.label}
-        {'(依據內文欄位)'}
       </FieldLabel>
       <MsgContainer>
         {msgsJSX}

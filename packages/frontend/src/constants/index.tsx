@@ -1,0 +1,226 @@
+export { STATUS_CODES } from './status-codes'
+
+import envVars from '@/environment-variables'
+import { CategorySlug } from '@/types'
+
+export const INTERNAL_API_URL = envVars.internalGqlEndpoint
+export const API_URL = envVars.gqlEndpoint
+export const ACCESS_TOKEN_ENDPOINT = `${envVars.apiGatewayEndpoint}/auth/access-token`
+export const LOGOUT_ENDPOINT = '/api/logout'
+
+export const KIDS_URL_ORIGIN = 'https://kids.twreporter.org'
+export const SUBSCRIBE_URL = 'https://solink.soundon.fm/kidstwreporter'
+export const CONTRIBUTE_FORM = 'https://forms.gle/7Yh4iPjfq92NDaSm9'
+export const MAIN_SITE_URL = 'https://www.twreporter.org/'
+export const DONATE_URL = 'https://support.twreporter.org/'
+export const CREDIT_DONATE_URL = 'https://www.twreporter.org/a/credit-donate'
+export const PRIVACY_POLICY = 'https://www.twreporter.org/a/privacy-policy'
+export const EMAIL = 'kidsnews@twreporter.org'
+export const NEWSLETTER_SUBSCRIPTION =
+  'https://twreporter.us14.list-manage.com/subscribe?u=4da5a7d3b98dbc9fdad009e7e&id=2154ac40c3'
+export const NEWSLETTER_PREVIEW =
+  'https://us14.campaign-archive.com/?u=4da5a7d3b98dbc9fdad009e7e&id=83fc470a1b'
+
+export const TOPIC_PAGE_ROUTE = '/topic/page'
+
+export const BACK_TO_TOP_ELEMENT_ID = 'back-to-top'
+
+export const OG_SUFFIX = '少年報導者 The Reporter for Kids'
+
+export const GENERAL_DESCRIPTION =
+  '《少年報導者》是由非營利媒體《報導者》針對兒少打造的深度新聞報導品牌，與兒童和少年一起理解世界，參與未來。'
+
+export const SUBSCRIBE_TITLE = '訂閱《少年報導者》電子報'
+
+export const Z_INDEX_TOP = 1000
+
+export enum FontSizeLevel {
+  NORMAL = 'normal',
+  LARGE = 'large',
+}
+
+export enum Theme {
+  YELLOW = 'yellow',
+  BLUE = 'blue',
+  RED = 'red',
+}
+
+export enum ThemeColor {
+  YELLOW = '#F8C341',
+  BLUE = '#27B5F7',
+  RED = '#F76977',
+}
+
+export enum Color {
+  DARK_GRAY = '#404040',
+  LIGHT_GRAY = '#eaeaea',
+  FONT_GRAY = '#808080',
+  BORDER_GRAY = '#F8F8F8',
+}
+
+export const DEFAULT_THEME_COLOR = ThemeColor.YELLOW
+
+export enum ContentType {
+  ARTICLE = 'article',
+  TOPIC = 'topic',
+  AUTHOR = 'author',
+  TAG = 'tag',
+}
+
+export enum AuthorRole {
+  CONSULTANTS = '諮詢專家',
+  COMIC_CONSULTANTS = '漫畫顧問',
+  TEACH_DESIGN = '教學設計',
+  DICTATION = '口述',
+  AUTHORS = '作者',
+  WRITERS = '文字',
+  TRANSLATORS = '翻譯',
+  PLANNERS = '企畫',
+  INSTRUCTORS = '指導老師',
+  PHOTOGRAPHERS = '攝影',
+  LEAD_TEACHERS = '帶隊老師',
+  PHOTO_INSTRUCTORS = '攝影指導',
+  DESIGNERS = '設計',
+  REVIEWERS = '核稿',
+  AUDITORS = '審閱',
+  EDITORS = '責任編輯',
+  READERS = '讀報',
+  DONATION_CONTACT = '捐書聯繫窗口',
+  MARKETING = '行銷',
+}
+
+export const AUTHOR_ROLES_IN_ORDER = [
+  AuthorRole.CONSULTANTS,
+  AuthorRole.COMIC_CONSULTANTS,
+  AuthorRole.TEACH_DESIGN,
+  AuthorRole.DICTATION,
+  AuthorRole.AUTHORS,
+  AuthorRole.WRITERS,
+  AuthorRole.TRANSLATORS,
+  AuthorRole.PLANNERS,
+  AuthorRole.INSTRUCTORS,
+  AuthorRole.PHOTOGRAPHERS,
+  AuthorRole.LEAD_TEACHERS,
+  AuthorRole.PHOTO_INSTRUCTORS,
+  AuthorRole.DESIGNERS,
+  AuthorRole.REVIEWERS,
+  AuthorRole.AUDITORS,
+  AuthorRole.EDITORS,
+  AuthorRole.READERS,
+  AuthorRole.DONATION_CONTACT,
+  AuthorRole.MARKETING,
+]
+
+export const DEFAULT_AVATAR = '/assets/images/avatar_default.svg'
+
+export const POST_PER_PAGE = 9
+
+export const POST_CONTENT_GQL = `
+title
+slug
+ogDescription
+heroImage {
+  resized {
+    small
+  }
+}
+subSubcategoriesOrdered {
+  name
+  subcategory {
+    name
+    category {
+      slug
+      themeColor
+    }
+  }
+}
+publishedDate
+`
+
+export const SEARCH_PLACEHOLDER = '搜尋更多新聞、議題'
+
+export const ERROR_PAGE = '/error'
+
+export const FALLBACK_IMG = '/assets/images/image_placeholder.png'
+
+export const DEBOUNCE_THRESHOLD = 100
+
+export const IS_LOGIN_ENABLED = true
+
+export const STICKY_HEADER_HEIGHT = 130
+
+export const POPULAR_KEYWORDS = ['氣候變遷', '選舉', '教育', '環境保護']
+
+export const SECTIONS = [
+  {
+    title: '時時刻刻',
+    image: 'topic_pic1.svg',
+    titleImg: 'topic_title1.svg',
+    link: '/category/news/times/',
+    theme: Theme.BLUE,
+  },
+  {
+    title: '真的假的',
+    image: 'topic_pic2.svg',
+    titleImg: 'topic_title2.svg',
+    link: '/category/news/knowledge/',
+    theme: Theme.BLUE,
+  },
+  {
+    title: '讀報新聞',
+    image: 'topic_pic3.svg',
+    titleImg: 'topic_title3.svg',
+    link: '/category/listening-news/',
+    theme: Theme.BLUE,
+  },
+  {
+    title: '他們的故事',
+    image: 'topic_pic4.svg',
+    titleImg: 'topic_title4.svg',
+    link: '/category/news/story/',
+    theme: Theme.RED,
+  },
+  {
+    title: '文化看世界',
+    image: 'topic_pic5.svg',
+    titleImg: 'topic_title5.svg',
+    link: '/category/news/explore/',
+    theme: Theme.RED,
+  },
+  {
+    title: '小讀者連線',
+    image: 'topic_pic7.svg',
+    titleImg: 'topic_title7.svg',
+    link: '/category/campus/joining/',
+    theme: Theme.YELLOW,
+  },
+  {
+    title: '圖解新聞',
+    image: 'topic_pic8.svg',
+    titleImg: 'topic_title8.svg',
+    link: '/category/comics/graphic-news/',
+    theme: Theme.YELLOW,
+  },
+  {
+    title: '上課好好玩',
+    image: 'topic_pic10.svg',
+    titleImg: 'topic_title10.svg',
+    link: '/category/campus/teaching/',
+    theme: Theme.YELLOW,
+  },
+  {
+    title: '火線新聞台',
+    image: 'topic_pic9.svg',
+    titleImg: 'topic_title9.svg',
+    link: '/category/comics/comic/',
+    theme: Theme.YELLOW,
+  },
+]
+
+export const CATEGORY_IMAGES: Record<CategorySlug, string> = {
+  news: '/assets/images/category_news.svg',
+  comics: '/assets/images/category_comics.svg',
+  campus: '/assets/images/category_campus.svg',
+  classroom: '/assets/images/category_campus.svg',
+  'listening-news': '/assets/images/category_listening_news.svg',
+}

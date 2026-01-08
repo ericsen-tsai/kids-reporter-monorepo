@@ -1,10 +1,6 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
-import { ReactNode } from 'react'
-
-import { jsx, Box, Center, useTheme } from '@keystone-ui/core'
 import { Head } from '@keystone-6/core/admin-ui/router'
+import { Box, Center, useTheme } from '@keystone-ui/core'
+import { ReactNode } from 'react'
 
 type SinglePageContainerProps = {
   children: ReactNode
@@ -22,7 +18,7 @@ export const SinglePageContainer = ({
         <title>{title || 'Keystone'}</title>
       </Head>
       <Center
-        css={{
+        style={{
           minWidth: '100vw',
           minHeight: '100vh',
           backgroundColor: colors.backgroundMuted,
@@ -30,7 +26,7 @@ export const SinglePageContainer = ({
         rounding="medium"
       >
         <Box
-          css={{
+          style={{
             background: colors.background,
             width: 600,
             boxShadow: shadow.s100,

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import styled, { useTheme } from 'styled-components'
 import debounce from 'lodash/debounce'
-import { breakpoints, mediaQuery } from '../utils/media-query'
+import { useEffect, useState } from 'react'
+import styled, { ThemeProvider, useTheme } from 'styled-components'
+
 import { DEBOUNCE_THRESHOLD } from '../utils/constants'
+import { breakpoints, mediaQuery } from '../utils/media-query'
 
 const Figure = styled.figure`
   width: 100%;
@@ -47,7 +48,7 @@ type ImageBlockProps = {
   }
 }
 
-export function ImageBlock({ className = '', data }: ImageBlockProps) {
+function ImageBlockInner({ className = '', data }: ImageBlockProps) {
   const theme = useTheme()
   const { desc, imageFile, resized } = data || {}
   const [isDesktopAndAbove, setIsDesktopAndAbove] = useState(false)
@@ -91,7 +92,8 @@ export function ImageBlock({ className = '', data }: ImageBlockProps) {
         style={{ aspectRatio: aspectRatio }}
         $isDesktopAndAbove={isDesktopAndAbove}
         onClick={() =>
-          isDesktopAndAbove && theme?.handleImgModalOpen?.(commonImgProps)
+          isDesktopAndAbove &&
+          (theme as any)?.handleImgModalOpen?.(commonImgProps)
         }
       />
       {desc && <FigureCaption>{desc}</FigureCaption>}
@@ -99,6 +101,14 @@ export function ImageBlock({ className = '', data }: ImageBlockProps) {
   )
 
   return imgBlock
+}
+
+export function ImageBlock({ className = '', data }: ImageBlockProps) {
+  return (
+    <ThemeProvider theme={{}}>
+      <ImageBlockInner className={className} data={data} />
+    </ThemeProvider>
+  )
 }
 
 type ImageBlockInArticleBodyProps = ImageBlockProps
@@ -144,6 +154,8 @@ const ArticleBodyContainer = styled.div<{ $alignment?: string }>`
             margin: 5px 27px 5px 0px;
           }
         `
+      default:
+        return ''
     }
   }}
 `

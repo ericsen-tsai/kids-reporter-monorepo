@@ -1,4 +1,5 @@
-import { ContentState, ContentBlock } from 'draft-js'
+import { ContentBlock, ContentState } from 'draft-js'
+
 import { blockRenderers } from './block-renderers'
 const {
   BlockquoteInArticleBody,

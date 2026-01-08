@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import { TextInput } from '@keystone-ui/fields'
 import { AlertDialog } from '@keystone-ui/modals'
 import { EditorState, Modifier } from 'draft-js'
-import { TextInput } from '@keystone-ui/fields'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 export const customStylePrefix = 'BACKGROUND_COLOR_'

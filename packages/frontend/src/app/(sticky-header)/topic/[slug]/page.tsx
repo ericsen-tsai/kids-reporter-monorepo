@@ -1,24 +1,27 @@
+import { HeaderPostTitleSetter } from '@kids-reporter/routing-ui'
 import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+
 import {
-  KIDS_URL_ORIGIN,
   ContentType,
-  Theme,
   GENERAL_DESCRIPTION,
+  KIDS_URL_ORIGIN,
   OG_SUFFIX,
-} from '@/app/constants'
-import { PublishedDate } from './styled'
-import { Content } from './content'
-import { Credits } from './credits'
+  Theme,
+} from '@/constants'
 import {
   getFormattedDate,
   getPostSummaries,
-  sendGQLRequest,
   log,
   LogLevel,
-} from '@/app/utils'
-import { Leading } from './leading'
-import { RelatedPosts } from './related-posts'
-import { notFound } from 'next/navigation'
+  sendGQLRequest,
+} from '@/utils'
+
+import { Content } from '../../_components/topic/content'
+import { Credits } from '../../_components/topic/credits'
+import { Leading } from '../../_components/topic/leading'
+import { RelatedPosts } from '../../_components/topic/related-posts'
+import { PublishedDate } from '../../_components/topic/styled'
 
 const query = `
   fragment ImageEntity on Photo {
@@ -155,6 +158,7 @@ export default async function TopicPage({
   return (
     project && (
       <div>
+        <HeaderPostTitleSetter postTitle={project.title} />
         <Leading
           title={project.title}
           subtitle={project.subtitle ?? ''}

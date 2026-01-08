@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  type-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup and install
+        uses: ./.github/actions/setup-and-install
+
+      - name: Type check
+        run: yarn type-check
+
+  format-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup and install
+        uses: ./.github/actions/setup-and-install
+
+      - name: Format check
+        run: yarn format:check
+
+  lint-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup and install
+        uses: ./.github/actions/setup-and-install
+
+      - name: Lint check
+        run: yarn lint:check

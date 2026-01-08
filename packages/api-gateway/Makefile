@@ -1,4 +1,7 @@
 P := "\\033[32m[+]\\033[0m"
+ENV_FILE ?= .env.local
+DOTENV_FLAGS ?=
+DOTENV := yarn dotenv -e $(ENV_FILE) $(DOTENV_FLAGS) --
 
 help:
 	@echo "$(P) make build - Transpile typescript files"
@@ -9,14 +12,25 @@ build-dist:
 
 dev-server:
 	@echo "$(P) Start dev server"
-	yarn tsc && NODE_ENV=development node dist/server
+	@yarn tsc && \
+	if [ -f "$(ENV_FILE)" ]; then \
+		NODE_ENV=development $(DOTENV) node dist/server; \
+	else \
+		echo "$(P) $(ENV_FILE) not found, starting without dotenv"; \
+		NODE_ENV=development node dist/server; \
+	fi
 
 dev:
 	yarn nodemon -e ts --exec make dev-server
 
 start: build-dist
 	@echo "$(P) Start production server"
-	NODE_ENV=production node dist/server
+	@if [ -f "$(ENV_FILE)" ]; then \
+		NODE_ENV=production $(DOTENV) node dist/server; \
+	else \
+		echo "$(P) $(ENV_FILE) not found, starting without dotenv"; \
+		NODE_ENV=production node dist/server; \
+	fi
 
 build: clean build-dist
 

@@ -1,5 +1,5 @@
 import { RichTextEditor } from '../src/index'
-import React, { useState } from 'react' // eslint-disable-line
+import { useState } from 'react'
 import { DrawerProvider } from '@keystone-ui/modals'
 import { EditorState } from 'draft-js'
 import { createRoot } from 'react-dom/client'

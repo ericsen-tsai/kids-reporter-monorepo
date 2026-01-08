@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
+import { blockRenderers } from '@kids-reporter/draft-renderer'
+import { Fragment, useState } from 'react'
 import styled from 'styled-components'
+
 import { AtomicBlockProps } from '../block-renderer-fn.type'
 import {
-  ImageSelectorOnChangeFn,
-  ImageSelector,
   ImageEntityWithMeta,
+  ImageSelector,
+  ImageSelectorOnChangeFn,
 } from '../buttons/selector/image-selector'
 import { EditableBlock as _EditableBlock } from './styled'
-import { blockRenderers } from '@kids-reporter/draft-renderer'
 
 const { ImageInArticleBody } = blockRenderers
 
@@ -19,6 +20,7 @@ const EditableBlock = styled(_EditableBlock)`
       background-color: #f0f0f0;
       opacity: 0.3;
     }
+  }
 `
 
 type EntityData = ImageEntityWithMeta & {
@@ -32,7 +34,7 @@ export function EditableImage(props: AtomicBlockProps<EntityData>) {
   const entityKey = block.getEntityAt(0)
   const entity = contentState.getEntity(entityKey)
   const data = entity.getData() || {}
-  const {alignment: _alignment, ...imageWithMeta} = data // eslint-disable-line
+  const { alignment: _alignment, ...imageWithMeta } = data // eslint-disable-line
 
   const onChange: ImageSelectorOnChangeFn = (selectedImages, alignment) => {
     // close `ImageSelector`
@@ -52,7 +54,7 @@ export function EditableImage(props: AtomicBlockProps<EntityData>) {
   }
 
   return (
-    <React.Fragment>
+    <Fragment>
       {isSelectorOpen && (
         <ImageSelector
           onChange={onChange}
@@ -69,6 +71,6 @@ export function EditableImage(props: AtomicBlockProps<EntityData>) {
           setIsSelectorOpen(true)
         }}
       />
-    </React.Fragment>
+    </Fragment>
   )
 }

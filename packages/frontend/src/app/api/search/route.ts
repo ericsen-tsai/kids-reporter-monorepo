@@ -1,17 +1,15 @@
 import errors from '@twreporter/errors'
 import { NextResponse } from 'next/server'
 
+import envVars from '@/environment-variables'
+import { log, LogLevel } from '@/utils'
+
 import {
   defaultCount,
   defaultStart,
   getFilteredSearchResults,
   transferItemsToCards,
 } from './utils'
-import { log, LogLevel } from '@/app/utils'
-
-const apiKey = process.env.SEARCH_API_KEY || ''
-const cx = process.env.SEARCH_ENGINE_ID || ''
-
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -32,8 +30,8 @@ export async function GET(request: Request) {
 
   try {
     const searchResults = await getFilteredSearchResults({
-      cx,
-      apiKey,
+      cx: envVars.searchEngineID,
+      apiKey: envVars.searchAPIKey,
       q,
       start,
       count,

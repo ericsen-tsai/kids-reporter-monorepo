@@ -1,8 +1,9 @@
+import { DefaultDraftBlockRenderMap } from 'draft-js'
 import Immutable from 'immutable'
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { DefaultDraftBlockRenderMap } from 'draft-js'
-import { Atomic, Paragraph, Heading, List } from './article-content'
+
+import { Atomic, Heading, List, Paragraph } from './article-content'
 
 const HeadingForInfoBox = styled(Heading)`
   margin-top: 0px;

@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { controller } from '@keystone-6/core/fields/types/virtual/views'
 import { FieldProps } from '@keystone-6/core/types'
 import { Button } from '@keystone-ui/button'
+import { Divider } from '@keystone-ui/core'
 import { FieldContainer, FieldLabel, TextInput } from '@keystone-ui/fields'
 import { PlusCircleIcon, TrashIcon } from '@keystone-ui/icons'
-import { Divider } from '@keystone-ui/core'
-import { controller } from '@keystone-6/core/fields/types/virtual/views'
+import { useState } from 'react'
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import styled from 'styled-components'
 
 type Author = {
   id: string | undefined
@@ -36,7 +36,7 @@ const Role = styled.div`
   width: 25%;
 `
 
-const IconButton = styled(Button)`
+const IconButton = styled(Button as any)`
   background-color: transparent;
   margin: 0 0 0 0.5rem;
 `

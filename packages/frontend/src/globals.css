@@ -1,0 +1,506 @@
+@import 'tailwindcss';
+@import '@kids-reporter/routing-ui/styles.css';
+@import 'tw-animate-css';
+
+@source './src/**/*.{js,ts,jsx,tsx,mdx}';
+@source '../../routing-ui/src/**/*.{js,ts,jsx,tsx}';
+@source "../node_modules/@kids-reporter/routing-ui";
+
+/* Frontend-specific theme extensions */
+@theme {
+  /* Colors - Neutral */
+  --color-neutral-white: #ffffff;
+  --color-neutral-100: #f8f8f8;
+  --color-neutral-200: #eaeaea;
+  --color-neutral-300: #d9d9d9;
+  --color-neutral-400: #c6c6c6;
+  --color-neutral-500: #a3a3a3;
+  --color-neutral-600: #8e8e8e;
+  --color-neutral-700: #575757;
+  --color-neutral-800: #3b3b3b;
+  --color-neutral-900: #232323;
+  --color-neutral-black: #000000;
+
+  /* Colors - Border */
+  --color-neutral-border: #00000026;
+
+  /* Colors - Brand Red */
+  --color-red-100: #fff0f2;
+  --color-red-200: #ffc4ca;
+  --color-red-300: #ff98a2;
+  --color-red-400: #f76977;
+  --color-red-500: #bd4450;
+  --color-red-600: #a0343e;
+  --color-red-700: #82262f;
+  --color-red-800: #651a22;
+
+  /* Colors - Brand Blue */
+  --color-blue-100: #e9f8ff;
+  --color-blue-200: #b9e8ff;
+  --color-blue-300: #89d9ff;
+  --color-blue-400: #27b3f5;
+  --color-blue-500: #1696d3;
+  --color-blue-600: #087bb1;
+  --color-blue-700: #00618f;
+  --color-blue-800: #004a6d;
+
+  /* Colors - Brand Yellow */
+  --color-yellow-100: #fff9ec;
+  --color-yellow-200: #ffedc2;
+  --color-yellow-300: #ffe197;
+  --color-yellow-400: #f8c341;
+  --color-yellow-500: #d6a52d;
+  --color-yellow-600: #b4881d;
+  --color-yellow-700: #926c10;
+  --color-yellow-800: #705207;
+
+  /* Colors - Semantic Danger */
+  --color-semantic-danger: #c7000a;
+
+  /* Typography - Font Families */
+  --font-family-noto: var(--font-noto-sans-tc), sans-serif;
+  --font-family-swei: var(--font-swei-marker), sans-serif;
+
+  /* Typography - Font Sizes */
+  --font-size-h1-large: 48px;
+  --font-size-h2-large: 40px;
+  --font-size-h3-large: 32px;
+  --font-size-h4-large: 28px;
+  --font-size-h5-large: 22px;
+  --font-size-h6-large: 18px;
+
+  --font-size-h1-small: 32px;
+  --font-size-h2-small: 28px;
+  --font-size-h3-small: 24px;
+  --font-size-h4-small: 22px;
+  --font-size-h5-small: 20px;
+  --font-size-h6-small: 18px;
+
+  --font-size-p1: 16px;
+  --font-size-p2: 14px;
+  --font-size-p3: 12px;
+  --font-size-p4: 10px;
+
+  /* Typography - Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.6;
+  --line-height-relaxed: 1.75;
+
+  /* Spacing - Grid System */
+  --spacing-grid-xs: 4px;
+  --spacing-grid-sm: 8px;
+  --spacing-grid-md: 16px;
+  --spacing-grid-lg: 24px;
+  --spacing-grid-xl: 32px;
+  --spacing-grid-2xl: 48px;
+  --spacing-grid-3xl: 64px;
+  --spacing-grid-4xl: 96px;
+  --spacing-grid-5xl: 128px;
+
+  /* Container Widths */
+  --container-mobile: 375px;
+  --container-tablet: 768px;
+  --container-desktop: 1024px;
+  --container-hd: 1440px;
+
+  /* Grid Gutters */
+  --gutter-mobile: 16px;
+  --gutter-tablet: 24px;
+  --gutter-desktop: 32px;
+  --gutter-hd: 32px;
+
+  /* Margins */
+  --margin-mobile: 24px;
+  --margin-tablet: 32px;
+  --margin-desktop: 48px;
+  --margin-hd: 120px;
+
+  /* Responsive Breakpoints */
+  --breakpoint-mobile: 375px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1024px;
+  --breakpoint-hd: 1440px;
+
+  /* Header */
+  --mobile-header-height: 64px;
+  --desktop-header-height: 122px;
+
+  /* Custom Shadows */
+  --shadow-custom: 0 0 24px 0 rgba(0, 0, 0, 0.1);
+  --shadow-baodaozai-card: 0 2px 16px 0 rgba(0, 0, 0, 0.15);
+}
+
+@import './assets/style.css' layer(utilities);
+@import './assets/button.css' layer(utilities);
+
+@layer utilities {
+  :root {
+    /* Legacy variables for backward compatibility */
+    --fontFamily: var(--font-family-noto);
+    --max-width: 1100px;
+    --border-radius: 12px;
+
+    /* Updated color palette using design system */
+    --paletteColor1: var(--color-blue-400);
+    --paletteColor2: var(--color-blue-600);
+    --paletteColor3: var(--color-neutral-700);
+    --paletteColor4: var(--color-neutral-900);
+    --paletteColor5: var(--color-red-400);
+    --paletteColor6: var(--color-yellow-400);
+    --paletteColor7: var(--color-neutral-200);
+    --paletteColor8: var(--color-neutral-white);
+    --color: var(--paletteColor3);
+
+    /* Design system color mappings */
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
+
+    --primary-glow: conic-gradient(
+      from 180deg at 50% 50%,
+      #16abff33 0deg,
+      #0885ff33 55deg,
+      #54d6ff33 120deg,
+      #0071ff33 160deg,
+      transparent 360deg
+    );
+    --secondary-glow: radial-gradient(
+      rgba(255, 255, 255, 1),
+      rgba(255, 255, 255, 0)
+    );
+
+    --tile-start-rgb: 239, 245, 249;
+    --tile-end-rgb: 228, 232, 233;
+    --tile-border: conic-gradient(
+      #00000080,
+      #00000040,
+      #00000030,
+      #00000020,
+      #00000010,
+      #00000010,
+      #00000080
+    );
+
+    --callout-rgb: 238, 240, 241;
+    --callout-border-rgb: 172, 175, 176;
+    --card-rgb: 180, 185, 188;
+    --card-border-rgb: 131, 134, 135;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --foreground-rgb: 255, 255, 255;
+      --background-start-rgb: 0, 0, 0;
+      --background-end-rgb: 0, 0, 0;
+
+      --primary-glow: radial-gradient(
+        rgba(1, 65, 255, 0.4),
+        rgba(1, 65, 255, 0)
+      );
+      --secondary-glow: linear-gradient(
+        to bottom right,
+        rgba(1, 65, 255, 0),
+        rgba(1, 65, 255, 0),
+        rgba(1, 65, 255, 0.3)
+      );
+
+      --tile-start-rgb: 2, 13, 46;
+      --tile-end-rgb: 2, 5, 19;
+      --tile-border: conic-gradient(
+        #ffffff80,
+        #ffffff40,
+        #ffffff30,
+        #ffffff20,
+        #ffffff10,
+        #ffffff10,
+        #ffffff80
+      );
+
+      --callout-rgb: 20, 20, 20;
+      --callout-border-rgb: 108, 108, 108;
+      --card-rgb: 100, 100, 100;
+      --card-border-rgb: 200, 200, 200;
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+
+  html,
+  body {
+    max-width: 100vw;
+    font-family: var(--fontFamily);
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--paletteColor4, #232323);
+    background-color: white;
+    --normal-container-max-width: 1440px;
+    --content-margin-top: 64px;
+    --content-spacing: 1.5em;
+    --container-spacing: 25px;
+    --container-width-base: calc(90vw - var(--frame-size, 0px) * 2);
+    --container-width: min(100%, var(--container-width-base));
+    --grid-template-columns: 2fr 1fr;
+    --stk-block-background-padding: 20px;
+    --letterSpacing: 0.05em;
+    --margin-bottom: 28px;
+  }
+
+  body ol {
+    list-style-type: decimal;
+  }
+  body ul {
+    list-style-type: disc;
+  }
+
+  body.no-scroll {
+    overflow: hidden;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html {
+      color-scheme: dark;
+    }
+  }
+
+  .icon-rpjr-icon-arrow-right {
+    color: var(--paletteColor6);
+  }
+
+  .icon-rpjr-icon-arrow-right::before {
+    content: '\e900';
+  }
+
+  /* for backward compatibility */
+  .theme-red {
+    --theme-color: var(--color-red-400);
+  }
+  .theme-yellow {
+    --theme-color: var(--color-yellow-400);
+  }
+  .theme-blue {
+    --theme-color: var(--color-blue-400);
+  }
+}
+
+@layer base {
+  ::selection {
+    background-color: var(--color-neutral-400);
+  }
+  ::-moz-selection {
+    background-color: var(--color-neutral-400);
+  }
+}
+
+/* Typography Utilities - Headlines Large */
+@utility prose-h1-large {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h1-large);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 2.4px;
+}
+
+@utility prose-h2-large {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h2-large);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 2px;
+}
+
+@utility prose-h3-large {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h3-large);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 1.6px;
+}
+
+@utility prose-h4-large {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h4-large);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 1.4px;
+}
+
+@utility prose-h5-large {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h5-large);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 1.1px;
+}
+
+@utility prose-h6-large {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h6-large);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.9px;
+}
+
+/* Typography Utilities - Headlines Small */
+@utility prose-h1-small {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h1-small);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 1.6px;
+}
+
+@utility prose-h2-small {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h2-small);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 1.4px;
+}
+
+@utility prose-h3-small {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h3-small);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 1.2px;
+}
+
+@utility prose-h4-small {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h4-small);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 1.1px;
+}
+
+@utility prose-h5-small {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h5-small);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 1px;
+}
+
+@utility prose-h6-small {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-h6-small);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.9px;
+}
+
+/* Typography Utilities - Paragraphs */
+@utility prose-p1 {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-p1);
+  font-weight: 500;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.8px;
+}
+
+@utility prose-p1-bold {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-p1);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.8px;
+}
+
+@utility prose-p2 {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-p2);
+  font-weight: 500;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.7px;
+}
+
+@utility prose-p2-bold {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-p2);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.7px;
+}
+
+@utility prose-p3 {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-p3);
+  font-weight: 500;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.6px;
+}
+
+@utility prose-p3-bold {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-p3);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.6px;
+}
+
+@utility prose-p4 {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-p4);
+  font-weight: 500;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.5px;
+}
+
+@utility prose-p4-bold {
+  font-family: var(--font-family-noto);
+  font-size: var(--font-size-p4);
+  font-weight: 700;
+  line-height: var(--line-height-normal);
+  letter-spacing: 0.5px;
+}
+
+@utility font-swei {
+  font-family: var(--font-family-swei);
+  font-weight: 700;
+}
+
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-neutral-300) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: transparent;
+  }
+}
+
+@utility theme-red {
+  --theme-color: var(--color-red-400);
+}
+@utility theme-yellow {
+  --theme-color: var(--color-yellow-400);
+}
+@utility theme-blue {
+  --theme-color: var(--color-blue-400);
+}
