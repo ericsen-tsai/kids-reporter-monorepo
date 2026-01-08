@@ -2,14 +2,12 @@
 import 'react-loading-skeleton/dist/skeleton.css'
 
 import { ArticleBodyDraftRenderer } from '@kids-reporter/draft-renderer'
-import { useEffect, useRef, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import styled from 'styled-components'
 
 import { STICKY_HEADER_HEIGHT, Theme } from '@/constants'
 
 import { useArticleContext } from './article-context'
-import { tocAnchorPrefix, tocIndexPrefix } from './table-of-content'
 
 type PostProp = {
   post: any
@@ -24,82 +22,11 @@ const SkeletonContainer = styled.div`
 `
 
 export const PostRenderer = (props: PostProp) => {
-  const [isMounted, setIsMounted] = useState(false)
-  const observerRef = useRef<IntersectionObserver | null>(null)
-  const firstAnchorIDRef = useRef<string | null>(null)
-  const prevAnchorIDRef = useRef<string | null>(null)
-
-  useEffect(() => {
-    setIsMounted(true)
-
-    const isVisibleClassName = 'isTOCVisible'
-    const highlightFirstVisible = () => {
-      const tocIndexes = document.querySelectorAll(`[id^="${tocIndexPrefix}-"]`)
-      tocIndexes?.forEach((index) => {
-        index?.classList.remove('isActive')
-      })
-
-      const firstVisibleIndex = document.querySelector(
-        `[id^="${tocIndexPrefix}-"].${isVisibleClassName}`
-      )
-      if (firstVisibleIndex) {
-        firstVisibleIndex.classList.add('isActive')
-      } else {
-        // Handling for outside first/last anchor
-        const prevAnchorID = prevAnchorIDRef.current
-        if (prevAnchorID && prevAnchorID !== firstAnchorIDRef.current) {
-          const tocIndexID = prevAnchorID.replace(
-            tocAnchorPrefix,
-            tocIndexPrefix
-          )
-          document.querySelector(`#${tocIndexID}`)?.classList.add('isActive')
-        }
-      }
-    }
-
-    // Add IntersectionObserver for spy scroll
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const anchorID = entry.target.getAttribute('id')
-          const indexID = anchorID?.replace(tocAnchorPrefix, tocIndexPrefix)
-          const index = document.querySelector(`#${indexID}`)
-          if (entry.isIntersecting) {
-            index?.classList?.add(isVisibleClassName)
-            prevAnchorIDRef.current = anchorID
-          } else {
-            index?.classList?.remove(isVisibleClassName)
-            // Prevent initial fire when mounted
-            if (prevAnchorIDRef.current) {
-              prevAnchorIDRef.current = anchorID
-            }
-          }
-          highlightFirstVisible()
-        })
-      },
-      {
-        root: null,
-        rootMargin: `-${STICKY_HEADER_HEIGHT}px 0px 0px 0px`,
-        threshold: 0,
-      }
-    )
-  }, [])
-
-  useEffect(() => {
-    const anchors = document.querySelectorAll(`[id^="${tocAnchorPrefix}-"]`)
-    anchors?.forEach((anchor, index) => {
-      if (index === 0) {
-        firstAnchorIDRef.current = anchor.id
-      }
-      observerRef.current?.observe(anchor)
-    })
-  })
-
   const content = props.post?.content
   const theme = props.theme
   const { fontSize, handleImgModalOpen } = useArticleContext()
 
-  return isMounted && content && theme ? (
+  return content && theme ? (
     <ArticleBodyDraftRenderer
       rawContentState={content}
       themeColor={theme}
