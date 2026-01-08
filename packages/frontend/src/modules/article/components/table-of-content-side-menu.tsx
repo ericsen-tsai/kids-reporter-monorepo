@@ -82,28 +82,21 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
         }
         return
       }
+      const threshold = STICKY_HEADER_HEIGHT + 50
+      const nearestEntry = visibleEntries.reduce(
+        (nearest, entry) => {
+          if (!nearest) return entry
+          const nearestDist = Math.abs(
+            nearest.boundingClientRect.top - threshold
+          )
+          const entryDist = Math.abs(entry.boundingClientRect.top - threshold)
+          return entryDist < nearestDist ? entry : nearest
+        },
+        null as IntersectionObserverEntry | null
+      )
 
-      const sortedEntries = visibleEntries.sort((a, b) => {
-        const aTop = a.boundingClientRect.top
-        const bTop = b.boundingClientRect.top
-        const threshold = STICKY_HEADER_HEIGHT + 50
-
-        // If both are near the top, prefer the one closer to the threshold
-        if (aTop < threshold && bTop < threshold) {
-          return Math.abs(aTop - threshold) - Math.abs(bTop - threshold)
-        }
-
-        // If one is above threshold and one is below, prefer the one above
-        if (aTop < threshold && bTop >= threshold) return -1
-        if (aTop >= threshold && bTop < threshold) return 1
-
-        // Both below threshold, prefer the one closer to the top
-        return aTop - bTop
-      })
-
-      const mostVisibleEntry = sortedEntries[0]
-      if (!mostVisibleEntry) return
-      const element = mostVisibleEntry.target as HTMLElement
+      if (!nearestEntry) return
+      const element = nearestEntry.target as HTMLElement
       const key = elementToKeyMap.get(element)
       if (!key) return
       setCurrentActiveIndex(makeAnchorKey(key))

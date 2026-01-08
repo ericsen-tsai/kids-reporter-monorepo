@@ -278,7 +278,7 @@ function Toolbar({ topicURL, postSlug }: ToolbarProp) {
   return (
     <>
       {/* 148px is 1/2 of toolbar height */}
-      <div className="fixed bottom-6 left-6 z-1000 tablet:bottom-8 tablet:left-1/2 tablet:-translate-x-1/2 desktop:sticky desktop:top-[calc(50vh+148px)] desktop:left-12 desktop:z-[999] desktop:flex desktop:h-0 desktop:translate-x-0 desktop:items-end hd:left-20">
+      <div className="fixed bottom-6 left-6 z-1000 tablet:bottom-8 tablet:left-1/2 tablet:-translate-x-1/2 desktop:sticky desktop:top-[calc(50vh+148px)] desktop:left-12 desktop:z-[999] desktop:flex desktop:h-0 desktop:translate-x-0 desktop:items-end hd:left-20 print:hidden">
         <div className="desktop:hidden">
           <MobileToolbar
             topicURL={topicURL}
