@@ -262,7 +262,7 @@ export function ActionButtons({
         {isSearchOpen ? <ClearIcon /> : <SearchIcon />}
       </button>
       <a
-        className="w-8 h-8 flex cursor-pointer items-center justify-center rounded-full text-neutral-600 transition-all duration-200 hover:text-neutral-800"
+        className="w-8 h-8 flex items-center justify-center rounded-full text-neutral-600 transition-all duration-200 hover:text-neutral-800"
         aria-label="設定"
         href={readingSettingsUrl}
       >
