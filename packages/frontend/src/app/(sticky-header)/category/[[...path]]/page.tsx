@@ -72,7 +72,10 @@ export async function generateMetadata({
     categoryData?.subcategories?.[0]?.ogImage?.resized?.medium ??
     categoryData?.ogImage?.resized?.medium
 
-    return {
+  return {
+    title,
+    description,
+    openGraph: {
       title,
       description,
       images: ogImage,
