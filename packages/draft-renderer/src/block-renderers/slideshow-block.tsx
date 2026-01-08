@@ -1,8 +1,9 @@
-import Multimedia from './multimedia'
-import React, { useState, useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
+
 import { getColorHex } from '../utils/index'
 import { mediaQuery } from '../utils/media-query'
+import Multimedia from './multimedia'
 
 const mockup = {
   mobile: {
@@ -249,7 +250,11 @@ const EmptyDesc = styled(Desc)`
   }
 `
 
-const SlidesFlexBox = styled.div`
+const SlidesFlexBox = styled.div<{
+  isSliding: boolean
+  duration: number
+  translateXUint: number
+}>`
   position: absolute;
   top: 0;
   left: 0;
@@ -257,38 +262,26 @@ const SlidesFlexBox = styled.div`
   flex-wrap: nowrap;
   width: 100%;
   height: 100%;
-  ${(props: {
-    isSliding: boolean
-    duration: number
-    translateXUint: number
-  }) => {
-    if (props.isSliding) {
-      return `transition: transform ${props.duration}ms ease-in-out;`
+  ${({ isSliding, duration }) =>
+    isSliding ? `transition: transform ${duration}ms ease-in-out;` : ''}
+
+  ${({ translateXUint }) => `
+    ${mediaQuery.smallOnly} {
+      transform: translateX(
+          ${getTranslateX(mockup.mobile, translateXUint) / getContainerWidth(mockup.mobile)} * 100%
+        );
     }
-  }}
-
-  ${mediaQuery.smallOnly} {
-    transform: translateX(
-      ${(props: { translateXUint: number }) =>
-        (getTranslateX(mockup.mobile, props.translateXUint) /
-          getContainerWidth(mockup.mobile)) *
-        100}%
-    );
-  }
-
-  ${mediaQuery.mediumOnly} {
-    transform: translateX(
-      ${(props: { translateXUint: number }) =>
-        getTranslateX(mockup.desktop, props.translateXUint)}px
-    );
-  }
-
-  ${mediaQuery.largeOnly} {
-    transform: translateX(
-      ${(props: { translateXUint: number }) =>
-        getTranslateX(mockup.hd, props.translateXUint)}px
-    );
-  }
+    ${mediaQuery.mediumOnly} {
+      transform: translateX(
+          ${getTranslateX(mockup.desktop, translateXUint) / getContainerWidth(mockup.desktop)} * 100%
+        );
+    }
+    ${mediaQuery.largeOnly} {
+      transform: translateX(
+          ${getTranslateX(mockup.hd, translateXUint) / getContainerWidth(mockup.hd)} * 100%
+        );
+    }
+  `}
 `
 
 const SlideFlexItem = styled.div`
@@ -296,13 +289,10 @@ const SlideFlexItem = styled.div`
   flex-shrink: 0;
 
   ${mediaQuery.smallOnly} {
-    flex-basis: calc(
-      ${getSlideWidth(mockup.mobile)} / ${getContainerWidth(mockup.mobile)}*100%
-    );
-    padding-right: calc(
-      ${mockup.mobile.slide.paddingRight} /
-        ${getContainerWidth(mockup.mobile)}*100%
-    );
+    flex-basis: ${() =>
+      `calc(${getSlideWidth(mockup.mobile)} / ${getContainerWidth(mockup.mobile)}*100%)`};
+    padding-right: ${() =>
+      `calc(${mockup.mobile.slide.paddingRight} / ${getContainerWidth(mockup.mobile)}*100%)`};
   }
 
   ${mediaQuery.mediumOnly} {

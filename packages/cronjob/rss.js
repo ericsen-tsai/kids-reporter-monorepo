@@ -1,8 +1,9 @@
-import { config } from './configs.js'
-import { logWithSlack, errorHandling, errors } from './utils.js'
+import { Storage } from '@google-cloud/storage'
 import axios from 'axios'
 import RSS from 'rss'
-import { Storage } from '@google-cloud/storage'
+
+import { config } from './configs.js'
+import { errorHandling, errors, logWithSlack } from './utils.js'
 
 const storage =
   config.gcs.projectId && config.gcs.keyFilename

@@ -1,12 +1,13 @@
+import { TextArea } from '@keystone-ui/fields'
 import React, { useState } from 'react'
 import styled from 'styled-components'
+
 import { AtomicBlockProps } from '../block-renderer-fn.type'
 import {
   EmbeddedCodeInput,
   EmbeddedCodeInputValue,
 } from '../buttons/embedded-code'
 import { EditableBlock as _EditableBlock } from './styled'
-import { TextArea } from '@keystone-ui/fields'
 
 function EmbeddedCode({
   className,

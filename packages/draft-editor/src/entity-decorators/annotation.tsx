@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import {
-  EditorState,
-  ContentState,
-  convertToRaw,
-  convertFromRaw,
-} from 'draft-js'
 import { Drawer, DrawerController } from '@keystone-ui/modals'
 import { annotationDecorator } from '@kids-reporter/draft-renderer'
+import {
+  ContentState,
+  convertFromRaw,
+  convertToRaw,
+  EditorState,
+} from 'draft-js'
+import { useEffect, useState } from 'react'
+
 import buttonNames from '../buttons/bt-names'
 import { RichTextEditor } from '../rich-text-editor'
-import { EditableWrapper } from './wrapper'
 import { editableLinkDecorator } from './link'
+import { EditableWrapper } from './wrapper'
 
 const disabledButtons = [
   buttonNames.h2,

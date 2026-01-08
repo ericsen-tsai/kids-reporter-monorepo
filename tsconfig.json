@@ -1,15 +1,27 @@
 {
   "compilerOptions": {
-    "isolatedModules": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "strict": true,
-    "module": "esnext",
-    "target": "esnext",
-    "jsx": "react",
-    "noEmit": true,
-    "moduleResolution": "node",
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "checkJs": true,
-    "allowJs": true
-  }
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "incremental": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": true,
+    "baseUrl": ".",
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "checkJs": true
+  },
+  "exclude": ["node_modules", "dist", "build", ".next", "lib", "lib-temp"]
 }

@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
+import { controller } from '@keystone-6/core/fields/types/virtual/views'
 import { FieldProps } from '@keystone-6/core/types'
 import { Button } from '@keystone-ui/button'
+import { Divider } from '@keystone-ui/core'
 import { FieldContainer, FieldLabel, TextInput } from '@keystone-ui/fields'
 import { PlusCircleIcon, TrashIcon } from '@keystone-ui/icons'
 import { Tooltip } from '@keystone-ui/tooltip'
-import { Divider } from '@keystone-ui/core'
-import { controller } from '@keystone-6/core/fields/types/virtual/views'
+import { useState } from 'react'
+import styled from 'styled-components'
 
 type EssayQuestion = {
   question: string
@@ -45,7 +45,7 @@ const QARow = styled.div`
   gap: 5px;
 `
 
-const IconButton = styled(Button)`
+const IconButton = styled(Button as any)`
   background-color: transparent;
   margin: 0 0 0 0.5rem;
 `
@@ -62,11 +62,11 @@ const AddQuestionTipComponent = (props: {
   const [question, setQuestion] = useState('')
   const [tip, setTip] = useState('')
 
-  const onQuestionChange = (e) => {
+  const onQuestionChange = (e: any) => {
     setQuestion(e.target.value)
   }
 
-  const onTipChange = (e) => {
+  const onTipChange = (e: any) => {
     setTip(e.target.value)
   }
 

@@ -1,7 +1,8 @@
+import { DefaultDraftBlockRenderMap } from 'draft-js'
 import Immutable from 'immutable'
 import React from 'react'
 import styled from 'styled-components'
-import { DefaultDraftBlockRenderMap } from 'draft-js'
+
 import { Atomic, Paragraph } from './article-content'
 
 const ParagraphForImageLink = styled(Paragraph)`

@@ -20,7 +20,8 @@ cloud runs:
 - [prod-cms](https://console.cloud.google.com/run/detail/asia-east1/prod-cms?project=kids-reporter)
 
 ## Environment Variables
-相關環境變數可以參考 [`environment-variables.ts`](https://github.com/kids-reporter/kids-reporter-monorepo/blob/dev/packages/cms/environment-variables.ts) 檔案。 
+
+相關環境變數可以參考 [`environment-variables.ts`](https://github.com/kids-reporter/kids-reporter-monorepo/blob/dev/packages/cms/environment-variables.ts) 檔案。
 
 其中值得注意的是，`NODE_ENV` 除了 convention 的 `development` 和 `production` 之外，亦有 `test`的選項。當 `NODE_ENV=test` 時，Keystone server 會關閉 Role-based Authentication，不再檢查 request 是否可以 Query/Create/Update/Delete Keystone 的資源，[請見相關程式碼](https://github.com/kids-reporter/kids-reporter-monorepo/blob/dev/packages/cms/lists/utils/access-control-list.ts#L22-L24)。
 
@@ -80,7 +81,6 @@ DATABASE_URL=postgres://anotherAccount:anotherPasswd@localhost:5433/anotherDatab
 
 起 CMS 服務後，我們可以透過 [http://localhost:3000/api/graphql](http://localhost:3000/api/graphql) 來使用 GraphQL playground。
 
-
 ### Database Migration （建議同步參考 [Keystone 文件](https://keystonejs.com/docs/guides/database-migration#title)）
 
 Keystone 底層是透過 [Prisma](https://github.com/prisma/prisma)來管理資料庫（Postgres）。
@@ -107,53 +107,53 @@ Keystone 底層是透過 [Prisma](https://github.com/prisma/prisma)來管理資�
 
 1. (optional) Stop the Docker database instance if necessary.
 
-    ```bash
-    docker stop kids-cms;
-    ```
+   ```bash
+   docker stop kids-cms;
+   ```
 
 2. Run a new Docker container for the database migration.
 
-    ```bash
-    docker run -p 5432:5432 --name kids-cms-migration -e POSTGRES_PASSWORD=password -e POSTGRES_USER=user -e POSTGRES_DB=kids -d postgres;
-    ```
+   ```bash
+   docker run -p 5432:5432 --name kids-cms-migration -e POSTGRES_PASSWORD=password -e POSTGRES_USER=user -e POSTGRES_DB=kids -d postgres;
+   ```
 
-    We run a new instance because Prisma migrations clean up all data before generating migration files.
+   We run a new instance because Prisma migrations clean up all data before generating migration files.
 
 3. Auto migrate new list schemas
 
-    ```bash
-    yarn dev;
-    ```
+   ```bash
+   yarn dev;
+   ```
 
-    You can enter CTRL+C to stop Keystone server after auto migration done
+   You can enter CTRL+C to stop Keystone server after auto migration done
 
 4. Generate new migration file for schema changes
 
-    ```bash
-    yarn keystone prisma migrate dev --name 'example_migration_name'
-    ```
+   ```bash
+   yarn keystone prisma migrate dev --name 'example_migration_name'
+   ```
 
-    `example_migration_name` will be part of the file name of the migration file.
+   `example_migration_name` will be part of the file name of the migration file.
 
 5. (optional) Stop the Docker container for the database migration.
 
-    ```bash
-    docker stop kids-cms-migration;
-    ```
+   ```bash
+   docker stop kids-cms-migration;
+   ```
 
 6. (optional) Start the Docker container for the database.
 
-    ```bash
-    docker start kids-cms;
-    ```
+   ```bash
+   docker start kids-cms;
+   ```
 
 7. (optional) Remove the Docker container for the database migration.
 
-    ```bash
-    docker rm kids-cms-migration;
-    ```
+   ```bash
+   docker rm kids-cms-migration;
+   ```
 
-    you may check if the container is removed by running `docker ps -a`.
+   you may check if the container is removed by running `docker ps -a`.
 
 #### 3. 上傳 migration 檔案和新的 schema.prisma 到 repo
 
@@ -174,7 +174,7 @@ Database migration 執行的時機點是在部署的時候，
 
 - [prod-frontend-for-preview](https://console.cloud.google.com/run/detail/asia-east1/prod-frontend-for-preview?project=kids-reporter)
 - [prod-api-gateway-for-preview](https://console.cloud.google.com/run/detail/asia-east1/prod-api-gateway-for-preview?project=kids-reporter)
-以上兩個 Cloud Runs 與 `prod-frontend` 和 `prod-api-gateway` 的程式碼相同，僅使用的環境變數不同。
+  以上兩個 Cloud Runs 與 `prod-frontend` 和 `prod-api-gateway` 的程式碼相同，僅使用的環境變數不同。
 
 `prod-frontend-for-preview` 使用 `prod-api-gateway-for-preview` 當作 API server，而 `prod-api-gateway-for-preview` 發送 request 到 CMS GraphQL 時，使用的角色是 `preview_headless_account`；`preview_headless_account` 在 CMS 角色權限設定上，有權限可以讀取 `draft` 的內容。
 

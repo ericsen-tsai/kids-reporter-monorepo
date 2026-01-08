@@ -21,6 +21,8 @@ const {
   TWO_FACTOR_AUTH_SECRET,
   TWO_FACTOR_AUTH_COOKIE_NAME,
   OPEN_AI_KEY,
+  OPEN_AI_ORGANIZATION,
+  OPEN_AI_PROJECT,
   TWREPORTER_ID,
   SEARCH_API_KEY,
   GO_API_JWT_SECRET,
@@ -96,7 +98,11 @@ const environmentVariables = {
   twreporterID: TWREPORTER_ID || 'twreporter-id',
   searchAPIKey: SEARCH_API_KEY || 'search-api-key',
   nodeEnv: NODE_ENV || 'development', // value could be 'development', 'production' or 'test'
-  openAIKey: OPEN_AI_KEY || 'open-ai-key',
+  openAI: {
+    key: OPEN_AI_KEY || 'open-ai-key',
+    organization: OPEN_AI_ORGANIZATION || '',
+    project: OPEN_AI_PROJECT || '',
+  },
   goApiJwt: {
     secret: GO_API_JWT_SECRET || '',
     issuer: GO_API_JWT_ISSUER || 'https://go-api.twreporter.org',

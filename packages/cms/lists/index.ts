@@ -1,12 +1,20 @@
 import Author from './author'
 import CallBaodaozai from './call-baodaozai'
+import CallBaodaozaiIntro from './call-baodaozai-intro'
 import Category from './category'
 import EditorPicksSetting from './editor-picks-setting'
 import Member from './member'
+import MemberAvatar from './member-avatar'
+import { NewsReadingGroup, NewsReadingGroupItem } from './news-reading'
 import OnlineUser from './online-user'
 import PDF from './pdf'
 import Photo from './photo'
 import Post from './post'
+import PostChoiceAnswer from './post-choice-answer'
+import PostChoiceQuestion from './post-choice-question'
+import PostEssayAnswer from './post-essay-answer'
+import PostEssayAnswerLike from './post-essay-answer-like'
+import PostEssayQuestion from './post-essay-question'
 import Project from './project'
 import ProjectCategory from './project-category'
 import SubSubcategory from './sub-subcategory'
@@ -14,7 +22,6 @@ import Subcategory from './subcatgory'
 import SVG from './svg'
 import Tag from './tag'
 import User from './user'
-import { NewsReadingGroup, NewsReadingGroupItem } from './news-reading'
 
 export const listDefinition = {
   User,
@@ -26,6 +33,7 @@ export const listDefinition = {
   Category,
   Subcategory,
   SubSubcategory,
+  CallBaodaozaiIntro,
   Tag,
   NewsReadingGroup,
   NewsReadingGroupItem,
@@ -35,4 +43,10 @@ export const listDefinition = {
   CallBaodaozai,
   OnlineUser,
   Member,
+  MemberAvatar,
+  PostChoiceAnswer,
+  PostChoiceQuestion,
+  PostEssayAnswer,
+  PostEssayQuestion,
+  PostEssayAnswerLike,
 }

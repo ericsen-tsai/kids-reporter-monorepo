@@ -1,6 +1,6 @@
 # Cronjob
 
-This package contains scripts for cronjobs.  Using different commands and arguments, you can run different scripts.
+This package contains scripts for cronjobs. Using different commands and arguments, you can run different scripts.
 For easy deployment, the file name of the script is the same as the command name specified in `package.json`.
 
 ## Prerequisites
@@ -22,15 +22,15 @@ For easy deployment, the file name of the script is the same as the command name
 
 1. Build the Docker image:
 
-    ```bash
-    docker build --platform linux/amd64 --no-cache --tag gcr.io/kids-reporter/cronjob:v1.0 .
-    ```
+   ```bash
+   docker build --platform linux/amd64 --no-cache --tag gcr.io/kids-reporter/cronjob:v1.0 .
+   ```
 
 2. Push the Docker image to Google Container Registry:
 
-    ```bash
-    docker push gcr.io/kids-reporter/cronjob:v1.0
-    ```
+   ```bash
+   docker push gcr.io/kids-reporter/cronjob:v1.0
+   ```
 
 3. Create a Cloud Run job with the image.
 4. Add Job Scheduler Trigger.
@@ -67,9 +67,8 @@ This will execute the script, fetching posts data, generating an RSS feed, uploa
 
 #### RSS Feed Cronjob Configs
 
-- Frequency:  `0 1 * * *` (every day at 01:00 UTC+8)
+- Frequency: `0 1 * * *` (every day at 01:00 UTC+8)
 - Fetch criteria: posts and projects published in last 2 days
-
 
 ### Scheduled Post Status Updater
 
@@ -97,4 +96,4 @@ This will execute the script, fetching posts data, and updating the status of sc
 
 #### Scheduled Post Cronjob Configs
 
-- Frequency:  `0 1 * * *` (every day at 01:00 UTC+8)
+- Frequency: `0 1 * * *` (every day at 01:00 UTC+8)

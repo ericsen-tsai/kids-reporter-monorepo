@@ -1,6 +1,7 @@
-import React from 'react'
-import styled, { useTheme } from 'styled-components'
 import { ContentState } from 'draft-js'
+import React from 'react'
+import styled, { ThemeProvider, useTheme } from 'styled-components'
+
 import { ENTITY, findEntitiesByType } from '../utils/entity'
 
 const LinkWrapper = styled.a`
@@ -14,7 +15,7 @@ const LinkWrapper = styled.a`
   }
 `
 
-const Link = (props: {
+const LinkInner = (props: {
   contentState: ContentState
   entityKey: string
   children: React.ReactNode
@@ -29,7 +30,7 @@ const Link = (props: {
           const anchor = document.querySelector(url) as HTMLElement
           if (anchor) {
             window.scrollTo({
-              top: anchor.offsetTop - theme?.offsetTop,
+              top: anchor.offsetTop - (theme as any)?.offsetTop,
               behavior: 'smooth',
             })
           }
@@ -41,6 +42,18 @@ const Link = (props: {
       }
 
   return <LinkWrapper {...linkProps}>{props.children}</LinkWrapper>
+}
+
+const Link = (props: {
+  contentState: ContentState
+  entityKey: string
+  children: React.ReactNode
+}) => {
+  return (
+    <ThemeProvider theme={{}}>
+      <LinkInner {...props} />
+    </ThemeProvider>
+  )
 }
 
 export const linkDecorator = {

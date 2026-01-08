@@ -1,18 +1,21 @@
-import envVars from '../environment-variables'
-import { KeystoneContext } from '@keystone-6/core/types'
+import { graphql, group, list } from '@keystone-6/core'
+import {
+  checkbox,
+  json,
+  relationship,
+  select,
+  text,
+  timestamp,
+  virtual,
+} from '@keystone-6/core/fields'
+import { KeystoneContext, ListConfig } from '@keystone-6/core/types'
 import {
   customFields,
   richTextEditorButtonNames,
 } from '@kids-reporter/cms-core'
-import { graphql, list, group } from '@keystone-6/core'
-import {
-  json,
-  virtual,
-  relationship,
-  timestamp,
-  text,
-  select,
-} from '@keystone-6/core/fields'
+
+import envVars from '../environment-variables'
+import { slugConfig } from './config'
 import {
   allowAllRoles,
   allowRoles,
@@ -21,7 +24,6 @@ import {
 import relationshipUtil, {
   OrderedRelationshipConfig,
 } from './utils/manual-order-relationship'
-import { slugConfig } from './config'
 
 const subSubcategories: OrderedRelationshipConfig = {
   fieldName: 'subSubcategories',
@@ -64,39 +66,8 @@ const TWReporterRelatedPostsConfig = isTWReporterRelatedPostsEnabled
   ? group({
       label: '報導者相關文章',
       fields: {
-        searchTWReporterRelatedPosts: virtual({
-          label: '搜尋 - 複製後貼入下方[新增與排序]之文字欄',
-          field: () =>
-            graphql.field({
-              type: graphql.JSON,
-              async resolve(item: Record<string, any>, args, context) {
-                const postID = item?.id
-                const post = await context.query.Post.findOne({
-                  where: { id: postID },
-                  query: 'id, tagsOrderJson',
-                })
-                return {
-                  tags: post.tagsOrderJson,
-                  twreporterID: envVars.twreporterID,
-                  searchAPIKey: envVars.searchAPIKey,
-                }
-              },
-            }),
-          ui: {
-            views: './lists/views/search-related-posts',
-            createView: {
-              fieldMode: 'hidden',
-            },
-            itemView: {
-              fieldMode: 'edit',
-            },
-            listView: {
-              fieldMode: 'hidden',
-            },
-          },
-        }),
         TWReporterRelatedPostsJSON: json({
-          label: '新增與排序',
+          label: '相關文章管理',
           defaultValue: [],
           ui: {
             views: './lists/views/twreporter-related-posts',
@@ -117,7 +88,9 @@ const aiDialog = virtual({
         return {
           label: '生成內容',
           content: item.content,
-          openAIKey: envVars.openAIKey,
+          openAIKey: envVars.openAI.key,
+          openAIOrganization: envVars.openAI.organization,
+          openAIProject: envVars.openAI.project,
         }
       },
     }),
@@ -135,133 +108,7 @@ const aiDialog = virtual({
   },
 })
 
-const openingFieldConfig = group({
-  label: '進入對話',
-  fields: {
-    aiSuggestionOpening: virtual({
-      field: () =>
-        graphql.field({
-          type: graphql.JSON,
-          async resolve(item: Record<string, any>) {
-            return {
-              label: 'AI助理生成',
-              content: item.content,
-              openAIKey: envVars.openAIKey,
-            }
-          },
-        }),
-      ui: {
-        views: './lists/views/ai-suggestion-opening',
-        createView: {
-          fieldMode: 'hidden',
-        },
-        itemView: {
-          fieldMode: 'read',
-        },
-        listView: {
-          fieldMode: 'hidden',
-        },
-      },
-    }),
-    opening: text({
-      label: '開場白',
-      ui: {
-        createView: { fieldMode: 'hidden' },
-        itemView: { fieldMode: 'edit' },
-        listView: { fieldMode: 'hidden' },
-      },
-    }),
-  },
-})
-
-const multipleChoiceQuestionsFieldConfig = group({
-  label: '選擇題組',
-  fields: {
-    aiSuggestion: virtual({
-      field: () =>
-        graphql.field({
-          type: graphql.JSON,
-          async resolve(item: Record<string, any>) {
-            return {
-              label: 'AI助理生成',
-              content: item.content,
-              openAIKey: envVars.openAIKey,
-            }
-          },
-        }),
-      ui: {
-        views: './lists/views/ai-suggestion-multiple-choice',
-        createView: {
-          fieldMode: 'hidden',
-        },
-        itemView: {
-          fieldMode: 'edit',
-        },
-        listView: {
-          fieldMode: 'hidden',
-        },
-      },
-    }),
-    multipleChoiceQuestionsJSON: json({
-      label: '選擇題',
-      defaultValue: [],
-      ui: {
-        views: './lists/views/multiple-choice-questions',
-        createView: { fieldMode: 'hidden' },
-        itemView: { fieldMode: 'edit' },
-        listView: { fieldMode: 'hidden' },
-      },
-    }),
-  },
-})
-
-const essayQuestionsFieldConfig = group({
-  label: '思辨題組',
-  fields: {
-    aiEssaySuggestion: virtual({
-      field: () =>
-        graphql.field({
-          type: graphql.JSON,
-          async resolve(item: Record<string, any>, args, context) {
-            const postID = item?.id
-            const post = await context.query.Post.findOne({
-              where: { id: postID },
-              query: 'id, content',
-            })
-            return {
-              label: 'AI助理生成',
-              content: post.content,
-              openAIKey: envVars.openAIKey,
-            }
-          },
-        }),
-      ui: {
-        views: './lists/views/ai-suggestion-essay',
-        createView: {
-          fieldMode: 'hidden',
-        },
-        itemView: {
-          fieldMode: 'edit',
-        },
-        listView: {
-          fieldMode: 'hidden',
-        },
-      },
-    }),
-    essayQuestionsJSON: json({
-      label: '思辨題',
-      defaultValue: [],
-      ui: {
-        views: './lists/views/essay-questions',
-        createView: { fieldMode: 'hidden' },
-        itemView: { fieldMode: 'edit' },
-        listView: { fieldMode: 'hidden' },
-      },
-    }),
-  },
-})
-
-const listConfigurations = list({
+const listConfigurations: ListConfig<any> = list({
   fields: {
     slug: slugConfig,
     title: text({
@@ -407,9 +254,76 @@ const listConfigurations = list({
       ref: 'Photo',
     }),
     aiDialog,
-    ...openingFieldConfig,
-    ...multipleChoiceQuestionsFieldConfig,
-    ...essayQuestionsFieldConfig,
+
+    // @TODO delete multipleChoiceQuestionsJSON field after ndx branch merged into dev branch
+    multipleChoiceQuestionsJSON: json({
+      defaultValue: [],
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'hidden' },
+        listView: { fieldMode: 'hidden' },
+      },
+    }),
+    // @TODO delete essayQuestionsJSON field after ndx branch merged into dev branch
+    essayQuestionsJSON: json({
+      defaultValue: [],
+      ui: {
+        views: './lists/views/essay-questions',
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'hidden' },
+        listView: { fieldMode: 'hidden' },
+      },
+    }),
+
+    opening: text({
+      label: '開場白',
+      ui: {
+        displayMode: 'textarea',
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'edit' },
+        listView: { fieldMode: 'hidden' },
+      },
+    }),
+    postChoiceQuestions: relationship({
+      label: '單選題（新）',
+      ref: 'PostChoiceQuestion.post',
+      many: true,
+      ui: {
+        hideCreate: true,
+        displayMode: 'cards',
+        cardFields: ['title'],
+        linkToItem: true,
+        inlineCreate: {
+          fields: ['title', 'options', 'reason'],
+        },
+        inlineEdit: {
+          fields: ['title', 'options', 'reason'],
+        },
+        inlineConnect: true,
+      },
+    }),
+    postEssayQuestions: relationship({
+      label: '思辨題（新）',
+      ref: 'PostEssayQuestion.post',
+      many: true,
+      ui: {
+        hideCreate: true,
+        displayMode: 'cards',
+        cardFields: ['title'],
+        linkToItem: true,
+        inlineCreate: {
+          fields: ['title', 'hint'],
+        },
+        inlineEdit: {
+          fields: ['title', 'hint'],
+        },
+        inlineConnect: true,
+      },
+    }),
+    showBaodaozai: checkbox({
+      label: '是否顯示報導仔？',
+      defaultValue: false,
+    }),
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
       ui: {
@@ -590,6 +504,68 @@ const listConfigurations = list({
           fieldPosition: 'sidebar',
         },
         listView: { fieldMode: 'hidden' },
+      },
+    }),
+    generateQuestions: virtual({
+      field: () =>
+        graphql.field({
+          type: graphql.JSON,
+          async resolve(item: Record<string, any>) {
+            return { postId: item.id }
+          },
+        }),
+      ui: {
+        views: './lists/views/generate-post-questions',
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldPosition: 'sidebar' },
+        listView: { fieldMode: 'hidden' },
+      },
+    }),
+    copyPostContent: virtual({
+      field: () =>
+        graphql.field({
+          type: graphql.JSON,
+          async resolve(
+            item: Record<string, any>,
+            args,
+            context: KeystoneContext
+          ) {
+            const post = await context.query.Post.findOne({
+              where: { id: item.id },
+              query: `
+                id
+                title
+                subtitle
+                brief
+                content
+                ogDescription
+                opening
+                postChoiceQuestions {
+                  title
+                  options
+                  reason
+                }
+                postEssayQuestions {
+                  title
+                  hint
+                }
+              `,
+            })
+            return post
+          },
+        }),
+      ui: {
+        views: './lists/views/copy-post-content',
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldPosition: 'sidebar' },
+        listView: { fieldMode: 'hidden' },
+      },
+      graphql: {
+        omit: {
+          read: false,
+          update: true,
+          create: true,
+        },
       },
     }),
   },

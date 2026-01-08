@@ -1,24 +1,25 @@
-import React, { useState, useRef } from 'react'
-import styled from 'styled-components'
-import { Drawer, DrawerController } from '@keystone-ui/modals'
 import { TextInput } from '@keystone-ui/fields'
+import { Drawer, DrawerController } from '@keystone-ui/modals'
+import { blockRenderers } from '@kids-reporter/draft-renderer'
 import {
+  convertFromRaw,
+  convertToRaw,
   EditorState,
   RawDraftContentState,
-  convertToRaw,
-  convertFromRaw,
 } from 'draft-js'
-import { blockRenderers } from '@kids-reporter/draft-renderer'
+import { useRef, useState } from 'react'
+import styled from 'styled-components'
+
 import { AtomicBlockProps } from '../block-renderer-fn.type'
+import buttonNames from '../buttons/bt-names'
+import { AlignSelector } from '../buttons/selector/align-selector'
 import {
   ImageAlignment,
   ImageAlignOptions,
 } from '../buttons/selector/image-selector'
-import { AlignSelector } from '../buttons/selector/align-selector'
-import { EditableBlock as _EditableBlock } from './styled'
-import { RichTextEditor } from '../rich-text-editor'
 import { editableLinkDecorator } from '../entity-decorators/link'
-import buttonNames from '../buttons/bt-names'
+import { RichTextEditor } from '../rich-text-editor'
+import { EditableBlock as _EditableBlock } from './styled'
 
 const disabledButtons = [
   buttonNames.bold,
@@ -63,6 +64,7 @@ const EditableBlock = styled(_EditableBlock)`
       background-color: #f0f0f0;
       opacity: 0.3;
     }
+  }
 `
 
 export type ImageLinkValue = {
@@ -156,7 +158,7 @@ export const EditableImageLink = (props: AtomicBlockProps<ImageLinkValue>) => {
   const entityKey = block.getEntityAt(0)
   const entity = contentState.getEntity(entityKey)
   const data = entity.getData() || {}
-  const { url, alignment, rawContentState } = data // eslint-disable-line
+  const { url, alignment, rawContentState } = data
 
   const onChange = (inputValue: ImageLinkValue) => {
     setIsEditorOpen(false)

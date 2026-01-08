@@ -5,8 +5,19 @@ help:
 	@echo "$(p) make postinstall - run after dependencies installation"
 
 postinstall: build-deps
-	@yarn patch-package;
-	@yarn keystone postinstall --fix;
+	@if [ "$(SKIP_PATCH_PACKAGE)" = "true" ]; then \
+		echo "Patch package skipped."; \
+	else \
+		echo "$(P) patch package"; \
+		yarn patch-package; \
+	fi
+	@yarn keystone build --no-ui;
+	@if [ "$(SKIP_PATCH_PACKAGE)" = "true" ]; then \
+		echo "Patch package skipped."; \
+	else \
+		echo "$(P) patch package"; \
+		yarn patch-package; \
+	fi
 
 build-deps:
 	@if [ "$(SKIP_BUILD_DEPS)" = "true" ]; then \

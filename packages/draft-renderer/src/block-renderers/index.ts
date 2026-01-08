@@ -7,8 +7,8 @@ import {
 import { ImageBlock, ImageInArticleBody } from './image-block'
 import { ImageLinkInArticleBody } from './image-link'
 import { InfoBoxInArticleBody } from './info-box-block'
-import { SlideshowBlock, SlideshowInArticleBody } from './slideshow-block'
 import { NewsReading } from './news-reading'
+import { SlideshowBlock, SlideshowInArticleBody } from './slideshow-block'
 
 export const blockRenderers = {
   BlockquoteInArticleBody,

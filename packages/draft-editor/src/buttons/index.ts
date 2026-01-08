@@ -1,24 +1,25 @@
 import styled from 'styled-components'
-import {
-  buttonStyle,
-  BlockStyleControls as _BlockStyleControls,
-  InlineStyleControls as _InlineStyleControls,
-} from './control-buttons'
+
+import { AnchorButton } from './anchor'
+import { AnnotationButton } from './annotation'
 import { BackgroundColorButton } from './bg-color'
 import { BlockquoteButton } from './blockquote'
+import {
+  BlockStyleControls as _BlockStyleControls,
+  buttonStyle,
+  InlineStyleControls as _InlineStyleControls,
+} from './control-buttons'
 import { DividerButton } from './divider'
 import { EmbeddedCodeButton } from './embedded-code'
 import { EnlargeButton } from './enlarge'
 import { FontColorButton } from './font-color'
 import { ImageButton } from './image'
 import { ImageLinkButton } from './image-link'
-import { TOCAnchorButton } from './toc-anchor'
-import { AnchorButton } from './anchor'
-import { LinkButton } from './link'
-import { AnnotationButton } from './annotation'
-import { SlideshowButton } from './slideshow'
-import { NewsReadingButton } from './news-reading'
 import { InfoBoxButton } from './info-box'
+import { LinkButton } from './link'
+import { NewsReadingButton } from './news-reading'
+import { SlideshowButton } from './slideshow'
+import { TOCAnchorButton } from './toc-anchor'
 
 export const withStyle = (Button: React.ComponentType<any>) => {
   return styled(Button)`

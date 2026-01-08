@@ -1,11 +1,14 @@
-// @ts-ignore `@twreporter/errors` does not have tyepscript definition file yet
+// @ts-ignore `@twreporter/errors` does not have typescript definition file yet
 import _errors from '@twreporter/errors'
-import consts from './constants.js'
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
-import middlewareCreator from './middlewares/index.js'
-import { createGraphQLProxy } from './gql-proxy-mini-app.js'
+
 import { createAuthMiniApp } from './auth-mini-app.js'
+import consts from './constants.js'
+import { createGraphQLProxy } from './gql-proxy-mini-app.js'
+import middlewareCreator from './middlewares/index.js'
+import { createGqlRestRouter } from './routes/gql-rest.js'
 
 // @twreporter/errors is a cjs module, therefore, we need to use its default property
 const errors = _errors.default
@@ -38,13 +41,24 @@ export function createApp({
 
   const corsOpts = {
     origin: corsAllowOrigin,
+    credentials: true,
   }
 
   // common middlewares for every request
   // 1. log requests
   // 2. handle cors requests
-  app.use(middlewareCreator.createLoggerMw(gcpProjectId), cors(corsOpts))
+  // 3. parse header cookie
+  app.use(
+    middlewareCreator.createLoggerMw(gcpProjectId),
+    cors(corsOpts),
+    cookieParser()
+  )
 
+  // Set the global JSON body limit to 1MB to support typical GraphQL payloads
+  app.use(express.json({ limit: '1mb' }))
+
+  // RESTful GraphQL mini app
+  app.use(createGqlRestRouter(gql))
   // mini app: GraphQL API
   app.use(createGraphQLProxy(gql))
 
@@ -54,7 +68,12 @@ export function createApp({
   /**
    *  Application level error handler
    */
-  const errorHandler: express.ErrorRequestHandler = (err, req, res, /* eslint-disable-line */ next) => {
+  const errorHandler: express.ErrorRequestHandler = (
+    err,
+    req,
+    res,
+    /* eslint-disable-line */ next
+  ) => {
     const annotatingError = errors.helpers.wrap(
       err,
       'UnknownError',

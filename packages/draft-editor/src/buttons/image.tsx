@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
 import { AtomicBlockUtils, EditorState } from 'draft-js'
+import React, { useState } from 'react'
 
 import {
   ImageSelector as DefaultImageSelector,

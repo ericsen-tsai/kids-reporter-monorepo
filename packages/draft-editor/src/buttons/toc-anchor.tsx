@@ -1,6 +1,6 @@
-import React from 'react'
-import { EditorState, RichUtils } from 'draft-js'
 import { ENTITY } from '@kids-reporter/draft-renderer'
+import { EditorState, RichUtils } from 'draft-js'
+import React from 'react'
 
 type TOCAnchorButtonProps = {
   className?: string

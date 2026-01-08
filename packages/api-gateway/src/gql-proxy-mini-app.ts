@@ -1,148 +1,15 @@
-import axios from 'axios'
-import consts from './constants.js'
-// @ts-ignore `@twreporter/errors` does not have tyepscript definition file yet
+// @ts-ignore `@twreporter/errors` does not have typescript definition file yet
 import _errors from '@twreporter/errors'
 import express from 'express'
 import { createProxyMiddleware } from 'http-proxy-middleware'
+
+import consts from './constants.js'
+import { isBearerAuth, TokenManager } from './graphql/auth.js'
 
 // @twreporter/errors is a cjs module, therefore, we need to use its default property
 const errors = _errors.default
 
 const statusCodes = consts.statusCodes
-
-class TokenManager {
-  // Singleton
-  static instance?: TokenManager
-  private email: string
-  private password: string
-  private apiEndpoint: string
-  private token: string
-  private expiredAt?: number // timestamp
-
-  constructor(
-    email: string,
-    password: string,
-    apiEndpoint = 'http://localhost:3000/api/graphql'
-  ) {
-    this.email = email
-    this.password = password
-    this.apiEndpoint = apiEndpoint
-    this.token = ''
-
-    if (TokenManager.instance) {
-      return TokenManager.instance
-    }
-
-    TokenManager.instance = this
-  }
-
-  /**
-   *  This function will return a cache token if token is existed and not expired.
-   */
-  async getToken() {
-    if (this.token && this.expiredAt && this.expiredAt >= Date.now()) {
-      return this.token
-    }
-
-    // fetch token
-    try {
-      const sessionToken = await this._fetchToken()
-      this.token = sessionToken
-
-      // @TODO expiry time should be returned by API
-      // So far, we set expiry time as one hour later
-      this.expiredAt = Date.now() + 3600 * 1000
-
-      return this.token
-    } catch (err) {
-      const annotatedErr = errors.helpers.wrap(
-        err,
-        'TokenManangerError',
-        'Fail to get session token',
-        {
-          accoutEmail: this.email,
-        }
-      )
-      throw annotatedErr
-    }
-  }
-
-  /**
-   *  This function will return a new token.
-   */
-  async renewToken() {
-    try {
-      const sessionToken = await this._fetchToken()
-      this.token = sessionToken
-
-      // @TODO expiry time should be returned by API
-      // So far, we set expiry time as one hour later
-      this.expiredAt = Date.now() + 3600 * 1000
-      return this.token
-    } catch (err) {
-      const annotatedErr = errors.helpers.wrap(
-        err,
-        'TokenManangerError',
-        'Fail to renew session token',
-        {
-          accoutEmail: this.email,
-        }
-      )
-      throw annotatedErr
-    }
-  }
-
-  async _fetchToken() {
-    const gqlQuery = `
-      mutation AuthenticateUserWithPassword($email: String!, $password: String!) {
-        authenticateUserWithPassword(email: $email, password: $password) {
-          ... on UserAuthenticationWithPasswordSuccess {
-            sessionToken
-          }
-          ... on UserAuthenticationWithPasswordFailure {
-            message
-          }
-        }
-      }
-    `
-
-    let axiosRes
-    // fetch token
-    try {
-      axiosRes = await axios.post(this.apiEndpoint, {
-        query: gqlQuery,
-        variables: {
-          email: this.email,
-          password: this.password,
-        },
-      })
-    } catch (err) {
-      throw errors.helpers.annotateAxiosError(err)
-    }
-
-    const authenticationResult =
-      axiosRes.data?.data?.authenticateUserWithPassword
-    const errorMessage = authenticationResult?.message
-    if (errorMessage) {
-      throw new Error(errorMessage)
-    }
-
-    const sessionToken = authenticationResult?.sessionToken
-    if (!sessionToken) {
-      throw new Error(
-        'Session token "' + sessionToken + '" is not a valid string'
-      )
-    }
-
-    return sessionToken
-  }
-}
-
-// helpers
-const isBearerAuth = (req: express.Request) => {
-  const auth = req.get('authorization') || ''
-  return auth.startsWith('Bearer ')
-}
 
 /**
  *  This function creates a `GraphQLProxy` mini app.
@@ -207,13 +74,28 @@ export function createGraphQLProxy({
     createProxyMiddleware({
       target: apiOrigin,
       changeOrigin: true,
-
       onProxyReq: (proxyReq, req, res) => {
         const mode: 'jwt' | 'cookie' = res.locals.authMode
 
-        // Always enforce Content-Type
-        proxyReq.setHeader('Content-Type', 'application/json')
+        // Preserve original Content-Type for multipart/form-data (file uploads)
+        // Only set to application/json for regular GraphQL requests
+        const originalContentType = req.get('Content-Type') || ''
+        const isMultipart = originalContentType.includes('multipart/form-data')
+        if (isMultipart) {
+          // Preserve multipart/form-data with boundary for file uploads
+          proxyReq.setHeader('Content-Type', originalContentType)
+        } else {
+          // Force JSON for regular GraphQL requests
+          proxyReq.setHeader('Content-Type', 'application/json')
+        }
         proxyReq.setHeader('x-apollo-operation-name', '')
+
+        const bodyData =
+          !isMultipart && req.body
+            ? typeof req.body === 'string'
+              ? req.body
+              : JSON.stringify(req.body)
+            : null
 
         if (mode === 'jwt') {
           // Forward Authorization header
@@ -228,43 +110,51 @@ export function createGraphQLProxy({
                 req: {
                   headers: {
                     authorization: '[REDACTED]',
-                    'content-type': 'application/json',
+                    'content-type': proxyReq.getHeader('Content-Type'),
                   },
                 },
               },
             })
           )
-          return
-        }
+        } else {
+          const originalCookie = req.get('Cookie') || ''
+          // Cookie mode: attach keystonejs-session token
+          const sessionToken = res.locals.sessionToken || ''
+          const cookie = originalCookie
+            ? `${originalCookie};keystonejs-session=${sessionToken}`
+            : `keystonejs-session=${sessionToken}`
 
-        const originalCookie = req.get('Cookie') || ''
-        // Cookie mode: attach keystonejs-session token
-        const sessionToken = res.locals.sessionToken || ''
-        const cookie = originalCookie
-          ? `${originalCookie};keystonejs-session=${sessionToken}`
-          : `keystonejs-session=${sessionToken}`
+          proxyReq.setHeader('Cookie', cookie)
+          // Ensure Authorization is not present to avoid ambiguity
+          proxyReq.removeHeader?.('Authorization')
 
-        proxyReq.setHeader('Cookie', cookie)
-        // Ensure Authorization is not present to avoid ambiguity
-        proxyReq.removeHeader?.('Authorization')
-
-        console.log(
-          JSON.stringify({
-            severity: 'DEBUG',
-            message:
-              'Proxy with keystonejs-session to ' + apiOrigin + proxyReq.path,
-            ...res?.locals?.globalLogFields,
-            debugPayload: {
-              req: {
-                headers: {
-                  cookie: '[REDACTED]',
-                  'content-type': 'application/json',
+          console.log(
+            JSON.stringify({
+              severity: 'DEBUG',
+              message:
+                'Proxy with keystonejs-session to ' + apiOrigin + proxyReq.path,
+              ...res?.locals?.globalLogFields,
+              debugPayload: {
+                req: {
+                  headers: {
+                    cookie: '[REDACTED]',
+                    'content-type': proxyReq.getHeader('Content-Type'),
+                  },
                 },
               },
-            },
-          })
-        )
+            })
+          )
+        }
+
+        // If body was already parsed by express.json,
+        // re-attach it so the upstream server doesn't hang waiting for bytes.
+        if (bodyData && !proxyReq.headersSent) {
+          proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData))
+          proxyReq.write(bodyData)
+          proxyReq.end()
+        }
       },
+      // end onProxyReq
 
       onProxyRes: async (proxyRes, req, res) => {
         const statusCode = proxyRes.statusCode

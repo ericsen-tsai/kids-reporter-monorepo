@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
-import { EditorState, RichUtils } from 'draft-js'
 import { ENTITY } from '@kids-reporter/draft-renderer'
+import { EditorState, RichUtils } from 'draft-js'
+import { useState } from 'react'
+
 import { LinkEditor } from '../entity-decorators/link'
 
 export const LinkButton = (props: {

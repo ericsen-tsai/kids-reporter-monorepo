@@ -1,19 +1,20 @@
-import { list, graphql } from '@keystone-6/core'
+import { graphql, list } from '@keystone-6/core'
 import {
-  text,
+  checkbox,
   password,
   select,
+  text,
   timestamp,
   virtual,
-  checkbox,
 } from '@keystone-6/core/fields'
+import type { ListConfig } from '@keystone-6/core/types'
+
 import {
   allowAllRoles,
   allowRoles,
   RoleEnum,
 } from './utils/access-control-list'
-
-const listConfigurations = list({
+const listConfigurations: ListConfig<any> = list({
   fields: {
     name: text({
       label: '姓名',
@@ -111,7 +112,7 @@ const listConfigurations = list({
     twoFactorAuth: virtual({
       field: graphql.field({
         type: graphql.JSON,
-        async resolve(item, args, context) {
+        async resolve(item: any, args: any, context: any) {
           const user = await context.query.User.findOne({
             where: { id: item.id.toString() },
             query: 'id twoFactorAuthSecret twoFactorAuthBypass',
