@@ -339,7 +339,6 @@ input PostUpdateInput {
   ogTitle: String
   ogDescription: String
   ogImage: PhotoRelateToOneForUpdateInput
-  opening: String
   multipleChoiceQuestionsJSON: JSON
   essayQuestionsJSON: JSON
   opening: String
@@ -455,7 +454,6 @@ input PostCreateInput {
   ogTitle: String
   ogDescription: String
   ogImage: PhotoRelateToOneForCreateInput
-  opening: String
   multipleChoiceQuestionsJSON: JSON
   essayQuestionsJSON: JSON
   opening: String

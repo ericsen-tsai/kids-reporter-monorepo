@@ -7,7 +7,7 @@ const breakpoints = {
 
 const mediaQuery = {
   smallOnly: `@media (max-width: ${breakpoints.medium - 1}px)`,
-  mediumOnly: `@media (min-width: ${breakpoints.medium}px) and (max-width: ${
+  mediumAndDesktopOnly: `@media (min-width: ${breakpoints.medium}px) and (max-width: ${
     breakpoints.large - 1
   }px)`,
   mediumAbove: `@media (min-width: ${breakpoints.medium}px)`,
