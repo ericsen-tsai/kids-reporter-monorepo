@@ -147,7 +147,7 @@ export const DEBOUNCE_THRESHOLD = 100
 
 export const IS_LOGIN_ENABLED = true
 
-export const STICKY_HEADER_HEIGHT = 130
+export const STICKY_HEADER_HEIGHT = 64
 
 export const POPULAR_KEYWORDS = ['氣候變遷', '選舉', '教育', '環境保護']
 

@@ -2,7 +2,7 @@
 import './article.css'
 
 import { GetPostQuery } from '__generated__/operations/post.generated'
-import { ScrollLevel, useScrollLevel } from '@kids-reporter/routing-ui'
+import { cn, ScrollLevel, useScrollLevel } from '@kids-reporter/routing-ui'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useCallback, useMemo, useState } from 'react'
@@ -22,6 +22,7 @@ import {
   BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT,
   BAODAOZAI_QUESTION_COUNT,
 } from '@/constants/baodaozai-question-count'
+import Toolbar from '@/modules/article/components/toolbar'
 import { useHydratedAuthStore } from '@/services/auth/use-hydrated-auth-store'
 import {
   BaodaozaiActionSetter,
@@ -46,7 +47,6 @@ import { NewsReading } from './news-reading'
 import PostRenderer from './post-renderer'
 import PublishedDate from './published-date'
 import RelatedArticles from './related-articles'
-import { MobileSidebar, Sidebar } from './sidebar'
 import StartReadingBaodaozaiEventTrigger from './start-reading-baodaozai-event-trigger'
 import SubSubcategory from './subSubcategory'
 import Title from './title'
@@ -390,7 +390,7 @@ const Article = ({
   return (
     <>
       <BaodaozaiVisibilitySetter show={showBaodaozai} />
-      <div className={`post${theme ? ` theme-${theme}` : ''}`}>
+      <div className={cn('post relative', theme ? ` theme-${theme}` : '')}>
         <ArticleContext.Provider
           value={{
             fontSize,
@@ -399,8 +399,7 @@ const Article = ({
             handleImgModalClose,
           }}
         >
-          <Sidebar topicURL={topicURL} />
-          <MobileSidebar topicURL={topicURL} />
+          <Toolbar topicURL={topicURL ?? '#'} postSlug={slug} />
           {topicBreadCrumb}
           <ImageModal
             isOpen={isImgModalOpen}
@@ -455,9 +454,9 @@ const Article = ({
             disabled={isScrollingDown}
             onAskQuestionsConfirm={handleBaodaozaiConfirm}
           />
-          <AuthorCard title="誰幫我們完成這篇文章" authors={orderedAuthors} />
         </ArticleContext.Provider>
       </div>
+      <AuthorCard title="誰幫我們完成這篇文章" authors={orderedAuthors} />
 
       <div className="relative w-full">
         {/* related posts enters 50% of the viewport*/}

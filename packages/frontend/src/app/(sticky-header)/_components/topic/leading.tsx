@@ -37,7 +37,7 @@ const PositionedTitle = styled(TitleContainer)`
     }
   }
 
-  ${mediaQuery.mediumOnly} {
+  ${mediaQuery.mediumAndDesktopOnly} {
     &.bottom {
       top: unset;
       bottom: 171px;

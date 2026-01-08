@@ -128,7 +128,7 @@ export const Container = styled.div`
     }
   }
 
-  ${mediaQuery.mediumOnly} {
+  ${mediaQuery.mediumAndDesktopOnly} {
     ${DownButton} {
       bottom: 40px;
       width: 50px;

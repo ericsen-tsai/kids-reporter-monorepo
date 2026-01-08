@@ -142,7 +142,7 @@ export function CallBaodaozaiProvider({
       <div
         className={cn(
           'transition-width transition-height duration-1000',
-          isActive ? 'h-auto w-25' : 'h-30 w-30 tablet:h-32 tablet:w-32'
+          isActive ? 'h-auto w-25' : 'h-26 w-25 tablet:h-32 tablet:w-32'
         )}
       >
         <RiveComponent />
