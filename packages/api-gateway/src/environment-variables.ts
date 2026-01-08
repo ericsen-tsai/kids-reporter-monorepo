@@ -7,11 +7,6 @@ const {
   GO_API_ENV,
 } = process.env
 
-/**
- *
- * @param {string} [cors]
- * @returns {'*' | string[]}
- */
 const getAllowOrigins = (cors: string) => {
   if (cors === '*') {
     return '*'
@@ -42,8 +37,8 @@ const envVar = {
         GO_API_ENV === 'prod'
           ? 'https://go-api.twreporter.org'
           : GO_API_ENV === 'staging'
-          ? 'https://staging-go-api.twreporter.org'
-          : 'http://localhost:8080',
+            ? 'https://staging-go-api.twreporter.org'
+            : 'http://localhost:8080',
     },
   },
   cors: {

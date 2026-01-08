@@ -1,6 +1,6 @@
-import { BaseItem } from '@keystone-6/core/types'
-import { ListConfig, graphql } from '@keystone-6/core'
+import { graphql, ListConfig } from '@keystone-6/core'
 import { json, virtual } from '@keystone-6/core/fields'
+import { BaseItem } from '@keystone-6/core/types'
 
 type ManualOrderFieldConfig = {
   fieldName: string
@@ -58,7 +58,7 @@ type ManualOrderFieldConfig = {
  */
 function addManualOrderRelationshipFields(
   manualOrderFields: ManualOrderFieldConfig[] = [],
-  list: ListConfig<any, any>
+  list: ListConfig<any>
 ) {
   manualOrderFields.forEach((mo) => {
     if (!list.fields?.[mo.fieldName]) {
@@ -110,9 +110,9 @@ function addManualOrderRelationshipFields(
 
           // user disconnects/removes some relationship items.
           const disconnectIds =
-            resolvedData[
-              targetFieldName
-            ]?.disconnect?.map((obj: { id: number }) => obj.id.toString()) || []
+            resolvedData[targetFieldName]?.disconnect?.map(
+              (obj: { id: number }) => obj.id.toString()
+            ) || []
 
           // filtered out to-be-disconnected relationship items
           currentOrder = previousOrder.filter(({ id }: { id: string }) => {
@@ -179,7 +179,7 @@ function addManualOrderRelationshipFields(
  *  And the GQL resolver will be defined in `resolve` function.
  */
 function addVirtualFieldToReturnItemsInInputOrder(
-  list: ListConfig<any, any>,
+  list: ListConfig<any>,
   manualOrderField: ManualOrderFieldConfig
 ) {
   const virtualFieldName = `${manualOrderField.targetFieldName}InInputOrder`

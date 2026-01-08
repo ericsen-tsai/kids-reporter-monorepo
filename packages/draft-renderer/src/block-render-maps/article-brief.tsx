@@ -1,8 +1,9 @@
+import { DefaultDraftBlockRenderMap } from 'draft-js'
 import Immutable from 'immutable'
 import React from 'react'
 import styled from 'styled-components'
-import { DefaultDraftBlockRenderMap } from 'draft-js'
-import { Paragraph, List } from './article-content'
+
+import { List, Paragraph } from './article-content'
 
 const ParagraphForIntroduction = styled(Paragraph)`
   font-size: ${({ theme }) =>

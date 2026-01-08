@@ -57,9 +57,12 @@ model Post {
   ogDescription                              String               @default("")
   ogImage                                    Photo?               @relation("Post_ogImage", fields: [ogImageId], references: [id])
   ogImageId                                  Int?                 @map("ogImage")
-  opening                                    String               @default("")
   multipleChoiceQuestionsJSON                Json?                @default("[]")
   essayQuestionsJSON                         Json?                @default("[]")
+  opening                                    String               @default("")
+  postChoiceQuestions                        PostChoiceQuestion[] @relation("PostChoiceQuestion_post")
+  postEssayQuestions                         PostEssayQuestion[]  @relation("PostEssayQuestion_post")
+  showBaodaozai                              Boolean              @default(false)
   createdAt                                  DateTime?            @default(now())
   updatedAt                                  DateTime?            @updatedAt
   createdBy                                  User?                @relation("Post_createdBy", fields: [createdById], references: [id])
@@ -232,6 +235,14 @@ model SubSubcategory {
   @@index([subcategoryId])
 }
 
+model CallBaodaozaiIntro {
+  id        Int                        @id @default(autoincrement())
+  page      CallBaodaozaiIntroPageType @unique
+  content   String                     @default("")
+  createdAt DateTime?                  @default(now())
+  updatedAt DateTime?                  @updatedAt
+}
+
 model Tag {
   id                                        Int                  @id @default(autoincrement())
   slug                                      String               @unique @default("")
@@ -334,13 +345,127 @@ model OnlineUser {
 }
 
 model Member {
-  id                 String    @id @default(cuid())
-  name               String    @default("")
-  email              String    @default("")
-  twreporter_user_id String    @unique @default("")
-  role               String    @default("member")
-  createdAt          DateTime? @default(now())
-  updatedAt          DateTime? @updatedAt
+  id                              String                @id @default(cuid())
+  name                            String                @default("")
+  nickname                        String                @default("")
+  email                           String                @default("")
+  contactEmail                    String                @default("")
+  twreporter_user_id              String                @unique @default("")
+  role                            String                @default("member")
+  showBaodaozai                   Boolean               @default(true)
+  essayQuestionCount              Int?                  @default(1)
+  avatar                          MemberAvatar?         @relation("Member_avatar", fields: [avatarId], references: [id])
+  avatarId                        Int?                  @map("avatar")
+  createdAt                       DateTime?             @default(now())
+  updatedAt                       DateTime?             @updatedAt
+  from_MemberAvatar_member        MemberAvatar[]        @relation("MemberAvatar_member")
+  from_PostChoiceAnswer_member    PostChoiceAnswer[]    @relation("PostChoiceAnswer_member")
+  from_PostEssayAnswer_member     PostEssayAnswer[]     @relation("PostEssayAnswer_member")
+  from_PostEssayAnswerLike_member PostEssayAnswerLike[] @relation("PostEssayAnswerLike_member")
 
   @@index([email])
+  @@index([avatarId])
+}
+
+model MemberAvatar {
+  id                  Int       @id @default(autoincrement())
+  name                String    @default("")
+  imageFile_id        String?
+  imageFile_filesize  Int?
+  imageFile_width     Int?
+  imageFile_height    Int?
+  imageFile_extension String?
+  member              Member?   @relation("MemberAvatar_member", fields: [memberId], references: [id])
+  memberId            String?   @map("member")
+  createdAt           DateTime? @default(now())
+  updatedAt           DateTime? @updatedAt
+  from_Member_avatar  Member[]  @relation("Member_avatar")
+
+  @@index([memberId])
+}
+
+model PostChoiceAnswer {
+  id           Int                 @id @default(autoincrement())
+  question     PostChoiceQuestion? @relation("PostChoiceAnswer_question", fields: [questionId], references: [id])
+  questionId   Int?                @map("question")
+  member       Member?             @relation("PostChoiceAnswer_member", fields: [memberId], references: [id])
+  memberId     String?             @map("member")
+  choiceIndex  Int
+  correct      Boolean             @default(false)
+  compositeKey String?             @unique
+  createdAt    DateTime?           @default(now())
+  updatedAt    DateTime?           @updatedAt
+
+  @@index([questionId])
+  @@index([memberId])
+}
+
+model PostChoiceQuestion {
+  id        Int                @id @default(autoincrement())
+  post      Post?              @relation("PostChoiceQuestion_post", fields: [postId], references: [id])
+  postId    Int?               @map("post")
+  answers   PostChoiceAnswer[] @relation("PostChoiceAnswer_question")
+  title     String             @default("")
+  options   Json?              @default("[]")
+  reason    String             @default("")
+  createdAt DateTime?          @default(now())
+  updatedAt DateTime?          @updatedAt
+
+  @@index([postId])
+}
+
+model PostEssayAnswer {
+  id                              Int                   @id @default(autoincrement())
+  question                        PostEssayQuestion?    @relation("PostEssayAnswer_question", fields: [questionId], references: [id])
+  questionId                      Int?                  @map("question")
+  member                          Member?               @relation("PostEssayAnswer_member", fields: [memberId], references: [id])
+  memberId                        String?               @map("member")
+  content                         String                @default("")
+  likesCount                      Int                   @default(0)
+  compositeKey                    String?               @unique
+  createdAt                       DateTime?             @default(now())
+  updatedAt                       DateTime?             @updatedAt
+  from_PostEssayAnswerLike_answer PostEssayAnswerLike[] @relation("PostEssayAnswerLike_answer")
+
+  @@index([questionId])
+  @@index([memberId])
+  @@index([createdAt])
+}
+
+model PostEssayQuestion {
+  id        Int               @id @default(autoincrement())
+  post      Post?             @relation("PostEssayQuestion_post", fields: [postId], references: [id])
+  postId    Int?              @map("post")
+  title     String            @default("")
+  answers   PostEssayAnswer[] @relation("PostEssayAnswer_question")
+  hint      String            @default("")
+  createdAt DateTime?         @default(now())
+  updatedAt DateTime?         @updatedAt
+
+  @@index([postId])
+}
+
+model PostEssayAnswerLike {
+  id           Int              @id @default(autoincrement())
+  answer       PostEssayAnswer? @relation("PostEssayAnswerLike_answer", fields: [answerId], references: [id])
+  answerId     Int?             @map("answer")
+  member       Member?          @relation("PostEssayAnswerLike_member", fields: [memberId], references: [id])
+  memberId     String?          @map("member")
+  compositeKey String?          @unique
+  createdAt    DateTime?        @default(now())
+  updatedAt    DateTime?        @updatedAt
+
+  @@index([answerId])
+  @@index([memberId])
+}
+
+enum CallBaodaozaiIntroPageType {
+  home
+  all
+  topics
+  news
+  comics
+  campus
+  listeningNews
+  classroom
 }

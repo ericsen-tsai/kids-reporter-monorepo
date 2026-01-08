@@ -1,31 +1,31 @@
 import blockRenderMaps from './block-render-maps/index'
-import {
-  DraftRenderer,
-  ArticleBodyDraftRenderer,
-  ArticleIntroductionDraftRenderer,
-  ProjectContentDraftRenderer,
-} from './draft-renderer'
 import { atomicBlockRenderer } from './block-renderer-fn'
 import { blockRenderers } from './block-renderers'
+import { customStyleFn } from './custom-style-fn'
+import {
+  ArticleBodyDraftRenderer,
+  ArticleIntroductionDraftRenderer,
+  DraftRenderer,
+  ProjectContentDraftRenderer,
+} from './draft-renderer'
 import { annotationDecorator, linkDecorator } from './entity-decorators'
 import { ENTITY, findEntitiesByType } from './utils/entity'
-import { customStyleFn } from './custom-style-fn'
 
 const blockRenderMap = blockRenderMaps.content
 
 export {
+  annotationDecorator,
   ArticleBodyDraftRenderer,
   ArticleIntroductionDraftRenderer,
-  DraftRenderer,
-  ProjectContentDraftRenderer,
   atomicBlockRenderer,
-  blockRenderMap,
   blockRenderers,
+  blockRenderMap,
   customStyleFn,
-  annotationDecorator,
-  linkDecorator,
+  DraftRenderer,
   ENTITY,
   findEntitiesByType,
+  linkDecorator,
+  ProjectContentDraftRenderer,
 }
 
 export default {

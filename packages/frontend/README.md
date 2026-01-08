@@ -19,6 +19,7 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
 ## Environment Variables
+
 NextJS 將環境變數分成 public 和 non-public。
 public 的環境變數在命名上需要加上 `NEXT_PUBLIC_` 前綴，而 `NEXT_PUBLIC_` 開頭的環境變數在 build time（也就跑 `next build`）時會被 NextJS build 進 bundles 裡。
 non-public 的環境變數則只能使用在 server side，不會被 NextJS build 進 bundles。

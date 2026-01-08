@@ -1,119 +1,23 @@
+import { HeaderPostTitleSetter } from '@kids-reporter/routing-ui'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { TOC, TOCIndex } from './table-of-content'
-import Article from './article'
+
+import { getPost, getPostMeta } from '@/api/post'
 import {
-  KIDS_URL_ORIGIN,
-  GENERAL_DESCRIPTION,
-  POST_CONTENT_GQL,
-  OG_SUFFIX,
   ContentType,
-} from '@/app/constants'
-import { sendGQLRequest, log, LogLevel } from '@/app/utils'
+  GENERAL_DESCRIPTION,
+  KIDS_URL_ORIGIN,
+  OG_SUFFIX,
+} from '@/constants'
+import { BAODAOZAI_QUESTION_COUNT } from '@/constants/baodaozai-question-count'
+import { log, LogLevel } from '@/utils'
+
+import Article from '../../_components/article/article'
+import { TOC, TOCIndex } from '../../_components/article/table-of-content'
 
 const topicRelatedPostsNum = 5
-
-const heroImageGQL = `
-  heroImage {
-    imageFile {
-      width
-      height
-    }
-    resized {
-      small
-      medium
-      large
-    }
-  }
-`
-
-const categoryGQL = `
-  subSubcategoriesOrdered {
-    name
-    slug
-    subcategory {
-      name
-      slug
-      category {
-        name
-        slug
-        themeColor
-      }
-    }
-  }
-`
-
-const postGQL = `
-  query($where: PostWhereUniqueInput!, $orderBy: [NewsReadingGroupItemOrderByInput!]!, $take: Int, $relatedPostsWhere: PostWhereInput!) {
-    post(where: $where) {
-      title
-      newsReadingGroup {
-        items (orderBy: $orderBy){
-          name
-          embedCode
-        }
-      }
-      brief
-      content
-      publishedDate
-      ${heroImageGQL}
-      heroCaption
-      authors {
-        avatar {
-          resized {
-            tiny
-          }
-        }
-        bio
-        id
-        name
-        slug
-      }
-      authorsJSON
-      tagsOrdered {
-        name
-        slug
-      }
-      relatedPostsOrdered {
-        title
-        slug
-        publishedDate
-        ${heroImageGQL}
-        ogDescription
-        ${categoryGQL}
-      }
-      subtitle
-      ${categoryGQL}
-      mainProject {
-        title
-        slug
-      }
-      projects {
-        title
-        slug
-        relatedPosts(take: $take, where: $relatedPostsWhere) {
-          ${POST_CONTENT_GQL}
-        }
-      }
-    }
-  }
-`
-
-const metaGQL = `
-query($where: PostWhereUniqueInput!) {
-  post(where: $where) {
-    publishedDate
-    ogDescription
-    ogTitle
-    ogImage {
-      resized {
-        small
-      }
-    }
-    ${categoryGQL}
-  }
-}
-`
+const postEssayQuestionsTake = BAODAOZAI_QUESTION_COUNT
+const postChoiceQuestionsTake = BAODAOZAI_QUESTION_COUNT
 
 export async function generateMetadata({
   params,
@@ -122,15 +26,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const slug = params.slug
 
-  const postMetaRes = await sendGQLRequest({
-    query: metaGQL,
-    variables: {
-      where: {
-        slug: slug,
-      },
+  const postMeta = await getPostMeta({
+    where: {
+      slug: slug,
     },
   })
-  const postMeta = postMetaRes?.data?.data?.post
+
   if (!postMeta) {
     log(LogLevel.WARNING, `Post meta not found! ${params.slug}`)
   }
@@ -175,22 +76,20 @@ export default async function PostPage({
     notFound()
   }
 
-  const postRes = await sendGQLRequest({
-    query: postGQL,
-    variables: {
-      where: {
-        slug: slug,
-      },
-      relatedPostsWhere: {
-        slug: {
-          notIn: slug,
-        },
-      },
-      orderBy: [{ order: 'asc' }],
-      take: topicRelatedPostsNum,
+  const post = await getPost({
+    where: {
+      slug: slug,
     },
+    relatedPostsWhere: {
+      slug: {
+        notIn: [slug],
+      },
+    },
+    orderBy: [{ order: 'asc' }],
+    take: topicRelatedPostsNum,
+    postEssayQuestionsTake,
+    postChoiceQuestionsTake,
   })
-  const post = postRes?.data?.data?.post
   if (!post) {
     log(LogLevel.WARNING, `Post not found! ${slug}`)
     notFound()
@@ -211,9 +110,10 @@ export default async function PostPage({
   })
 
   return (
-    <main className="flex flex-col items-center max-w-screen-2xl">
+    <main className="mx-auto flex max-w-(--breakpoint-2xl) flex-col items-center">
+      <HeaderPostTitleSetter postTitle={post?.title} />
       {tocIndexes.length > 0 && <TOC indexes={tocIndexes} />}
-      {post && <Article post={post} />}
+      {post && <Article post={post} slug={slug} />}
     </main>
   )
 }

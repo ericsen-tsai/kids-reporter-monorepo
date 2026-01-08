@@ -1,7 +1,7 @@
 import { Storage } from '@google-cloud/storage'
-import fetch from 'node-fetch'
 // @ts-ignore `@twreporter/errors` does not have tyepscript definition file yet
 import _errors from '@twreporter/errors'
+import fetch from 'node-fetch'
 
 // @twreporter/errors is a cjs module, therefore, we need to use its default property
 const errors = _errors.default

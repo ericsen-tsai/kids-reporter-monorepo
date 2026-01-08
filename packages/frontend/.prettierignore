@@ -1,0 +1,21 @@
+# Build outputs
+.next/
+.next/**
+/out/
+/build
+lib/
+dist/
+
+# Generated files
+*.tsbuildinfo
+next-env.d.ts
+
+# Cache
+.eslintcache
+
+# OS
+.DS_Store
+
+# Environment
+.env*.local
+.env

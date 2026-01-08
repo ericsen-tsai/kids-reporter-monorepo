@@ -2,16 +2,16 @@ export default async function Error() {
   return (
     <div
       style={{ width: '95vw' }}
-      className="flex flex-col justify-center items-center mb-16"
+      className="mb-16 flex flex-col items-center justify-center"
     >
       <img
-        className="max-w-72 md:max-w-md lg:max-w-xl w-full mt-20 mb-16"
+        className="mt-20 mb-16 w-full max-w-72 md:max-w-md lg:max-w-xl"
         src="./assets/images/500_error.png"
         alt="500 Internal Server Error"
         loading="lazy"
       />
-      <div className="flex flex-col justify-center items-center gap-2.5">
-        <h1 className="text-3xl md:text-4xl font-bold">伺服器遭遇困難⋯⋯</h1>
+      <div className="flex flex-col items-center justify-center gap-2.5">
+        <h1 className="text-3xl font-bold md:text-4xl">伺服器遭遇困難⋯⋯</h1>
         <span
           style={{
             fontFamily: 'var(--fontFamily)',

@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import { ContentState } from 'draft-js'
-import { AlertDialog } from '@keystone-ui/modals'
 import { TextInput } from '@keystone-ui/fields'
+import { AlertDialog } from '@keystone-ui/modals'
 import { linkDecorator } from '@kids-reporter/draft-renderer'
+import { ContentState } from 'draft-js'
+import { useEffect, useState } from 'react'
+
 import { EditableWrapper } from './wrapper'
 
 export const LinkEditor = (props: {

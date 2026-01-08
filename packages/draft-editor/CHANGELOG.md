@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.18
+
+### Patch Changes
+
+- babel config update
+- Updated dependencies
+  - @kids-reporter/draft-renderer@1.0.13
+
 ## 1.0.15
 
 ### Patch Changes

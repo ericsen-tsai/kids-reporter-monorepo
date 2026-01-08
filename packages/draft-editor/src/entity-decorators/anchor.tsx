@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
-import { ContentState } from 'draft-js'
-import { AlertDialog } from '@keystone-ui/modals'
 import { TextInput } from '@keystone-ui/fields'
+import { AlertDialog } from '@keystone-ui/modals'
 import { ENTITY, findEntitiesByType } from '@kids-reporter/draft-renderer'
+import { ContentState } from 'draft-js'
+import React, { Fragment, useEffect, useState } from 'react'
+import styled from 'styled-components'
 
 const AnchorWrapper = styled.span`
   display: inline;
@@ -118,7 +118,7 @@ const EditableAnchor = (props: {
   }
 
   return (
-    <React.Fragment>
+    <Fragment>
       {isModalOpen && (
         <AnchorIDEditor
           isOpen={isModalOpen}
@@ -143,7 +143,7 @@ const EditableAnchor = (props: {
         </AnchorEditButton>
         <span>{children}</span>
       </AnchorWrapper>
-    </React.Fragment>
+    </Fragment>
   )
 }
 

@@ -1,0 +1,1 @@
+export const DEFAULT_PAGE_ITEM_COUNT = 5

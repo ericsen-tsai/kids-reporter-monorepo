@@ -1,4 +1,4 @@
-import express from 'express' // eslint-disable-line
+import express from 'express'
 
 /**
  *  Follow [Writing structured logs](https://cloud.google.com/run/docs/logging#writing_structured_logs)
@@ -16,9 +16,8 @@ function getGlobalLogFields(req: express.Request, projectId: string) {
   const traceHeader = req.header('X-Cloud-Trace-Context')
   if (traceHeader && projectId) {
     const [trace] = traceHeader.split('/')
-    globalLogFields[
-      'logging.googleapis.com/trace'
-    ] = `projects/${projectId}/traces/${trace}`
+    globalLogFields['logging.googleapis.com/trace'] =
+      `projects/${projectId}/traces/${trace}`
   }
   return globalLogFields
 }
@@ -35,8 +34,8 @@ export function createLoggerMw(projectId: string): express.RequestHandler {
       authHeader && authHeader.startsWith('Bearer ')
         ? 'Bearer ***REDACTED***'
         : authHeader
-        ? '***REDACTED***'
-        : undefined
+          ? '***REDACTED***'
+          : undefined
 
     console.log(
       JSON.stringify({

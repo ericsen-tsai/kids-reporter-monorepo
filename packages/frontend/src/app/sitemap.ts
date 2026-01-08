@@ -11,11 +11,12 @@ Therefore, so far we can't upgrade to v13.5.4 due to #56018 & #54057 remains.
 */
 
 import { MetadataRoute } from 'next'
-import { KIDS_URL_ORIGIN } from '@/app/constants'
-import { sendGQLRequest } from '@/app/utils'
-import { isProduction } from '@/environment-variables'
 
-export const revalidate = isProduction ? 86400 : 0 // 1 day
+import { KIDS_URL_ORIGIN } from '@/constants'
+import envVars from '@/environment-variables'
+import { sendGQLRequest } from '@/utils'
+
+export const revalidate = envVars.isProduction ? 86400 : 0 // 1 day
 
 const postsGQL = `
 query($where: PostWhereInput!) {

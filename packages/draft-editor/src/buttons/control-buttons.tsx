@@ -1,10 +1,10 @@
+import { EditorState } from 'draft-js'
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { EditorState } from 'draft-js'
 
 export const buttonStyle = css<{
-  isDisabled: boolean
-  readOnly: boolean
+  isDisabled?: boolean
+  readOnly?: boolean
   isActive?: boolean
 }>`
   cursor: pointer;
@@ -57,7 +57,11 @@ export const buttonStyle = css<{
   }};
 `
 
-const CustomButton = styled.div`
+const CustomButton = styled.div<{
+  isDisabled: boolean
+  isActive: boolean
+  readOnly: boolean
+}>`
   ${buttonStyle}
 `
 
