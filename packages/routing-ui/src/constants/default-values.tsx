@@ -76,10 +76,12 @@ export const MENU_ITEMS: MenuItem[] = [
   },
 ]
 
+export const READING_SETTINGS_URL = '/custom'
+
 export const ADDITIONAL_MENU_ITEMS: MenuItem[] = [
   {
     label: '閱讀探索設定',
-    href: '/reading-settings',
+    href: READING_SETTINGS_URL,
     subItems: [],
     showIcon: true,
     icon: <SettingsIconSmall />,
