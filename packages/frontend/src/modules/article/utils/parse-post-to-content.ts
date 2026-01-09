@@ -64,7 +64,8 @@ function parsePostToContent(post: NonNullable<GetPostQuery['post']>) {
         }
         const avatarURL = author?.avatar?.resized?.tiny
         return {
-          slug: author.slug,
+          id: author.id,
+          slug: author.slug ?? '',
           name: author.name ?? '',
           avatar: avatarURL ?? DEFAULT_AVATAR,
           bio: author.bio ?? '',

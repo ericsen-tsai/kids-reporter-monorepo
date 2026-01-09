@@ -9,7 +9,6 @@ import {
 import { useRouter } from 'next/navigation'
 import { useCallback, useMemo, useState } from 'react'
 
-import AuthorCard from '@/components/author-card'
 import { FontSizeLevel } from '@/constants'
 import { BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT } from '@/constants/baodaozai-question-count'
 import { SeparateIcon } from '@/icons'
@@ -28,6 +27,7 @@ import getLoginUrl from '@/utils/get-login-url'
 import CallToAction from './call-to-action'
 import ArticleBaodaozaiEventTrigger from './components/article-baodaozai-event-trigger'
 import ArticleSummary from './components/article-summary'
+import Authors from './components/authors'
 import NewsReading from './components/news-reading'
 import PopularKeywords from './components/popular-keywords'
 import PostRenderer from './components/post-renderer'
@@ -319,7 +319,7 @@ const ArticleModule = ({
         </ArticleContext.Provider>
       </div>
 
-      <AuthorCard title="誰幫我們完成這篇文章" authors={orderedAuthors} />
+      <Authors authors={orderedAuthors} />
 
       <div className="relative w-full">
         {/* related posts enters 50% of the viewport*/}
