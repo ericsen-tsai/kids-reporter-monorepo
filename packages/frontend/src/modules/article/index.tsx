@@ -122,19 +122,8 @@ const ArticleModule = ({
     }))
   }, [post?.newsReadingGroup?.items])
 
-  const showBaodaozai = (() => {
-    if (post?.showBaodaozai === true && !isLogin) {
-      return true
-    }
-    if (
-      post?.showBaodaozai === true &&
-      isLogin &&
-      member?.showBaodaozai === true
-    ) {
-      return true
-    }
-    return false
-  })()
+  const showBaodaozai =
+    post?.showBaodaozai === true && (!isLogin || member?.showBaodaozai === true)
 
   const essayQuestionCount = isLogin
     ? (member?.essayQuestionCount ?? BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT)

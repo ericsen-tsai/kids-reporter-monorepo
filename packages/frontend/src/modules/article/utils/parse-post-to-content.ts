@@ -21,36 +21,25 @@ function parsePostToContent(post: NonNullable<GetPostQuery['post']>) {
     role: string
     type: 'link' | 'string'
   }[]
-  const authorsInBrief: AuthorGroup[] = []
-  let currentAuthorRole = '',
-    currentAuthors: { name: string; link: string }[] = []
 
-  authorsJSON?.forEach((authorJSON, index) => {
-    const author = post?.authors?.find((a) => a?.id === authorJSON?.id)
-    const authName = author ? (author.name ?? '') : authorJSON.name
-    const authorObj = author
-      ? {
-          name: authName,
-          link: `/author/${author.slug}`,
-        }
-      : {
-          name: authName,
-          link: '',
-        }
-    if (index === 0 || authorJSON.role === authorsJSON[index - 1]?.role) {
-      currentAuthorRole = authorJSON.role
-      currentAuthors.push(authorObj)
-    } else {
-      authorsInBrief.push({ title: currentAuthorRole, authors: currentAuthors })
-      currentAuthorRole = authorJSON.role
-      currentAuthors = [authorObj]
-    }
+  const authorsInBrief: AuthorGroup[] = (authorsJSON ?? []).reduce(
+    (acc: AuthorGroup[], authorJSON) => {
+      const author = post?.authors?.find((a) => a?.id === authorJSON?.id)
+      const authorObj = {
+        name: author?.name ?? authorJSON.name,
+        link: author?.slug ? `/author/${author.slug}` : '',
+      }
 
-    if (index === authorsJSON?.length - 1) {
-      authorsInBrief.push({ title: currentAuthorRole, authors: currentAuthors })
-    }
-  })
-
+      const authorGroup = acc.find((group) => group.title === authorJSON.role)
+      if (authorGroup) {
+        authorGroup.authors.push(authorObj)
+      } else {
+        acc.push({ title: authorJSON.role, authors: [authorObj] })
+      }
+      return acc
+    },
+    [] as AuthorGroup[]
+  )
   // Assemble ordered authors for AuthorCard
   type AuthorWithLink = Author & { link: string }
   const authors: AuthorWithLink[] =
