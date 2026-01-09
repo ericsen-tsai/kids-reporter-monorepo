@@ -10,7 +10,6 @@ import { useRouter } from 'next/navigation'
 import { useCallback, useMemo, useState } from 'react'
 
 import AuthorCard from '@/components/author-card'
-import Tags from '@/components/tags'
 import { FontSizeLevel } from '@/constants'
 import { BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT } from '@/constants/baodaozai-question-count'
 import { SeparateIcon } from '@/icons'
@@ -30,6 +29,7 @@ import CallToAction from './call-to-action'
 import ArticleBaodaozaiEventTrigger from './components/article-baodaozai-event-trigger'
 import ArticleSummary from './components/article-summary'
 import NewsReading from './components/news-reading'
+import PopularKeywords from './components/popular-keywords'
 import PostRenderer from './components/post-renderer'
 import RelatedArticles from './components/related-articles'
 import StartReadingBaodaozaiEventTrigger from './components/start-reading-baodaozai-event-trigger'
@@ -39,6 +39,7 @@ import Toolbar from './components/toolbar'
 import { ArticleContext } from './context'
 import useBatchSubmitAnswers from './hooks/use-batch-submit-answers'
 import ImageModal from './image-modal'
+import { Keyword } from './types'
 import parsePostToContent from './utils/parse-post-to-content'
 import parseTocIndexesFromEntityMap from './utils/parse-toc-indexes-from-entity-map'
 
@@ -120,14 +121,6 @@ const ArticleModule = ({
       embedCode: item.embedCode ?? '',
     }))
   }, [post?.newsReadingGroup?.items])
-
-  const tags = useMemo(() => {
-    if (!post?.tagsOrdered) return []
-    return post.tagsOrdered.map((tag) => ({
-      name: tag.name ?? '',
-      slug: tag.slug ?? '',
-    }))
-  }, [post.tagsOrdered])
 
   const showBaodaozai = (() => {
     if (post?.showBaodaozai === true && !isLogin) {
@@ -226,6 +219,13 @@ const ArticleModule = ({
     [post.content?.entityMap]
   )
 
+  const keywords = useMemo(() => {
+    if (!post?.tagsOrdered) return []
+    return post.tagsOrdered.filter(
+      (tag): tag is Keyword => tag.name !== undefined
+    )
+  }, [post.tagsOrdered])
+
   return (
     <>
       <BaodaozaiVisibilitySetter show={showBaodaozai} />
@@ -304,7 +304,7 @@ const ArticleModule = ({
               </div>
             </div>
 
-            {post?.tagsOrdered && <Tags title="常用關鍵字" tags={tags} />}
+            {keywords.length > 0 && <PopularKeywords keywords={keywords} />}
             <ArticleBaodaozaiEventTrigger
               id="show-ask-questions"
               disabled={!isScrollingDown}
