@@ -139,7 +139,7 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
   return (
     <nav
       ref={menuContainerRef}
-      className="fixed top-0 left-0 z-1002 print:hidden"
+      className="fixed top-0 left-0 z-1000 print:hidden"
       aria-label="文章目錄"
     >
       <button
