@@ -35,6 +35,7 @@ const tellYouItems = [
 
 const teamMembers = [
   {
+    id: 'jill718',
     slug: 'jill718',
     name: '楊惠君',
     role: AuthorRole.REVIEWERS,
@@ -43,6 +44,7 @@ const teamMembers = [
     bio: '總監工作就是「總兼」，把大家的企畫統合。我也是一名記者，和團隊努力把重要的新聞事件，轉成豐富的報導，讓大家更認識這個世界和自己。',
   },
   {
+    id: 'shaowen',
     slug: 'shaowen',
     name: '邱紹雯',
     role: AuthorRole.AUDITORS,
@@ -51,6 +53,7 @@ const teamMembers = [
     bio: '主編是協助稿件從企劃到編輯完成的主要橋樑。我也負責Podcast及教案，以多元呈現方式，將議題轉成孩子有興趣閱讀、老師家長能應用的教材。',
   },
   {
+    id: 'sofia-wei',
     slug: 'sofia-wei',
     name: '韋麗文',
     role: AuthorRole.AUDITORS,
@@ -59,6 +62,7 @@ const teamMembers = [
     bio: '主編，是從世界的紋理中發掘新聞議題，帶領團隊深入挖掘故事，讓報導既有深度，也有溫度。引領議題的開局，讓對話持續延展，正是新聞工作的魅力。',
   },
   {
+    id: 'wang-wei-han',
     slug: 'wang-wei-han',
     name: '王崴漢',
     role: AuthorRole.AUDITORS,
@@ -67,6 +71,7 @@ const teamMembers = [
     bio: '記者工作是在對的時機點，向社會拋出新的疑問，激發讀者對生命更深層、更深刻的思辨。期許自己能用文字及影像參與並記下具時代意義的重要現場。',
   },
   {
+    id: 'kl-wu',
     slug: 'kl-wu',
     name: '吳冠伶',
     role: AuthorRole.EDITORS,
@@ -75,6 +80,7 @@ const teamMembers = [
     bio: '將內容編織成篇，在網頁上呈現，幫助讀者易消化、好吸收，就是我身為編輯的任務。我也仔細核對資訊是否正確，讓大家可以安心服用我們的文章。',
   },
   {
+    id: 'hychen',
     slug: 'hychen',
     name: '黃禹禛',
     role: AuthorRole.DESIGNERS,
@@ -83,6 +89,7 @@ const teamMembers = [
     bio: '在這裡所有圖表、插畫、圖文故事，大大小小的視覺元素，都是由設計師或插畫家完成。我希望透過圖像的力量，幫助讀者理解事件、開啟對世界的想像！',
   },
   {
+    id: 'chen-li-ting',
     slug: 'chen-li-ting',
     name: '陳麗婷',
     role: AuthorRole.AUDITORS,
@@ -91,6 +98,7 @@ const teamMembers = [
     bio: '記者的工作是將每位人物的故事、事件歷程，透過每次的訪問記錄下來，寫成大家能夠讀懂的文章，讓讀者看到來自各領域的不同面貌，獲取更多資訊。',
   },
   {
+    id: 'shakingwave',
     slug: 'shakingwave',
     name: '余志偉',
     role: AuthorRole.PHOTOGRAPHERS,
@@ -99,6 +107,7 @@ const teamMembers = [
     bio: '我在左腦擅長理性邏輯的學習中，用圖像刺激右腦感性創意的思考，依報導內容開發出兼具資訊事實、引人入勝的圖像，讓報導有趣，豐富閱讀多重體驗。',
   },
   {
+    id: 'jheng-han-wun',
     slug: 'jheng-han-wun',
     name: '鄭涵文',
     role: AuthorRole.DESIGNERS,
@@ -110,6 +119,7 @@ const teamMembers = [
 
 const consultants = [
   {
+    id: 'chen-ming-lei',
     slug: '',
     name: '陳明蕾',
     role: AuthorRole.CONSULTANTS,
@@ -118,6 +128,7 @@ const consultants = [
     bio: '清華大學台灣語言研究與教學研究所副教授，同時亦主持清大柯華葳教授閱讀研究中心。',
   },
   {
+    id: 'lin-mei-ling',
     slug: '',
     name: '林玫伶',
     role: AuthorRole.CONSULTANTS,
@@ -126,6 +137,7 @@ const consultants = [
     bio: '曾任台北市大橋、明德、士東、國語實驗國小校長，現為清華大學竹師教育學院客座助理教授、台灣閱讀文化基金會數位閱讀推廣顧問。',
   },
   {
+    id: 'huang-hui-ling',
     slug: '',
     name: '黃惠鈴',
     role: AuthorRole.CONSULTANTS,
@@ -134,6 +146,7 @@ const consultants = [
     bio: '曾在媒體與出版工作，曾獲出版與文學獎，出過一些書與繪本，現勤於創作與企劃、諮商，在大學兼任繪本與兒童文學課程。',
   },
   {
+    id: 'chen-rong-yu',
     slug: '',
     name: '陳榮裕',
     role: AuthorRole.CONSULTANTS,
