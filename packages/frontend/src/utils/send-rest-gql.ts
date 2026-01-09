@@ -1,7 +1,7 @@
 import errors from '@twreporter/errors'
 import axios, { AxiosResponse } from 'axios'
 
-import { REST_GQL_ENDPOINT } from '@/constants'
+import { INTERNAL_REST_GQL_ENDPOINT, REST_GQL_ENDPOINT } from '@/constants'
 
 import { log, LogLevel } from './log'
 import { AXIOS_TIMEOUT } from './send-gql-request'
@@ -24,7 +24,12 @@ export async function sendRestGqlRequest<TData = Record<string, unknown>>({
   authToken?: string
   signal?: AbortSignal
 }) {
-  const url = `${REST_GQL_ENDPOINT}/${operation}`
+  let url
+  if (typeof window === 'undefined') {
+    url = `${INTERNAL_REST_GQL_ENDPOINT}/${operation}`
+  } else {
+    url = `${REST_GQL_ENDPOINT}/${operation}`
+  }
 
   let response: AxiosResponse<GraphQLResponse<TData>> | undefined
   try {
