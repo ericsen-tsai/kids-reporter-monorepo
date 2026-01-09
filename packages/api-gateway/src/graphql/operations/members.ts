@@ -60,12 +60,10 @@ export const operations: Record<string, Operation> = {
     operationName: 'GetMemberPostsWithAnswers',
     document: `
       query GetMemberPostsWithAnswers(
-        $memberId: ID!
         $take: Int
         $nextCursor: String
       ) {
         getMemberPostsWithAnswers(
-          memberId: $memberId
           take: $take
           cursor: $nextCursor
         )
@@ -73,12 +71,7 @@ export const operations: Record<string, Operation> = {
     `,
     buildVariables: (req) => {
       const input = ensureRecord(parseVars(req), 'Missing variables')
-      const memberId = input.memberId
-      if (typeof memberId !== 'string') {
-        throw new Error('Missing memberId')
-      }
       return {
-        memberId,
         take: toInt(input.take),
         nextCursor:
           typeof input.nextCursor === 'string' ? input.nextCursor : undefined,

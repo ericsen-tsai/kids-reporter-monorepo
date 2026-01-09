@@ -34,7 +34,7 @@ export function EditableImage(props: AtomicBlockProps<EntityData>) {
   const entityKey = block.getEntityAt(0)
   const entity = contentState.getEntity(entityKey)
   const data = entity.getData() || {}
-  const { alignment: _alignment, ...imageWithMeta } = data // eslint-disable-line
+  const { alignment: _alignment, ...imageWithMeta } = data
 
   const onChange: ImageSelectorOnChangeFn = (selectedImages, alignment) => {
     // close `ImageSelector`
