@@ -9,10 +9,7 @@ import {
 
 import config from '../config'
 import { allowAllRoles } from './utils/access-control-list'
-import {
-  makeMemberOwnedFilter,
-  memberOwnedOperationAccess,
-} from './utils/member-owned-access'
+import { memberOwnedOperationAccess } from './utils/member-owned-access'
 
 const ALLOWED_IMAGE_TYPES = [
   'image/jpeg',
@@ -25,7 +22,6 @@ const ALLOWED_IMAGE_TYPES = [
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024 // 5MB
 
 const operationAccessControl = memberOwnedOperationAccess
-const filterAccessControl = makeMemberOwnedFilter('self')
 export default list({
   fields: {
     name: text({
@@ -77,13 +73,13 @@ export default list({
     operation: {
       query: allowAllRoles(),
       create: operationAccessControl,
-      update: operationAccessControl,
+      update: () => false,
       delete: operationAccessControl,
     },
     filter: {
       query: undefined,
-      update: filterAccessControl,
-      delete: filterAccessControl,
+      update: undefined,
+      delete: () => ({ member: null }),
     },
   },
   hooks: {
