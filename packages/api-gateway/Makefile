@@ -25,7 +25,7 @@ dev-server:
 	fi
 
 dev:
-	yarn nodemon -e ts --exec make dev-server
+	yarn nodemon -w ./src -e ts --exec make dev-server
 
 start: build-dist
 	@echo "$(P) Start production server"
