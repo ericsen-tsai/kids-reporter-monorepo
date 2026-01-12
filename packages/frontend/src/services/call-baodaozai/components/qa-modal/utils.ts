@@ -3,12 +3,14 @@ import {
   BaodaozaiQuestion,
   BaodaozaiQuestions,
 } from '../../types'
+import { QAModalMode } from './types'
 
 type EssayStep = {
   type: 'essay'
   title: string
   tips: string
   questionIndex: number
+  defaultAnswer?: string
   onNext: () => void
   onPass: () => void
 }
@@ -49,6 +51,7 @@ const parseQuestionToStep = ({
   onNext,
   onPass,
   onSubmit,
+  mode = 'default',
 }: {
   question: BaodaozaiQuestion
   questionIndex: number
@@ -56,6 +59,7 @@ const parseQuestionToStep = ({
   onNext: () => void
   onPass: (questionIndex: number) => void
   onSubmit: () => void
+  mode?: QAModalMode
 }): ModalStep => {
   if (question.type === 'essay') {
     return {
@@ -63,8 +67,9 @@ const parseQuestionToStep = ({
       title: question.title,
       tips: question.hint,
       questionIndex,
-      onNext,
+      onNext: mode === 'update' ? onSubmit : onNext,
       onPass: isLastQuestion ? onSubmit : () => onPass(questionIndex),
+      defaultAnswer: question.defaultAnswer,
     }
   }
 
@@ -117,11 +122,13 @@ export const getModalStepsFromQuestions = ({
   onNext,
   onPass,
   onSubmit,
+  mode = 'default',
 }: {
   questions: BaodaozaiQuestions
   onNext: () => void
   onPass: (questionIndex: number) => void
   onSubmit: () => void
+  mode?: QAModalMode
 }): ModalStep[] => {
   return questions.reduce<ModalStep[]>((steps, question, index) => {
     const questionStep = parseQuestionToStep({
@@ -131,7 +138,11 @@ export const getModalStepsFromQuestions = ({
       onNext,
       onPass,
       onSubmit,
+      mode,
     })
+    if (mode === 'update') {
+      return [...steps, questionStep]
+    }
     const resultStep = parseAnswerToResultStep({
       question,
       questionIndex: index,
@@ -141,4 +152,18 @@ export const getModalStepsFromQuestions = ({
     })
     return [...steps, questionStep, resultStep]
   }, [])
+}
+
+export const getDefaultAnswerFromQuestions = (
+  questions: BaodaozaiQuestions
+): Record<number, string> => {
+  return questions.reduce<Record<number, string>>(
+    (answers, question, index) => {
+      if (question.type === 'essay' && question.defaultAnswer) {
+        return { ...answers, [index]: question.defaultAnswer }
+      }
+      return answers
+    },
+    {}
+  )
 }

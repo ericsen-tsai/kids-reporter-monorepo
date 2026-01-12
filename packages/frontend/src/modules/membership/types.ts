@@ -3,6 +3,7 @@ import { z } from 'zod'
 
 export type PostQuestionAnswers = {
   title: string
+  slug: string
   href: string
   answers: (PostChoiceAnswer | PostEssayAnswer)[]
   lastAnsweredTime: string
