@@ -16,7 +16,7 @@ build-dist:
 
 dev-server:
 	@echo "$(P) Start dev server"
-	@make build-dist && \
+	@$(MAKE) build-dist && \
 	if [ -f "$(ENV_FILE)" ]; then \
 		NODE_ENV=development $(DOTENV) node dist/server; \
 	else \
@@ -47,4 +47,4 @@ clean:
 	rm -rf dist/
 	rm -f tsconfig.tsbuildinfo
 
-.PHONY: build clean build-dist
+.PHONY: build clean build-dist help dev-server dev start lint
