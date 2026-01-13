@@ -8,11 +8,15 @@ help:
 
 build-dist:
 	@echo "$(P) Transpile typescript files"
+	@if [ ! -d dist ]; then \
+		echo "$(P) dist/ missing, clearing incremental cache"; \
+		rm -f tsconfig.tsbuildinfo; \
+	fi
 	yarn tsc
 
 dev-server:
 	@echo "$(P) Start dev server"
-	@yarn tsc && \
+	@$(MAKE) build-dist && \
 	if [ -f "$(ENV_FILE)" ]; then \
 		NODE_ENV=development $(DOTENV) node dist/server; \
 	else \
@@ -21,7 +25,7 @@ dev-server:
 	fi
 
 dev:
-	yarn nodemon -e ts --exec make dev-server
+	yarn nodemon -w ./src -e ts --exec make dev-server
 
 start: build-dist
 	@echo "$(P) Start production server"
@@ -41,5 +45,6 @@ lint:
 clean:
 	@echo "$(P) Clean dist/"
 	rm -rf dist/
+	rm -f tsconfig.tsbuildinfo
 
-.PHONY: build clean build-dist
+.PHONY: build clean build-dist help dev-server dev start lint
