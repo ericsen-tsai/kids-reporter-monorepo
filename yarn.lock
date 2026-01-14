@@ -6268,6 +6268,8 @@ __metadata:
     cors: "npm:^2.8.5"
     dotenv-cli: "npm:^10.0.0"
     express: "npm:^4.18.2"
+    graphql: "npm:^16.8.1"
+    graphql-tag: "npm:^2.12.6"
     http-proxy-middleware: "npm:^2.0.6"
     nodemon: "npm:^2.0.20"
     typescript: "npm:5.9.2"
