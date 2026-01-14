@@ -29,8 +29,8 @@ function Member() {
             avatar={member?.avatar?.url ?? ''}
             name={member?.name ?? ''}
           />
-          <div className="flex flex-col items-center gap-0">
-            <h2 className="text-center prose-h5-small text-neutral-900">
+          <div className="flex w-full flex-col items-center gap-0 px-6">
+            <h2 className="w-full truncate text-center prose-h5-small text-neutral-900">
               {member?.name ?? ''}
             </h2>
             <p className="mt-0 text-center prose-p1 text-neutral-700">

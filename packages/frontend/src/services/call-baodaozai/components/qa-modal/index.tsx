@@ -282,8 +282,8 @@ function QAModal({
                 <h2 className="text-center prose-h6-large text-neutral-900">
                   {answers[currentModalStep.questionIndex] ===
                   currentModalStep.correctAnswerIndex.toString()
-                    ? '答對了～'
-                    : '再接再厲'}
+                    ? '厲害厲害！'
+                    : '差了一點，別氣餒！'}
                 </h2>
               </div>
 
@@ -355,7 +355,7 @@ function QAModal({
 
             <div className="w-full bg-neutral-100 p-6 pb-10 tablet:pb-6">
               <div className="mb-4">
-                <p className="mb-4 prose-p1 text-neutral-700">你的回答：</p>
+                <p className="mb-4 prose-p1 text-neutral-700">你送出的回答：</p>
                 <div className="w-full rounded-2xl border-2 border-neutral-200 bg-white p-4">
                   <span className="prose-p1-bold text-wrap break-words text-neutral-900">
                     {currentAnswer}
