@@ -15,7 +15,11 @@ import {
   DialogTitle,
 } from '@/components/dialog'
 import { FALLBACK_IMG } from '@/constants'
-import { ArticleShortcutIconLarge, XIcon } from '@/icons/miscellaneous'
+import {
+  ArticleShortcutIconLarge,
+  IdeaHubShortcutIcon,
+  XIcon,
+} from '@/icons/miscellaneous'
 
 import ModalQuestionCard from './modal-question-card'
 
@@ -23,12 +27,14 @@ type PostEssayQuestionsModalProps = {
   postSlug: string
   open: boolean
   onClose: () => void
+  mode?: 'default' | 'in-article'
 }
 
 function PostEssayQuestionsModal({
   postSlug,
   open,
   onClose,
+  mode = 'default',
 }: PostEssayQuestionsModalProps) {
   const { data: post, isPending } = usePostEssayQuestionsByPostSlugQuery({
     slug: postSlug,
@@ -171,10 +177,16 @@ function PostEssayQuestionsModal({
 
                 <div className="flex items-center justify-center gap-4">
                   <Link
-                    href={`/article/${postSlug}`}
+                    href={
+                      mode === 'default' ? `/article/${postSlug}` : '/idea-hub'
+                    }
                     className="flex size-10 items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:bg-neutral-white/50"
                   >
-                    <ArticleShortcutIconLarge />
+                    {mode === 'default' ? (
+                      <ArticleShortcutIconLarge />
+                    ) : (
+                      <IdeaHubShortcutIcon />
+                    )}
                   </Link>
                   <DialogClose className="flex size-10 cursor-pointer items-center justify-center gap-1 rounded-full bg-neutral-white/30 text-neutral-white hover:bg-neutral-white/50">
                     <XIcon />
