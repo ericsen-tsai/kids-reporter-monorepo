@@ -10,16 +10,58 @@ import { operations } from '../graphql/operations.js'
 const errors = _errors.default
 const statusCodes = consts.statusCodes
 const MAX_LOG_BODY_BYTES = 1024
+const SLOW_THRESHOLD_MS = consts.slowThresholdMs
 const CLIENT_GQL_ERROR_CODES = new Set([
   'BAD_USER_INPUT',
   'GRAPHQL_VALIDATION_FAILED',
 ])
 
+const summarizeParams = (
+  variables: Record<string, unknown>
+): Record<string, unknown> | undefined => {
+  const summary: Record<string, unknown> = {}
+
+  for (const [key, value] of Object.entries(variables)) {
+    const lowerKey = key.toLowerCase()
+    if (
+      lowerKey.endsWith('take') &&
+      typeof value === 'number' &&
+      Number.isFinite(value)
+    ) {
+      summary[key] = value
+    }
+    if (lowerKey.endsWith('orderby') && Array.isArray(value)) {
+      summary[`${key}Count`] = value.length
+    }
+  }
+
+  const skipValue = variables.skip
+  if (typeof skipValue === 'number' && Number.isFinite(skipValue)) {
+    summary.skip = skipValue
+  }
+
+  if (typeof variables.nextCursor === 'string') {
+    summary.nextCursorLength = variables.nextCursor.length
+  }
+
+  return Object.keys(summary).length ? summary : undefined
+}
+
 const logResponse = (
   res: express.Response,
   status: number,
-  payload: unknown
+  payload: unknown,
+  startAt?: bigint,
+  operation?: string,
+  variables?: Record<string, unknown>
 ) => {
+  const elapsedMs = startAt
+    ? // Convert high-resolution nanoseconds to milliseconds.
+      Number(process.hrtime.bigint() - startAt) / 1e6
+    : undefined
+  const isSlow =
+    typeof elapsedMs === 'number' ? elapsedMs >= SLOW_THRESHOLD_MS : false
+  const params = isSlow && variables ? summarizeParams(variables) : undefined
   let serialized = ''
   let serializeError: string | undefined
   try {
@@ -50,14 +92,28 @@ const logResponse = (
 
   console.log(
     JSON.stringify({
-      severity: 'INFO',
+      severity: isSlow ? 'WARNING' : 'INFO',
       message: 'GraphQL REST response',
       status,
+      elapsedMs,
+      slow: isSlow,
+      operation,
+      params,
       body: bodyForLog,
       ...res?.locals?.globalLogFields,
     })
   )
+}
 
+const logAndSend = (
+  res: express.Response,
+  status: number,
+  payload: unknown,
+  startAt?: bigint,
+  operation?: string,
+  variables?: Record<string, unknown>
+) => {
+  logResponse(res, status, payload, startAt, operation, variables)
   return res.status(status).json(payload)
 }
 
@@ -83,16 +139,24 @@ export function createGqlRestRouter({
           handler: express.RequestHandler
         ) => void
       ).call(router, `/api/rest/${operationName}`, async (req, res) => {
+        const startAt = process.hrtime.bigint()
         let variables
         try {
           variables = op.buildVariables(req)
         } catch (err) {
-          return logResponse(res, statusCodes.badRequest, {
+          const payload = {
             status: 'fail',
             data: {
               message: 'buildVariables fails. ' + (err as Error).message,
             },
-          })
+          }
+          return logAndSend(
+            res,
+            statusCodes.badRequest,
+            payload,
+            startAt,
+            operationName
+          )
         }
 
         let authContext
@@ -104,12 +168,20 @@ export function createGqlRestRouter({
             auth: op.auth,
           })
         } catch (err) {
-          return logResponse(res, statusCodes.badRequest, {
+          const payload = {
             status: 'fail',
             data: {
               message: 'buildAuthContext fails. ' + (err as Error).message,
             },
-          })
+          }
+          return logAndSend(
+            res,
+            statusCodes.badRequest,
+            payload,
+            startAt,
+            operationName,
+            variables
+          )
         }
 
         try {
@@ -137,23 +209,36 @@ export function createGqlRestRouter({
               (error: { extensions?: { code?: string } }) =>
                 CLIENT_GQL_ERROR_CODES.has(error?.extensions?.code ?? '')
             )
-            return logResponse(
+            const status = hasClientError
+              ? statusCodes.badRequest
+              : statusCodes.internalServerError
+            const payload = {
+              status: 'error',
+              message: 'CMS GraphQL responded with errors',
+              errors: gqlPayload.errors,
+            }
+            return logAndSend(
               res,
-              hasClientError
-                ? statusCodes.badRequest
-                : statusCodes.internalServerError,
-              {
-                status: 'error',
-                message: 'CMS GraphQL responded with errors',
-                errors: gqlPayload.errors,
-              }
+              status,
+              payload,
+              startAt,
+              operationName,
+              variables
             )
           }
 
-          return logResponse(res, statusCodes.ok, {
+          const payload = {
             status: 'success',
             data: gqlPayload?.data ?? {},
-          })
+          }
+          return logAndSend(
+            res,
+            statusCodes.ok,
+            payload,
+            startAt,
+            operationName,
+            variables
+          )
         } catch (err) {
           const annotatedErr = errors.helpers.wrap(
             err,
@@ -170,29 +255,52 @@ export function createGqlRestRouter({
               ...res?.locals?.globalLogFields,
             })
           )
-          return logResponse(res, statusCodes.internalServerError, {
+          const payload = {
             status: 'error',
             message: 'Failed to process request',
-          })
+          }
+          return logAndSend(
+            res,
+            statusCodes.internalServerError,
+            payload,
+            startAt,
+            operationName,
+            variables
+          )
         }
       })
     }
   })
 
   router.all('/api/rest/:operation', (req, res) => {
+    const startAt = process.hrtime.bigint()
     const op = operations[req.params.operation]
     if (!op) {
-      return logResponse(res, statusCodes.badRequest, {
+      const payload = {
         status: 'fail',
         data: {
           message: `Unknown operation: '${req.params.operation}'. Available operations: [${Object.keys(operations).join(', ')}]`,
         },
-      })
+      }
+      return logAndSend(
+        res,
+        statusCodes.badRequest,
+        payload,
+        startAt,
+        req.params.operation
+      )
     }
-    return logResponse(res, statusCodes.methodNotAllowed, {
+    const payload = {
       status: 'fail',
       data: { message: `Use ${op.method}` },
-    })
+    }
+    return logAndSend(
+      res,
+      statusCodes.methodNotAllowed,
+      payload,
+      startAt,
+      req.params.operation
+    )
   })
 
   return router
