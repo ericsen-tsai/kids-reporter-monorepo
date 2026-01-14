@@ -10,6 +10,7 @@ export function parseMemberPostsWithAnswersToPostQuestionAnswers(
 
     return {
       title: post.title,
+      slug: post.slug,
       href: `/article/${post.slug}`,
       lastAnsweredTime: post.lastAnsweredTime,
       answers,

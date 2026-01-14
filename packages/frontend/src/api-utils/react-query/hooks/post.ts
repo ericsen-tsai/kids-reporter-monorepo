@@ -55,6 +55,7 @@ export function usePostsEssayAnswersWithLikesInfinityQuery({
     },
     initialPageParam: 0,
     select,
+    refetchOnMount: 'always',
   })
 }
 

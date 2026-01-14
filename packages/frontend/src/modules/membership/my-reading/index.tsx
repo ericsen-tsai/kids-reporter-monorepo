@@ -3,7 +3,7 @@ import {
   Button,
   HeaderMobileBackButtonHrefSetter,
 } from '@kids-reporter/routing-ui'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { DEFAULT_PAGE_ITEM_COUNT } from '@/api-utils/react-query/constants'
 import { useMemberPostsWithAnswersInfinityQuery } from '@/api-utils/react-query/hooks/extended'
@@ -28,13 +28,10 @@ function MyReading() {
     accessToken: tokens?.accessToken ?? '',
   })
 
-  const memberPostsWithAnswers = useMemo(() => {
-    return memberPostsWithAnswersPageData?.pages[currentPage - 1]?.posts ?? []
-  }, [memberPostsWithAnswersPageData, currentPage])
-
-  const currentPostQuestionAnswers = memberPostsWithAnswers
-    ? parseMemberPostsWithAnswersToPostQuestionAnswers(memberPostsWithAnswers)
-    : []
+  const currentPostQuestionAnswers =
+    parseMemberPostsWithAnswersToPostQuestionAnswers(
+      memberPostsWithAnswersPageData?.pages[currentPage - 1]?.posts ?? []
+    )
 
   const isFirstPage = currentPage === 1
   const isLastPage =
@@ -46,6 +43,13 @@ function MyReading() {
     }
   }, [currentPage, fetchNextPage, hasNextPage])
 
+  const [openedAccordionItemValue, setOpenedAccordionItemValue] = useState<
+    string | undefined
+  >(undefined)
+  const handleBackToFirstPage = useCallback((slug: string) => {
+    setCurrentPage(1)
+    setOpenedAccordionItemValue(slug)
+  }, [])
   const isGetMemberPostsWithAnswersLoading = isLoading || !member?.id
 
   return (
@@ -63,6 +67,8 @@ function MyReading() {
             postQuestionAnswers={currentPostQuestionAnswers}
             isLoading={isGetMemberPostsWithAnswersLoading}
             key={currentPage}
+            onBackToFirstPage={handleBackToFirstPage}
+            openedAccordionItemValue={openedAccordionItemValue}
           />
           {!isGetMemberPostsWithAnswersLoading &&
             currentPostQuestionAnswers.length > 0 && (
@@ -79,7 +85,10 @@ function MyReading() {
                   variant="secondary"
                   className="size-11 p-0"
                   disabled={isLastPage}
-                  onClick={() => setCurrentPage(currentPage + 1)}
+                  onClick={() => {
+                    setCurrentPage(currentPage + 1)
+                    setOpenedAccordionItemValue(undefined)
+                  }}
                 >
                   <ArrowRight />
                 </Button>

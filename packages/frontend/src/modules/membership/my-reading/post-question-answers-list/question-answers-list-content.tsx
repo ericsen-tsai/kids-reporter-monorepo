@@ -10,11 +10,15 @@ import EssayAnswerItem from './essay-answer-item'
 type QuestionAnswersListContentProps = {
   answers: PostQuestionAnswers[number]['answers']
   href: string
+  postSlug: string
+  onBackToFirstPage: (slug: string) => void
 }
 
 function QuestionAnswersListContent({
   href,
   answers,
+  postSlug,
+  onBackToFirstPage,
 }: QuestionAnswersListContentProps) {
   if (answers.length === 0) {
     return (
@@ -45,7 +49,13 @@ function QuestionAnswersListContent({
             </div>
 
             <div className="flex flex-col gap-3">
-              {isEssayAnswer && <EssayAnswerItem answer={answer} />}
+              {isEssayAnswer && (
+                <EssayAnswerItem
+                  answer={answer}
+                  postSlug={postSlug}
+                  onBackToFirstPage={onBackToFirstPage}
+                />
+              )}
               {isChoiceAnswer && <ChoiceAnswerItem answer={answer} />}
             </div>
           </div>

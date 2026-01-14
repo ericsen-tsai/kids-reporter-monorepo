@@ -15,6 +15,7 @@ export type BaodaozaiEssayQuestion = {
   type: 'essay'
   title: string
   hint: string
+  defaultAnswer?: string
 }
 
 export type BaodaozaiChoiceQuestion = {
@@ -30,9 +31,7 @@ export type BaodaozaiChoiceQuestion = {
 
 export type BaodaozaiQuestion = BaodaozaiEssayQuestion | BaodaozaiChoiceQuestion
 
-// only support 3 questions for now
-export type BaodaozaiQuestions = [
-  BaodaozaiQuestion,
-  BaodaozaiQuestion,
-  BaodaozaiQuestion,
-]
+// only support 3 questions (default flow) or 1 question (update flow) for now
+export type BaodaozaiQuestions =
+  | [BaodaozaiQuestion, BaodaozaiQuestion, BaodaozaiQuestion]
+  | [BaodaozaiQuestion]

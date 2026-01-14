@@ -5,22 +5,21 @@ export enum LogLevel {
 }
 
 export const log = (level: LogLevel = LogLevel.INFO, msg: string) => {
+  const isInBrowser = typeof window !== 'undefined'
   const structuredMsg = JSON.stringify({
     severity: level,
     message: msg,
+    ...(!isInBrowser && level === LogLevel.ERROR
+      ? {
+          '@type':
+            'type.googleapis.com/google.devtools.clouderrorreporting.v1beta1.ReportedErrorEvent',
+        }
+      : {}),
   })
 
   switch (level) {
     case LogLevel.ERROR: {
-      // Follow https://cloud.google.com/error-reporting/docs/formatting-error-messages doc to print structured error log
-      // and trigger GCP error reporting.
-      const errorLogEntry = {
-        severity: level,
-        '@type':
-          'type.googleapis.com/google.devtools.clouderrorreporting.v1beta1.ReportedErrorEvent',
-        message: msg,
-      }
-      console.error(JSON.stringify(errorLogEntry))
+      console.error(structuredMsg)
       return
     }
     case LogLevel.WARNING:
