@@ -21,6 +21,7 @@ type ChoiceStep = {
   options: BaodaozaiChoiceQuestion['options']
   questionIndex: number
   onNext: () => void
+  onPass: () => void
 }
 
 type EssayResultStep = {
@@ -79,6 +80,7 @@ const parseQuestionToStep = ({
     options: question.options,
     questionIndex,
     onNext,
+    onPass: isLastQuestion ? onSubmit : () => onPass(questionIndex),
   }
 }
 

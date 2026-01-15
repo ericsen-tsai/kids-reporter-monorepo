@@ -5,6 +5,7 @@ export type MenuItem = {
   external?: boolean
   showIcon?: boolean
   icon?: React.ReactNode
+  hideInFooter?: boolean
 }
 
 export type SocialMediaHrefs = readonly string[]
