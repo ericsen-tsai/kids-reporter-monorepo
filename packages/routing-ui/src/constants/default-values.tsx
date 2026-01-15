@@ -85,24 +85,27 @@ export const ADDITIONAL_MENU_ITEMS: MenuItem[] = [
     subItems: [],
     showIcon: true,
     icon: <SettingsIconSmall />,
+    hideInFooter: true,
   },
   {
     label: '關於我們',
     href: '/about',
     subItems: [],
   },
-  {
-    label: '呼叫報導仔流程',
-    href: '/about#callkidsreporter',
-    subItems: [],
-  },
+  // TODO: add back when about us page is ready
+  // {
+  //   label: '呼叫報導仔',
+  //   href: '/about#callkidsreporter',
+  //   subItems: [],
+  // },
   {
     label: '小讀者觀點大集合',
     href: '/idea-hub',
     subItems: [],
+    hideInFooter: true,
   },
   {
-    label: '投稿專區',
+    label: '我要投稿',
     href: 'https://forms.gle/49AEG8kFj7QWjgij8',
     subItems: [],
     external: true,
@@ -110,6 +113,12 @@ export const ADDITIONAL_MENU_ITEMS: MenuItem[] = [
   {
     label: '加入小記者',
     href: 'https://forms.gle/eGq5jagNTwriwSCX6',
+    subItems: [],
+    external: true,
+  },
+  {
+    label: '訂閱電子報',
+    href: 'https://twreporter.us14.list-manage.com/subscribe?u=4da5a7d3b98dbc9fdad009e7e&id=2154ac40c3',
     subItems: [],
     external: true,
   },

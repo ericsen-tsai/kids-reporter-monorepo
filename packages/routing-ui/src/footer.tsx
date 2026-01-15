@@ -24,7 +24,9 @@ const Footer = ({
   privacyPolicyUrl = PRIVACY_POLICY,
 }: FooterProps) => {
   const socialMediaConfig = generateSocialMediaConfig(socialMediaHrefs)
-
+  const footerMenuItems = additionalMenuItems.filter(
+    (item) => !item.hideInFooter
+  )
   return (
     <footer className="w-full bg-neutral-white">
       {/* Main Footer Content */}
@@ -56,7 +58,7 @@ const Footer = ({
 
             <div className="gap-6 flex flex-row">
               <div className="gap-2 flex flex-col">
-                {additionalMenuItems.slice(0, 4).map((link) => (
+                {footerMenuItems.slice(0, 4).map((link) => (
                   <a
                     key={link.label}
                     href={link.href}
@@ -69,7 +71,7 @@ const Footer = ({
                 ))}
               </div>
               <div className="gap-2 flex flex-col">
-                {additionalMenuItems.slice(4).map((link) => (
+                {footerMenuItems.slice(4).map((link) => (
                   <a
                     key={link.label}
                     href={link.href}
