@@ -1,5 +1,10 @@
-import gql from 'graphql-tag'
-
+import {
+  DELETE_MEMBER_AVATAR_MUTATION,
+  GET_MEMBER_ESSAY_ANSWERS_HAS_LIKED_QUERY,
+  GET_MEMBER_POSTS_WITH_ANSWERS_QUERY,
+  GET_MEMBER_PROFILE_QUERY,
+  UPDATE_MEMBER_PROFILE_MUTATION,
+} from '../documents/members.js'
 import { ensureRecord, Operation, toInt } from './shared.js'
 
 export const operations: Record<string, Operation> = {
@@ -7,25 +12,7 @@ export const operations: Record<string, Operation> = {
     method: 'GET',
     auth: 'auth',
     operationName: 'GetMemberProfile',
-    document: gql`
-      query GetMemberProfile($where: MemberWhereUniqueInput!) {
-        member(where: $where) {
-          id
-          name
-          email
-          nickname
-          contactEmail
-          twreporter_user_id
-          showBaodaozai
-          essayQuestionCount
-          avatar {
-            id
-            fileUrl
-          }
-          createdAt
-        }
-      }
-    `,
+    document: GET_MEMBER_PROFILE_QUERY,
     buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
@@ -34,24 +21,7 @@ export const operations: Record<string, Operation> = {
     method: 'POST',
     auth: 'auth',
     operationName: 'UpdateMemberProfile',
-    document: gql`
-      mutation UpdateMemberProfile(
-        $where: MemberWhereUniqueInput!
-        $data: MemberUpdateInput!
-      ) {
-        updateMember(where: $where, data: $data) {
-          id
-          name
-          nickname
-          contactEmail
-          showBaodaozai
-          essayQuestionCount
-          avatar {
-            id
-          }
-        }
-      }
-    `,
+    document: UPDATE_MEMBER_PROFILE_MUTATION,
     buildVariables: (input) => {
       return {
         where: ensureRecord(input.where, 'Missing where'),
@@ -63,11 +33,7 @@ export const operations: Record<string, Operation> = {
     method: 'GET',
     auth: 'auth',
     operationName: 'GetMemberPostsWithAnswers',
-    document: gql`
-      query GetMemberPostsWithAnswers($take: Int, $nextCursor: String) {
-        getMemberPostsWithAnswers(take: $take, cursor: $nextCursor)
-      }
-    `,
+    document: GET_MEMBER_POSTS_WITH_ANSWERS_QUERY,
     buildVariables: (input) => {
       return {
         take: toInt(input.take),
@@ -80,13 +46,7 @@ export const operations: Record<string, Operation> = {
     method: 'POST',
     auth: 'auth',
     operationName: 'DeleteMemberAvatar',
-    document: gql`
-      mutation DeleteMemberAvatar($where: MemberAvatarWhereUniqueInput!) {
-        deleteMemberAvatar(where: $where) {
-          id
-        }
-      }
-    `,
+    document: DELETE_MEMBER_AVATAR_MUTATION,
     buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
@@ -95,14 +55,7 @@ export const operations: Record<string, Operation> = {
     method: 'GET',
     auth: 'auth',
     operationName: 'GetMemberEssayAnswersHasLiked',
-    document: gql`
-      query GetMemberEssayAnswersHasLiked($essayAnswerIds: [ID!]!) {
-        getMemberEssayAnswersHasLiked(essayAnswerIds: $essayAnswerIds) {
-          essayAnswerId
-          hasLiked
-        }
-      }
-    `,
+    document: GET_MEMBER_ESSAY_ANSWERS_HAS_LIKED_QUERY,
     buildVariables: (input) => {
       if (!Array.isArray(input.essayAnswerIds)) {
         throw new Error('Missing essayAnswerIds')

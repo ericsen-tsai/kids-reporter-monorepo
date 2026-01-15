@@ -1,7 +1,7 @@
 import { CodegenConfig } from '@graphql-codegen/cli'
 
 const schemaPath = 'schema.graphql'
-const documents = 'graphql/operations/**/*.ts'
+const documents = 'graphql/documents/*.ts'
 
 // Generated artifacts are written to packages/frontend/__generated__ so that
 // imports can use the "__generated__/" alias configured in tsconfig.json.
@@ -35,13 +35,8 @@ const config: CodegenConfig = {
 
         // folder is resolved *from each operation file's directory*.
         //
-        // from: ./graphql/operations/<operation-file>.ts (directory)
+        // from: ./graphql/documents/<operation-file>.ts (directory)
         // to:   ./__generated__/operations
-        //
-        // ⚠️ NOTE:
-        // This relative path assumes operation files are only one level deep.
-        // If operations become nested (operations/**), this value may need adjustment
-        // because each additional subfolder adds one more ".." to the relative path.
         folder: '../../__generated__/operations',
       },
       config: {

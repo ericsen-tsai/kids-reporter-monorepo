@@ -1,7 +1,5 @@
 import express from 'express'
 import type { DocumentNode } from 'graphql'
-import gql from 'graphql-tag'
-
 export type Operation = {
   method: 'GET' | 'POST'
   cacheTtl?: number
@@ -10,30 +8,6 @@ export type Operation = {
   document: DocumentNode
   buildVariables: (input: Record<string, unknown>) => Record<string, unknown>
 }
-
-export const postContentFragment = gql`
-  fragment PostContent on Post {
-    title
-    slug
-    ogDescription
-    heroImage {
-      resized {
-        small
-      }
-    }
-    subSubcategoriesOrdered {
-      name
-      subcategory {
-        name
-        category {
-          slug
-          themeColor
-        }
-      }
-    }
-    publishedDate
-  }
-`
 
 const isRecord = (val: unknown): val is Record<string, unknown> =>
   typeof val === 'object' && val !== null && !Array.isArray(val)
