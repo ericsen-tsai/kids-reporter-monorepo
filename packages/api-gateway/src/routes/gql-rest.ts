@@ -1,11 +1,13 @@
 // @ts-ignore `@twreporter/errors` does not have typescript definition file yet
 import _errors from '@twreporter/errors'
 import express from 'express'
+import { print } from 'graphql'
 
 import consts from '../constants.js'
 import { buildAuthContext } from '../graphql/auth.js'
 import { callCmsGraphql } from '../graphql/cms-client.js'
 import { operations } from '../graphql/operations.js'
+import { ensureRecord, parseVars } from '../graphql/operations/shared.js'
 
 const errors = _errors.default
 const statusCodes = consts.statusCodes
@@ -142,7 +144,8 @@ export function createGqlRestRouter({
         const startAt = process.hrtime.bigint()
         let variables
         try {
-          variables = op.buildVariables(req)
+          const input = ensureRecord(parseVars(req), 'Missing variables')
+          variables = op.buildVariables(input)
         } catch (err) {
           const payload = {
             status: 'fail',
@@ -187,7 +190,7 @@ export function createGqlRestRouter({
         try {
           const gqlRes = await callCmsGraphql({
             apiOrigin,
-            document: op.document,
+            document: print(op.document),
             variables,
             operationName: op.operationName,
             headers: authContext.headers,

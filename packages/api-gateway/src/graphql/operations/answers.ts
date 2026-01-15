@@ -1,23 +1,24 @@
-import { ensureRecord, Operation, parseVars, toInt } from './shared.js'
+import {
+  CREATE_POST_CHOICE_ANSWER_MUTATION,
+  CREATE_POST_ESSAY_ANSWER_LIKE_MUTATION,
+  CREATE_POST_ESSAY_ANSWER_MUTATION,
+  DELETE_POST_ESSAY_ANSWER_LIKE_MUTATION,
+  GET_ALL_POST_ESSAY_ANSWERS_QUERY,
+  GET_ESSAY_QUESTION_ESSAY_ANSWERS_QUERY,
+  GET_POST_CHOICE_ANSWERS_QUERY,
+  GET_POST_ESSAY_ANSWERS_QUERY,
+  UPDATE_POST_CHOICE_ANSWER_MUTATION,
+  UPDATE_POST_ESSAY_ANSWER_MUTATION,
+} from '../documents/answers.js'
+import { ensureRecord, normalizeOrderBy, Operation, toInt } from './shared.js'
 
 export const operations: Record<string, Operation> = {
   'post-choice-answers': {
     method: 'GET',
     auth: 'auth',
     operationName: 'GetPostChoiceAnswers',
-    document: `
-      query GetPostChoiceAnswers($where: PostChoiceAnswerWhereInput!) {
-        postChoiceAnswers(where: $where) {
-          id
-          question { id }
-          member { id }
-          choiceIndex
-          correct
-        }
-      }
-    `,
-    buildVariables: (req) => {
-      const input = ensureRecord(parseVars(req), 'Missing variables')
+    document: GET_POST_CHOICE_ANSWERS_QUERY,
+    buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
   },
@@ -25,17 +26,8 @@ export const operations: Record<string, Operation> = {
     method: 'POST',
     auth: 'auth',
     operationName: 'CreatePostChoiceAnswer',
-    document: `
-      mutation CreatePostChoiceAnswer($data: PostChoiceAnswerCreateInput!) {
-        createPostChoiceAnswer(data: $data) {
-          question { id }
-          choiceIndex
-          correct
-        }
-      }
-    `,
-    buildVariables: (req) => {
-      const input = ensureRecord(parseVars(req), 'Missing variables')
+    document: CREATE_POST_CHOICE_ANSWER_MUTATION,
+    buildVariables: (input) => {
       return { data: ensureRecord(input.data, 'Missing data') }
     },
   },
@@ -43,20 +35,8 @@ export const operations: Record<string, Operation> = {
     method: 'POST',
     auth: 'auth',
     operationName: 'UpdatePostChoiceAnswer',
-    document: `
-      mutation UpdatePostChoiceAnswer(
-        $id: ID!
-        $data: PostChoiceAnswerUpdateInput!
-      ) {
-        updatePostChoiceAnswer(where: { id: $id }, data: $data) {
-          id
-          choiceIndex
-          correct
-        }
-      }
-    `,
-    buildVariables: (req) => {
-      const input = ensureRecord(parseVars(req), 'Missing variables')
+    document: UPDATE_POST_CHOICE_ANSWER_MUTATION,
+    buildVariables: (input) => {
       const id = input.id
       if (typeof id !== 'string') {
         throw new Error('Missing id')
@@ -68,18 +48,8 @@ export const operations: Record<string, Operation> = {
     method: 'GET',
     auth: 'auth',
     operationName: 'GetPostEssayAnswers',
-    document: `
-      query GetPostEssayAnswers($where: PostEssayAnswerWhereInput!) {
-        postEssayAnswers(where: $where) {
-          id
-          question { id }
-          member { id }
-          content
-        }
-      }
-    `,
-    buildVariables: (req) => {
-      const input = ensureRecord(parseVars(req), 'Missing variables')
+    document: GET_POST_ESSAY_ANSWERS_QUERY,
+    buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
   },
@@ -88,31 +58,10 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 60,
     auth: 'public',
     operationName: 'GetAllPostEssayAnswers',
-    document: `
-      query GetAllPostEssayAnswers(
-        $orderBy: [PostEssayAnswerOrderByInput!]!
-        $take: Int
-  ) {
-    postEssayAnswers(orderBy: $orderBy, take: $take) {
-      id
-      question { id }
-      member {
-            id
-            avatar { fileUrl }
-            nickname
-            name
-          }
-          content
-          likesCount
-        }
-      }
-    `,
-    buildVariables: (req) => {
-      const input = ensureRecord(parseVars(req), 'Missing variables')
+    document: GET_ALL_POST_ESSAY_ANSWERS_QUERY,
+    buildVariables: (input) => {
       return {
-        orderBy: Array.isArray(input.orderBy)
-          ? input.orderBy
-          : [{ createdAt: 'desc' }],
+        orderBy: normalizeOrderBy(input.orderBy, [{ createdAt: 'desc' }]),
         take: toInt(input.take),
       }
     },
@@ -121,16 +70,8 @@ export const operations: Record<string, Operation> = {
     method: 'POST',
     auth: 'auth',
     operationName: 'CreatePostEssayAnswer',
-    document: `
-      mutation CreatePostEssayAnswer($data: PostEssayAnswerCreateInput!) {
-        createPostEssayAnswer(data: $data) {
-          question { id }
-          content
-        }
-      }
-    `,
-    buildVariables: (req) => {
-      const input = ensureRecord(parseVars(req), 'Missing variables')
+    document: CREATE_POST_ESSAY_ANSWER_MUTATION,
+    buildVariables: (input) => {
       return { data: ensureRecord(input.data, 'Missing data') }
     },
   },
@@ -138,24 +79,51 @@ export const operations: Record<string, Operation> = {
     method: 'POST',
     auth: 'auth',
     operationName: 'UpdatePostEssayAnswer',
-    document: `
-      mutation UpdatePostEssayAnswer(
-        $id: ID!
-        $data: PostEssayAnswerUpdateInput!
-      ) {
-        updatePostEssayAnswer(where: { id: $id }, data: $data) {
-          id
-          content
-        }
-      }
-    `,
-    buildVariables: (req) => {
-      const input = ensureRecord(parseVars(req), 'Missing variables')
+    document: UPDATE_POST_ESSAY_ANSWER_MUTATION,
+    buildVariables: (input) => {
       const id = input.id
       if (typeof id !== 'string') {
         throw new Error('Missing id')
       }
       return { id, data: ensureRecord(input.data, 'Missing data') }
+    },
+  },
+  'post-essay-question-answers': {
+    method: 'GET',
+    auth: 'public',
+    operationName: 'GetEssayQuestionEssayAnswers',
+    document: GET_ESSAY_QUESTION_ESSAY_ANSWERS_QUERY,
+    buildVariables: (input) => {
+      const answerTake = toInt(input.answerTake)
+      if (typeof answerTake !== 'number') {
+        throw new Error('Missing required variable: answerTake')
+      }
+      return {
+        where: ensureRecord(input.where, 'Missing where'),
+        answerOrderBy: normalizeOrderBy(input.answerOrderBy, [
+          { createdAt: 'desc' },
+        ]),
+        answerTake,
+        answerSkip: toInt(input.answerSkip),
+      }
+    },
+  },
+  'create-post-essay-answer-like': {
+    method: 'POST',
+    auth: 'auth',
+    operationName: 'CreatePostEssayAnswerLike',
+    document: CREATE_POST_ESSAY_ANSWER_LIKE_MUTATION,
+    buildVariables: (input) => {
+      return { data: ensureRecord(input.data, 'Missing data') }
+    },
+  },
+  'delete-post-essay-answer-like': {
+    method: 'POST',
+    auth: 'auth',
+    operationName: 'DeletePostEssayAnswerLike',
+    document: DELETE_POST_ESSAY_ANSWER_LIKE_MUTATION,
+    buildVariables: (input) => {
+      return { where: ensureRecord(input.where, 'Missing where') }
     },
   },
 }

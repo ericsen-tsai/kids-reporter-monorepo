@@ -1,41 +1,16 @@
+import type {
+  GetAuthorPostsCountQuery,
+  GetProjectRelatedPostsCountQuery,
+  GetTagPostsQuery,
+} from '__generated__/operations/content.generated'
 import { customsearch } from '@googleapis/customsearch'
 import { customsearch_v1 } from '@googleapis/customsearch/v1'
 import errors from '@twreporter/errors'
 
 import { CardProp } from '@/app/(sticky-header)/_components/search/card'
 import { ContentType, Theme } from '@/constants'
-import { log, LogLevel, sendGQLRequest } from '@/utils'
-
-const topicQuery = `
-query Query($where: ProjectWhereUniqueInput!) {
-  project(where: $where) {
-    relatedPostsCount
-  }
-}
-`
-
-const authorQuery = `
-query Query($where: AuthorWhereUniqueInput!) {
-  author(where: $where) {
-    postsCount
-  }
-}
-`
-
-const tagQuery = `
-query Query($where: TagWhereUniqueInput!, $take: Int, $orderBy: [PostOrderByInput!]!) {
-  tag(where: $where) {
-    posts(take: $take, orderBy: $orderBy) {
-      heroImage {
-        resized {
-          tiny
-        }
-      }
-    }
-    postsCount
-  }
-}
-`
+import { log, LogLevel } from '@/utils'
+import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 const client = customsearch('v1')
 export const defaultCount = 10
@@ -60,77 +35,83 @@ export async function transferItemsToCards(
     return items
   }
 
-  const cardItems: CardProp[] = []
-  for (const item of items) {
-    const metaTag = item?.pagemap?.metatags?.[0]
-    const contentType = metaTag?.['contenttype']
+  const cardItems = await Promise.all(
+    items.map(async (item) => {
+      const metaTag = item?.pagemap?.metatags?.[0]
+      const contentType = metaTag?.['contenttype']
 
-    if (!validContentTypes.includes(contentType)) {
-      continue
-    }
+      if (!validContentTypes.includes(contentType)) {
+        return null
+      }
 
-    const creativeWork = item?.pagemap?.creativework?.[0]
-    const contentSummary = {
-      type: contentType,
-      image: creativeWork?.image || metaTag?.['og:image'],
-      title: creativeWork?.headline || metaTag?.['og:title'],
-      desc: metaTag?.['og:description'],
-      publishedDate: metaTag?.['publisheddate'] ?? '',
-      url: item?.link || metaTag?.['og:url'],
-      category: metaTag?.['category'] ?? '',
-      subSubcategory: metaTag?.['subSubcategory'] ?? '',
-      theme: Theme.BLUE,
-      postCount: 0,
-    }
+      const creativeWork = item?.pagemap?.creativework?.[0]
+      const contentSummary = {
+        type: contentType,
+        image: creativeWork?.image || metaTag?.['og:image'],
+        title: creativeWork?.headline || metaTag?.['og:title'],
+        desc: metaTag?.['og:description'],
+        publishedDate: metaTag?.['publisheddate'] ?? '',
+        url: item?.link || metaTag?.['og:url'],
+        category: metaTag?.['category'] ?? '',
+        subSubcategory: metaTag?.['subSubcategory'] ?? '',
+        theme: Theme.BLUE,
+        postCount: 0,
+      }
 
-    const url = item?.link || metaTag?.['og:url']
-    const slug = url.match(/(author|topic|tag)\/([^/]*)\/?/)?.[2]
-    if (contentType === ContentType.TOPIC && slug) {
-      const topicRes = await sendGQLRequest({
-        query: topicQuery,
-        variables: {
-          where: {
-            slug: slug,
+      const url = item?.link || metaTag?.['og:url']
+      const slug = url?.match(/(author|topic|tag)\/([^/]*)\/?/)?.[2]
+      if (contentType === ContentType.TOPIC && slug) {
+        const topicRes =
+          await sendRestGqlRequest<GetProjectRelatedPostsCountQuery>({
+            operation: 'project-related-posts-count',
+            method: 'GET',
+            variables: {
+              where: {
+                slug: slug,
+              },
+            },
+          })
+        contentSummary.category = '專題'
+        contentSummary.postCount =
+          topicRes?.data?.data?.project?.relatedPostsCount ?? 0
+      } else if (contentType === ContentType.AUTHOR && slug) {
+        const authorRes = await sendRestGqlRequest<GetAuthorPostsCountQuery>({
+          operation: 'author-posts-count',
+          method: 'GET',
+          variables: {
+            where: {
+              slug: slug,
+            },
           },
-        },
-      })
-      contentSummary.category = '專題'
-      contentSummary.postCount =
-        topicRes?.data?.data?.project?.relatedPostsCount
-    } else if (contentType === ContentType.AUTHOR && slug) {
-      const authorRes = await sendGQLRequest({
-        query: authorQuery,
-        variables: {
-          where: {
-            slug: slug,
+        })
+        contentSummary.category = '作者'
+        contentSummary.postCount =
+          authorRes?.data?.data?.author?.postsCount ?? 0
+      } else if (contentType === ContentType.TAG && slug) {
+        const tagRes = await sendRestGqlRequest<GetTagPostsQuery>({
+          operation: 'tag-posts',
+          method: 'GET',
+          variables: {
+            where: {
+              slug: slug,
+            },
+            take: 1,
+            orderBy: {
+              publishedDate: 'desc',
+            },
           },
-        },
-      })
-      contentSummary.category = '作者'
-      contentSummary.postCount = authorRes?.data?.data?.author?.postsCount
-    } else if (contentType === ContentType.TAG && slug) {
-      const tagRes = await sendGQLRequest({
-        query: tagQuery,
-        variables: {
-          where: {
-            slug: slug,
-          },
-          take: 1,
-          orderBy: {
-            publishedDate: 'desc',
-          },
-        },
-      })
-      contentSummary.category = '標籤'
-      contentSummary.postCount = tagRes?.data?.data?.tag?.postsCount
-      contentSummary.image =
-        tagRes?.data?.data?.tag?.posts?.[0]?.heroImage?.resized?.tiny
-    }
+        })
+        contentSummary.category = '標籤'
+        contentSummary.postCount = tagRes?.data?.data?.tag?.postsCount ?? 0
+        contentSummary.image =
+          tagRes?.data?.data?.tag?.posts?.[0]?.heroImage?.resized?.small
+      }
 
-    cardItems.push({ content: contentSummary })
-  }
+      return { content: contentSummary }
+    })
+  )
 
-  return cardItems
+  return cardItems.filter((item): item is CardProp => Boolean(item))
 }
 
 async function getSearchResults({

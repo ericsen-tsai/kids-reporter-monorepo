@@ -1,16 +1,14 @@
 import { CodegenConfig } from '@graphql-codegen/cli'
 
-const schemaPath =
-  process.env.NODE_ENV === 'production'
-    ? 'schema.graphql'
-    : '../../packages/cms/schema.graphql'
+const schemaPath = 'schema.graphql'
+const documents = 'graphql/documents/*.ts'
 
 // Generated artifacts are written to packages/frontend/__generated__ so that
 // imports can use the "__generated__/" alias configured in tsconfig.json.
 const config: CodegenConfig = {
   overwrite: true,
   schema: schemaPath,
-  documents: 'src/api/graphql/**/*.ts',
+  documents,
   generates: {
     '__generated__/types.ts': {
       plugins: ['typescript'],
@@ -30,8 +28,16 @@ const config: CodegenConfig = {
       preset: 'near-operation-file',
       presetConfig: {
         extension: '.generated.ts',
+        // baseTypesPath is resolved *from the generated file location*.
+        // generated ops: ./__generated__/operations/*.generated.ts
+        // base types:    ./__generated__/types.ts
         baseTypesPath: '../types.ts',
-        folder: '../../../__generated__/operations',
+
+        // folder is resolved *from each operation file's directory*.
+        //
+        // from: ./graphql/documents/<operation-file>.ts (directory)
+        // to:   ./__generated__/operations
+        folder: '../../__generated__/operations',
       },
       config: {
         maybeValue: 'T | undefined',

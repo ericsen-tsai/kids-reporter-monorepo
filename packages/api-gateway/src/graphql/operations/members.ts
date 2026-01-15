@@ -1,28 +1,19 @@
-import { ensureRecord, Operation, parseVars, toInt } from './shared.js'
+import {
+  DELETE_MEMBER_AVATAR_MUTATION,
+  GET_MEMBER_ESSAY_ANSWERS_HAS_LIKED_QUERY,
+  GET_MEMBER_POSTS_WITH_ANSWERS_QUERY,
+  GET_MEMBER_PROFILE_QUERY,
+  UPDATE_MEMBER_PROFILE_MUTATION,
+} from '../documents/members.js'
+import { ensureRecord, Operation, toInt } from './shared.js'
 
 export const operations: Record<string, Operation> = {
   'member-profile': {
     method: 'GET',
     auth: 'auth',
     operationName: 'GetMemberProfile',
-    document: `
-      query GetMemberProfile($where: MemberWhereUniqueInput!) {
-        member(where: $where) {
-          id
-          name
-          email
-          nickname
-          contactEmail
-          twreporter_user_id
-          showBaodaozai
-          essayQuestionCount
-          avatar { id fileUrl }
-          createdAt
-        }
-      }
-    `,
-    buildVariables: (req) => {
-      const input = ensureRecord(parseVars(req), 'Missing variables')
+    document: GET_MEMBER_PROFILE_QUERY,
+    buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
   },
@@ -30,24 +21,8 @@ export const operations: Record<string, Operation> = {
     method: 'POST',
     auth: 'auth',
     operationName: 'UpdateMemberProfile',
-    document: `
-      mutation UpdateMemberProfile(
-        $where: MemberWhereUniqueInput!
-        $data: MemberUpdateInput!
-      ) {
-        updateMember(where: $where, data: $data) {
-          id
-          name
-          nickname
-          contactEmail
-          showBaodaozai
-          essayQuestionCount
-          avatar { id }
-        }
-      }
-    `,
-    buildVariables: (req) => {
-      const input = ensureRecord(parseVars(req), 'Missing variables')
+    document: UPDATE_MEMBER_PROFILE_MUTATION,
+    buildVariables: (input) => {
       return {
         where: ensureRecord(input.where, 'Missing where'),
         data: ensureRecord(input.data, 'Missing data'),
@@ -58,19 +33,8 @@ export const operations: Record<string, Operation> = {
     method: 'GET',
     auth: 'auth',
     operationName: 'GetMemberPostsWithAnswers',
-    document: `
-      query GetMemberPostsWithAnswers(
-        $take: Int
-        $nextCursor: String
-      ) {
-        getMemberPostsWithAnswers(
-          take: $take
-          cursor: $nextCursor
-        )
-      }
-    `,
-    buildVariables: (req) => {
-      const input = ensureRecord(parseVars(req), 'Missing variables')
+    document: GET_MEMBER_POSTS_WITH_ANSWERS_QUERY,
+    buildVariables: (input) => {
       return {
         take: toInt(input.take),
         nextCursor:
@@ -82,16 +46,21 @@ export const operations: Record<string, Operation> = {
     method: 'POST',
     auth: 'auth',
     operationName: 'DeleteMemberAvatar',
-    document: `
-      mutation DeleteMemberAvatar($where: MemberAvatarWhereUniqueInput!) {
-        deleteMemberAvatar(where: $where) {
-          id
-        }
-      }
-    `,
-    buildVariables: (req) => {
-      const input = ensureRecord(parseVars(req), 'Missing variables')
+    document: DELETE_MEMBER_AVATAR_MUTATION,
+    buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
+    },
+  },
+  'member-essay-answers-has-liked': {
+    method: 'GET',
+    auth: 'auth',
+    operationName: 'GetMemberEssayAnswersHasLiked',
+    document: GET_MEMBER_ESSAY_ANSWERS_HAS_LIKED_QUERY,
+    buildVariables: (input) => {
+      if (!Array.isArray(input.essayAnswerIds)) {
+        throw new Error('Missing essayAnswerIds')
+      }
+      return { essayAnswerIds: input.essayAnswerIds }
     },
   },
 }

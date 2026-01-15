@@ -10,31 +10,17 @@ https://github.com/vercel/next.js/issues/56018
 Therefore, so far we can't upgrade to v13.5.4 due to #56018 & #54057 remains.
 */
 
+import type {
+  GetPostsForSitemapQuery,
+  GetProjectsForSitemapQuery,
+} from '__generated__/operations/content.generated'
 import { MetadataRoute } from 'next'
 
 import { KIDS_URL_ORIGIN } from '@/constants'
 import envVars from '@/environment-variables'
-import { sendGQLRequest } from '@/utils'
+import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export const revalidate = envVars.isProduction ? 86400 : 0 // 1 day
-
-const postsGQL = `
-query($where: PostWhereInput!) {
-  posts(where: $where) {
-    slug
-    publishedDate
-  }
-}
-`
-
-const topicsGQL = `
-query($where: ProjectWhereInput!) {
-  projects(where: $where) {
-    slug
-    publishedDate
-  }
-}
-`
 
 const fetchSitemaps = async (): Promise<
   { url: string; lastModified: Date }[]
@@ -43,8 +29,9 @@ const fetchSitemaps = async (): Promise<
   const sixtyDaysBefore = new Date(
     new Date().setHours(0, 0, 0, 0) - 60 * 24 * 60 * 60 * 1000
   )
-  const postsRes = await sendGQLRequest({
-    query: postsGQL,
+  const postsRes = await sendRestGqlRequest<GetPostsForSitemapQuery>({
+    operation: 'posts-sitemap',
+    method: 'GET',
     variables: {
       where: {
         publishedDate: {
@@ -63,8 +50,9 @@ const fetchSitemaps = async (): Promise<
     sitemaps = [...posts]
   }
 
-  const topicsRes = await sendGQLRequest({
-    query: topicsGQL,
+  const topicsRes = await sendRestGqlRequest<GetProjectsForSitemapQuery>({
+    operation: 'projects-sitemap',
+    method: 'GET',
     variables: {
       where: {
         publishedDate: {
