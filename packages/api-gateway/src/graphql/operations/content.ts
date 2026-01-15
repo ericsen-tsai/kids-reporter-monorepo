@@ -1,12 +1,38 @@
-import gql from 'graphql-tag'
-
+import {
+  GET_AUTHOR_AVATAR_QUERY,
+  GET_AUTHOR_META_QUERY,
+  GET_AUTHOR_POSTS_COUNT_QUERY,
+  GET_AUTHOR_POSTS_QUERY,
+  GET_CALL_BAODAOZAI_INTRO_QUERY,
+  GET_CATEGORY_METADATA_QUERY,
+  GET_CATEGORY_POSTS_QUERY,
+  GET_CATEGORY_SUBCATEGORIES_AND_THEME_COLOR_QUERY,
+  GET_EDITOR_PICKS_SETTINGS_QUERY,
+  GET_LATEST_POSTS_QUERY,
+  GET_POST_ESSAY_QUESTIONS_QUERY,
+  GET_POST_META_QUERY,
+  GET_POST_QUERY,
+  GET_POSTS_COUNT_QUERY,
+  GET_POSTS_ESSAY_ANSWERS_WITH_LIKES_QUERY,
+  GET_POSTS_FOR_SITEMAP_QUERY,
+  GET_POSTS_QUERY,
+  GET_PROJECT_META_QUERY,
+  GET_PROJECT_QUERY,
+  GET_PROJECT_RELATED_POSTS_COUNT_QUERY,
+  GET_PROJECTS_FOR_SITEMAP_QUERY,
+  GET_PROJECTS_QUERY,
+  GET_SUB_SUBCATEGORY_POSTS_QUERY,
+  GET_SUBCATEGORY_POSTS_QUERY,
+  GET_TAG_META_QUERY,
+  GET_TAG_POSTS_QUERY,
+  GET_TOPIC_PROJECTS_QUERY,
+} from '../documents/content.js'
 import {
   ensureArray,
   ensureRecord,
   normalizeBoolean,
   normalizeOrderBy,
   Operation,
-  postContentFragment,
   toInt,
 } from './shared.js'
 
@@ -16,14 +42,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetLatestPosts',
-    document: gql`
-      ${postContentFragment}
-      query GetLatestPosts($orderBy: [PostOrderByInput!]!, $take: Int) {
-        posts(orderBy: $orderBy, take: $take) {
-          ...PostContent
-        }
-      }
-    `,
+    document: GET_LATEST_POSTS_QUERY,
     buildVariables: (input) => {
       const take = toInt(input.take)
       const orderBy = normalizeOrderBy(input.orderBy, [
@@ -37,21 +56,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetEditorPicksSettings',
-    document: gql`
-      ${postContentFragment}
-      query GetEditorPicksSettings($take: Int) {
-        editorPicksSettings(take: $take) {
-          id
-          editorPicksOfPostsOrdered {
-            ...PostContent
-          }
-          editorPicksOfTags {
-            name
-            slug
-          }
-        }
-      }
-    `,
+    document: GET_EDITOR_PICKS_SETTINGS_QUERY,
     buildVariables: (input) => {
       return { take: toInt(input.take) }
     },
@@ -61,15 +66,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 300,
     auth: 'public',
     operationName: 'GetCallBaodaozaiIntro',
-    document: gql`
-      query GetCallBaodaozaiIntro($where: CallBaodaozaiIntroWhereUniqueInput!) {
-        callBaodaozaiIntro(where: $where) {
-          id
-          page
-          content
-        }
-      }
-    `,
+    document: GET_CALL_BAODAOZAI_INTRO_QUERY,
     buildVariables: (input) => {
       const where = ensureRecord(input.where, 'Missing where')
       const page = where.page
@@ -84,21 +81,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetCategoryPosts',
-    document: gql`
-      ${postContentFragment}
-      query GetCategoryPosts(
-        $where: CategoryWhereUniqueInput!
-        $take: Int
-        $skip: Int
-      ) {
-        category(where: $where) {
-          relatedPosts(take: $take, skip: $skip) {
-            ...PostContent
-          }
-          relatedPostsCount
-        }
-      }
-    `,
+    document: GET_CATEGORY_POSTS_QUERY,
     buildVariables: (input) => {
       return {
         where: ensureRecord(input.where, 'Missing where'),
@@ -112,31 +95,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetCategoryMetadata',
-    document: gql`
-      query GetCategoryMetadata(
-        $categoryWhere: CategoryWhereUniqueInput!
-        $subcategoryWhere: SubcategoryWhereInput!
-      ) {
-        category(where: $categoryWhere) {
-          ogTitle
-          ogDescription
-          ogImage {
-            resized {
-              medium
-            }
-          }
-          subcategories(where: $subcategoryWhere) {
-            ogTitle
-            ogDescription
-            ogImage {
-              resized {
-                medium
-              }
-            }
-          }
-        }
-      }
-    `,
+    document: GET_CATEGORY_METADATA_QUERY,
     buildVariables: (input) => {
       return {
         categoryWhere: ensureRecord(
@@ -155,19 +114,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetCategorySubcategoriesAndThemeColor',
-    document: gql`
-      query GetCategorySubcategoriesAndThemeColor(
-        $where: CategoryWhereUniqueInput!
-      ) {
-        category(where: $where) {
-          subcategories {
-            name
-            slug
-          }
-          themeColor
-        }
-      }
-    `,
+    document: GET_CATEGORY_SUBCATEGORIES_AND_THEME_COLOR_QUERY,
     buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
@@ -177,24 +124,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetSubcategoryPosts',
-    document: gql`
-      ${postContentFragment}
-      query GetSubcategoryPosts(
-        $where: SubcategoryWhereUniqueInput!
-        $take: Int
-        $skip: Int
-      ) {
-        subcategory(where: $where) {
-          relatedPosts(take: $take, skip: $skip) {
-            ...PostContent
-          }
-          relatedPostsCount
-          category {
-            slug
-          }
-        }
-      }
-    `,
+    document: GET_SUBCATEGORY_POSTS_QUERY,
     buildVariables: (input) => {
       return {
         where: ensureRecord(input.where, 'Missing where'),
@@ -208,28 +138,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetSubSubcategoryPosts',
-    document: gql`
-      ${postContentFragment}
-      query GetSubSubcategoryPosts(
-        $where: SubSubcategoryWhereUniqueInput!
-        $take: Int
-        $skip: Int
-        $orderBy: [PostOrderByInput!]!
-      ) {
-        subSubcategory(where: $where) {
-          relatedPosts(take: $take, skip: $skip, orderBy: $orderBy) {
-            ...PostContent
-          }
-          relatedPostsCount
-          subcategory {
-            slug
-            category {
-              slug
-            }
-          }
-        }
-      }
-    `,
+    document: GET_SUB_SUBCATEGORY_POSTS_QUERY,
     buildVariables: (input) => {
       return {
         where: ensureRecord(input.where, 'Missing where'),
@@ -244,20 +153,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetTopicProjects',
-    document: gql`
-      query GetTopicProjects($orderBy: [ProjectOrderByInput!]!, $take: Int) {
-        projects(orderBy: $orderBy, take: $take) {
-          title
-          subtitle
-          slug
-          heroImage {
-            resized {
-              small
-            }
-          }
-        }
-      }
-    `,
+    document: GET_TOPIC_PROJECTS_QUERY,
     buildVariables: (input) => {
       return {
         orderBy: ensureArray(input.orderBy, 'Missing orderBy'),
@@ -270,123 +166,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetPost',
-    document: gql`
-      ${postContentFragment}
-      query GetPost(
-        $where: PostWhereUniqueInput!
-        $orderBy: [NewsReadingGroupItemOrderByInput!]!
-        $take: Int
-        $relatedPostsWhere: PostWhereInput!
-        $postEssayQuestionsTake: Int
-        $postChoiceQuestionsTake: Int
-      ) {
-        post(where: $where) {
-          opening
-          title
-          showBaodaozai
-          newsReadingGroup {
-            items(orderBy: $orderBy) {
-              name
-              embedCode
-            }
-          }
-          brief
-          content
-          publishedDate
-          heroImage {
-            imageFile {
-              width
-              height
-            }
-            resized {
-              small
-              medium
-              large
-            }
-          }
-          heroCaption
-          authors {
-            avatar {
-              resized {
-                tiny
-              }
-            }
-            bio
-            id
-            name
-            slug
-          }
-          authorsJSON
-          tagsOrdered {
-            name
-            slug
-          }
-          TWReporterRelatedPostsJSON
-          relatedPostsOrdered {
-            title
-            slug
-            publishedDate
-            heroImage {
-              resized {
-                small
-                medium
-                large
-              }
-            }
-            ogDescription
-            subSubcategoriesOrdered {
-              name
-              slug
-              subcategory {
-                name
-                slug
-                category {
-                  name
-                  slug
-                  themeColor
-                }
-              }
-            }
-          }
-          subtitle
-          subSubcategoriesOrdered {
-            name
-            slug
-            subcategory {
-              name
-              slug
-              category {
-                name
-                slug
-                themeColor
-              }
-            }
-          }
-          mainProject {
-            title
-            slug
-          }
-          projects {
-            title
-            slug
-            relatedPosts(take: $take, where: $relatedPostsWhere) {
-              ...PostContent
-            }
-          }
-          postEssayQuestions(take: $postEssayQuestionsTake) {
-            id
-            title
-            hint
-          }
-          postChoiceQuestions(take: $postChoiceQuestionsTake) {
-            id
-            title
-            options
-            reason
-          }
-        }
-      }
-    `,
+    document: GET_POST_QUERY,
     buildVariables: (input) => {
       return {
         where: ensureRecord(input.where, 'Missing where'),
@@ -406,33 +186,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetPostMeta',
-    document: gql`
-      query GetPostMeta($where: PostWhereUniqueInput!) {
-        post(where: $where) {
-          publishedDate
-          ogDescription
-          ogTitle
-          ogImage {
-            resized {
-              small
-            }
-          }
-          subSubcategoriesOrdered {
-            name
-            slug
-            subcategory {
-              name
-              slug
-              category {
-                name
-                slug
-                themeColor
-              }
-            }
-          }
-        }
-      }
-    `,
+    document: GET_POST_META_QUERY,
     buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
@@ -442,11 +196,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'PostsCount',
-    document: gql`
-      query PostsCount {
-        postsCount
-      }
-    `,
+    document: GET_POSTS_COUNT_QUERY,
     buildVariables: () => ({}),
   },
   'posts-paged': {
@@ -454,14 +204,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetPosts',
-    document: gql`
-      ${postContentFragment}
-      query GetPosts($orderBy: [PostOrderByInput!]!, $take: Int, $skip: Int) {
-        posts(orderBy: $orderBy, take: $take, skip: $skip) {
-          ...PostContent
-        }
-      }
-    `,
+    document: GET_POSTS_QUERY,
     buildVariables: (input) => {
       return {
         orderBy: normalizeOrderBy(input.orderBy, [{ publishedDate: 'desc' }]),
@@ -474,50 +217,7 @@ export const operations: Record<string, Operation> = {
     method: 'GET',
     auth: 'public',
     operationName: 'GetPostsEssayAnswersWithLikes',
-    document: gql`
-      query GetPostsEssayAnswersWithLikes(
-        $orderBy: [PostOrderByInput!]!
-        $take: Int
-        $skip: Int
-        $answerOrderBy: [PostEssayAnswerOrderByInput!]!
-        $answerTake: Int
-        $where: PostWhereInput!
-      ) {
-        posts(orderBy: $orderBy, take: $take, skip: $skip, where: $where) {
-          id
-          title
-          slug
-          heroImage {
-            resized {
-              medium
-            }
-          }
-          subSubcategoriesOrdered {
-            name
-          }
-          postEssayQuestions {
-            id
-            title
-            hint
-            answers(orderBy: $answerOrderBy, take: $answerTake) {
-              id
-              content
-              member {
-                id
-                avatar {
-                  id
-                  fileUrl
-                }
-                name
-                nickname
-                email
-              }
-              likesCount
-            }
-          }
-        }
-      }
-    `,
+    document: GET_POSTS_ESSAY_ANSWERS_WITH_LIKES_QUERY,
     buildVariables: (input) => {
       return {
         orderBy: normalizeOrderBy(input.orderBy, [{ publishedDate: 'desc' }]),
@@ -536,28 +236,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetPostEssayQuestions',
-    document: gql`
-      query GetPostEssayQuestions($where: PostWhereUniqueInput!) {
-        post(where: $where) {
-          id
-          slug
-          title
-          heroImage {
-            resized {
-              medium
-            }
-          }
-          postEssayQuestions {
-            id
-            title
-            hint
-          }
-          subSubcategoriesOrdered {
-            name
-          }
-        }
-      }
-    `,
+    document: GET_POST_ESSAY_QUESTIONS_QUERY,
     buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
@@ -567,23 +246,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetTagPosts',
-    document: gql`
-      ${postContentFragment}
-      query GetTagPosts(
-        $where: TagWhereUniqueInput!
-        $take: Int
-        $skip: Int
-        $orderBy: [PostOrderByInput!]!
-      ) {
-        tag(where: $where) {
-          posts(orderBy: $orderBy, take: $take, skip: $skip) {
-            ...PostContent
-          }
-          postsCount
-          name
-        }
-      }
-    `,
+    document: GET_TAG_POSTS_QUERY,
     buildVariables: (input) => {
       return {
         where: ensureRecord(input.where, 'Missing where'),
@@ -598,19 +261,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetTagMeta',
-    document: gql`
-      query GetTagMeta($where: TagWhereUniqueInput!) {
-        tag(where: $where) {
-          ogDescription
-          ogTitle
-          ogImage {
-            resized {
-              small
-            }
-          }
-        }
-      }
-    `,
+    document: GET_TAG_META_QUERY,
     buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
@@ -620,53 +271,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetProject',
-    document: gql`
-      fragment ImageEntity on Photo {
-        resized {
-          small
-          medium
-          large
-        }
-      }
-      query GetProject($where: ProjectWhereUniqueInput!) {
-        project(where: $where) {
-          title
-          titlePosition
-          subtitle
-          content
-          credits
-          publishedDate
-          heroImage {
-            ...ImageEntity
-          }
-          mobileHeroImage {
-            ...ImageEntity
-          }
-          relatedPostsOrdered {
-            title
-            slug
-            publishedDate
-            heroImage {
-              ...ImageEntity
-            }
-            ogDescription
-            subSubcategoriesOrdered {
-              name
-              slug
-              subcategory {
-                name
-                slug
-                category {
-                  name
-                  slug
-                  themeColor
-                }
-              }
-            }
-          }
-        }
-      }
-    `,
+    document: GET_PROJECT_QUERY,
     buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
@@ -676,20 +281,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetProjectMeta',
-    document: gql`
-      query GetProjectMeta($where: ProjectWhereUniqueInput!) {
-        project(where: $where) {
-          publishedDate
-          ogDescription
-          ogTitle
-          ogImage {
-            resized {
-              small
-            }
-          }
-        }
-      }
-    `,
+    document: GET_PROJECT_META_QUERY,
     buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
@@ -699,31 +291,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetProjects',
-    document: gql`
-      ${postContentFragment}
-      query GetProjects(
-        $orderBy: [ProjectOrderByInput!]!
-        $take: Int
-        $skip: Int
-        $includeRelatedPosts: Boolean = false
-      ) {
-        projects(orderBy: $orderBy, take: $take, skip: $skip) {
-          title
-          slug
-          ogDescription
-          heroImage {
-            resized {
-              medium
-            }
-          }
-          publishedDate
-          relatedPostsOrdered @include(if: $includeRelatedPosts) {
-            ...PostContent
-          }
-        }
-        projectsCount
-      }
-    `,
+    document: GET_PROJECTS_QUERY,
     buildVariables: (input) => {
       return {
         orderBy: normalizeOrderBy(input.orderBy, [{ publishedDate: 'desc' }]),
@@ -738,13 +306,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetProjectRelatedPostsCount',
-    document: gql`
-      query GetProjectRelatedPostsCount($where: ProjectWhereUniqueInput!) {
-        project(where: $where) {
-          relatedPostsCount
-        }
-      }
-    `,
+    document: GET_PROJECT_RELATED_POSTS_COUNT_QUERY,
     buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
@@ -754,30 +316,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetAuthorPosts',
-    document: gql`
-      ${postContentFragment}
-      query GetAuthorPosts(
-        $where: AuthorWhereUniqueInput!
-        $take: Int
-        $skip: Int
-        $orderBy: [PostOrderByInput!]!
-      ) {
-        author(where: $where) {
-          bio
-          name
-          email
-          avatar {
-            resized {
-              tiny
-            }
-          }
-          posts(orderBy: $orderBy, take: $take, skip: $skip) {
-            ...PostContent
-          }
-          postsCount
-        }
-      }
-    `,
+    document: GET_AUTHOR_POSTS_QUERY,
     buildVariables: (input) => {
       return {
         where: ensureRecord(input.where, 'Missing where'),
@@ -792,20 +331,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetAuthorMeta',
-    document: gql`
-      query GetAuthorMeta($where: AuthorWhereUniqueInput!) {
-        author(where: $where) {
-          slug
-          name
-          bio
-          image {
-            resized {
-              small
-            }
-          }
-        }
-      }
-    `,
+    document: GET_AUTHOR_META_QUERY,
     buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
@@ -815,17 +341,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetAuthorAvatar',
-    document: gql`
-      query GetAuthorAvatar($where: AuthorWhereUniqueInput!) {
-        author(where: $where) {
-          avatar {
-            resized {
-              tiny
-            }
-          }
-        }
-      }
-    `,
+    document: GET_AUTHOR_AVATAR_QUERY,
     buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
@@ -835,13 +351,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 120,
     auth: 'public',
     operationName: 'GetAuthorPostsCount',
-    document: gql`
-      query GetAuthorPostsCount($where: AuthorWhereUniqueInput!) {
-        author(where: $where) {
-          postsCount
-        }
-      }
-    `,
+    document: GET_AUTHOR_POSTS_COUNT_QUERY,
     buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
@@ -851,14 +361,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 300,
     auth: 'public',
     operationName: 'GetPostsForSitemap',
-    document: gql`
-      query GetPostsForSitemap($where: PostWhereInput!) {
-        posts(where: $where) {
-          slug
-          publishedDate
-        }
-      }
-    `,
+    document: GET_POSTS_FOR_SITEMAP_QUERY,
     buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
@@ -868,14 +371,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 300,
     auth: 'public',
     operationName: 'GetProjectsForSitemap',
-    document: gql`
-      query GetProjectsForSitemap($where: ProjectWhereInput!) {
-        projects(where: $where) {
-          slug
-          publishedDate
-        }
-      }
-    `,
+    document: GET_PROJECTS_FOR_SITEMAP_QUERY,
     buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },

@@ -7,7 +7,7 @@ const schemaPath = '../cms/schema.graphql'
 const config: CodegenConfig = {
   overwrite: true,
   schema: schemaPath,
-  documents: '../api-gateway/src/graphql/operations/**/*.ts',
+  documents: '../api-gateway/src/graphql/documents/*.ts',
   generates: {
     '__generated__/types.ts': {
       plugins: ['typescript'],
@@ -28,19 +28,15 @@ const config: CodegenConfig = {
       presetConfig: {
         extension: '.generated.ts',
         // baseTypesPath is resolved *from the generated file location*.
-        // generated ops: packages/frontend/__generated__/operations/*.generated.ts
+        // generated ops: packages/frontend/__generated__/documents/*.generated.ts
         // base types:     packages/frontend/__generated__/types.ts
         baseTypesPath: '../types.ts',
 
         // folder is resolved *from each operation file's directory*.
         //
-        // from: packages/api-gateway/src/graphql/operations/<operation-file>.ts (directory)
+        // from: packages/api-gateway/src/graphql/documents/<operation-file>.ts (directory)
         // to:   packages/frontend/__generated__/operations
         //
-        // ⚠️ NOTE:
-        // This relative path assumes operation files are only one level deep.
-        // If operations become nested (operations/**), this value may need adjustment
-        // because each additional subfolder adds one more ".." to the relative path.
         folder: '../../../../frontend/__generated__/operations',
       },
       config: {

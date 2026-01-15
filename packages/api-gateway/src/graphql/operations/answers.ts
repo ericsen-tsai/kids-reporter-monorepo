@@ -1,5 +1,15 @@
-import gql from 'graphql-tag'
-
+import {
+  CREATE_POST_CHOICE_ANSWER_MUTATION,
+  CREATE_POST_ESSAY_ANSWER_LIKE_MUTATION,
+  CREATE_POST_ESSAY_ANSWER_MUTATION,
+  DELETE_POST_ESSAY_ANSWER_LIKE_MUTATION,
+  GET_ALL_POST_ESSAY_ANSWERS_QUERY,
+  GET_ESSAY_QUESTION_ESSAY_ANSWERS_QUERY,
+  GET_POST_CHOICE_ANSWERS_QUERY,
+  GET_POST_ESSAY_ANSWERS_QUERY,
+  UPDATE_POST_CHOICE_ANSWER_MUTATION,
+  UPDATE_POST_ESSAY_ANSWER_MUTATION,
+} from '../documents/answers.js'
 import { ensureRecord, normalizeOrderBy, Operation, toInt } from './shared.js'
 
 export const operations: Record<string, Operation> = {
@@ -7,21 +17,7 @@ export const operations: Record<string, Operation> = {
     method: 'GET',
     auth: 'auth',
     operationName: 'GetPostChoiceAnswers',
-    document: gql`
-      query GetPostChoiceAnswers($where: PostChoiceAnswerWhereInput!) {
-        postChoiceAnswers(where: $where) {
-          id
-          question {
-            id
-          }
-          member {
-            id
-          }
-          choiceIndex
-          correct
-        }
-      }
-    `,
+    document: GET_POST_CHOICE_ANSWERS_QUERY,
     buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
@@ -30,17 +26,7 @@ export const operations: Record<string, Operation> = {
     method: 'POST',
     auth: 'auth',
     operationName: 'CreatePostChoiceAnswer',
-    document: gql`
-      mutation CreatePostChoiceAnswer($data: PostChoiceAnswerCreateInput!) {
-        createPostChoiceAnswer(data: $data) {
-          question {
-            id
-          }
-          choiceIndex
-          correct
-        }
-      }
-    `,
+    document: CREATE_POST_CHOICE_ANSWER_MUTATION,
     buildVariables: (input) => {
       return { data: ensureRecord(input.data, 'Missing data') }
     },
@@ -49,18 +35,7 @@ export const operations: Record<string, Operation> = {
     method: 'POST',
     auth: 'auth',
     operationName: 'UpdatePostChoiceAnswer',
-    document: gql`
-      mutation UpdatePostChoiceAnswer(
-        $id: ID!
-        $data: PostChoiceAnswerUpdateInput!
-      ) {
-        updatePostChoiceAnswer(where: { id: $id }, data: $data) {
-          id
-          choiceIndex
-          correct
-        }
-      }
-    `,
+    document: UPDATE_POST_CHOICE_ANSWER_MUTATION,
     buildVariables: (input) => {
       const id = input.id
       if (typeof id !== 'string') {
@@ -73,20 +48,7 @@ export const operations: Record<string, Operation> = {
     method: 'GET',
     auth: 'auth',
     operationName: 'GetPostEssayAnswers',
-    document: gql`
-      query GetPostEssayAnswers($where: PostEssayAnswerWhereInput!) {
-        postEssayAnswers(where: $where) {
-          id
-          question {
-            id
-          }
-          member {
-            id
-          }
-          content
-        }
-      }
-    `,
+    document: GET_POST_ESSAY_ANSWERS_QUERY,
     buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
@@ -96,32 +58,7 @@ export const operations: Record<string, Operation> = {
     cacheTtl: 60,
     auth: 'public',
     operationName: 'GetAllPostEssayAnswers',
-    document: gql`
-      query GetAllPostEssayAnswers(
-        $orderBy: [PostEssayAnswerOrderByInput!]!
-        $take: Int
-      ) {
-        postEssayAnswers(orderBy: $orderBy, take: $take) {
-          id
-          question {
-            id
-            post {
-              slug
-            }
-          }
-          member {
-            id
-            avatar {
-              fileUrl
-            }
-            nickname
-            name
-          }
-          content
-          likesCount
-        }
-      }
-    `,
+    document: GET_ALL_POST_ESSAY_ANSWERS_QUERY,
     buildVariables: (input) => {
       return {
         orderBy: normalizeOrderBy(input.orderBy, [{ createdAt: 'desc' }]),
@@ -133,16 +70,7 @@ export const operations: Record<string, Operation> = {
     method: 'POST',
     auth: 'auth',
     operationName: 'CreatePostEssayAnswer',
-    document: gql`
-      mutation CreatePostEssayAnswer($data: PostEssayAnswerCreateInput!) {
-        createPostEssayAnswer(data: $data) {
-          question {
-            id
-          }
-          content
-        }
-      }
-    `,
+    document: CREATE_POST_ESSAY_ANSWER_MUTATION,
     buildVariables: (input) => {
       return { data: ensureRecord(input.data, 'Missing data') }
     },
@@ -151,17 +79,7 @@ export const operations: Record<string, Operation> = {
     method: 'POST',
     auth: 'auth',
     operationName: 'UpdatePostEssayAnswer',
-    document: gql`
-      mutation UpdatePostEssayAnswer(
-        $id: ID!
-        $data: PostEssayAnswerUpdateInput!
-      ) {
-        updatePostEssayAnswer(where: { id: $id }, data: $data) {
-          id
-          content
-        }
-      }
-    `,
+    document: UPDATE_POST_ESSAY_ANSWER_MUTATION,
     buildVariables: (input) => {
       const id = input.id
       if (typeof id !== 'string') {
@@ -174,39 +92,7 @@ export const operations: Record<string, Operation> = {
     method: 'GET',
     auth: 'public',
     operationName: 'GetEssayQuestionEssayAnswers',
-    document: gql`
-      query GetEssayQuestionEssayAnswers(
-        $where: PostEssayQuestionWhereUniqueInput!
-        $answerOrderBy: [PostEssayAnswerOrderByInput!]!
-        $answerTake: Int!
-        $answerSkip: Int
-      ) {
-        postEssayQuestion(where: $where) {
-          id
-          title
-          hint
-          answers(
-            orderBy: $answerOrderBy
-            take: $answerTake
-            skip: $answerSkip
-          ) {
-            id
-            content
-            member {
-              id
-              avatar {
-                fileUrl
-                id
-              }
-              name
-              nickname
-              email
-            }
-            likesCount
-          }
-        }
-      }
-    `,
+    document: GET_ESSAY_QUESTION_ESSAY_ANSWERS_QUERY,
     buildVariables: (input) => {
       const answerTake = toInt(input.answerTake)
       if (typeof answerTake !== 'number') {
@@ -226,20 +112,7 @@ export const operations: Record<string, Operation> = {
     method: 'POST',
     auth: 'auth',
     operationName: 'CreatePostEssayAnswerLike',
-    document: gql`
-      mutation CreatePostEssayAnswerLike(
-        $data: PostEssayAnswerLikeCreateInput!
-      ) {
-        createPostEssayAnswerLike(data: $data) {
-          answer {
-            id
-          }
-          member {
-            id
-          }
-        }
-      }
-    `,
+    document: CREATE_POST_ESSAY_ANSWER_LIKE_MUTATION,
     buildVariables: (input) => {
       return { data: ensureRecord(input.data, 'Missing data') }
     },
@@ -248,15 +121,7 @@ export const operations: Record<string, Operation> = {
     method: 'POST',
     auth: 'auth',
     operationName: 'DeletePostEssayAnswerLike',
-    document: gql`
-      mutation DeletePostEssayAnswerLike(
-        $where: PostEssayAnswerLikeWhereUniqueInput!
-      ) {
-        deletePostEssayAnswerLike(where: $where) {
-          id
-        }
-      }
-    `,
+    document: DELETE_POST_ESSAY_ANSWER_LIKE_MUTATION,
     buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
