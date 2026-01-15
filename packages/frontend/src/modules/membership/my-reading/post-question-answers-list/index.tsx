@@ -14,11 +14,15 @@ import QuestionAnswersListContent from './question-answers-list-content'
 type PostQuestionAnswersListProps = {
   postQuestionAnswers: PostQuestionAnswers
   isLoading: boolean
+  onBackToFirstPage: (slug: string) => void
+  openedAccordionItemValue: string | undefined
 }
 
 function PostQuestionAnswersList({
   postQuestionAnswers,
   isLoading,
+  onBackToFirstPage,
+  openedAccordionItemValue,
 }: PostQuestionAnswersListProps) {
   if (isLoading) {
     return (
@@ -44,12 +48,15 @@ function PostQuestionAnswersList({
     <Accordion
       type="multiple"
       className="flex w-full flex-col gap-0 border-t-[2px] border-t-neutral-200"
+      defaultValue={
+        openedAccordionItemValue ? [openedAccordionItemValue] : undefined
+      }
     >
       {postQuestionAnswers.map((group) => {
         return (
           <AccordionItem
-            key={group.title}
-            value={group.title}
+            key={group.slug}
+            value={group.slug}
             className="border-b-[2px] border-b-neutral-200 last:border-b"
           >
             <AccordionTrigger
@@ -82,6 +89,8 @@ function PostQuestionAnswersList({
               <QuestionAnswersListContent
                 href={group.href}
                 answers={group.answers}
+                postSlug={group.slug}
+                onBackToFirstPage={onBackToFirstPage}
               />
             </AccordionContent>
           </AccordionItem>

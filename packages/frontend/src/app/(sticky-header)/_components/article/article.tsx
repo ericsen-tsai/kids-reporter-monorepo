@@ -18,10 +18,7 @@ import {
   DEFAULT_THEME_COLOR,
   FontSizeLevel,
 } from '@/constants'
-import {
-  BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT,
-  BAODAOZAI_QUESTION_COUNT,
-} from '@/constants/baodaozai-question-count'
+import { BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT } from '@/constants/baodaozai-question-count'
 import Toolbar from '@/modules/article/components/toolbar'
 import { useHydratedAuthStore } from '@/services/auth/use-hydrated-auth-store'
 import {
@@ -311,14 +308,11 @@ const Article = ({
     : 0
 
   const postQuestions = useMemo<BaodaozaiQuestions | null>(() => {
-    const essayCount = essayQuestionCount
-    const choiceCount = BAODAOZAI_QUESTION_COUNT - essayCount
-
-    const essayQuestions = (post.postEssayQuestions ?? []).slice(0, essayCount)
-    const choiceQuestions = (post.postChoiceQuestions ?? []).slice(
-      BAODAOZAI_QUESTION_COUNT - choiceCount,
-      BAODAOZAI_QUESTION_COUNT
+    const essayQuestions = (post.postEssayQuestions ?? []).slice(
+      0,
+      essayQuestionCount
     )
+    const choiceQuestions = post.postChoiceQuestions ?? []
 
     const finalChoiceQuestions = choiceQuestions.map<BaodaozaiChoiceQuestion>(
       (question) => ({

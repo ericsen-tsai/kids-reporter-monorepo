@@ -578,6 +578,35 @@ export const ArticleShortcutIconLarge = () => {
   )
 }
 
+export const IdeaHubShortcutIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="23"
+      height="21"
+      viewBox="0 0 23 21"
+      fill="none"
+    >
+      <path
+        d="M14.7441 3.10024L14.7441 9.30334C14.7441 10.4079 13.8487 11.3033 12.7441 11.3033L4.31339 11.3033L1.09987 14.3467L1.09987 11.3033L1.09987 3.10024C1.09987 1.99567 1.9953 1.10024 3.09987 1.10024L12.7441 1.10024C13.8487 1.10024 14.7441 1.99567 14.7441 3.10024Z"
+        stroke="white"
+        strokeWidth="2.2"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M17.8868 7.38442L19.1003 7.38442C20.2049 7.38442 21.1003 8.27985 21.1003 9.38442L21.1003 16.5875L21.1003 19.6309L17.8868 16.5875L9.44347 16.5875C8.34585 16.5875 7.45605 15.6977 7.45605 14.6001"
+        stroke="white"
+        strokeWidth="2.2"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
 export const GroupIcon = () => {
   return (
     <svg

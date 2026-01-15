@@ -72,9 +72,11 @@ function EditMode({ id, joinedAt }: EditModeProps) {
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between gap-4">
           <div className="flex w-full flex-col gap-1">
-            <span className="prose-p1-bold text-neutral-900">會員帳號</span>
+            <span className="prose-p1-bold text-neutral-900">
+              少年報導者會員ID
+            </span>
             <span id="member-account-desc" className="sr-only">
-              會員帳號無法編輯
+              少年報導者會員ID無法編輯
             </span>
             <Input
               value={id}

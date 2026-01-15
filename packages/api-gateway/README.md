@@ -40,6 +40,10 @@ $ yarn start
 
 開發環境可將 `.env.example` 複製為 `.env.local` 後依需求填入。
 
+新增或常用環境變數：
+
+- `SLOW_THRESHOLD_MS`: request 超過此毫秒數時 log severity 會提升為 WARNING；預設 5000
+
 `make dev` 與 `make start` 會預設載入 `.env.local`；透過環境變數 `ENV_FILE` 可改用其他檔案。dotenv 預設不會覆寫既有的 shell 環境變數，因此需要覆寫時請先調整 shell 或改用 `--override`。
 
 `make start` 會在載入 dotenv 前將 `NODE_ENV` 設為 `production` 以維持正式環境設定，若需覆寫請於啟動前手動指定。

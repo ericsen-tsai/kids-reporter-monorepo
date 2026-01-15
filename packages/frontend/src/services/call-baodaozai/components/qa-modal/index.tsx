@@ -6,7 +6,13 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { CallBaodaozaiProps, useCallBaodaozaiContext } from '../../context'
 import { BaodaozaiAction, BaodaozaiQuestions } from '../../types'
-import { getModalStepsFromQuestions, ModalStep } from './utils'
+import { UPDATE_QA_MODAL_OVERRIDES } from './constants'
+import { QAModalMode } from './types'
+import {
+  getDefaultAnswerFromQuestions,
+  getModalStepsFromQuestions,
+  ModalStep,
+} from './utils'
 
 export type QAModalEvent = {
   setHide: (hide: boolean) => void
@@ -27,11 +33,32 @@ type QAModalProps = {
   }: QAModalEvent) => void
   onSubmit: (answers: Record<number, string>, events: QAModalEvent) => void
   isOpen: boolean
+  mode?: QAModalMode
 }
 
-function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
+function QAModal({
+  questions,
+  onClose,
+  onSubmit,
+  isOpen,
+  mode = 'default',
+}: QAModalProps) {
   const [currentModalStepIndex, setCurrentModalStepIndex] = useState(0)
-  const [answers, setAnswers] = useState<Record<number, string>>({})
+  const defaultAnswers = useMemo(
+    () => getDefaultAnswerFromQuestions(questions),
+    [questions]
+  )
+  const [answers, setAnswers] = useState<Record<number, string>>(defaultAnswers)
+  const isCleanAnswers = useMemo(() => {
+    if (Object.keys(answers).length !== Object.keys(defaultAnswers).length) {
+      return false
+    }
+    return Object.keys(answers).every((key) => {
+      const index = parseInt(key)
+      return defaultAnswers[index] === answers[index]
+    })
+  }, [answers, defaultAnswers])
+
   const [isLeaving, setIsLeaving] = useState(false)
 
   const {
@@ -54,6 +81,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
     [currentModalStepIndex, setAnswers]
   )
 
+  const shouldByPassOnLeaving = mode === 'update' && isCleanAnswers
   const handleShowLeaving = useCallback(() => {
     setIsLeaving(true)
   }, [])
@@ -89,14 +117,15 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
       onNext: handleNext,
       onPass: handlePass,
       onSubmit: handleSubmit,
+      mode,
     })
-  }, [handleNext, handlePass, questions, handleSubmit])
+  }, [handleNext, handlePass, questions, handleSubmit, mode])
 
   const handleReset = useCallback(() => {
-    setAnswers({})
+    setAnswers(defaultAnswers)
     setCurrentModalStepIndex(0)
     setIsLeaving(false)
-  }, [])
+  }, [defaultAnswers])
 
   useEffect(() => {
     if (isOpen) {
@@ -129,6 +158,9 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
     if (isLeaving) {
       return '再想一下'
     }
+    if (mode === 'update') {
+      return UPDATE_QA_MODAL_OVERRIDES.title
+    }
     if (!currentModalStep) return null
     if (
       currentModalStep?.type === 'choice-result' ||
@@ -137,17 +169,25 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
       return '作答結果'
     }
     return `${currentModalStep?.questionIndex + 1}/${questions.length}`
-  }, [currentModalStep, questions.length, isLeaving])
+  }, [currentModalStep, questions.length, isLeaving, mode])
+
+  const handleLeaving = useCallback(() => {
+    return shouldByPassOnLeaving ? onClose(events) : handleShowLeaving()
+  }, [shouldByPassOnLeaving, onClose, events, handleShowLeaving])
 
   const renderModalContent = useMemo(() => {
     if (isLeaving) {
       return (
         <div className="mb-5 flex w-full flex-col items-start p-6 tablet:mb-0">
           <h2 className="mb-3 prose-h6-large text-neutral-900">
-            確定要放棄作答嗎？
+            {mode === 'update'
+              ? UPDATE_QA_MODAL_OVERRIDES.onLeavingModal.subtitle
+              : '確定要放棄作答嗎？'}
           </h2>
           <p className="prose-p1 text-neutral-700">
-            你可以隨時呼叫報導仔，重新挑戰！
+            {mode === 'update'
+              ? UPDATE_QA_MODAL_OVERRIDES.onLeavingModal.content
+              : '你可以隨時呼叫報導仔，重新挑戰！'}
           </p>
         </div>
       )
@@ -191,7 +231,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
         )
       case 'essay':
         return (
-          <div className="flex h-full w-full flex-col p-6 pb-10 tablet:pb-6">
+          <div className="flex h-full w-full flex-col p-6 pb-10 tablet:pb-1">
             <div className="mb-6 w-full">
               <h2 className="mb-3 prose-h6-large text-neutral-900">
                 {currentModalStep.title}
@@ -203,7 +243,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
 
             <textarea
               className={cn(
-                'h-72 w-full flex-1 resize-none rounded-2xl border-2 bg-white px-5 py-4 prose-p1 text-neutral-900 transition-all focus:outline-none',
+                'h-38 w-full flex-1 resize-none rounded-2xl border-2 bg-white px-5 py-4 prose-p1 text-neutral-900 transition-all focus:outline-none',
                 (answers[currentModalStep.questionIndex] || '').trim()
                   ? 'border-neutral-600'
                   : 'border-neutral-200 hover:border-neutral-600 focus:border-neutral-600'
@@ -217,6 +257,21 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
                 )
               }
             />
+            <span className="mt-5 flex items-center gap-2 prose-p1 text-neutral-400">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M12 17C12.2833 17 12.5208 16.9042 12.7125 16.7125C12.9042 16.5208 13 16.2833 13 16V12C13 11.7167 12.9042 11.4792 12.7125 11.2875C12.5208 11.0958 12.2833 11 12 11C11.7167 11 11.4792 11.0958 11.2875 11.2875C11.0958 11.4792 11 11.7167 11 12V16C11 16.2833 11.0958 16.5208 11.2875 16.7125C11.4792 16.9042 11.7167 17 12 17ZM12 9C12.2833 9 12.5208 8.90417 12.7125 8.7125C12.9042 8.52083 13 8.28333 13 8C13 7.71667 12.9042 7.47917 12.7125 7.2875C12.5208 7.09583 12.2833 7 12 7C11.7167 7 11.4792 7.09583 11.2875 7.2875C11.0958 7.47917 11 7.71667 11 8C11 8.28333 11.0958 8.52083 11.2875 8.7125C11.4792 8.90417 11.7167 9 12 9ZM12 22C10.6167 22 9.31667 21.7375 8.1 21.2125C6.88333 20.6875 5.825 19.975 4.925 19.075C4.025 18.175 3.3125 17.1167 2.7875 15.9C2.2625 14.6833 2 13.3833 2 12C2 10.6167 2.2625 9.31667 2.7875 8.1C3.3125 6.88333 4.025 5.825 4.925 4.925C5.825 4.025 6.88333 3.3125 8.1 2.7875C9.31667 2.2625 10.6167 2 12 2C13.3833 2 14.6833 2.2625 15.9 2.7875C17.1167 3.3125 18.175 4.025 19.075 4.925C19.975 5.825 20.6875 6.88333 21.2125 8.1C21.7375 9.31667 22 10.6167 22 12C22 13.3833 21.7375 14.6833 21.2125 15.9C20.6875 17.1167 19.975 18.175 19.075 19.075C18.175 19.975 17.1167 20.6875 15.9 21.2125C14.6833 21.7375 13.3833 22 12 22ZM12 20C14.2333 20 16.125 19.225 17.675 17.675C19.225 16.125 20 14.2333 20 12C20 9.76667 19.225 7.875 17.675 6.325C16.125 4.775 14.2333 4 12 4C9.76667 4 7.875 4.775 6.325 6.325C4.775 7.875 4 9.76667 4 12C4 14.2333 4.775 16.125 6.325 17.675C7.875 19.225 9.76667 20 12 20Z"
+                  fill="#8E8E8E"
+                />
+              </svg>
+              答案送出後會公開在「小讀者觀點大集合」頁面。
+            </span>
           </div>
         )
       case 'choice-result':
@@ -227,8 +282,8 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
                 <h2 className="text-center prose-h6-large text-neutral-900">
                   {answers[currentModalStep.questionIndex] ===
                   currentModalStep.correctAnswerIndex.toString()
-                    ? '答對了～'
-                    : '再接再厲'}
+                    ? '厲害厲害！'
+                    : '差了一點，別氣餒！'}
                 </h2>
               </div>
 
@@ -279,7 +334,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
             <div className="flex flex-col bg-neutral-white">
               <div className="mb-6 w-full px-6 pt-6">
                 <h2 className="text-center prose-h6-large text-neutral-900">
-                  已送出
+                  這個觀點真不錯，謝謝你的分享
                 </h2>
               </div>
 
@@ -300,7 +355,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
 
             <div className="w-full bg-neutral-100 p-6 pb-10 tablet:pb-6">
               <div className="mb-4">
-                <p className="mb-4 prose-p1 text-neutral-700">你的回答：</p>
+                <p className="mb-4 prose-p1 text-neutral-700">你送出的回答：</p>
                 <div className="w-full rounded-2xl border-2 border-neutral-200 bg-white p-4">
                   <span className="prose-p1-bold text-wrap break-words text-neutral-900">
                     {currentAnswer}
@@ -311,7 +366,14 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
           </div>
         )
     }
-  }, [answers, currentAnswer, currentModalStep, handleAnswerChange, isLeaving])
+  }, [
+    answers,
+    currentAnswer,
+    currentModalStep,
+    handleAnswerChange,
+    isLeaving,
+    mode,
+  ])
 
   const renderModalButtons = useMemo(() => {
     if (isLeaving) {
@@ -354,16 +416,23 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
         return (
           <div className="flex w-full gap-4">
             <Button
-              onClick={currentModalStep.onPass}
+              onClick={
+                mode === 'update' ? handleLeaving : currentModalStep.onPass
+              }
               variant="secondary"
               size={36}
               className="flex-1"
             >
-              跳過
+              {mode === 'update'
+                ? UPDATE_QA_MODAL_OVERRIDES.cancelButtonText
+                : '跳過'}
             </Button>
             <Button
               onClick={currentModalStep.onNext}
-              disabled={!(currentAnswer || '').trim()}
+              disabled={
+                !(currentAnswer || '').trim() ||
+                (mode === 'update' && isCleanAnswers)
+              }
               variant="primary"
               size={36}
               className="flex-1"
@@ -398,12 +467,14 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
         return null
     }
   }, [
-    currentModalStep,
-    isLastQuestion,
-    currentAnswer,
     isLeaving,
+    currentModalStep,
     handleCancelLeaving,
     handleConfirmLeaving,
+    currentAnswer,
+    mode,
+    handleLeaving,
+    isLastQuestion,
   ])
 
   const renderBaodaozai = useMemo(() => {
@@ -455,7 +526,7 @@ function QAModal({ questions, onClose, onSubmit, isOpen }: QAModalProps) {
           </span>
           {!isLeaving && (
             <button
-              onClick={handleShowLeaving}
+              onClick={handleLeaving}
               className="absolute top-5 right-6 flex h-8 w-8 cursor-pointer items-center justify-center text-neutral-600 transition-colors hover:text-neutral-800"
             >
               <svg

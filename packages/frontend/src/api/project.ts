@@ -3,15 +3,14 @@ import {
   GetTopicProjectsQueryVariables,
 } from '__generated__/operations/project.generated'
 
-import { sendGQLRequest } from '@/utils'
-
-import { GET_TOPIC_PROJECTS_GQL } from './graphql/project'
+import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export const getTopicProjects = async (
   variables: GetTopicProjectsQueryVariables
 ) => {
-  const response = await sendGQLRequest<GetTopicProjectsQuery>({
-    query: GET_TOPIC_PROJECTS_GQL,
+  const response = await sendRestGqlRequest<GetTopicProjectsQuery>({
+    operation: 'topic-projects',
+    method: 'GET',
     variables,
   })
 

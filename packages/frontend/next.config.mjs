@@ -14,6 +14,10 @@ const nextConfig = {
         hostname: 'kids-storage.twreporter.org',
       },
       {
+        protocol: 'https',
+        hostname: '*-kids-storage.twreporter.org',
+      },
+      {
         protocol: 'http',
         hostname: 'localhost',
       },

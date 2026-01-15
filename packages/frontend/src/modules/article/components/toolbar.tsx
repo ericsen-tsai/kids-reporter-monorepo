@@ -296,6 +296,7 @@ function Toolbar({ topicURL, postSlug }: ToolbarProp) {
         open={isPostEssayQuestionsModalOpen}
         onClose={() => setIsPostEssayQuestionsModalOpen(false)}
         postSlug={postSlug}
+        mode="in-article"
       />
     </>
   )

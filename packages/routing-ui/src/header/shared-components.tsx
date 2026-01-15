@@ -196,11 +196,13 @@ export function ActionButtons({
   tags,
   searchPlaceholder,
   subscribeUrl,
+  readingSettingsUrl,
 }: {
   hideCtaButtons?: boolean
   tags: string[]
   searchPlaceholder: string
   subscribeUrl: string
+  readingSettingsUrl: string
 }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
 
@@ -259,12 +261,13 @@ export function ActionButtons({
       >
         {isSearchOpen ? <ClearIcon /> : <SearchIcon />}
       </button>
-      <button
-        className="w-8 h-8 flex cursor-pointer items-center justify-center rounded-full text-neutral-600 transition-all duration-200 hover:text-neutral-800"
+      <a
+        className="w-8 h-8 flex items-center justify-center rounded-full text-neutral-600 transition-all duration-200 hover:text-neutral-800"
         aria-label="設定"
+        href={readingSettingsUrl}
       >
         <SettingsIcon />
-      </button>
+      </a>
     </div>
   )
 }

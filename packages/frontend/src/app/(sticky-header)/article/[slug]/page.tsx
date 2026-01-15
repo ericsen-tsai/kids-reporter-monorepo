@@ -9,15 +9,14 @@ import {
   KIDS_URL_ORIGIN,
   OG_SUFFIX,
 } from '@/constants'
-import { BAODAOZAI_QUESTION_COUNT } from '@/constants/baodaozai-question-count'
 import TableOfContentSideMenu from '@/modules/article/components/table-of-content-side-menu'
 import { log, LogLevel } from '@/utils'
 
 import Article from '../../_components/article/article'
 
 const topicRelatedPostsNum = 5
-const postEssayQuestionsTake = BAODAOZAI_QUESTION_COUNT
-const postChoiceQuestionsTake = BAODAOZAI_QUESTION_COUNT
+const postEssayQuestionsTake = 3
+const postChoiceQuestionsTake = 3
 
 export async function generateMetadata({
   params,

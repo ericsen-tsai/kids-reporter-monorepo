@@ -7,12 +7,9 @@ import { print } from 'graphql/language/printer'
 
 import { API_URL, INTERNAL_API_URL } from '@/constants'
 import envVars from '@/environment-variables'
-import { sendGQLRequest } from '@/utils'
+import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
-import {
-  CREATE_MEMBER_AVATAR_MUTATION,
-  DELETE_MEMBER_AVATAR_MUTATION,
-} from './graphql/member-avatar'
+import { CREATE_MEMBER_AVATAR_MUTATION } from './graphql/member-avatar'
 
 export const uploadMemberAvatar = async (
   file: File,
@@ -68,17 +65,14 @@ export const deleteMemberAvatar = async (
   avatarId: string,
   accessToken: string
 ) => {
-  const response = await sendGQLRequest<DeleteMemberAvatarMutation>(
-    {
-      query: DELETE_MEMBER_AVATAR_MUTATION,
-      variables: {
-        where: { id: avatarId },
-      },
+  const response = await sendRestGqlRequest<DeleteMemberAvatarMutation>({
+    operation: 'delete-member-avatar',
+    method: 'POST',
+    variables: {
+      where: { id: avatarId },
     },
-    {
-      authToken: accessToken,
-    }
-  )
+    authToken: accessToken,
+  })
 
   return response?.data?.data?.deleteMemberAvatar
 }

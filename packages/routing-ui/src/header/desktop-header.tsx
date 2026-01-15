@@ -21,6 +21,7 @@ type DesktopHeaderProps = {
   menuItems: MenuItem[]
   isLoggedIn?: boolean
   loginUrl?: string
+  readingSettingsUrl: string
 }
 
 export function DesktopHeader({
@@ -34,6 +35,7 @@ export function DesktopHeader({
   menuItems,
   isLoggedIn,
   loginUrl,
+  readingSettingsUrl,
 }: DesktopHeaderProps) {
   return (
     <>
@@ -100,6 +102,7 @@ export function DesktopHeader({
                   hideCtaButtons={compactMode}
                   searchPlaceholder={searchPlaceholder}
                   subscribeUrl={subscribeUrl}
+                  readingSettingsUrl={readingSettingsUrl}
                 />
                 <a
                   href={isLoggedIn ? '/member' : (loginUrl ?? '/login')}

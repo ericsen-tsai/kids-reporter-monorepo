@@ -10,14 +10,7 @@ import {
 } from '__generated__/operations/post-essay-answer.generated'
 import { PostEssayAnswerOrderByInput } from '__generated__/types'
 
-import { sendGQLRequest } from '@/utils/send-gql-request'
-
-import {
-  CREATE_POST_ESSAY_ANSWER_MUTATION,
-  GET_ALL_POST_ESSAY_ANSWERS_QUERY,
-  GET_POST_ESSAY_ANSWER_QUERY,
-  UPDATE_POST_ESSAY_ANSWER_MUTATION,
-} from './graphql/post-essay-answer'
+import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export const getPostEssayAnswersByMemberId = async (
   memberId: string,
@@ -30,15 +23,12 @@ export const getPostEssayAnswersByMemberId = async (
       ...(postSlug && { question: { post: { slug: { equals: postSlug } } } }),
     },
   }
-  const response = await sendGQLRequest<GetPostEssayAnswersQuery>(
-    {
-      query: GET_POST_ESSAY_ANSWER_QUERY,
-      variables,
-    },
-    {
-      authToken: accessToken,
-    }
-  )
+  const response = await sendRestGqlRequest<GetPostEssayAnswersQuery>({
+    operation: 'post-essay-answers',
+    method: 'GET',
+    variables,
+    authToken: accessToken,
+  })
   return response?.data?.data?.postEssayAnswers ?? []
 }
 
@@ -50,8 +40,9 @@ export const getAllPostEssayAnswers = async (
     orderBy: orderBy ?? [],
     take: take ?? 10,
   }
-  const response = await sendGQLRequest<GetAllPostEssayAnswersQuery>({
-    query: GET_ALL_POST_ESSAY_ANSWERS_QUERY,
+  const response = await sendRestGqlRequest<GetAllPostEssayAnswersQuery>({
+    operation: 'all-post-essay-answers',
+    method: 'GET',
     variables,
   })
   return response?.data?.data?.postEssayAnswers ?? []
@@ -61,15 +52,12 @@ export const createPostEssayAnswer = async (
   variables: CreatePostEssayAnswerMutationVariables,
   accessToken: string
 ) => {
-  const response = await sendGQLRequest<CreatePostEssayAnswerMutation>(
-    {
-      query: CREATE_POST_ESSAY_ANSWER_MUTATION,
-      variables,
-    },
-    {
-      authToken: accessToken,
-    }
-  )
+  const response = await sendRestGqlRequest<CreatePostEssayAnswerMutation>({
+    operation: 'create-post-essay-answer',
+    method: 'POST',
+    variables,
+    authToken: accessToken,
+  })
   return response?.data?.data?.createPostEssayAnswer
 }
 
@@ -77,15 +65,12 @@ export const updatePostEssayAnswer = async (
   variables: UpdatePostEssayAnswerMutationVariables,
   accessToken: string
 ) => {
-  const response = await sendGQLRequest<UpdatePostEssayAnswerMutation>(
-    {
-      query: UPDATE_POST_ESSAY_ANSWER_MUTATION,
-      variables,
-    },
-    {
-      authToken: accessToken,
-    }
-  )
+  const response = await sendRestGqlRequest<UpdatePostEssayAnswerMutation>({
+    operation: 'update-post-essay-answer',
+    method: 'POST',
+    variables,
+    authToken: accessToken,
+  })
 
   return response?.data?.data?.updatePostEssayAnswer
 }

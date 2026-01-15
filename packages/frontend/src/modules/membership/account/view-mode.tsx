@@ -47,7 +47,9 @@ function ViewMode({
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between gap-4">
           <div className="flex flex-col gap-1">
-            <span className="prose-p1-bold text-neutral-900">會員帳號</span>
+            <span className="prose-p1-bold text-neutral-900">
+              少年報導者會員ID
+            </span>
             <span className="prose-p1 text-neutral-700">
               {id || NO_DATA_TEXT}
             </span>

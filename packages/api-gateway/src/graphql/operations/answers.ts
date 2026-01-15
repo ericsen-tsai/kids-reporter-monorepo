@@ -90,7 +90,7 @@ export const operations: Record<string, Operation> = {
     operationName: 'GetAllPostEssayAnswers',
     document: `
       query GetAllPostEssayAnswers(
-        $orderBy: [PostEssayAnswerOrderByInput!]
+        $orderBy: [PostEssayAnswerOrderByInput!]!
         $take: Int
   ) {
     postEssayAnswers(orderBy: $orderBy, take: $take) {
