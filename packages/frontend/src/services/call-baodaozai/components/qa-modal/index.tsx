@@ -401,17 +401,6 @@ function QAModal({
     if (!currentModalStep) return null
     switch (currentModalStep.type) {
       case 'choice':
-        return (
-          <Button
-            onClick={currentModalStep.onNext}
-            disabled={!currentAnswer}
-            variant="primary"
-            size={36}
-            className="w-full"
-          >
-            確定
-          </Button>
-        )
       case 'essay':
         return (
           <div className="flex w-full gap-4">
@@ -437,7 +426,7 @@ function QAModal({
               size={36}
               className="flex-1"
             >
-              送出答案
+              確定
             </Button>
           </div>
         )
