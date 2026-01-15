@@ -76,6 +76,7 @@ export const GET_ALL_POST_ESSAY_ANSWERS_QUERY = gql`
         }
         nickname
         name
+        email
       }
       content
       likesCount
