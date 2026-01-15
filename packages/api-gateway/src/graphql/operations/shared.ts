@@ -1,23 +1,35 @@
 import express from 'express'
+import type { DocumentNode } from 'graphql'
+import gql from 'graphql-tag'
 
 export type Operation = {
   method: 'GET' | 'POST'
   cacheTtl?: number
   auth: 'public' | 'auth'
   operationName: string
-  document: string
+  document: DocumentNode
   buildVariables: (input: Record<string, unknown>) => Record<string, unknown>
 }
 
-export const postContentFragment = `
+export const postContentFragment = gql`
   fragment PostContent on Post {
     title
     slug
     ogDescription
-    heroImage { resized { small } }
+    heroImage {
+      resized {
+        small
+      }
+    }
     subSubcategoriesOrdered {
       name
-      subcategory { name category { slug themeColor } }
+      subcategory {
+        name
+        category {
+          slug
+          themeColor
+        }
+      }
     }
     publishedDate
   }
