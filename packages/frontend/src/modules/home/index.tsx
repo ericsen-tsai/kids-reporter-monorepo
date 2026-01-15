@@ -5,9 +5,9 @@ import { PostSummary } from '@/components/types'
 import { SECTIONS } from '@/constants'
 
 import { CallToAction } from './call-to-action'
+import TopicSlider from './components/topic-slider'
 import Divider from './divider'
 import GoToMainSite from './go-to-main-site'
-import MainSlider from './main-slider'
 import MakeFriends from './make-friend'
 import PostSelection from './post-selection'
 import SearchAndTags from './search-and-tags'
@@ -30,7 +30,7 @@ function HomeModule({
 }: HomeModuleProps) {
   return (
     <>
-      <MainSlider topics={topics} />
+      <TopicSlider topics={topics} />
       <PostSelection latestPosts={latestPosts} featuredPosts={featuredPosts} />
       {SECTIONS.map((sectionConfig, index) => {
         const posts = sectionPostsArray?.[index]
