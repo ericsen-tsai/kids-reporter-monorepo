@@ -64,15 +64,15 @@ function QuestionAnswersListContent({
       <div className="mt-3 flex items-center justify-center gap-5">
         <Link
           href={href}
-          className="flex items-center gap-1 text-neutral-900 hover:bg-neutral-white/50"
+          className="flex items-center gap-1 text-neutral-900 transition-colors duration-200 hover:bg-neutral-white/50 hover:text-red-400 active:text-red-500"
         >
           <ArticleShortcutIcon />
           <span>閱讀完整文章</span>
         </Link>
         <Divider direction="vertical" className="h-4 bg-neutral-900" />
         <Link
-          href={href}
-          className="flex items-center gap-1 text-neutral-900 hover:bg-neutral-white/50"
+          href="/idea-hub"
+          className="flex items-center gap-1 text-neutral-900 transition-colors duration-200 hover:bg-neutral-white/50 hover:text-red-400 active:text-red-500"
         >
           <GroupIcon />
           <span>前往讀者討論</span>
