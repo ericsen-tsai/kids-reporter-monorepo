@@ -2,6 +2,10 @@
 import _errors from '@twreporter/errors'
 import express from 'express'
 import { print } from 'graphql'
+import {
+  createProxyMiddleware,
+  responseInterceptor,
+} from 'http-proxy-middleware'
 
 import consts from '../constants.js'
 import { buildAuthContext } from '../graphql/auth.js'
@@ -127,9 +131,175 @@ export function createGqlRestRouter({
   headlessAccount: { email: string; password: string }
 }) {
   const router = express.Router()
+  const respondMultipart = ({
+    res,
+    status,
+    payload,
+  }: {
+    res: express.Response
+    status: number
+    payload: unknown
+  }) => {
+    res.set('Cache-Control', 'no-store')
+    logResponse(
+      res,
+      status,
+      payload,
+      res.locals.gqlRestStartAt,
+      'create-member-avatar'
+    )
+    res.status(status)
+    return JSON.stringify(payload)
+  }
+  // Stream multipart uploads directly to GraphQL to avoid buffering files in memory.
+  const multipartProxy = createProxyMiddleware({
+    target: apiOrigin,
+    changeOrigin: true,
+    pathRewrite: () => '/api/graphql',
+    selfHandleResponse: true,
+    onProxyReq: (proxyReq, req, res) => {
+      const authContext = res.locals.gqlRestAuthContext
+      if (authContext?.mode === 'jwt') {
+        proxyReq.setHeader('Authorization', authContext.headers.Authorization)
+        proxyReq.removeHeader?.('Cookie')
+      } else if (authContext?.mode === 'cookie') {
+        if (authContext.headers?.Cookie) {
+          proxyReq.setHeader('Cookie', authContext.headers.Cookie)
+        }
+        proxyReq.removeHeader?.('Authorization')
+      }
+    },
+    onProxyRes: responseInterceptor(
+      async (responseBuffer, proxyRes, req, res) => {
+        const expressRes = res as express.Response
+        const rawBody = responseBuffer.toString('utf8')
+        let gqlPayload: { data?: unknown; errors?: unknown } | undefined
+        try {
+          gqlPayload = rawBody ? JSON.parse(rawBody) : undefined
+        } catch (_err) {
+          const payload = {
+            status: 'error',
+            message: 'Invalid response from upstream GraphQL',
+          }
+          return respondMultipart({
+            res: expressRes,
+            status: statusCodes.internalServerError,
+            payload,
+          })
+        }
+
+        if (gqlPayload?.errors) {
+          const hasClientError = Array.isArray(gqlPayload.errors)
+            ? gqlPayload.errors.some(
+                (error: { extensions?: { code?: string } }) =>
+                  CLIENT_GQL_ERROR_CODES.has(error?.extensions?.code ?? '')
+              )
+            : false
+          const status = hasClientError
+            ? statusCodes.badRequest
+            : statusCodes.internalServerError
+          const payload = {
+            status: 'error',
+            message: 'CMS GraphQL responded with errors',
+            errors: gqlPayload.errors,
+          }
+          return respondMultipart({ res: expressRes, status, payload })
+        }
+
+        const payload = {
+          status: 'success',
+          data: gqlPayload?.data ?? {},
+        }
+        return respondMultipart({
+          res: expressRes,
+          status: statusCodes.ok,
+          payload,
+        })
+      }
+    ),
+    onError: (err, req, res) => {
+      const annotatedErr = errors.helpers.wrap(
+        err,
+        'GraphQLRestProxyError',
+        'Failed to proxy multipart request'
+      )
+      console.log(
+        JSON.stringify({
+          severity: 'ERROR',
+          message: errors.helpers.printAll(annotatedErr, {
+            withStack: true,
+            withPayload: true,
+          }),
+          ...res?.locals?.globalLogFields,
+        })
+      )
+      res.writeHead(statusCodes.internalServerError, {
+        'Content-Type': 'application/json',
+      })
+      res.end(
+        JSON.stringify({
+          status: 'error',
+          message: 'Failed to proxy multipart request',
+        })
+      )
+    },
+  })
+
+  // Dedicated handler for file uploads; keep it out of the JSON-oriented loop below.
+  const createMemberAvatarOp = operations['create-member-avatar']
+  if (createMemberAvatarOp) {
+    router.post('/api/rest/create-member-avatar', async (req, res, next) => {
+      const startAt = process.hrtime.bigint()
+      const contentType = req.get('Content-Type') || ''
+      const isMultipart = contentType.includes('multipart/form-data')
+      if (!isMultipart) {
+        const payload = {
+          status: 'fail',
+          data: { message: 'Multipart form required for this operation' },
+        }
+        return logAndSend(
+          res,
+          statusCodes.badRequest,
+          payload,
+          startAt,
+          'create-member-avatar'
+        )
+      }
+
+      try {
+        const authContext = await buildAuthContext({
+          req,
+          apiOrigin,
+          headlessAccount,
+          auth: createMemberAvatarOp.auth,
+        })
+        res.locals.gqlRestStartAt = startAt
+        res.locals.gqlRestAuthContext = authContext
+        return multipartProxy(req, res, next)
+      } catch (err) {
+        const payload = {
+          status: 'fail',
+          data: {
+            message: 'buildAuthContext fails. ' + (err as Error).message,
+          },
+        }
+        return logAndSend(
+          res,
+          statusCodes.badRequest,
+          payload,
+          startAt,
+          'create-member-avatar'
+        )
+      }
+    })
+  }
 
   // Register method-specific handlers for each operation
   Object.entries(operations).forEach(([operationName, op]) => {
+    if (operationName === 'create-member-avatar') {
+      // Handled by the multipart proxy route above.
+      return
+    }
     const method = op.method.toLowerCase() as keyof express.Router
     const methodFn = router[method]
 
