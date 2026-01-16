@@ -208,7 +208,7 @@ function DesktopToolbar({ topicURL, onCheckAnswerClick }: DesktopToolbarProp) {
         </button>
         <div
           className={cn(
-            'pointer-events-none absolute top-6 left-21 flex flex-col gap-3 rounded-[40px] bg-neutral-white p-3 opacity-0 shadow-[var(--shadow-baodaozai-card)] transition-all duration-300 ease-in-out',
+            'pointer-events-none absolute top-6 left-21 flex flex-col gap-3 rounded-[40px] bg-neutral-white p-3 opacity-0 shadow-[var(--shadow-baodaozai-card)] transition-opacity duration-300 ease-in-out',
             {
               'pointer-events-auto opacity-100': isSharePanelOpen,
             }

@@ -178,7 +178,7 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
       >
         <div
           className={cn(
-            'absolute top-0 left-0 flex h-24 w-8 flex-col items-center justify-center gap-2.5 rounded-r-[20px] bg-neutral-black/8 px-[9px] py-[26px] text-sm leading-[1.6] text-neutral-700 backdrop-blur-xs transition-all duration-300 ease-in-out hover:text-red-400 desktop:hidden',
+            'absolute top-0 left-0 flex h-24 w-8 flex-col items-center justify-center gap-2.5 rounded-r-[20px] bg-neutral-black/8 px-[9px] py-[26px] text-sm leading-[1.6] text-neutral-700 backdrop-blur-xs transition-colors duration-300 ease-in-out hover:text-red-400 desktop:hidden',
             isExpanded && 'bg-neutral-200'
           )}
         >
@@ -230,7 +230,7 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
               : undefined
           }
           className={cn(
-            'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-all duration-300 ease-in-out hover:bg-neutral-black/5 active:bg-neutral-black/10',
+            'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-colors duration-300 ease-in-out hover:bg-neutral-black/5 active:bg-neutral-black/10',
             // Desktop/HD: match Figma design
             'desktop:rounded desktop:px-1 desktop:py-[1px]',
             currentActiveIndex ===
@@ -253,7 +253,7 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
               currentActiveIndex === makeAnchorKey(key) ? 'location' : undefined
             }
             className={cn(
-              'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-all duration-300 ease-in-out hover:bg-neutral-black/5 active:bg-neutral-black/10',
+              'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-colors duration-300 ease-in-out hover:bg-neutral-black/5 active:bg-neutral-black/10',
               // Desktop/HD: match Figma design
               'desktop:rounded desktop:px-1 desktop:py-[1px]',
               currentActiveIndex === makeAnchorKey(key) &&
