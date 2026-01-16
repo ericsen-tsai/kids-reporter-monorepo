@@ -12,6 +12,7 @@ type MobileHeaderProps = {
   isLoggedIn?: boolean
   mobileBackButtonHref?: string
   loginUrl?: string
+  hide?: boolean
 }
 
 export function MobileHeader({
@@ -22,15 +23,22 @@ export function MobileHeader({
   isLoggedIn,
   loginUrl,
   mobileBackButtonHref,
+  hide = false,
 }: MobileHeaderProps) {
   const showCloseButton = showCloseButtonWhenMenuOpen && isMenuOpen
 
   return (
     <>
-      <div className="h-(--mobile-header-height) desktop:hidden"></div>
       <div
         className={cn(
-          'px-6 tablet:px-8 ease-in-out top-0 translate-y-0 pointer-events-auto fixed z-1002 w-full bg-neutral-white opacity-100 transition-all duration-300 tablet:z-1000 desktop:hidden'
+          'h-(--mobile-header-height) desktop:hidden',
+          hide && 'h-0'
+        )}
+      ></div>
+      <div
+        className={cn(
+          'px-6 tablet:px-8 ease-in-out top-0 translate-y-0 pointer-events-auto fixed z-1002 w-full bg-neutral-white opacity-100 transition-all duration-300 tablet:z-1000 desktop:hidden',
+          hide && 'pointer-events-none -translate-y-full opacity-0'
         )}
       >
         <div className="py-4 flex items-center justify-between">

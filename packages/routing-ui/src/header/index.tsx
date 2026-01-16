@@ -89,6 +89,7 @@ function Header({
         isLoggedIn={isLoggedIn}
         loginUrl={loginUrl}
         mobileBackButtonHref={mobileBackButtonHref}
+        hide={isScrollingDown}
       />
       <Menu
         isOpen={isMenuOpen}
