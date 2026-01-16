@@ -234,10 +234,15 @@ export function createGraphQLProxy({
           })
         )
 
-        res.status(statusCodes.internalServerError).send({
-          status: 'error',
-          error: annotatedErr.message,
+        res.writeHead(statusCodes.internalServerError, {
+          'Content-Type': 'application/json',
         })
+        res.end(
+          JSON.stringify({
+            status: 'error',
+            error: annotatedErr.message,
+          })
+        )
       },
     })
   )
