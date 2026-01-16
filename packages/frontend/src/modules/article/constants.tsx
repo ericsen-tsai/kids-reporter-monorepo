@@ -59,3 +59,5 @@ export const SHARE_ICONS = [
     },
   },
 ]
+
+export const ARTICLE_WIDGET_SCROLL_DOWN_DISTANCE = 220

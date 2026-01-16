@@ -11,6 +11,7 @@ import { STICKY_HEADER_HEIGHT } from '@/constants'
 import useClickOutside from '@/hooks/use-click-outside'
 
 import {
+  ARTICLE_WIDGET_SCROLL_DOWN_DISTANCE,
   TABLE_OF_CONTENT_ANCHOR_PREFIX,
   TABLE_OF_CONTENT_BACK_TO_TOP_KEY,
   TABLE_OF_CONTENT_INDEX_PREFIX,
@@ -136,7 +137,9 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
   useClickOutside(menuContainerRef, handleClickOutside)
 
   const isDesktop = useMediaQuery('(min-width: 1024px)')
-  const scrollLevel = useScrollLevel()
+  const scrollLevel = useScrollLevel({
+    scrollDownDistance: ARTICLE_WIDGET_SCROLL_DOWN_DISTANCE,
+  })
   const isHidden =
     scrollLevel === ScrollLevel.DOWN_HIDDEN && !isDesktop && !isExpanded
 
@@ -230,12 +233,12 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
               : undefined
           }
           className={cn(
-            'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-colors duration-300 ease-in-out hover:bg-neutral-black/5 active:bg-neutral-black/10',
+            'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-colors duration-300 ease-in-out hover:bg-neutral-black/5 hover:text-neutral-900 active:bg-neutral-black/10',
             // Desktop/HD: match Figma design
             'desktop:rounded desktop:px-1 desktop:py-[1px]',
             currentActiveIndex ===
               makeAnchorKey(TABLE_OF_CONTENT_BACK_TO_TOP_KEY) &&
-              'font-bold text-red-400'
+              'font-bold text-red-400 hover:text-red-400'
           )}
         >
           回到置頂
@@ -253,11 +256,11 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
               currentActiveIndex === makeAnchorKey(key) ? 'location' : undefined
             }
             className={cn(
-              'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-colors duration-300 ease-in-out hover:bg-neutral-black/5 active:bg-neutral-black/10',
+              'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-colors duration-300 ease-in-out hover:bg-neutral-black/5 hover:text-neutral-900 active:bg-neutral-black/10',
               // Desktop/HD: match Figma design
               'desktop:rounded desktop:px-1 desktop:py-[1px]',
               currentActiveIndex === makeAnchorKey(key) &&
-                'font-bold text-red-400'
+                'font-bold text-red-400 hover:text-red-400'
             )}
           >
             {label}

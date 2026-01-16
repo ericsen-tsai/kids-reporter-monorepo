@@ -15,7 +15,7 @@ import {
 } from '@/icons/miscellaneous'
 import PostEssayQuestionsModal from '@/modules/idea-hub/post-essay-questions-modal'
 
-import { SHARE_ICONS } from '../constants'
+import { ARTICLE_WIDGET_SCROLL_DOWN_DISTANCE, SHARE_ICONS } from '../constants'
 
 type MobileToolbarProp = {
   topicURL: string
@@ -24,7 +24,9 @@ type MobileToolbarProp = {
 
 function MobileToolbar({ topicURL, onCheckAnswerClick }: MobileToolbarProp) {
   const [isSharePanelOpen, setIsSharePanelOpen] = useState(false)
-  const scrollLevel = useScrollLevel()
+  const scrollLevel = useScrollLevel({
+    scrollDownDistance: ARTICLE_WIDGET_SCROLL_DOWN_DISTANCE,
+  })
   const { onFontSizeChange } = useArticleContext()
   const toolbarRef = useRef<HTMLDivElement>(null)
 
@@ -93,7 +95,9 @@ function MobileToolbar({ topicURL, onCheckAnswerClick }: MobileToolbarProp) {
             <div className="flex h-6 w-6 items-center justify-center text-neutral-600">
               <ToolbarTopicIcon />
             </div>
-            <span className="prose-p4 text-neutral-900">前往專題</span>
+            <span className="prose-p4 text-neutral-900 [text-shadow:-1px_-1px_0_white,1px_-1px_0_white,-1px_1px_0_white,1px_1px_0_white]">
+              前往專題
+            </span>
           </Link>
           <button
             className="flex w-[50px] cursor-pointer flex-col items-center justify-center border-none bg-transparent"
@@ -103,7 +107,9 @@ function MobileToolbar({ topicURL, onCheckAnswerClick }: MobileToolbarProp) {
             <div className="flex h-6 w-6 items-center justify-center text-neutral-600">
               <ToolbarCheckAnswerIcon />
             </div>
-            <span className="prose-p4 text-neutral-900">查看回答</span>
+            <span className="prose-p4 text-neutral-900 [text-shadow:-1px_-1px_0_white,1px_-1px_0_white,-1px_1px_0_white,1px_1px_0_white]">
+              查看回答
+            </span>
           </button>
           <button
             className="flex w-[50px] cursor-pointer flex-col items-center justify-center border-none bg-transparent text-neutral-600"
@@ -113,7 +119,9 @@ function MobileToolbar({ topicURL, onCheckAnswerClick }: MobileToolbarProp) {
             <div className="flex h-6 w-6 items-center justify-center">
               <ToolbarShareIcon />
             </div>
-            <span className="prose-p4 text-neutral-900">分享</span>
+            <span className="prose-p4 text-neutral-900 [text-shadow:-1px_-1px_0_white,1px_-1px_0_white,-1px_1px_0_white,1px_1px_0_white]">
+              分享
+            </span>
           </button>
           <button
             className="flex w-[50px] cursor-pointer flex-col items-center justify-center border-none bg-transparent text-neutral-600"
@@ -123,7 +131,9 @@ function MobileToolbar({ topicURL, onCheckAnswerClick }: MobileToolbarProp) {
             <div className="flex h-6 w-6 items-center justify-center">
               <ToolbarFontIcon />
             </div>
-            <span className="prose-p4 text-neutral-900">文字大小</span>
+            <span className="prose-p4 text-neutral-900 [text-shadow:-1px_-1px_0_white,1px_-1px_0_white,-1px_1px_0_white,1px_1px_0_white]">
+              文字大小
+            </span>
           </button>
         </div>
       </div>
@@ -164,7 +174,7 @@ function DesktopToolbar({ topicURL, onCheckAnswerClick }: DesktopToolbarProp) {
           <div className="relative z-1">
             <ToolbarTopicIcon />
           </div>
-          <span className="pointer-events-none absolute left-15 z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-opacity duration-200 [text-shadow:0_0_6px_white,0_0_12px_white] group-hover:pointer-events-auto group-hover:opacity-100">
+          <span className="pointer-events-none absolute left-15 z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-opacity duration-200 [text-shadow:-1px_-1px_0_white,1px_-1px_0_white,-1px_1px_0_white,1px_1px_0_white] group-hover:pointer-events-auto group-hover:opacity-100">
             前往專題
           </span>
         </Link>
@@ -176,7 +186,7 @@ function DesktopToolbar({ topicURL, onCheckAnswerClick }: DesktopToolbarProp) {
           <div className="relative z-1">
             <ToolbarCheckAnswerIcon />
           </div>
-          <span className="pointer-events-none absolute left-15 z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-opacity duration-200 [text-shadow:0_0_6px_white,0_0_12px_white] group-hover:pointer-events-auto group-hover:opacity-100">
+          <span className="pointer-events-none absolute left-15 z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-opacity duration-200 [text-shadow:-1px_-1px_0_white,1px_-1px_0_white,-1px_1px_0_white,1px_1px_0_white] group-hover:pointer-events-auto group-hover:opacity-100">
             查看回答
           </span>
         </button>
@@ -190,7 +200,7 @@ function DesktopToolbar({ topicURL, onCheckAnswerClick }: DesktopToolbarProp) {
           <div className="relative z-1">
             <ToolbarFontIcon />
           </div>
-          <span className="pointer-events-none absolute left-15 z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-opacity duration-200 [text-shadow:0_0_6px_white,0_0_12px_white] group-hover:pointer-events-auto group-hover:opacity-100">
+          <span className="pointer-events-none absolute left-15 z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-opacity duration-200 [text-shadow:-1px_-1px_0_white,1px_-1px_0_white,-1px_1px_0_white,1px_1px_0_white] group-hover:pointer-events-auto group-hover:opacity-100">
             字體大小{fontSize === FontSizeLevel.NORMAL ? '100%' : '125%'}
           </span>
         </button>
@@ -202,7 +212,7 @@ function DesktopToolbar({ topicURL, onCheckAnswerClick }: DesktopToolbarProp) {
           <div className="relative z-1">
             <ToolbarPrintIcon />
           </div>
-          <span className="pointer-events-none absolute left-15 z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-opacity duration-200 [text-shadow:0_0_6px_white,0_0_12px_white] group-hover:pointer-events-auto group-hover:opacity-100">
+          <span className="pointer-events-none absolute left-15 z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-opacity duration-200 [text-shadow:-1px_-1px_0_white,1px_-1px_0_white,-1px_1px_0_white,1px_1px_0_white] group-hover:pointer-events-auto group-hover:opacity-100">
             列印
           </span>
         </button>
@@ -253,7 +263,7 @@ function DesktopToolbar({ topicURL, onCheckAnswerClick }: DesktopToolbarProp) {
           </div>
           <span
             className={cn(
-              'pointer-events-none absolute left-15 z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-opacity duration-200 [text-shadow:0_0_6px_white,0_0_12px_white] group-hover:pointer-events-auto group-hover:opacity-100',
+              'pointer-events-none absolute left-15 z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-opacity duration-200 [text-shadow:-1px_-1px_0_white,1px_-1px_0_white,-1px_1px_0_white,1px_1px_0_white] group-hover:pointer-events-auto group-hover:opacity-100',
               {
                 'group-hover:opacity-0': isSharePanelOpen,
               }
