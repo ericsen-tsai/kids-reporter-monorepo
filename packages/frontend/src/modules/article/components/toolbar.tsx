@@ -164,7 +164,7 @@ function DesktopToolbar({ topicURL, onCheckAnswerClick }: DesktopToolbarProp) {
           <div className="relative z-1">
             <ToolbarTopicIcon />
           </div>
-          <span className="absolute z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-all duration-200 [text-shadow:0_0_6px_white,0_0_12px_white] group-hover:translate-x-12 group-hover:opacity-100">
+          <span className="pointer-events-none absolute left-15 z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-opacity duration-200 [text-shadow:0_0_6px_white,0_0_12px_white] group-hover:pointer-events-auto group-hover:opacity-100">
             前往專題
           </span>
         </Link>
@@ -176,7 +176,7 @@ function DesktopToolbar({ topicURL, onCheckAnswerClick }: DesktopToolbarProp) {
           <div className="relative z-1">
             <ToolbarCheckAnswerIcon />
           </div>
-          <span className="absolute z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-all duration-200 [text-shadow:0_0_6px_white,0_0_12px_white] group-hover:translate-x-12 group-hover:opacity-100">
+          <span className="pointer-events-none absolute left-15 z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-opacity duration-200 [text-shadow:0_0_6px_white,0_0_12px_white] group-hover:pointer-events-auto group-hover:opacity-100">
             查看回答
           </span>
         </button>
@@ -190,7 +190,7 @@ function DesktopToolbar({ topicURL, onCheckAnswerClick }: DesktopToolbarProp) {
           <div className="relative z-1">
             <ToolbarFontIcon />
           </div>
-          <span className="absolute z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-all duration-200 [text-shadow:0_0_6px_white,0_0_12px_white] group-hover:translate-x-12 group-hover:opacity-100">
+          <span className="pointer-events-none absolute left-15 z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-opacity duration-200 [text-shadow:0_0_6px_white,0_0_12px_white] group-hover:pointer-events-auto group-hover:opacity-100">
             字體大小{fontSize === FontSizeLevel.NORMAL ? '100%' : '125%'}
           </span>
         </button>
@@ -202,15 +202,15 @@ function DesktopToolbar({ topicURL, onCheckAnswerClick }: DesktopToolbarProp) {
           <div className="relative z-1">
             <ToolbarPrintIcon />
           </div>
-          <span className="absolute z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-all duration-200 [text-shadow:0_0_6px_white,0_0_12px_white] group-hover:translate-x-12 group-hover:opacity-100">
+          <span className="pointer-events-none absolute left-15 z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-opacity duration-200 [text-shadow:0_0_6px_white,0_0_12px_white] group-hover:pointer-events-auto group-hover:opacity-100">
             列印
           </span>
         </button>
         <div
           className={cn(
-            'pointer-events-none absolute top-6 left-21 flex translate-x-[-15px] flex-col gap-3 rounded-[40px] bg-neutral-white p-3 opacity-0 shadow-[var(--shadow-baodaozai-card)] transition-all duration-300 ease-in-out',
+            'pointer-events-none absolute top-6 left-21 flex flex-col gap-3 rounded-[40px] bg-neutral-white p-3 opacity-0 shadow-[var(--shadow-baodaozai-card)] transition-all duration-300 ease-in-out',
             {
-              'pointer-events-auto translate-x-0 opacity-100': isSharePanelOpen,
+              'pointer-events-auto opacity-100': isSharePanelOpen,
             }
           )}
         >
@@ -253,7 +253,7 @@ function DesktopToolbar({ topicURL, onCheckAnswerClick }: DesktopToolbarProp) {
           </div>
           <span
             className={cn(
-              'absolute z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-all duration-200 [text-shadow:0_0_6px_white,0_0_12px_white] group-hover:translate-x-12 group-hover:opacity-100',
+              'pointer-events-none absolute left-15 z-0 w-4 text-start prose-p3-bold text-nowrap text-neutral-black opacity-0 transition-opacity duration-200 [text-shadow:0_0_6px_white,0_0_12px_white] group-hover:pointer-events-auto group-hover:opacity-100',
               {
                 'group-hover:opacity-0': isSharePanelOpen,
               }
