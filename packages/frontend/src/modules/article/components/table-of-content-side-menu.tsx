@@ -221,9 +221,9 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
               : undefined
           }
           className={cn(
-            'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-all duration-100 ease-in-out',
+            'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-all duration-100 ease-in-out hover:bg-neutral-black/5 active:bg-neutral-black/10',
             // Desktop/HD: match Figma design
-            'desktop:rounded desktop:px-1 desktop:py-[1px] desktop:font-medium',
+            'desktop:rounded desktop:px-1 desktop:py-[1px]',
             currentActiveIndex ===
               makeAnchorKey(TABLE_OF_CONTENT_BACK_TO_TOP_KEY) &&
               'font-bold text-red-400'
@@ -244,11 +244,11 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
               currentActiveIndex === makeAnchorKey(key) ? 'location' : undefined
             }
             className={cn(
-              'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-all duration-100 ease-in-out',
+              'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-all duration-100 ease-in-out hover:bg-neutral-black/5 active:bg-neutral-black/10',
               // Desktop/HD: match Figma design
-              'desktop:rounded desktop:px-1 desktop:py-[1px] desktop:font-medium',
+              'desktop:rounded desktop:px-1 desktop:py-[1px]',
               currentActiveIndex === makeAnchorKey(key) &&
-                'font-bold text-red-400 desktop:font-bold'
+                'font-bold text-red-400'
             )}
           >
             {label}
