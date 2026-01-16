@@ -1,5 +1,10 @@
 'use client'
-import { cn, useMediaQuery } from '@kids-reporter/routing-ui'
+import {
+  cn,
+  ScrollLevel,
+  useMediaQuery,
+  useScrollLevel,
+} from '@kids-reporter/routing-ui'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { STICKY_HEADER_HEIGHT } from '@/constants'
@@ -131,6 +136,9 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
   useClickOutside(menuContainerRef, handleClickOutside)
 
   const isDesktop = useMediaQuery('(min-width: 1024px)')
+  const scrollLevel = useScrollLevel()
+  const isHidden =
+    scrollLevel === ScrollLevel.DOWN_HIDDEN && !isDesktop && !isExpanded
 
   if (indexes.length === 0) {
     return null
@@ -139,7 +147,7 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
   return (
     <nav
       ref={menuContainerRef}
-      className="fixed top-0 left-0 z-1002 print:hidden"
+      className="fixed top-0 left-0 z-1000 print:hidden"
       aria-label="文章目錄"
     >
       <button
@@ -161,15 +169,16 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
         aria-label={isExpanded ? '關閉目錄' : '開啟目錄'}
         aria-expanded={isExpanded}
         className={cn(
-          'fixed top-[80px] left-0 w-8 cursor-pointer transition-transform delay-100 duration-100 ease-in-out desktop:top-1/2 desktop:-translate-y-1/2',
+          'fixed top-[80px] left-0 w-8 cursor-pointer transition-transform duration-300 ease-in-out desktop:top-1/2 desktop:-translate-y-1/2',
           isExpanded
             ? 'translate-x-[200px] desktop:translate-x-0'
-            : 'translate-x-0'
+            : 'translate-x-0',
+          isHidden && 'translate-x-[-200px]'
         )}
       >
         <div
           className={cn(
-            'absolute top-0 left-0 flex h-24 w-8 flex-col items-center justify-center gap-2.5 rounded-r-[20px] bg-neutral-black/8 px-[9px] py-[26px] text-sm leading-[1.6] text-neutral-700 backdrop-blur-xs transition-all duration-100 ease-in-out hover:text-red-400 desktop:hidden',
+            'absolute top-0 left-0 flex h-24 w-8 flex-col items-center justify-center gap-2.5 rounded-r-[20px] bg-neutral-black/8 px-[9px] py-[26px] text-sm leading-[1.6] text-neutral-700 backdrop-blur-xs transition-colors duration-300 ease-in-out hover:text-red-400 desktop:hidden',
             isExpanded && 'bg-neutral-200'
           )}
         >
@@ -193,7 +202,7 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
       <div
         role="list"
         className={cn(
-          'fixed top-0 left-0 flex h-screen w-[200px] flex-col justify-center gap-2 bg-neutral-100 px-5 py-6 shadow-[0px_2px_12px_0px_rgba(0,0,0,0.2)] transition-transform delay-100 duration-100 ease-in-out desktop:left-4',
+          'fixed top-0 left-0 flex h-screen w-[200px] flex-col justify-center gap-2 bg-neutral-100 px-5 py-6 shadow-[0px_2px_12px_0px_rgba(0,0,0,0.2)] transition-transform duration-300 ease-in-out desktop:left-4',
           isExpanded ? 'translate-x-0' : '-translate-x-[200px]',
           'desktop:top-1/2 desktop:h-auto desktop:min-h-75 desktop:-translate-y-1/2 desktop:rounded-[20px] desktop:px-5 desktop:py-6',
           isExpanded && isDesktop
@@ -221,9 +230,9 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
               : undefined
           }
           className={cn(
-            'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-all duration-100 ease-in-out',
+            'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-colors duration-300 ease-in-out hover:bg-neutral-black/5 active:bg-neutral-black/10',
             // Desktop/HD: match Figma design
-            'desktop:rounded desktop:px-1 desktop:py-[1px] desktop:font-medium',
+            'desktop:rounded desktop:px-1 desktop:py-[1px]',
             currentActiveIndex ===
               makeAnchorKey(TABLE_OF_CONTENT_BACK_TO_TOP_KEY) &&
               'font-bold text-red-400'
@@ -244,11 +253,11 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
               currentActiveIndex === makeAnchorKey(key) ? 'location' : undefined
             }
             className={cn(
-              'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-all duration-100 ease-in-out',
+              'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-colors duration-300 ease-in-out hover:bg-neutral-black/5 active:bg-neutral-black/10',
               // Desktop/HD: match Figma design
-              'desktop:rounded desktop:px-1 desktop:py-[1px] desktop:font-medium',
+              'desktop:rounded desktop:px-1 desktop:py-[1px]',
               currentActiveIndex === makeAnchorKey(key) &&
-                'font-bold text-red-400 desktop:font-bold'
+                'font-bold text-red-400'
             )}
           >
             {label}
