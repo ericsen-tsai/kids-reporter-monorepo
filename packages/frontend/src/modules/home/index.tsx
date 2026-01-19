@@ -5,6 +5,7 @@ import { PostSummary } from '@/components/types'
 import { SECTIONS } from '@/constants'
 
 import { CallToAction } from './call-to-action'
+import EditorRecommendation from './components/editor-recommendation'
 import TopicSlider from './components/topic-slider'
 import Divider from './divider'
 import GoToMainSite from './go-to-main-site'
@@ -31,6 +32,7 @@ function HomeModule({
   return (
     <>
       <TopicSlider topics={topics} />
+      <EditorRecommendation posts={featuredPosts} />
       <PostSelection latestPosts={latestPosts} featuredPosts={featuredPosts} />
       {SECTIONS.map((sectionConfig, index) => {
         const posts = sectionPostsArray?.[index]
