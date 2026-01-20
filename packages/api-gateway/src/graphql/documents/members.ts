@@ -20,6 +20,15 @@ export const GET_MEMBER_PROFILE_QUERY = gql`
   }
 `
 
+export const CREATE_MEMBER_AVATAR_MUTATION = gql`
+  mutation CreateMemberAvatar($data: MemberAvatarCreateInput!) {
+    item: createMemberAvatar(data: $data) {
+      id
+      name
+    }
+  }
+`
+
 export const UPDATE_MEMBER_PROFILE_MUTATION = gql`
   mutation UpdateMemberProfile(
     $where: MemberWhereUniqueInput!
