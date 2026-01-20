@@ -6,11 +6,11 @@ import { SECTIONS } from '@/constants'
 
 import { CallToAction } from './call-to-action'
 import EditorRecommendation from './components/editor-recommendation'
+import LatestArticles from './components/latest-articles'
 import TopicSlider from './components/topic-slider'
 import Divider from './divider'
 import GoToMainSite from './go-to-main-site'
 import MakeFriends from './make-friend'
-import PostSelection from './post-selection'
 import SearchAndTags from './search-and-tags'
 import Section from './section'
 
@@ -33,7 +33,7 @@ function HomeModule({
     <>
       <TopicSlider topics={topics} />
       <EditorRecommendation posts={featuredPosts} />
-      <PostSelection latestPosts={latestPosts} featuredPosts={featuredPosts} />
+      <LatestArticles posts={latestPosts} />
       {SECTIONS.map((sectionConfig, index) => {
         const posts = sectionPostsArray?.[index]
         if (!posts) return null
