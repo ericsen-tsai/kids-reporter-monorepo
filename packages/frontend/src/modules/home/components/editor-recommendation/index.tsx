@@ -15,8 +15,7 @@ import {
 import { getFormattedDate } from '@/utils'
 
 const ImageWithFallback = dynamic(
-  () => import('@/components/image-with-fallback'),
-  { ssr: false }
+  () => import('@/components/image-with-fallback')
 )
 
 type EditorRecommendationProps = {
