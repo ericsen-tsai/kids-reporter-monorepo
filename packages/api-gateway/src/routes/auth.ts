@@ -77,7 +77,7 @@ const ensureIdTokenCookie: express.RequestHandler = (req, res, next) => {
 }
 
 /**
- * Creates auth routes.
+ * Creates and returns an Express router for authentication routes.
  *
  * This router exposes the `/auth/access-token` endpoint,
  * which exchanges the go-api-issued `id_token` cookie for an
