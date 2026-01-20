@@ -75,7 +75,6 @@ function TopicSlider({ topics }: TopicSliderProp) {
           onClick={() => swiperRef.current?.slideNext()}
           className="absolute top-26 right-0 z-[900] -translate-y-1/2 scale-[0.625] tablet:top-42 tablet:right-[calc(50%-320px)] tablet:translate-x-1/2 desktop:top-56 desktop:right-[calc(50%-416px)] desktop:scale-100 hd:top-64 hd:right-[calc(50%-544px)] hd:scale-100"
         />
-        <div className="topic-slider-pagination" />
       </div>
       <WaveIllustrations />
       <Image

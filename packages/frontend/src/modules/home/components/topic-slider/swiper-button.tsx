@@ -1,4 +1,5 @@
 import { cn } from '@kids-reporter/routing-ui'
+import { useId } from 'react'
 
 type SwiperButtonProps = {
   onClick: () => void
@@ -7,6 +8,7 @@ type SwiperButtonProps = {
 }
 
 function SwiperButton({ onClick, variant, className }: SwiperButtonProps) {
+  const clipId = useId()
   return (
     <button
       type="button"
@@ -24,7 +26,7 @@ function SwiperButton({ onClick, variant, className }: SwiperButtonProps) {
           viewBox="0 0 64 64"
           fill="none"
         >
-          <g clipPath="url(#clip0_482_4785)">
+          <g clipPath={`url(#${clipId})`}>
             <path
               d="M32 62C48.5685 62 62 48.5686 62 32C62 15.4315 48.5685 2.00001 32 2.00001C15.4315 2.00001 2 15.4315 2 32C2 48.5686 15.4315 62 32 62Z"
               fill="currentColor"
@@ -41,7 +43,7 @@ function SwiperButton({ onClick, variant, className }: SwiperButtonProps) {
             />
           </g>
           <defs>
-            <clipPath id="clip0_482_4785">
+            <clipPath id={clipId}>
               <rect
                 width="64"
                 height="64"
@@ -59,7 +61,7 @@ function SwiperButton({ onClick, variant, className }: SwiperButtonProps) {
           viewBox="0 0 64 64"
           fill="none"
         >
-          <g clipPath="url(#clip0_482_4786)">
+          <g clipPath={`url(#${clipId})`}>
             <path
               d="M32 62C48.5685 62 62 48.5686 62 32C62 15.4315 48.5685 2.00001 32 2.00001C15.4315 2.00001 2 15.4315 2 32C2 48.5686 15.4315 62 32 62Z"
               fill="currentColor"
@@ -76,7 +78,7 @@ function SwiperButton({ onClick, variant, className }: SwiperButtonProps) {
             />
           </g>
           <defs>
-            <clipPath id="clip0_482_4786">
+            <clipPath id={clipId}>
               <rect
                 width="64"
                 height="64"
