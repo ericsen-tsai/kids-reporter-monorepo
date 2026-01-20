@@ -3,8 +3,8 @@ import _errors from '@twreporter/errors'
 import axios from 'axios'
 import express from 'express'
 
-import consts from './constants.js'
-import envVar from './environment-variables.js'
+import consts from '../constants.js'
+import envVar from '../environment-variables.js'
 
 // @twreporter/errors is a CommonJS module, so we must access its `default` property
 const errors = _errors.default
@@ -77,14 +77,13 @@ const ensureIdTokenCookie: express.RequestHandler = (req, res, next) => {
 }
 
 /**
- * Creates an Auth mini app.
+ * Creates auth routes.
  *
- * This mini app exposes the `/auth/access-token` endpoint,
+ * This router exposes the `/auth/access-token` endpoint,
  * which exchanges the go-api-issued `id_token` cookie for an
  * access token by calling the go-api (`/v2/auth/token`).
  */
-export function createAuthMiniApp() {
-  // Create an Express router
+export function createAuthRouter() {
   const router = express.Router()
 
   // Enable preflight requests (CORS OPTIONS)
