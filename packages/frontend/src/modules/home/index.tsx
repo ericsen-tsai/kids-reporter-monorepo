@@ -7,6 +7,7 @@ import { SECTIONS } from '@/constants'
 import { CallToAction } from './call-to-action'
 import EditorRecommendation from './components/editor-recommendation'
 import LatestArticles from './components/latest-articles'
+import SubcategoriesMarquee from './components/subcategories-marquee'
 import TopicSlider from './components/topic-slider'
 import Divider from './divider'
 import GoToMainSite from './go-to-main-site'
@@ -34,6 +35,7 @@ function HomeModule({
       <TopicSlider topics={topics} />
       <EditorRecommendation posts={featuredPosts} />
       <LatestArticles posts={latestPosts} />
+      <SubcategoriesMarquee />
       {SECTIONS.map((sectionConfig, index) => {
         const posts = sectionPostsArray?.[index]
         if (!posts) return null
