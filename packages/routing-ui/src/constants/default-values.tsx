@@ -34,7 +34,7 @@ export const MENU_ITEMS: MenuItem[] = [
     href: '/category/storytelling',
     subItems: [
       { label: '圖解新聞', href: '/category/storytelling/times' },
-      { label: '新聞遊戲', href: '/category/storytelling/test-news' },
+      { label: '新聞遊戲', href: '/category/storytelling/news-game' },
       { label: '圖文故事', href: '/category/storytelling/graphic-story' },
     ],
   },
