@@ -16,7 +16,7 @@ export default list({
         { label: '最新頁', value: 'all' },
         { label: '集合頁-專題', value: 'topics' },
         { label: '集合頁-新聞', value: 'news' },
-        { label: '集合頁-多媒體', value: 'comics' },
+        { label: '集合頁-多媒體', value: 'storytelling' },
         { label: '集合頁-校園', value: 'campus' },
         { label: '集合頁-Podcast', value: 'listeningNews' },
         { label: '集合頁-教案', value: 'classroom' },

@@ -1,10 +1,11 @@
-import { CreateMemberAvatarMutation } from '__generated__/operations/member-avatar.generated'
-import { DeleteMemberAvatarMutation } from '__generated__/operations/members.generated'
+import {
+  CreateMemberAvatarMutation,
+  DeleteMemberAvatarMutation,
+} from '__generated__/operations/members.generated'
 import axios, { AxiosResponse } from 'axios'
 import { print } from 'graphql/language/printer'
 
-import { API_URL, INTERNAL_API_URL } from '@/constants'
-import envVars from '@/environment-variables'
+import { REST_GQL_ENDPOINT } from '@/constants'
 import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 import { CREATE_MEMBER_AVATAR_MUTATION } from './graphql/member-avatar'
@@ -14,20 +15,15 @@ export const uploadMemberAvatar = async (
   accessToken: string,
   fileName?: string
 ) => {
-  const url =
-    typeof window === 'undefined' && !envVars.isProduction
-      ? INTERNAL_API_URL
-      : API_URL
-
-  // Create multipart form data for file upload
+  // Use REST GQL upload endpoint; payload mirrors GraphQL multipart spec.
   const formData = new FormData()
 
-  // Prepare operations with file set to null
-  // Include name field (using filename without extension as default)
+  // Route uses the REST endpoint; payload still follows GraphQL multipart spec.
   const newFileName =
     fileName || file.name.replace(/\.[^/.]+$/, '') || 'memberAvatar'
   const operations = {
     query: print(CREATE_MEMBER_AVATAR_MUTATION),
+    operationName: 'CreateMemberAvatar',
     variables: {
       data: {
         name: newFileName,
@@ -47,14 +43,17 @@ export const uploadMemberAvatar = async (
   formData.append('map', JSON.stringify(map))
   formData.append('1', file)
 
-  const response: AxiosResponse<{ data: CreateMemberAvatarMutation }> =
-    await axios.post(url, formData, {
-      headers: {
-        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-        'apollo-require-preflight': 'true',
-      },
-      withCredentials: true,
-    })
+  // Route to the REST handler that proxies multipart uploads to GraphQL.
+  const response: AxiosResponse<{
+    status: string
+    data: CreateMemberAvatarMutation
+  }> = await axios.post(`${REST_GQL_ENDPOINT}/create-member-avatar`, formData, {
+    headers: {
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+      'apollo-require-preflight': 'true',
+    },
+    withCredentials: true,
+  })
 
   return response?.data?.data?.item
 }

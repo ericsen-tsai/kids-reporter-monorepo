@@ -31,11 +31,11 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     label: '多媒體',
-    href: '/category/comics',
+    href: '/category/storytelling',
     subItems: [
-      { label: '圖解新聞', href: '/category/comics/times' },
-      { label: '新聞遊戲', href: '/category/comics/test-news' },
-      { label: '圖文故事', href: '/category/comics/graphic-story' },
+      { label: '圖解新聞', href: '/category/storytelling/times' },
+      { label: '新聞遊戲', href: '/category/storytelling/news-game' },
+      { label: '圖文故事', href: '/category/storytelling/graphic-story' },
     ],
   },
   {

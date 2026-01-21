@@ -1,4 +1,5 @@
 import {
+  CREATE_MEMBER_AVATAR_MUTATION,
   DELETE_MEMBER_AVATAR_MUTATION,
   GET_MEMBER_ESSAY_ANSWERS_HAS_LIKED_QUERY,
   GET_MEMBER_POSTS_WITH_ANSWERS_QUERY,
@@ -27,6 +28,16 @@ export const operations: Record<string, Operation> = {
         where: ensureRecord(input.where, 'Missing where'),
         data: ensureRecord(input.data, 'Missing data'),
       }
+    },
+  },
+  // Multipart upload route proxies this operation directly to GraphQL.
+  'create-member-avatar': {
+    method: 'POST',
+    auth: 'auth',
+    operationName: 'CreateMemberAvatar',
+    document: CREATE_MEMBER_AVATAR_MUTATION,
+    buildVariables: (input) => {
+      return { data: ensureRecord(input.data, 'Missing data') }
     },
   },
   'member-posts-with-answers': {

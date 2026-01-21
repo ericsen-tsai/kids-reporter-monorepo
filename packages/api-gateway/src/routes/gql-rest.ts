@@ -1,123 +1,13 @@
-// @ts-ignore `@twreporter/errors` does not have typescript definition file yet
-import _errors from '@twreporter/errors'
 import express from 'express'
 import { print } from 'graphql'
 
-import consts from '../constants.js'
 import { buildAuthContext } from '../graphql/auth.js'
 import { callCmsGraphql } from '../graphql/cms-client.js'
 import { operations } from '../graphql/operations.js'
 import { ensureRecord, parseVars } from '../graphql/operations/shared.js'
-
-const errors = _errors.default
-const statusCodes = consts.statusCodes
-const MAX_LOG_BODY_BYTES = 1024
-const SLOW_THRESHOLD_MS = consts.slowThresholdMs
-const CLIENT_GQL_ERROR_CODES = new Set([
-  'BAD_USER_INPUT',
-  'GRAPHQL_VALIDATION_FAILED',
-])
-
-const summarizeParams = (
-  variables: Record<string, unknown>
-): Record<string, unknown> | undefined => {
-  const summary: Record<string, unknown> = {}
-
-  for (const [key, value] of Object.entries(variables)) {
-    const lowerKey = key.toLowerCase()
-    if (
-      lowerKey.endsWith('take') &&
-      typeof value === 'number' &&
-      Number.isFinite(value)
-    ) {
-      summary[key] = value
-    }
-    if (lowerKey.endsWith('orderby') && Array.isArray(value)) {
-      summary[`${key}Count`] = value.length
-    }
-  }
-
-  const skipValue = variables.skip
-  if (typeof skipValue === 'number' && Number.isFinite(skipValue)) {
-    summary.skip = skipValue
-  }
-
-  if (typeof variables.nextCursor === 'string') {
-    summary.nextCursorLength = variables.nextCursor.length
-  }
-
-  return Object.keys(summary).length ? summary : undefined
-}
-
-const logResponse = (
-  res: express.Response,
-  status: number,
-  payload: unknown,
-  startAt?: bigint,
-  operation?: string,
-  variables?: Record<string, unknown>
-) => {
-  const elapsedMs = startAt
-    ? // Convert high-resolution nanoseconds to milliseconds.
-      Number(process.hrtime.bigint() - startAt) / 1e6
-    : undefined
-  const isSlow =
-    typeof elapsedMs === 'number' ? elapsedMs >= SLOW_THRESHOLD_MS : false
-  const params = isSlow && variables ? summarizeParams(variables) : undefined
-  let serialized = ''
-  let serializeError: string | undefined
-  try {
-    serialized = JSON.stringify(payload)
-  } catch (err) {
-    serialized = '"[unserializable payload]"'
-    serializeError = (err as Error).message
-  }
-
-  const byteLength = Buffer.byteLength(serialized, 'utf8')
-  const errorInfo = serializeError
-    ? { unserializable: true, serializeError }
-    : null
-  let bodyForLog: unknown = errorInfo
-  if (!bodyForLog) {
-    if (status === statusCodes.ok) {
-      bodyForLog = { byteLength }
-    } else if (byteLength > MAX_LOG_BODY_BYTES) {
-      bodyForLog = {
-        truncated: true,
-        byteLength,
-        preview: serialized.slice(0, MAX_LOG_BODY_BYTES),
-      }
-    } else {
-      bodyForLog = payload
-    }
-  }
-
-  console.log(
-    JSON.stringify({
-      severity: isSlow ? 'WARNING' : 'INFO',
-      message: 'GraphQL REST response',
-      status,
-      elapsedMs,
-      slow: isSlow,
-      operation,
-      params,
-      body: bodyForLog,
-      ...res?.locals?.globalLogFields,
-    })
-  )
-}
-
-const logAndSend = (
-  res: express.Response,
-  status: number,
-  payload: unknown,
-  startAt?: bigint,
-  operation?: string,
-  variables?: Record<string, unknown>
-) => {
-  logResponse(res, status, payload, startAt, operation, variables)
-  return res.status(status).json(payload)
-}
+import { logAndSend } from './gql-rest-logger.js'
+import { createMultipartProxy } from './gql-rest-multipart.js'
+import { clientGqlErrorCodes, errors, statusCodes } from './gql-rest-shared.js'
 
 export function createGqlRestRouter({
   apiOrigin,
@@ -127,9 +17,63 @@ export function createGqlRestRouter({
   headlessAccount: { email: string; password: string }
 }) {
   const router = express.Router()
+  const multipartProxy = createMultipartProxy({ apiOrigin })
+
+  // Dedicated handler for file uploads; keep it out of the JSON-oriented loop below.
+  const createMemberAvatarOp = operations['create-member-avatar']
+  if (createMemberAvatarOp) {
+    router.post('/api/rest/create-member-avatar', async (req, res, next) => {
+      const startAt = process.hrtime.bigint()
+      const contentType = req.get('Content-Type') || ''
+      const isMultipart = contentType.includes('multipart/form-data')
+      if (!isMultipart) {
+        const payload = {
+          status: 'fail',
+          data: { message: 'Multipart form required for this operation' },
+        }
+        return logAndSend(
+          res,
+          statusCodes.badRequest,
+          payload,
+          startAt,
+          'create-member-avatar'
+        )
+      }
+
+      try {
+        const authContext = await buildAuthContext({
+          req,
+          apiOrigin,
+          headlessAccount,
+          auth: createMemberAvatarOp.auth,
+        })
+        res.locals.gqlRestStartAt = startAt
+        res.locals.gqlRestAuthContext = authContext
+        return multipartProxy(req, res, next)
+      } catch (err) {
+        const payload = {
+          status: 'fail',
+          data: {
+            message: 'buildAuthContext fails. ' + (err as Error).message,
+          },
+        }
+        return logAndSend(
+          res,
+          statusCodes.badRequest,
+          payload,
+          startAt,
+          'create-member-avatar'
+        )
+      }
+    })
+  }
 
   // Register method-specific handlers for each operation
   Object.entries(operations).forEach(([operationName, op]) => {
+    if (operationName === 'create-member-avatar') {
+      // Handled by the multipart proxy route above.
+      return
+    }
     const method = op.method.toLowerCase() as keyof express.Router
     const methodFn = router[method]
 
@@ -210,7 +154,7 @@ export function createGqlRestRouter({
           if (gqlPayload?.errors?.length) {
             const hasClientError = gqlPayload.errors.some(
               (error: { extensions?: { code?: string } }) =>
-                CLIENT_GQL_ERROR_CODES.has(error?.extensions?.code ?? '')
+                clientGqlErrorCodes.has(error?.extensions?.code ?? '')
             )
             const status = hasClientError
               ? statusCodes.badRequest
