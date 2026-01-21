@@ -1,5 +1,7 @@
-import { CreateMemberAvatarMutation } from '__generated__/operations/member-avatar.generated'
-import { DeleteMemberAvatarMutation } from '__generated__/operations/members.generated'
+import {
+  CreateMemberAvatarMutation,
+  DeleteMemberAvatarMutation,
+} from '__generated__/operations/members.generated'
 import axios, { AxiosResponse } from 'axios'
 import { print } from 'graphql/language/printer'
 
