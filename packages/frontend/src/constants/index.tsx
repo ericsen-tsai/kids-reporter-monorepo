@@ -200,7 +200,7 @@ export const SECTIONS = [
     title: '圖解新聞',
     image: 'topic_pic8.svg',
     titleImg: 'topic_title8.svg',
-    link: '/category/comics/graphic-news/',
+    link: '/category/storytelling/graphic-news/',
     theme: Theme.YELLOW,
   },
   {
@@ -214,14 +214,14 @@ export const SECTIONS = [
     title: '火線新聞台',
     image: 'topic_pic9.svg',
     titleImg: 'topic_title9.svg',
-    link: '/category/comics/comic/',
+    link: '/category/storytelling/comic/',
     theme: Theme.YELLOW,
   },
 ]
 
 export const CATEGORY_IMAGES: Record<CategorySlug, string> = {
   news: '/assets/images/category_news.svg',
-  comics: '/assets/images/category_comics.svg',
+  storytelling: '/assets/images/category_storytelling.svg',
   campus: '/assets/images/category_campus.svg',
   classroom: '/assets/images/category_classroom.svg',
   'listening-news': '/assets/images/category_listening_news.svg',
