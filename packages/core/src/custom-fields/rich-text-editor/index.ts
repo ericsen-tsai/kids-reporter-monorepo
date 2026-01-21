@@ -1,11 +1,11 @@
+import { graphql } from '@keystone-6/core'
 import {
   BaseListTypeInfo,
-  JSONValue,
-  FieldTypeFunc,
   CommonFieldConfig,
+  FieldTypeFunc,
   jsonFieldTypePolyfilledForSQLite,
+  JSONValue,
 } from '@keystone-6/core/types'
-import { graphql } from '@keystone-6/core'
 
 export type JsonFieldConfig<ListTypeInfo extends BaseListTypeInfo> =
   CommonFieldConfig<ListTypeInfo> & {
@@ -19,7 +19,7 @@ export const richTextEditor =
     defaultValue = null,
     disabledButtons = [],
     ...config
-  }: JsonFieldConfig<ListTypeInfo> = {}): FieldTypeFunc<ListTypeInfo> =>
+  }: JsonFieldConfig<ListTypeInfo>): FieldTypeFunc<ListTypeInfo> =>
   (meta) => {
     if ((config as any).isIndexed === 'unique') {
       throw Error(

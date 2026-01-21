@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
+import { gql, useMutation, useQuery } from '@keystone-6/core/admin-ui/apollo'
+import { controller } from '@keystone-6/core/fields/types/virtual/views'
 import { FieldProps } from '@keystone-6/core/types'
 import { FieldContainer } from '@keystone-ui/fields'
-import { controller } from '@keystone-6/core/fields/types/virtual/views'
-import { useMutation, useQuery, gql } from '@keystone-6/core/admin-ui/apollo'
+import { useEffect, useState } from 'react'
+import styled from 'styled-components'
 
 const colors = [
   '#EEE8AA',
@@ -59,6 +59,7 @@ const GET_ONLINE_USERS = gql`
   }
 `
 
+// @ts-ignore FieldContainer type is not compatible with styled-components
 const Container = styled(FieldContainer)`
   display: flex;
   flex-direction: row;
@@ -221,10 +222,10 @@ export const Field = ({ value }: FieldProps<typeof controller>) => {
     task()
 
     // Polling to tell the server the user is still online
-    const polling = setInterval(task, pollInterval)
+    const polling = window.setInterval(task, pollInterval)
 
     return () => {
-      clearInterval(polling)
+      window.clearInterval(polling)
     }
   }, [createOnlineUserData, updateOnlineUser])
 

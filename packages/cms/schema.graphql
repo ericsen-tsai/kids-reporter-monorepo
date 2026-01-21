@@ -193,18 +193,19 @@ type Post {
   relatedPostsCount(where: PostWhereInput! = {}): Int
   relatedPostsOrderJson: JSON
   relatedPostsOrdered(take: Int! = 12, skip: Int! = 0): [Post!]
-  searchTWReporterRelatedPosts: JSON
   TWReporterRelatedPostsJSON: JSON
   ogTitle: String
   ogDescription: String
   ogImage: Photo
   aiDialog: JSON
-  aiSuggestionOpening: JSON
-  opening: String
-  aiSuggestion: JSON
   multipleChoiceQuestionsJSON: JSON
-  aiEssaySuggestion: JSON
   essayQuestionsJSON: JSON
+  opening: String
+  postChoiceQuestions(where: PostChoiceQuestionWhereInput! = {}, orderBy: [PostChoiceQuestionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostChoiceQuestionWhereUniqueInput): [PostChoiceQuestion!]
+  postChoiceQuestionsCount(where: PostChoiceQuestionWhereInput! = {}): Int
+  postEssayQuestions(where: PostEssayQuestionWhereInput! = {}, orderBy: [PostEssayQuestionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostEssayQuestionWhereUniqueInput): [PostEssayQuestion!]
+  postEssayQuestionsCount(where: PostEssayQuestionWhereInput! = {}): Int
+  showBaodaozai: Boolean
   createdAt: DateTime
   updatedAt: DateTime
   createdBy: User
@@ -214,6 +215,8 @@ type Post {
   preview: JSON
   listPreview: String
   onlineUsers: JSON
+  generateQuestions: JSON
+  copyPostContent: JSON
 }
 
 input PostWhereUniqueInput {
@@ -244,6 +247,9 @@ input PostWhereInput {
   ogDescription: StringFilter
   ogImage: PhotoWhereInput
   opening: StringFilter
+  postChoiceQuestions: PostChoiceQuestionManyRelationFilter
+  postEssayQuestions: PostEssayQuestionManyRelationFilter
+  showBaodaozai: BooleanFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
   createdBy: UserWhereInput
@@ -280,6 +286,18 @@ input PostManyRelationFilter {
   none: PostWhereInput
 }
 
+input PostChoiceQuestionManyRelationFilter {
+  every: PostChoiceQuestionWhereInput
+  some: PostChoiceQuestionWhereInput
+  none: PostChoiceQuestionWhereInput
+}
+
+input PostEssayQuestionManyRelationFilter {
+  every: PostEssayQuestionWhereInput
+  some: PostEssayQuestionWhereInput
+  none: PostEssayQuestionWhereInput
+}
+
 input PostOrderByInput {
   id: OrderDirection
   slug: OrderDirection
@@ -291,6 +309,7 @@ input PostOrderByInput {
   ogTitle: OrderDirection
   ogDescription: OrderDirection
   opening: OrderDirection
+  showBaodaozai: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -320,9 +339,12 @@ input PostUpdateInput {
   ogTitle: String
   ogDescription: String
   ogImage: PhotoRelateToOneForUpdateInput
-  opening: String
   multipleChoiceQuestionsJSON: JSON
   essayQuestionsJSON: JSON
+  opening: String
+  postChoiceQuestions: PostChoiceQuestionRelateToManyForUpdateInput
+  postEssayQuestions: PostEssayQuestionRelateToManyForUpdateInput
+  showBaodaozai: Boolean
   createdAt: DateTime
   updatedAt: DateTime
   createdBy: UserRelateToOneForUpdateInput
@@ -382,6 +404,20 @@ input PostRelateToManyForUpdateInput {
   connect: [PostWhereUniqueInput!]
 }
 
+input PostChoiceQuestionRelateToManyForUpdateInput {
+  disconnect: [PostChoiceQuestionWhereUniqueInput!]
+  set: [PostChoiceQuestionWhereUniqueInput!]
+  create: [PostChoiceQuestionCreateInput!]
+  connect: [PostChoiceQuestionWhereUniqueInput!]
+}
+
+input PostEssayQuestionRelateToManyForUpdateInput {
+  disconnect: [PostEssayQuestionWhereUniqueInput!]
+  set: [PostEssayQuestionWhereUniqueInput!]
+  create: [PostEssayQuestionCreateInput!]
+  connect: [PostEssayQuestionWhereUniqueInput!]
+}
+
 input UserRelateToOneForUpdateInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
@@ -418,9 +454,12 @@ input PostCreateInput {
   ogTitle: String
   ogDescription: String
   ogImage: PhotoRelateToOneForCreateInput
-  opening: String
   multipleChoiceQuestionsJSON: JSON
   essayQuestionsJSON: JSON
+  opening: String
+  postChoiceQuestions: PostChoiceQuestionRelateToManyForCreateInput
+  postEssayQuestions: PostEssayQuestionRelateToManyForCreateInput
+  showBaodaozai: Boolean
   createdAt: DateTime
   updatedAt: DateTime
   createdBy: UserRelateToOneForCreateInput
@@ -465,6 +504,16 @@ input TagRelateToManyForCreateInput {
 input PostRelateToManyForCreateInput {
   create: [PostCreateInput!]
   connect: [PostWhereUniqueInput!]
+}
+
+input PostChoiceQuestionRelateToManyForCreateInput {
+  create: [PostChoiceQuestionCreateInput!]
+  connect: [PostChoiceQuestionWhereUniqueInput!]
+}
+
+input PostEssayQuestionRelateToManyForCreateInput {
+  create: [PostEssayQuestionCreateInput!]
+  connect: [PostEssayQuestionWhereUniqueInput!]
 }
 
 input UserRelateToOneForCreateInput {
@@ -1114,6 +1163,75 @@ input SubcategoryRelateToOneForCreateInput {
   connect: SubcategoryWhereUniqueInput
 }
 
+type CallBaodaozaiIntro {
+  id: ID!
+  page: CallBaodaozaiIntroPageType
+  content: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+enum CallBaodaozaiIntroPageType {
+  home
+  all
+  topics
+  news
+  storytelling
+  campus
+  listeningNews
+  classroom
+}
+
+input CallBaodaozaiIntroWhereUniqueInput {
+  id: ID
+  page: CallBaodaozaiIntroPageType
+}
+
+input CallBaodaozaiIntroWhereInput {
+  AND: [CallBaodaozaiIntroWhereInput!]
+  OR: [CallBaodaozaiIntroWhereInput!]
+  NOT: [CallBaodaozaiIntroWhereInput!]
+  id: IDFilter
+  page: CallBaodaozaiIntroPageTypeNullableFilter
+  content: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CallBaodaozaiIntroPageTypeNullableFilter {
+  equals: CallBaodaozaiIntroPageType
+  in: [CallBaodaozaiIntroPageType!]
+  notIn: [CallBaodaozaiIntroPageType!]
+  not: CallBaodaozaiIntroPageTypeNullableFilter
+}
+
+input CallBaodaozaiIntroOrderByInput {
+  id: OrderDirection
+  page: OrderDirection
+  content: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CallBaodaozaiIntroUpdateInput {
+  page: CallBaodaozaiIntroPageType
+  content: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CallBaodaozaiIntroUpdateArgs {
+  where: CallBaodaozaiIntroWhereUniqueInput!
+  data: CallBaodaozaiIntroUpdateInput!
+}
+
+input CallBaodaozaiIntroCreateInput {
+  page: CallBaodaozaiIntroPageType
+  content: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 type Tag {
   id: ID!
   slug: String
@@ -1638,10 +1756,15 @@ input OnlineUserCreateInput {
 type Member {
   id: ID!
   name: String
+  nickname: String
   email: String
+  contactEmail: String
   twreporter_user_id: String
   role: String
   twoFactorAuth: JSON
+  showBaodaozai: Boolean
+  essayQuestionCount: Int
+  avatar: MemberAvatar
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1657,9 +1780,14 @@ input MemberWhereInput {
   NOT: [MemberWhereInput!]
   id: IDFilter
   name: StringFilter
+  nickname: StringFilter
   email: StringFilter
+  contactEmail: StringFilter
   twreporter_user_id: StringFilter
   role: StringFilter
+  showBaodaozai: BooleanFilter
+  essayQuestionCount: IntNullableFilter
+  avatar: MemberAvatarWhereInput
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -1667,20 +1795,35 @@ input MemberWhereInput {
 input MemberOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  nickname: OrderDirection
   email: OrderDirection
+  contactEmail: OrderDirection
   twreporter_user_id: OrderDirection
   role: OrderDirection
+  showBaodaozai: OrderDirection
+  essayQuestionCount: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
 
 input MemberUpdateInput {
   name: String
+  nickname: String
   email: String
+  contactEmail: String
   twreporter_user_id: String
   role: String
+  showBaodaozai: Boolean
+  essayQuestionCount: Int
+  avatar: MemberAvatarRelateToOneForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+input MemberAvatarRelateToOneForUpdateInput {
+  create: MemberAvatarCreateInput
+  connect: MemberAvatarWhereUniqueInput
+  disconnect: Boolean
 }
 
 input MemberUpdateArgs {
@@ -1690,11 +1833,446 @@ input MemberUpdateArgs {
 
 input MemberCreateInput {
   name: String
+  nickname: String
   email: String
+  contactEmail: String
   twreporter_user_id: String
   role: String
+  showBaodaozai: Boolean
+  essayQuestionCount: Int
+  avatar: MemberAvatarRelateToOneForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+input MemberAvatarRelateToOneForCreateInput {
+  create: MemberAvatarCreateInput
+  connect: MemberAvatarWhereUniqueInput
+}
+
+type MemberAvatar {
+  id: ID!
+  name: String
+  imageFile: ImageFieldOutput
+  member: Member
+  fileUrl: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input MemberAvatarWhereUniqueInput {
+  id: ID
+}
+
+input MemberAvatarWhereInput {
+  AND: [MemberAvatarWhereInput!]
+  OR: [MemberAvatarWhereInput!]
+  NOT: [MemberAvatarWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  member: MemberWhereInput
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input MemberAvatarOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input MemberAvatarUpdateInput {
+  name: String
+  imageFile: ImageFieldInput
+  member: MemberRelateToOneForUpdateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input MemberRelateToOneForUpdateInput {
+  create: MemberCreateInput
+  connect: MemberWhereUniqueInput
+  disconnect: Boolean
+}
+
+input MemberAvatarUpdateArgs {
+  where: MemberAvatarWhereUniqueInput!
+  data: MemberAvatarUpdateInput!
+}
+
+input MemberAvatarCreateInput {
+  name: String
+  imageFile: ImageFieldInput
+  member: MemberRelateToOneForCreateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input MemberRelateToOneForCreateInput {
+  create: MemberCreateInput
+  connect: MemberWhereUniqueInput
+}
+
+type PostChoiceAnswer {
+  id: ID!
+  question: PostChoiceQuestion
+  member: Member
+  choiceIndex: Int
+  correct: Boolean
+  compositeKey: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostChoiceAnswerWhereUniqueInput {
+  id: ID
+  compositeKey: String
+}
+
+input PostChoiceAnswerWhereInput {
+  AND: [PostChoiceAnswerWhereInput!]
+  OR: [PostChoiceAnswerWhereInput!]
+  NOT: [PostChoiceAnswerWhereInput!]
+  id: IDFilter
+  question: PostChoiceQuestionWhereInput
+  member: MemberWhereInput
+  choiceIndex: IntFilter
+  correct: BooleanFilter
+  compositeKey: StringNullableFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntFilter
+}
+
+input PostChoiceAnswerOrderByInput {
+  id: OrderDirection
+  choiceIndex: OrderDirection
+  correct: OrderDirection
+  compositeKey: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input PostChoiceAnswerUpdateInput {
+  question: PostChoiceQuestionRelateToOneForUpdateInput
+  choiceIndex: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostChoiceQuestionRelateToOneForUpdateInput {
+  create: PostChoiceQuestionCreateInput
+  connect: PostChoiceQuestionWhereUniqueInput
+  disconnect: Boolean
+}
+
+input PostChoiceAnswerUpdateArgs {
+  where: PostChoiceAnswerWhereUniqueInput!
+  data: PostChoiceAnswerUpdateInput!
+}
+
+input PostChoiceAnswerCreateInput {
+  question: PostChoiceQuestionRelateToOneForCreateInput
+  choiceIndex: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostChoiceQuestionRelateToOneForCreateInput {
+  create: PostChoiceQuestionCreateInput
+  connect: PostChoiceQuestionWhereUniqueInput
+}
+
+type PostChoiceQuestion {
+  id: ID!
+  post: Post
+  answers(where: PostChoiceAnswerWhereInput! = {}, orderBy: [PostChoiceAnswerOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostChoiceAnswerWhereUniqueInput): [PostChoiceAnswer!]
+  answersCount(where: PostChoiceAnswerWhereInput! = {}): Int
+  title: String
+  options: JSON
+  reason: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostChoiceQuestionWhereUniqueInput {
+  id: ID
+}
+
+input PostChoiceQuestionWhereInput {
+  AND: [PostChoiceQuestionWhereInput!]
+  OR: [PostChoiceQuestionWhereInput!]
+  NOT: [PostChoiceQuestionWhereInput!]
+  id: IDFilter
+  post: PostWhereInput
+  answers: PostChoiceAnswerManyRelationFilter
+  title: StringFilter
+  reason: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input PostChoiceAnswerManyRelationFilter {
+  every: PostChoiceAnswerWhereInput
+  some: PostChoiceAnswerWhereInput
+  none: PostChoiceAnswerWhereInput
+}
+
+input PostChoiceQuestionOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  reason: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input PostChoiceQuestionUpdateInput {
+  post: PostRelateToOneForUpdateInput
+  answers: PostChoiceAnswerRelateToManyForUpdateInput
+  title: String
+  options: JSON
+  reason: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostRelateToOneForUpdateInput {
+  create: PostCreateInput
+  connect: PostWhereUniqueInput
+  disconnect: Boolean
+}
+
+input PostChoiceAnswerRelateToManyForUpdateInput {
+  disconnect: [PostChoiceAnswerWhereUniqueInput!]
+  set: [PostChoiceAnswerWhereUniqueInput!]
+  create: [PostChoiceAnswerCreateInput!]
+  connect: [PostChoiceAnswerWhereUniqueInput!]
+}
+
+input PostChoiceQuestionUpdateArgs {
+  where: PostChoiceQuestionWhereUniqueInput!
+  data: PostChoiceQuestionUpdateInput!
+}
+
+input PostChoiceQuestionCreateInput {
+  post: PostRelateToOneForCreateInput
+  answers: PostChoiceAnswerRelateToManyForCreateInput
+  title: String
+  options: JSON
+  reason: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostRelateToOneForCreateInput {
+  create: PostCreateInput
+  connect: PostWhereUniqueInput
+}
+
+input PostChoiceAnswerRelateToManyForCreateInput {
+  create: [PostChoiceAnswerCreateInput!]
+  connect: [PostChoiceAnswerWhereUniqueInput!]
+}
+
+type PostEssayAnswer {
+  id: ID!
+  question: PostEssayQuestion
+  member: Member
+  content: String
+  likesCount: Int
+  compositeKey: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostEssayAnswerWhereUniqueInput {
+  id: ID
+  compositeKey: String
+}
+
+input PostEssayAnswerWhereInput {
+  AND: [PostEssayAnswerWhereInput!]
+  OR: [PostEssayAnswerWhereInput!]
+  NOT: [PostEssayAnswerWhereInput!]
+  id: IDFilter
+  question: PostEssayQuestionWhereInput
+  member: MemberWhereInput
+  content: StringFilter
+  likesCount: IntFilter
+  compositeKey: StringNullableFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input PostEssayAnswerOrderByInput {
+  id: OrderDirection
+  content: OrderDirection
+  likesCount: OrderDirection
+  compositeKey: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input PostEssayAnswerUpdateInput {
+  question: PostEssayQuestionRelateToOneForUpdateInput
+  content: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostEssayQuestionRelateToOneForUpdateInput {
+  create: PostEssayQuestionCreateInput
+  connect: PostEssayQuestionWhereUniqueInput
+  disconnect: Boolean
+}
+
+input PostEssayAnswerUpdateArgs {
+  where: PostEssayAnswerWhereUniqueInput!
+  data: PostEssayAnswerUpdateInput!
+}
+
+input PostEssayAnswerCreateInput {
+  question: PostEssayQuestionRelateToOneForCreateInput
+  content: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostEssayQuestionRelateToOneForCreateInput {
+  create: PostEssayQuestionCreateInput
+  connect: PostEssayQuestionWhereUniqueInput
+}
+
+type PostEssayQuestion {
+  id: ID!
+  post: Post
+  title: String
+  answers(where: PostEssayAnswerWhereInput! = {}, orderBy: [PostEssayAnswerOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostEssayAnswerWhereUniqueInput): [PostEssayAnswer!]
+  answersCount(where: PostEssayAnswerWhereInput! = {}): Int
+  hint: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostEssayQuestionWhereUniqueInput {
+  id: ID
+}
+
+input PostEssayQuestionWhereInput {
+  AND: [PostEssayQuestionWhereInput!]
+  OR: [PostEssayQuestionWhereInput!]
+  NOT: [PostEssayQuestionWhereInput!]
+  id: IDFilter
+  post: PostWhereInput
+  title: StringFilter
+  answers: PostEssayAnswerManyRelationFilter
+  hint: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input PostEssayAnswerManyRelationFilter {
+  every: PostEssayAnswerWhereInput
+  some: PostEssayAnswerWhereInput
+  none: PostEssayAnswerWhereInput
+}
+
+input PostEssayQuestionOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  hint: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input PostEssayQuestionUpdateInput {
+  post: PostRelateToOneForUpdateInput
+  title: String
+  answers: PostEssayAnswerRelateToManyForUpdateInput
+  hint: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostEssayAnswerRelateToManyForUpdateInput {
+  disconnect: [PostEssayAnswerWhereUniqueInput!]
+  set: [PostEssayAnswerWhereUniqueInput!]
+  create: [PostEssayAnswerCreateInput!]
+  connect: [PostEssayAnswerWhereUniqueInput!]
+}
+
+input PostEssayQuestionUpdateArgs {
+  where: PostEssayQuestionWhereUniqueInput!
+  data: PostEssayQuestionUpdateInput!
+}
+
+input PostEssayQuestionCreateInput {
+  post: PostRelateToOneForCreateInput
+  title: String
+  answers: PostEssayAnswerRelateToManyForCreateInput
+  hint: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostEssayAnswerRelateToManyForCreateInput {
+  create: [PostEssayAnswerCreateInput!]
+  connect: [PostEssayAnswerWhereUniqueInput!]
+}
+
+type PostEssayAnswerLike {
+  id: ID!
+  answer: PostEssayAnswer
+  member: Member
+  compositeKey: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostEssayAnswerLikeWhereUniqueInput {
+  id: ID
+  compositeKey: String
+}
+
+input PostEssayAnswerLikeWhereInput {
+  AND: [PostEssayAnswerLikeWhereInput!]
+  OR: [PostEssayAnswerLikeWhereInput!]
+  NOT: [PostEssayAnswerLikeWhereInput!]
+  id: IDFilter
+  answer: PostEssayAnswerWhereInput
+  member: MemberWhereInput
+  compositeKey: StringNullableFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input PostEssayAnswerLikeOrderByInput {
+  id: OrderDirection
+  compositeKey: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input PostEssayAnswerLikeCreateInput {
+  answer: PostEssayAnswerRelateToOneForCreateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PostEssayAnswerRelateToOneForCreateInput {
+  create: PostEssayAnswerCreateInput
+  connect: PostEssayAnswerWhereUniqueInput
 }
 
 """
@@ -1757,6 +2335,12 @@ type Mutation {
   updateSubSubcategories(data: [SubSubcategoryUpdateArgs!]!): [SubSubcategory]
   deleteSubSubcategory(where: SubSubcategoryWhereUniqueInput!): SubSubcategory
   deleteSubSubcategories(where: [SubSubcategoryWhereUniqueInput!]!): [SubSubcategory]
+  createCallBaodaozaiIntro(data: CallBaodaozaiIntroCreateInput!): CallBaodaozaiIntro
+  createCallBaodaozaiIntros(data: [CallBaodaozaiIntroCreateInput!]!): [CallBaodaozaiIntro]
+  updateCallBaodaozaiIntro(where: CallBaodaozaiIntroWhereUniqueInput!, data: CallBaodaozaiIntroUpdateInput!): CallBaodaozaiIntro
+  updateCallBaodaozaiIntros(data: [CallBaodaozaiIntroUpdateArgs!]!): [CallBaodaozaiIntro]
+  deleteCallBaodaozaiIntro(where: CallBaodaozaiIntroWhereUniqueInput!): CallBaodaozaiIntro
+  deleteCallBaodaozaiIntros(where: [CallBaodaozaiIntroWhereUniqueInput!]!): [CallBaodaozaiIntro]
   createTag(data: TagCreateInput!): Tag
   createTags(data: [TagCreateInput!]!): [Tag]
   updateTag(where: TagWhereUniqueInput!, data: TagUpdateInput!): Tag
@@ -1811,9 +2395,44 @@ type Mutation {
   updateMembers(data: [MemberUpdateArgs!]!): [Member]
   deleteMember(where: MemberWhereUniqueInput!): Member
   deleteMembers(where: [MemberWhereUniqueInput!]!): [Member]
+  createMemberAvatar(data: MemberAvatarCreateInput!): MemberAvatar
+  createMemberAvatars(data: [MemberAvatarCreateInput!]!): [MemberAvatar]
+  updateMemberAvatar(where: MemberAvatarWhereUniqueInput!, data: MemberAvatarUpdateInput!): MemberAvatar
+  updateMemberAvatars(data: [MemberAvatarUpdateArgs!]!): [MemberAvatar]
+  deleteMemberAvatar(where: MemberAvatarWhereUniqueInput!): MemberAvatar
+  deleteMemberAvatars(where: [MemberAvatarWhereUniqueInput!]!): [MemberAvatar]
+  createPostChoiceAnswer(data: PostChoiceAnswerCreateInput!): PostChoiceAnswer
+  createPostChoiceAnswers(data: [PostChoiceAnswerCreateInput!]!): [PostChoiceAnswer]
+  updatePostChoiceAnswer(where: PostChoiceAnswerWhereUniqueInput!, data: PostChoiceAnswerUpdateInput!): PostChoiceAnswer
+  updatePostChoiceAnswers(data: [PostChoiceAnswerUpdateArgs!]!): [PostChoiceAnswer]
+  deletePostChoiceAnswer(where: PostChoiceAnswerWhereUniqueInput!): PostChoiceAnswer
+  deletePostChoiceAnswers(where: [PostChoiceAnswerWhereUniqueInput!]!): [PostChoiceAnswer]
+  createPostChoiceQuestion(data: PostChoiceQuestionCreateInput!): PostChoiceQuestion
+  createPostChoiceQuestions(data: [PostChoiceQuestionCreateInput!]!): [PostChoiceQuestion]
+  updatePostChoiceQuestion(where: PostChoiceQuestionWhereUniqueInput!, data: PostChoiceQuestionUpdateInput!): PostChoiceQuestion
+  updatePostChoiceQuestions(data: [PostChoiceQuestionUpdateArgs!]!): [PostChoiceQuestion]
+  deletePostChoiceQuestion(where: PostChoiceQuestionWhereUniqueInput!): PostChoiceQuestion
+  deletePostChoiceQuestions(where: [PostChoiceQuestionWhereUniqueInput!]!): [PostChoiceQuestion]
+  createPostEssayAnswer(data: PostEssayAnswerCreateInput!): PostEssayAnswer
+  createPostEssayAnswers(data: [PostEssayAnswerCreateInput!]!): [PostEssayAnswer]
+  updatePostEssayAnswer(where: PostEssayAnswerWhereUniqueInput!, data: PostEssayAnswerUpdateInput!): PostEssayAnswer
+  updatePostEssayAnswers(data: [PostEssayAnswerUpdateArgs!]!): [PostEssayAnswer]
+  deletePostEssayAnswer(where: PostEssayAnswerWhereUniqueInput!): PostEssayAnswer
+  deletePostEssayAnswers(where: [PostEssayAnswerWhereUniqueInput!]!): [PostEssayAnswer]
+  createPostEssayQuestion(data: PostEssayQuestionCreateInput!): PostEssayQuestion
+  createPostEssayQuestions(data: [PostEssayQuestionCreateInput!]!): [PostEssayQuestion]
+  updatePostEssayQuestion(where: PostEssayQuestionWhereUniqueInput!, data: PostEssayQuestionUpdateInput!): PostEssayQuestion
+  updatePostEssayQuestions(data: [PostEssayQuestionUpdateArgs!]!): [PostEssayQuestion]
+  deletePostEssayQuestion(where: PostEssayQuestionWhereUniqueInput!): PostEssayQuestion
+  deletePostEssayQuestions(where: [PostEssayQuestionWhereUniqueInput!]!): [PostEssayQuestion]
+  createPostEssayAnswerLike(data: PostEssayAnswerLikeCreateInput!): PostEssayAnswerLike
+  createPostEssayAnswerLikes(data: [PostEssayAnswerLikeCreateInput!]!): [PostEssayAnswerLike]
+  deletePostEssayAnswerLike(where: PostEssayAnswerLikeWhereUniqueInput!): PostEssayAnswerLike
+  deletePostEssayAnswerLikes(where: [PostEssayAnswerLikeWhereUniqueInput!]!): [PostEssayAnswerLike]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
+  generatePostQuestions(postId: ID!): Boolean!
 }
 
 union UserAuthenticationWithPasswordResult = UserAuthenticationWithPasswordSuccess | UserAuthenticationWithPasswordFailure
@@ -1835,62 +2454,92 @@ input CreateInitialUserInput {
 }
 
 type Query {
-  users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   user(where: UserWhereUniqueInput!): User
+  users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   usersCount(where: UserWhereInput! = {}): Int
-  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   post(where: PostWhereUniqueInput!): Post
+  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   postsCount(where: PostWhereInput! = {}): Int
-  photos(where: PhotoWhereInput! = {}, orderBy: [PhotoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PhotoWhereUniqueInput): [Photo!]
   photo(where: PhotoWhereUniqueInput!): Photo
+  photos(where: PhotoWhereInput! = {}, orderBy: [PhotoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PhotoWhereUniqueInput): [Photo!]
   photosCount(where: PhotoWhereInput! = {}): Int
-  authors(where: AuthorWhereInput! = {}, orderBy: [AuthorOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AuthorWhereUniqueInput): [Author!]
   author(where: AuthorWhereUniqueInput!): Author
+  authors(where: AuthorWhereInput! = {}, orderBy: [AuthorOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AuthorWhereUniqueInput): [Author!]
   authorsCount(where: AuthorWhereInput! = {}): Int
-  projects(where: ProjectWhereInput! = {}, orderBy: [ProjectOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProjectWhereUniqueInput): [Project!]
   project(where: ProjectWhereUniqueInput!): Project
+  projects(where: ProjectWhereInput! = {}, orderBy: [ProjectOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProjectWhereUniqueInput): [Project!]
   projectsCount(where: ProjectWhereInput! = {}): Int
-  projectCategories(where: ProjectCategoryWhereInput! = {}, orderBy: [ProjectCategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProjectCategoryWhereUniqueInput): [ProjectCategory!]
   projectCategory(where: ProjectCategoryWhereUniqueInput!): ProjectCategory
+  projectCategories(where: ProjectCategoryWhereInput! = {}, orderBy: [ProjectCategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProjectCategoryWhereUniqueInput): [ProjectCategory!]
   projectCategoriesCount(where: ProjectCategoryWhereInput! = {}): Int
-  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
   category(where: CategoryWhereUniqueInput!): Category
+  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
   categoriesCount(where: CategoryWhereInput! = {}): Int
-  subcategories(where: SubcategoryWhereInput! = {}, orderBy: [SubcategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubcategoryWhereUniqueInput): [Subcategory!]
   subcategory(where: SubcategoryWhereUniqueInput!): Subcategory
+  subcategories(where: SubcategoryWhereInput! = {}, orderBy: [SubcategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubcategoryWhereUniqueInput): [Subcategory!]
   subcategoriesCount(where: SubcategoryWhereInput! = {}): Int
-  subSubcategories(where: SubSubcategoryWhereInput! = {}, orderBy: [SubSubcategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubSubcategoryWhereUniqueInput): [SubSubcategory!]
   subSubcategory(where: SubSubcategoryWhereUniqueInput!): SubSubcategory
+  subSubcategories(where: SubSubcategoryWhereInput! = {}, orderBy: [SubSubcategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubSubcategoryWhereUniqueInput): [SubSubcategory!]
   subSubcategoriesCount(where: SubSubcategoryWhereInput! = {}): Int
-  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
+  callBaodaozaiIntro(where: CallBaodaozaiIntroWhereUniqueInput!): CallBaodaozaiIntro
+  callBaodaozaiIntros(where: CallBaodaozaiIntroWhereInput! = {}, orderBy: [CallBaodaozaiIntroOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CallBaodaozaiIntroWhereUniqueInput): [CallBaodaozaiIntro!]
+  callBaodaozaiIntrosCount(where: CallBaodaozaiIntroWhereInput! = {}): Int
   tag(where: TagWhereUniqueInput!): Tag
+  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
-  newsReadingGroups(where: NewsReadingGroupWhereInput! = {}, orderBy: [NewsReadingGroupOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: NewsReadingGroupWhereUniqueInput): [NewsReadingGroup!]
   newsReadingGroup(where: NewsReadingGroupWhereUniqueInput!): NewsReadingGroup
+  newsReadingGroups(where: NewsReadingGroupWhereInput! = {}, orderBy: [NewsReadingGroupOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: NewsReadingGroupWhereUniqueInput): [NewsReadingGroup!]
   newsReadingGroupsCount(where: NewsReadingGroupWhereInput! = {}): Int
-  newsReadingGroupItems(where: NewsReadingGroupItemWhereInput! = {}, orderBy: [NewsReadingGroupItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: NewsReadingGroupItemWhereUniqueInput): [NewsReadingGroupItem!]
   newsReadingGroupItem(where: NewsReadingGroupItemWhereUniqueInput!): NewsReadingGroupItem
+  newsReadingGroupItems(where: NewsReadingGroupItemWhereInput! = {}, orderBy: [NewsReadingGroupItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: NewsReadingGroupItemWhereUniqueInput): [NewsReadingGroupItem!]
   newsReadingGroupItemsCount(where: NewsReadingGroupItemWhereInput! = {}): Int
-  editorPicksSettings(where: EditorPicksSettingWhereInput! = {}, orderBy: [EditorPicksSettingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EditorPicksSettingWhereUniqueInput): [EditorPicksSetting!]
   editorPicksSetting(where: EditorPicksSettingWhereUniqueInput!): EditorPicksSetting
+  editorPicksSettings(where: EditorPicksSettingWhereInput! = {}, orderBy: [EditorPicksSettingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EditorPicksSettingWhereUniqueInput): [EditorPicksSetting!]
   editorPicksSettingsCount(where: EditorPicksSettingWhereInput! = {}): Int
-  pDFS(where: PDFWhereInput! = {}, orderBy: [PDFOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PDFWhereUniqueInput): [PDF!]
   pDF(where: PDFWhereUniqueInput!): PDF
+  pDFS(where: PDFWhereInput! = {}, orderBy: [PDFOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PDFWhereUniqueInput): [PDF!]
   pDFSCount(where: PDFWhereInput! = {}): Int
-  sVGS(where: SVGWhereInput! = {}, orderBy: [SVGOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SVGWhereUniqueInput): [SVG!]
   sVG(where: SVGWhereUniqueInput!): SVG
+  sVGS(where: SVGWhereInput! = {}, orderBy: [SVGOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SVGWhereUniqueInput): [SVG!]
   sVGSCount(where: SVGWhereInput! = {}): Int
-  callBaodaozais(where: CallBaodaozaiWhereInput! = {}, orderBy: [CallBaodaozaiOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CallBaodaozaiWhereUniqueInput): [CallBaodaozai!]
   callBaodaozai(where: CallBaodaozaiWhereUniqueInput!): CallBaodaozai
+  callBaodaozais(where: CallBaodaozaiWhereInput! = {}, orderBy: [CallBaodaozaiOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CallBaodaozaiWhereUniqueInput): [CallBaodaozai!]
   callBaodaozaisCount(where: CallBaodaozaiWhereInput! = {}): Int
-  onlineUsers(where: OnlineUserWhereInput! = {}, orderBy: [OnlineUserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OnlineUserWhereUniqueInput): [OnlineUser!]
   onlineUser(where: OnlineUserWhereUniqueInput!): OnlineUser
+  onlineUsers(where: OnlineUserWhereInput! = {}, orderBy: [OnlineUserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OnlineUserWhereUniqueInput): [OnlineUser!]
   onlineUsersCount(where: OnlineUserWhereInput! = {}): Int
-  members(where: MemberWhereInput! = {}, orderBy: [MemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberWhereUniqueInput): [Member!]
   member(where: MemberWhereUniqueInput!): Member
+  members(where: MemberWhereInput! = {}, orderBy: [MemberOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberWhereUniqueInput): [Member!]
   membersCount(where: MemberWhereInput! = {}): Int
+  memberAvatar(where: MemberAvatarWhereUniqueInput!): MemberAvatar
+  memberAvatars(where: MemberAvatarWhereInput! = {}, orderBy: [MemberAvatarOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MemberAvatarWhereUniqueInput): [MemberAvatar!]
+  memberAvatarsCount(where: MemberAvatarWhereInput! = {}): Int
+  postChoiceAnswer(where: PostChoiceAnswerWhereUniqueInput!): PostChoiceAnswer
+  postChoiceAnswers(where: PostChoiceAnswerWhereInput! = {}, orderBy: [PostChoiceAnswerOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostChoiceAnswerWhereUniqueInput): [PostChoiceAnswer!]
+  postChoiceAnswersCount(where: PostChoiceAnswerWhereInput! = {}): Int
+  postChoiceQuestion(where: PostChoiceQuestionWhereUniqueInput!): PostChoiceQuestion
+  postChoiceQuestions(where: PostChoiceQuestionWhereInput! = {}, orderBy: [PostChoiceQuestionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostChoiceQuestionWhereUniqueInput): [PostChoiceQuestion!]
+  postChoiceQuestionsCount(where: PostChoiceQuestionWhereInput! = {}): Int
+  postEssayAnswer(where: PostEssayAnswerWhereUniqueInput!): PostEssayAnswer
+  postEssayAnswers(where: PostEssayAnswerWhereInput! = {}, orderBy: [PostEssayAnswerOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostEssayAnswerWhereUniqueInput): [PostEssayAnswer!]
+  postEssayAnswersCount(where: PostEssayAnswerWhereInput! = {}): Int
+  postEssayQuestion(where: PostEssayQuestionWhereUniqueInput!): PostEssayQuestion
+  postEssayQuestions(where: PostEssayQuestionWhereInput! = {}, orderBy: [PostEssayQuestionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostEssayQuestionWhereUniqueInput): [PostEssayQuestion!]
+  postEssayQuestionsCount(where: PostEssayQuestionWhereInput! = {}): Int
+  postEssayAnswerLike(where: PostEssayAnswerLikeWhereUniqueInput!): PostEssayAnswerLike
+  postEssayAnswerLikes(where: PostEssayAnswerLikeWhereInput! = {}, orderBy: [PostEssayAnswerLikeOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostEssayAnswerLikeWhereUniqueInput): [PostEssayAnswerLike!]
+  postEssayAnswerLikesCount(where: PostEssayAnswerLikeWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
+  searchTWReporterPosts(keywords: String!): [JSON]
+  getMemberPostsWithAnswers(take: Int = 5, cursor: String): JSON
+  getMemberEssayAnswersHasLiked(essayAnswerIds: [ID]): [getMemberEssayAnswersHasLikedResult]
+}
+
+type getMemberEssayAnswersHasLikedResult {
+  essayAnswerId: ID
+  hasLiked: Boolean
+  essayAnswerLikeId: ID
 }
 
 union AuthenticatedItem = User
@@ -1906,23 +2555,25 @@ type KeystoneAdminMeta {
 
 type KeystoneAdminUIListMeta {
   key: String!
-  itemQueryName: String!
-  listQueryName: String!
-  hideCreate: Boolean!
-  hideDelete: Boolean!
   path: String!
   label: String!
   singular: String!
   plural: String!
   description: String
-  initialColumns: [String!]!
   pageSize: Int!
   labelField: String!
   fields: [KeystoneAdminUIFieldMeta!]!
   groups: [KeystoneAdminUIFieldGroupMeta!]!
+  graphql: KeystoneAdminUIGraphQL!
+  initialColumns: [String!]!
+  initialSearchFields: [String!]!
   initialSort: KeystoneAdminUISort
-  isHidden: Boolean!
   isSingleton: Boolean!
+  hideCreate: Boolean!
+  hideDelete: Boolean!
+  isHidden: Boolean!
+  itemQueryName: String!
+  listQueryName: String!
 }
 
 type KeystoneAdminUIFieldMeta {
@@ -1985,6 +2636,33 @@ type KeystoneAdminUIFieldGroupMeta {
   label: String!
   description: String
   fields: [KeystoneAdminUIFieldMeta!]!
+}
+
+type KeystoneAdminUIGraphQL {
+  names: KeystoneAdminUIGraphQLNames!
+}
+
+type KeystoneAdminUIGraphQLNames {
+  outputTypeName: String!
+  whereInputName: String!
+  whereUniqueInputName: String!
+  createInputName: String!
+  createMutationName: String!
+  createManyMutationName: String!
+  relateToOneForCreateInputName: String!
+  relateToManyForCreateInputName: String!
+  itemQueryName: String!
+  listOrderName: String!
+  listQueryCountName: String!
+  listQueryName: String!
+  updateInputName: String!
+  updateMutationName: String!
+  updateManyInputName: String!
+  updateManyMutationName: String!
+  relateToOneForUpdateInputName: String!
+  relateToManyForUpdateInputName: String!
+  deleteMutationName: String!
+  deleteManyMutationName: String!
 }
 
 type KeystoneAdminUISort {

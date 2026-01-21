@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react'
-import debounce from 'lodash/debounce'
-import styled from 'styled-components'
-import { Drawer, DrawerController } from '@keystone-ui/modals'
 import { gql, useLazyQuery } from '@keystone-6/core/admin-ui/apollo'
+import { Drawer, DrawerController } from '@keystone-ui/modals'
+import debounce from 'lodash/debounce'
+import React, { useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
+
 import { AlignSelector } from './align-selector'
-import { SearchBox as _SearchBox, SearchBoxOnChangeFn } from './search-box'
 import { Pagination } from './pagination'
+import { SearchBox as _SearchBox, SearchBoxOnChangeFn } from './search-box'
 
 export enum ImageAlignment {
   DEFAULT = 'default',

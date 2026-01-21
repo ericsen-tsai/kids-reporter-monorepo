@@ -1,42 +1,21 @@
+import type {
+  GetTagMetaQuery,
+  GetTagPostsQuery,
+} from '__generated__/operations/content.generated'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import PostList from '@/app/components/post-list'
-import Pagination from '@/app/components/pagination'
+
+import Pagination from '@/components/pagination'
+import PostList from '@/components/post-list'
 import {
+  ContentType,
   GENERAL_DESCRIPTION,
-  POST_PER_PAGE,
-  POST_CONTENT_GQL,
   KIDS_URL_ORIGIN,
   OG_SUFFIX,
-  ContentType,
-} from '@/app/constants'
-import { getPostSummaries, sendGQLRequest, log, LogLevel } from '@/app/utils'
-
-const tagGQL = `
-query($where: TagWhereUniqueInput!, $take: Int, $skip: Int!, $orderBy: [PostOrderByInput!]!) {
-  tag(where: $where) {
-    posts(orderBy: $orderBy, take: $take, skip: $skip) {
-      ${POST_CONTENT_GQL}
-    }
-    postsCount
-    name
-  }
-}
-`
-
-const metaGQL = `
-query($where: TagWhereUniqueInput!) {
-  tag(where: $where) {
-    ogDescription
-    ogTitle
-    ogImage {
-      resized {
-        small
-      }
-    }
-  }
-}
-`
+  POST_PER_PAGE,
+} from '@/constants'
+import { getPostSummaries, log, LogLevel } from '@/utils'
+import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export async function generateMetadata({
   params,
@@ -45,8 +24,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const slug = params.slug?.[0]
 
-  const tagOGRes = await sendGQLRequest({
-    query: metaGQL,
+  const tagOGRes = await sendRestGqlRequest<GetTagMetaQuery>({
+    operation: 'tag-meta',
+    method: 'GET',
     variables: {
       where: {
         slug: slug,
@@ -89,8 +69,9 @@ export default async function Tag({ params }: { params: { slug: any } }) {
     notFound()
   }
 
-  const response = await sendGQLRequest({
-    query: tagGQL,
+  const response = await sendRestGqlRequest<GetTagPostsQuery>({
+    operation: 'tag-posts',
+    method: 'GET',
     variables: {
       where: {
         slug: slug,
@@ -110,8 +91,8 @@ export default async function Tag({ params }: { params: { slug: any } }) {
     log(LogLevel.WARNING, 'Tag not found!')
     notFound()
   }
-  const posts = tag.posts
-  const postsCount = tag.postsCount
+  const posts = tag.posts ?? []
+  const postsCount = tag.postsCount ?? 0
 
   const totalPages = Math.ceil(postsCount / POST_PER_PAGE)
   if (currentPage > 1 && currentPage > totalPages) {
@@ -127,12 +108,12 @@ export default async function Tag({ params }: { params: { slug: any } }) {
   return (
     <main
       style={{ width: '95vw' }}
-      className="flex flex-col justify-center items-center mb-10 px-9 pt-10 gap-10"
+      className="mb-10 flex flex-col items-center justify-center gap-10 px-9 pt-10"
     >
-      <div className="w-full flex flex-col justify-center items-center bg-white">
+      <div className="flex w-full flex-col items-center justify-center bg-white">
         <h1
           style={{ lineHeight: '160%' }}
-          className="text-center text-3xl text-gray-900 font-bold tracking-wider"
+          className="text-center text-3xl font-bold tracking-wider text-gray-900"
         >
           #{tag.name}
         </h1>

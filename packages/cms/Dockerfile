@@ -1,4 +1,6 @@
-FROM node:18.18.2-slim
+FROM node:20.19.5-slim
+
+RUN corepack enable
 
 ## Install system dependencies, `gcsfuse` in particular.
 RUN set -e; \
@@ -34,7 +36,7 @@ WORKDIR $APP_DIR
 COPY . $APP_DIR
 
 ## Install application dependencies
-RUN SKIP_BUILD_DEPS=true yarn install
+RUN SKIP_BUILD_DEPS=true yarn install --immutable
 
 ## Build application bundles
 RUN yarn build

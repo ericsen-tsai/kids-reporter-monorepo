@@ -1,6 +1,6 @@
+import { Select } from '@keystone-ui/fields'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Select } from '@keystone-ui/fields'
 
 const Label = styled.label`
   display: block;

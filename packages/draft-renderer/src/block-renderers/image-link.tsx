@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import styled, { useTheme } from 'styled-components'
 import {
+  convertFromRaw,
   Editor,
   EditorState,
   RawDraftContentState,
-  convertFromRaw,
 } from 'draft-js'
 import debounce from 'lodash/debounce'
-import { InfoBoxContainer } from './image-block'
+import { useEffect, useState } from 'react'
+import styled, { ThemeProvider, useTheme } from 'styled-components'
+
 import blockRenderMaps from '../block-render-maps/index'
 import { decorator } from '../entity-decorators/index'
-import { breakpoints, mediaQuery } from '../utils/media-query'
 import { DEBOUNCE_THRESHOLD } from '../utils/constants'
+import { breakpoints, mediaQuery } from '../utils/media-query'
+import { InfoBoxContainer } from './image-block'
 
 const fallbackImg = '/assets/images/image_placeholder.png'
 
@@ -34,10 +35,7 @@ type ImageLinkBlockProps = {
   }
 }
 
-export const ImageLinkBlock = ({
-  className = '',
-  data,
-}: ImageLinkBlockProps) => {
+function ImageLinkBlockInner({ className = '', data }: ImageLinkBlockProps) {
   const theme = useTheme()
   const { url, rawContentState } = data
   const [isDesktopAndAbove, setIsDesktopAndAbove] = useState(false)
@@ -68,20 +66,31 @@ export const ImageLinkBlock = ({
         {...commonImgProps}
         $isDesktopAndAbove={isDesktopAndAbove}
         onClick={() =>
-          isDesktopAndAbove && theme?.handleImgModalOpen?.(commonImgProps)
+          isDesktopAndAbove &&
+          (theme as any)?.handleImgModalOpen?.(commonImgProps)
         }
       />
       <Editor
         blockRenderMap={blockRenderMap}
         editorState={editorState}
         readOnly
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
         onChange={() => {}}
       />
     </Figure>
   )
 
   return imgBlock
+}
+
+export const ImageLinkBlock = ({
+  className = '',
+  data,
+}: ImageLinkBlockProps) => {
+  return (
+    <ThemeProvider theme={{}}>
+      <ImageLinkBlockInner className={className} data={data} />
+    </ThemeProvider>
+  )
 }
 
 type ImageBlockInArticleBodyProps = ImageLinkBlockProps
@@ -127,6 +136,8 @@ const ArticleBodyContainer = styled.div<{ $alignment?: string }>`
             margin: 5px 27px 5px 0px;
           }
         `
+      default:
+        return ''
     }
   }}
 `

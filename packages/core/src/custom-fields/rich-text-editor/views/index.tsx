@@ -1,6 +1,4 @@
-import React from 'react'
-import { jsx, Stack } from '@keystone-ui/core'; // eslint-disable-line
-import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
+import { CellContainer, CellLink } from '@keystone-6/core/admin-ui/components'
 import {
   CardValueComponent,
   CellComponent,
@@ -9,9 +7,11 @@ import {
   FieldProps,
   JSONValue,
 } from '@keystone-6/core/types'
-import { CellContainer, CellLink } from '@keystone-6/core/admin-ui/components'
-import { EditorState, convertFromRaw, convertToRaw } from 'draft-js'
+import { jsx, Stack } from '@keystone-ui/core' // eslint-disable-line
+import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
 import { RichTextEditor } from '@kids-reporter/draft-editor'
+import { convertFromRaw, convertToRaw, EditorState } from 'draft-js'
+import React from 'react'
 
 export const Field = ({
   field,

@@ -1,17 +1,22 @@
 import Path from 'node:path'
-import cors from 'cors'
-import { config } from '@keystone-6/core'
-import { listDefinition as lists } from './lists/index'
-import { RoleEnum } from './lists/utils/access-control-list'
-import appConfig from './config'
-import envVar from './environment-variables'
-import jwt from 'jsonwebtoken'
-import { createAuth } from '@keystone-6/auth'
-import { statelessSessions } from '@keystone-6/core/session'
+
 import { InMemoryLRUCache } from '@apollo/utils.keyvaluecache'
+import { createAuth } from '@keystone-6/auth'
+import { config } from '@keystone-6/core'
+import { statelessSessions } from '@keystone-6/core/session'
+import type { SessionStrategy } from '@keystone-6/core/types'
+import cors from 'cors'
+import express from 'express'
+import jwt from 'jsonwebtoken'
+
+import appConfig from './config'
+import { RoleEnum } from './constants/index'
+import envVar from './environment-variables'
 import { createPreviewMiniApp } from './express-mini-apps/preview/app'
 import { twoFactorAuth } from './express-mini-apps/two-factor-auth'
-import type { KeystoneContext, SessionStrategy } from '@keystone-6/core/types'
+import { extendGraphqlSchema } from './graphql/extend-schema'
+import { listDefinition as lists } from './lists/index'
+import type { AdminSession, Context, Session, TypeInfo } from './types/index'
 
 const sessionDataQuery = 'id name role email twoFactorAuth'
 
@@ -30,7 +35,7 @@ const { withAuth } = createAuth({
 /**
  *  Existing Keystone cookie-based session: used for Admin login/logout
  */
-const adminUISession = statelessSessions(appConfig.session)
+const adminUISession = statelessSessions<Session>(appConfig.session)
 
 /**
  *  Generate Keystone Session from an external JWT
@@ -41,8 +46,8 @@ const adminUISession = statelessSessions(appConfig.session)
 async function getSessionFromGoApiJwt({
   context,
 }: {
-  context: KeystoneContext
-}): Promise<any | undefined> {
+  context: Context
+}): Promise<Session | undefined> {
   const req = context.req
   if (!req) {
     return
@@ -162,26 +167,20 @@ async function getSessionFromGoApiJwt({
     },
   }
 }
-
-type AdminSession = {
-  listKey: string
-  itemId: number
-}
-
 /**
  *  Composite strategy:
  *    - get(): try Admin UI session first, if not found then try external JWT
  *    - start/end: delegate directly to Admin UI session (Admin login/logout)
  */
-const compositeSession: SessionStrategy<any> = {
+const compositeSession: SessionStrategy<Session, TypeInfo> = {
   async get({ context }) {
     // First, try Admin UI session
-    let session = (await adminUISession.get({ context })) as AdminSession | null
+    let session = (await adminUISession.get({ context })) as AdminSession
 
     if (session) {
       const sudoContext = context.sudo()
 
-      const { listKey, itemId }: { listKey: string; itemId: number } = session
+      const { listKey, itemId } = session
 
       if (!listKey || !itemId) {
         return
@@ -220,9 +219,7 @@ const compositeSession: SessionStrategy<any> = {
     }
 
     // Then try external JWT
-    session = await getSessionFromGoApiJwt({ context })
-
-    return session
+    return await getSessionFromGoApiJwt({ context })
   },
   async start({ context, data }) {
     // Only Admin login calls this: this will set keystonejs-session cookie
@@ -305,13 +302,22 @@ const authConfig = withAuth(
           ttl: envVar.memoryCacheTtl,
         }),
       },
+      extendGraphqlSchema,
     },
     server: {
-      healthCheck: {
-        path: '/health_check',
-        data: { status: 'healthy' },
-      },
       extendExpressApp: (app, commonContext) => {
+        // Health check endpoint
+        app.get('/health_check', (req, res) => {
+          res.status(200).json({ status: 'healthy' })
+        })
+
+        if (envVar.nodeEnv !== 'production') {
+          app.use(
+            '/resized',
+            express.static(Path.resolve(appConfig.images.storagePath))
+          )
+        }
+
         const corsOpts = {
           origin: envVar.cors.allowOrigins,
         }

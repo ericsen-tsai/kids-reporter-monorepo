@@ -1,11 +1,12 @@
 import { graphql } from '@keystone-6/core'
 import {
   json,
-  virtual,
   relationship,
   RelationshipFieldConfig,
+  virtual,
 } from '@keystone-6/core/fields'
 import { BaseListTypeInfo } from '@keystone-6/core/types'
+
 import { RelationshipInfo } from '../views/relationship-order-editor'
 
 const orderJsonSuffix = 'OrderJson'
@@ -75,12 +76,12 @@ const relationshipAndExtendedFields = ({
 
             // Query relationship & order to find target ids/ordered ids
             const source = await context.query[list].findOne({
-              where: { id: item?.id?.toString() },
+              where: { id: (item as any)?.id?.toString() },
               query: `${orderJSONField} ${relationshipField} { id }`,
             })
             const order = source?.[orderJSONField]
             const relationships = source?.[relationshipField]
-            const orderedIds = order?.map((item) => item?.id) ?? []
+            const orderedIds = order?.map((item: any) => item?.id) ?? []
             const targetIds =
               relationships?.map((relationship: any) => {
                 return relationship?.id
@@ -134,7 +135,7 @@ const mutateOrderFieldHook = ({
   const orderJSONField = `${relationshipField}${orderJsonSuffix}`
   const refList = relationshipConfig?.ref?.split('.')?.[0]
 
-  return async ({ inputData, item, resolvedData, context }) => {
+  return async ({ inputData, item, resolvedData, context }: any) => {
     if (!refList) {
       console.error('Invalid ref list!')
       return
@@ -159,7 +160,7 @@ const mutateOrderFieldHook = ({
         where: { id: { in: ids } },
         query: `id ${refLabelField}`,
       })
-      const newRelationships = items.map((item) => {
+      const newRelationships = items.map((item: any) => {
         return {
           id: item.id,
           label: item[refLabelField],

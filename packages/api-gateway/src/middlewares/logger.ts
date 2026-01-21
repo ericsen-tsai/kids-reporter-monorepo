@@ -1,4 +1,6 @@
-import express from 'express' // eslint-disable-line
+import express from 'express'
+
+import consts from '../constants.js'
 
 /**
  *  Follow [Writing structured logs](https://cloud.google.com/run/docs/logging#writing_structured_logs)
@@ -16,9 +18,8 @@ function getGlobalLogFields(req: express.Request, projectId: string) {
   const traceHeader = req.header('X-Cloud-Trace-Context')
   if (traceHeader && projectId) {
     const [trace] = traceHeader.split('/')
-    globalLogFields[
-      'logging.googleapis.com/trace'
-    ] = `projects/${projectId}/traces/${trace}`
+    globalLogFields['logging.googleapis.com/trace'] =
+      `projects/${projectId}/traces/${trace}`
   }
   return globalLogFields
 }
@@ -29,14 +30,42 @@ function getGlobalLogFields(req: express.Request, projectId: string) {
 export function createLoggerMw(projectId: string): express.RequestHandler {
   const handler: express.RequestHandler = (req, res, next) => {
     const globalLogFields = getGlobalLogFields(req, projectId)
+    const startAt = process.hrtime.bigint()
+    let logged = false
+    const slowThresholdMs = consts.slowThresholdMs
 
     const authHeader = req.get('Authorization')
     const safeAuthHeader =
       authHeader && authHeader.startsWith('Bearer ')
         ? 'Bearer ***REDACTED***'
         : authHeader
-        ? '***REDACTED***'
-        : undefined
+          ? '***REDACTED***'
+          : undefined
+
+    const logResponse = (event: 'finish' | 'close') => {
+      if (logged) {
+        return
+      }
+      logged = true
+      // Convert high-resolution nanoseconds to milliseconds.
+      const elapsedMs = Number(process.hrtime.bigint() - startAt) / 1e6
+      const isSlow = elapsedMs >= slowThresholdMs
+
+      console.log(
+        JSON.stringify({
+          severity: isSlow ? 'WARNING' : 'INFO',
+          message: `Response: ${req.method} ${req.originalUrl}`,
+          status: res.statusCode,
+          elapsedMs,
+          event,
+          slow: isSlow,
+          ...globalLogFields,
+        })
+      )
+    }
+
+    res.once('finish', () => logResponse('finish'))
+    res.once('close', () => logResponse('close'))
 
     console.log(
       JSON.stringify({

@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+
 import { getColorHex } from '../utils/index'
 import { mediaQuery } from '../utils/media-query'
 
@@ -52,7 +53,7 @@ const SvgBlock = styled.div`
     }
   }
 
-  ${mediaQuery.mediumOnly} {
+  ${mediaQuery.mediumAndDesktopOnly} {
     svg {
       width: 25px;
       margin-right: 15px;

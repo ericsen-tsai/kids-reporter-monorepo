@@ -1,17 +1,19 @@
-import React, { useState } from 'react'
-import buttonNames from './bt-names'
+import { Drawer, DrawerController } from '@keystone-ui/modals'
 import {
   AtomicBlockUtils,
+  convertFromRaw,
+  convertToRaw,
   EditorState,
   RawDraftContentState,
-  convertToRaw,
-  convertFromRaw,
 } from 'draft-js'
-import { Drawer, DrawerController } from '@keystone-ui/modals'
-import { RichTextEditor } from '../rich-text-editor'
-import { Select } from './form/select'
+import { useState } from 'react'
+
 import { editableAnnotationDecorator } from '../entity-decorators/annotation'
 import { editableLinkDecorator } from '../entity-decorators/link'
+import { RichTextEditor } from '../rich-text-editor'
+import buttonNames from './bt-names'
+import { Checkbox } from './form/checkbox'
+import { Select } from './form/select'
 
 const disabledButtons = [
   buttonNames.h2,
@@ -34,13 +36,14 @@ enum InfoBoxTypeEnum {
 
 enum InfoBoxLabelEnum {
   newsChargeStation = '新聞充電器',
-  headerBorder = '無線框版',
-  boxBorder = '有線框版',
+  headerBorder = '藍底版（有標題設計）',
+  boxBorder = '灰底版',
 }
 
 export type InfoBoxInputValue = {
   type: InfoBoxTypeEnum
   rawContentState: RawDraftContentState
+  showBaodaozai?: boolean
 }
 
 type InfoBoxInputType = {
@@ -48,6 +51,7 @@ type InfoBoxInputType = {
   onConfirm: (arg0: {
     type: InfoBoxTypeEnum
     rawContentState: RawDraftContentState
+    showBaodaozai?: boolean
   }) => void
   onCancel: () => void
   inputValue: InfoBoxInputValue
@@ -55,11 +59,11 @@ type InfoBoxInputType = {
 
 export function InfoBoxInput(props: InfoBoxInputType) {
   const { isOpen, onConfirm, onCancel, inputValue } = props
-
   const contentState = convertFromRaw(inputValue.rawContentState)
   const [inputValueState, setInputValueState] = useState({
     type: inputValue.type,
     editorState: EditorState.createWithContent(contentState),
+    showBaodaozai: inputValue.showBaodaozai,
   })
 
   return (
@@ -81,6 +85,7 @@ export function InfoBoxInput(props: InfoBoxInputType) {
                 rawContentState: convertToRaw(
                   inputValueState.editorState.getCurrentContent()
                 ),
+                showBaodaozai: inputValueState.showBaodaozai,
               })
             },
           },
@@ -104,21 +109,33 @@ export function InfoBoxInput(props: InfoBoxInputType) {
             },
           ]}
           onChange={(infoBoxType) => {
-            setInputValueState({
+            setInputValueState((prev) => ({
+              ...prev,
               type: infoBoxType as InfoBoxTypeEnum,
-              editorState: inputValueState.editorState,
-            })
+            }))
           }}
         />
+        {inputValueState.type !== InfoBoxTypeEnum.newsChargeStation && (
+          <Checkbox
+            label="是否顯示報導仔圖片"
+            checked={inputValueState.showBaodaozai ?? false}
+            onChange={(checked) => {
+              setInputValueState((prev) => ({
+                ...prev,
+                showBaodaozai: checked,
+              }))
+            }}
+          />
+        )}
         <RichTextEditor
           decorators={[editableAnnotationDecorator, editableLinkDecorator]}
           disabledButtons={disabledButtons}
           editorState={inputValueState.editorState}
           onChange={(editorState: EditorState) => {
-            setInputValueState({
-              type: inputValueState.type,
+            setInputValueState((prev) => ({
+              ...prev,
               editorState,
-            })
+            }))
           }}
         />
       </Drawer>
@@ -139,9 +156,11 @@ export const InfoBoxButton = (props: InfoBoxButtonProps) => {
   const onChange = ({
     type,
     rawContentState,
+    showBaodaozai,
   }: {
     type: InfoBoxTypeEnum
     rawContentState: RawDraftContentState
+    showBaodaozai?: boolean
   }) => {
     const contentState = editorState.getCurrentContent()
 
@@ -152,6 +171,7 @@ export const InfoBoxButton = (props: InfoBoxButtonProps) => {
       {
         type,
         rawContentState,
+        showBaodaozai,
       }
     )
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey()
@@ -179,6 +199,7 @@ export const InfoBoxButton = (props: InfoBoxButtonProps) => {
           inputValue={{
             type: InfoBoxTypeEnum.newsChargeStation,
             rawContentState: { blocks: [], entityMap: {} },
+            showBaodaozai: true,
           }}
         />
       )}

@@ -1,17 +1,17 @@
 import {
   ContentBlock,
   ContentState,
+  convertFromRaw,
   Editor,
   EditorState,
   RawDraftContentState,
-  convertFromRaw,
 } from 'draft-js'
 import React from 'react'
 import styled, { css } from 'styled-components'
+
 import blockRenderMaps from '../block-render-maps/index'
 import { ImageInInfoBox } from '../block-renderers/image-block'
 import { ImageLinkInInfoBox } from '../block-renderers/image-link'
-import { ThemeColorEnum } from '../utils/index'
 import { decorator } from '../entity-decorators/index'
 import { mediaQuery } from '../utils/media-query'
 
@@ -26,28 +26,41 @@ type InfoBoxBlockProps = {
   data: {
     type: InfoBoxTypeEnum
     rawContentState: RawDraftContentState
+    showBaodaozai?: boolean
   }
 }
 
 const containerStyles = css`
-  padding: 40px 40px 20px 40px;
   border-radius: 30px;
   position: relative;
 
   ${mediaQuery.smallOnly} {
-    padding: 20px 20px 0px 20px;
+    padding: 24px;
+  }
+
+  ${mediaQuery.mediumOnly} {
+    padding: 36px;
+  }
+
+  ${mediaQuery.desktopAbove} {
+    padding: 48px;
   }
 `
 
-const NewsChargeStationContainer = styled.div`
+const NewsChargeStationContainer = styled.div<{ $showBaodaozai?: boolean }>`
   ${containerStyles}
-
-  padding-top: 60px;
-  background-color: #fffcf4;
-
   ${mediaQuery.smallOnly} {
-    padding-top: 60px;
+    padding-top: 56px;
   }
+
+  ${mediaQuery.mediumOnly} {
+    padding-top: 72px;
+  }
+
+  ${mediaQuery.desktopAbove} {
+    padding-top: 84px;
+  }
+  background-color: #fff9ec;
 
   &::before {
     content: '';
@@ -69,79 +82,84 @@ function NewsChargeStation({ children }: { children: React.ReactNode }) {
   return <NewsChargeStationContainer>{children}</NewsChargeStationContainer>
 }
 
-const HeaderBorderContainer = styled.div`
-  ${({ theme }) => {
-    let logoColor
-    let bgColor
-    switch (theme?.themeColor) {
-      case ThemeColorEnum.YELLOW: {
-        logoColor = 'red'
-        bgColor = '#fff0d2'
-        break
-      }
-      case ThemeColorEnum.RED: {
-        logoColor = 'blue'
-        bgColor = '#ffd2d2'
-        break
-      }
-      case ThemeColorEnum.BLUE:
-      default: {
-        logoColor = 'yellow'
-        bgColor = '#d2f5ff'
-        break
-      }
-    }
-    return `
-      background-color: ${bgColor};
-      &::before {
-        background-image: url(https://www.unpkg.com/@kids-reporter/draft-renderer/public/images/info-box-blocksy-child-1-${logoColor}.png);
-      }
-      `
-  }}
-
-  ${containerStyles}
-
-  &::before {
-    content: '';
-    width: 120px;
-    height: 120px;
-    background-size: contain;
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
+const HeaderBorderLogoContainer = styled.div`
+  display: flex;
+  justify-content: end;
+  ${mediaQuery.smallOnly} {
+    padding-top: 20px;
+  }
+  ${mediaQuery.mediumAbove} {
+    padding-top: 32px;
   }
 `
 
-function HeaderBorder({ children }: { children: React.ReactNode }) {
-  return <HeaderBorderContainer>{children}</HeaderBorderContainer>
+const HeaderBorderLogo = styled.img`
+  width: 120px;
+  height: 100px;
+`
+
+const HeaderBorderContainer = styled.div`
+  background-color: #e9f8ff;
+  ${containerStyles}
+`
+
+function HeaderBorder({
+  children,
+  showBaodaozai,
+}: {
+  children: React.ReactNode
+  showBaodaozai?: boolean
+}) {
+  return (
+    <HeaderBorderContainer>
+      {children}
+      {showBaodaozai && (
+        <HeaderBorderLogoContainer>
+          <HeaderBorderLogo
+            src="https://www.unpkg.com/@kids-reporter/draft-renderer/public/images/info-box-blocksy-child-1-yellow.png"
+            alt="黃色報導仔"
+          />
+        </HeaderBorderLogoContainer>
+      )}
+    </HeaderBorderContainer>
+  )
 }
 
 const BoxBorderContainer = styled.div`
   ${containerStyles}
-  background-color: #ebebeb;
-  border: 3px solid #232323;
   overflow: hidden;
-
-  ${({ theme }) => `
-    &::before {
-      background-image: url(https://www.unpkg.com/@kids-reporter/draft-renderer/public/images/info-box-blocksy-child-2-${
-        theme?.themeColor || ThemeColorEnum.BLUE
-      }.png);
-    }`}
-
-  &::before {
-    content: '';
-    width: 100px;
-    height: 100px;
-    background-size: contain;
-    position: absolute;
-    bottom: 0;
-    right: 0;
+  background-color: #f8f8f8;
+  ${mediaQuery.smallOnly} {
+    padding-bottom: 64px;
   }
 `
 
-function BoxBorder({ children }: { children: React.ReactNode }) {
-  return <BoxBorderContainer>{children}</BoxBorderContainer>
+const BoxBorderLogo = styled.img`
+  width: 88px;
+  height: 64px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+`
+
+function BoxBorder({
+  children,
+  showBaodaozai,
+}: {
+  children: React.ReactNode
+  showBaodaozai?: boolean
+}) {
+  return (
+    <BoxBorderContainer>
+      {children}
+      {showBaodaozai && (
+        <BoxBorderLogo
+          src="https://www.unpkg.com/@kids-reporter/draft-renderer/public/images/info-box-blocksy-child-2-blue.png"
+          alt="藍色報導仔"
+        />
+      )}
+    </BoxBorderContainer>
+  )
 }
 
 const ArticleBodyContainer = styled.div`
@@ -157,9 +175,45 @@ const EditorContainer = styled.div`
   position: relative;
 `
 
-export function InfoBoxInArticleBody({ className, data }: InfoBoxBlockProps) {
-  const { type, rawContentState } = data
+function convertFromRawWithoutUnstyledTrailingBlocks(
+  rawContentState: RawDraftContentState
+) {
   const contentState = convertFromRaw(rawContentState)
+  const originalBlocks = contentState.getBlocksAsArray()
+
+  if (originalBlocks.length === 0) {
+    return contentState
+  }
+
+  let lastNonEmptyBlockIndex = originalBlocks.length - 1
+
+  // Find the index of the last block that is not an empty 'unstyled' block.
+  while (
+    lastNonEmptyBlockIndex >= 0 &&
+    originalBlocks[lastNonEmptyBlockIndex].getText().trim() === '' &&
+    originalBlocks[lastNonEmptyBlockIndex].getType() === 'unstyled'
+  ) {
+    lastNonEmptyBlockIndex--
+  }
+
+  // If no blocks were removed, return the original contentState.
+  if (lastNonEmptyBlockIndex === originalBlocks.length - 1) {
+    return contentState
+  }
+
+  const newBlocks = originalBlocks.slice(0, lastNonEmptyBlockIndex + 1)
+
+  // Create a new ContentState from the trimmed blocks, preserving the entityMap.
+  return ContentState.createFromBlockArray(
+    newBlocks,
+    contentState.getEntityMap()
+  )
+}
+
+export function InfoBoxInArticleBody({ className, data }: InfoBoxBlockProps) {
+  const { type, rawContentState, showBaodaozai = true } = data
+  const contentState =
+    convertFromRawWithoutUnstyledTrailingBlocks(rawContentState)
   const editorState = EditorState.createWithContent(contentState, decorator)
   let Component
   let blockRenderMap = blockRenderMaps.infoBox.default
@@ -181,14 +235,13 @@ export function InfoBoxInArticleBody({ className, data }: InfoBoxBlockProps) {
   }
   return (
     <ArticleBodyContainer className={className}>
-      <Component>
+      <Component showBaodaozai={showBaodaozai}>
         <EditorContainer>
           <Editor
             blockRenderMap={blockRenderMap}
             blockRendererFn={blockRendererFn}
             editorState={editorState}
             readOnly
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
             onChange={() => {}}
           />
           <ClearFloat />

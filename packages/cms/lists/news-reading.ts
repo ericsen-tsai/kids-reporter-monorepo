@@ -1,12 +1,13 @@
 import { list } from '@keystone-6/core'
 import { integer, relationship, text, timestamp } from '@keystone-6/core/fields'
+import type { ListConfig } from '@keystone-6/core/types'
+
 import {
   allowAllRoles,
   allowRoles,
   RoleEnum,
 } from './utils/access-control-list'
-
-const NewsReadingGroupItem = list({
+const NewsReadingGroupItem: ListConfig<any> = list({
   fields: {
     name: text({
       label: '語言類別',
@@ -83,7 +84,7 @@ const NewsReadingGroupItem = list({
   },
 })
 
-const NewsReadingGroup = list({
+const NewsReadingGroup: ListConfig<any> = list({
   fields: {
     name: text({
       isIndexed: true,
@@ -124,4 +125,4 @@ const NewsReadingGroup = list({
   },
 })
 
-export { NewsReadingGroupItem, NewsReadingGroup }
+export { NewsReadingGroup, NewsReadingGroupItem }

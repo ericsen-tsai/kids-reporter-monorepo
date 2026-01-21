@@ -1,6 +1,7 @@
-import { mediaQuery } from '../utils/media-query'
 import styled from 'styled-components'
+
 import { getColorHex } from '../utils/index'
+import { mediaQuery } from '../utils/media-query'
 
 const mockup = {
   mobile: {
@@ -92,7 +93,7 @@ const Caption = styled.figcaption`
     }
   }
 
-  ${mediaQuery.mediumOnly} {
+  ${mediaQuery.mediumAndDesktopOnly} {
     width: ${mockup.desktop.caption.width}px;
     padding: 15px 0 15px 0;
   }

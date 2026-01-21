@@ -1,8 +1,9 @@
-import { RichTextEditor } from '../src/index'
-import React, { useState } from 'react' // eslint-disable-line
 import { DrawerProvider } from '@keystone-ui/modals'
 import { EditorState } from 'draft-js'
+import { useState } from 'react'
 import { createRoot } from 'react-dom/client'
+
+import { RichTextEditor } from '../src/index'
 
 const reactRootId = 'root'
 const container = document.getElementById(reactRootId)

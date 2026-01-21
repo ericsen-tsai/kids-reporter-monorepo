@@ -1,52 +1,53 @@
-import React from 'react'
-import {
-  ContentBlock,
-  DraftBlockType,
-  DraftEditorCommand,
-  Editor,
-  EditorState,
-  KeyBindingUtil,
-  RichUtils,
-  getDefaultKeyBinding,
-  CompositeDecorator,
-} from 'draft-js'
 import {
   blockRenderMap,
   customStyleFn,
   ENTITY,
 } from '@kids-reporter/draft-renderer'
-import buttonNames from './buttons/bt-names'
+import {
+  CompositeDecorator,
+  ContentBlock,
+  DraftBlockType,
+  DraftEditorCommand,
+  Editor,
+  EditorState,
+  getDefaultKeyBinding,
+  KeyBindingUtil,
+  RichUtils,
+} from 'draft-js'
+import React from 'react'
+
 import { atomicBlockRenderer } from './block-renderer-fn'
 import {
+  BlockStyleControls,
+  CustomAnchorButton,
+  CustomAnnotationButton,
+  CustomBackgroundColorButton,
+  CustomBlockquoteButton,
+  CustomDividerButton,
+  CustomEmbeddedCodeButton,
+  CustomEnlargeButton,
+  CustomFontColorButton,
+  CustomImageButton,
+  CustomImageLinkButton,
+  CustomInfoBoxButton,
+  CustomLinkButton,
+  CustomNewsReadingButton,
+  CustomSlideshowButton,
+  CustomTOCAnchorButton,
+  InlineStyleControls,
+} from './buttons'
+import { customStylePrefix as bgColorPrefix } from './buttons/bg-color'
+import buttonNames from './buttons/bt-names'
+import { customStylePrefix as fontColorPrefix } from './buttons/font-color'
+import { ImageSelector } from './buttons/selector/image-selector'
+import {
   DraftEditorContainer,
-  DraftEditorWrapper,
   DraftEditorControls,
   DraftEditorControlsWrapper,
+  DraftEditorWrapper,
   EnlargeButtonWrapper,
   TextEditorWrapper,
 } from './styled'
-import {
-  BlockStyleControls,
-  InlineStyleControls,
-  CustomEnlargeButton,
-  CustomTOCAnchorButton,
-  CustomAnchorButton,
-  CustomLinkButton,
-  CustomAnnotationButton,
-  CustomBackgroundColorButton,
-  CustomFontColorButton,
-  CustomBlockquoteButton,
-  CustomImageButton,
-  CustomImageLinkButton,
-  CustomSlideshowButton,
-  CustomEmbeddedCodeButton,
-  CustomNewsReadingButton,
-  CustomDividerButton,
-  CustomInfoBoxButton,
-} from './buttons'
-import { ImageSelector } from './buttons/selector/image-selector'
-import { customStylePrefix as bgColorPrefix } from './buttons/bg-color'
-import { customStylePrefix as fontColorPrefix } from './buttons/font-color'
 
 const styleSource = [
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css',
@@ -380,8 +381,7 @@ class RichTextEditor extends React.Component<
           <TextEditorWrapper
             onClick={() => {
               if (this.editorRef) {
-                // eslint-disable-next-line prettier/prettier
-                (this.editorRef as HTMLElement)?.focus()
+                ;(this.editorRef as HTMLElement)?.focus()
               }
             }}
           >

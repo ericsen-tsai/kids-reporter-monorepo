@@ -1,19 +1,21 @@
-import config from '../config'
-import { list, graphql } from '@keystone-6/core'
+import { graphql, list } from '@keystone-6/core'
 import {
   image,
-  text,
-  virtual,
-  timestamp,
   relationship,
+  text,
+  timestamp,
+  virtual,
 } from '@keystone-6/core/fields'
+import { ListType } from 'types'
+
+import config from '../config'
 import {
   allowAllRoles,
   allowRoles,
   RoleEnum,
 } from './utils/access-control-list'
 
-const listConfigurations = list({
+export default list<ListType<'Photo'>>({
   fields: {
     name: text({
       label: '標題',
@@ -89,14 +91,13 @@ const listConfigurations = list({
           }
 
           Object.entries(resizedTargets).forEach(([key, value]) => {
-            rtn[
-              key
-            ] = `${config.googleCloudStorage.origin}/resized/${filename}-${value}.webp`
+            const resizedFilename = `${filename}-${value}.webp`
+            rtn[key] =
+              `${config.googleCloudStorage.origin}/resized/${resizedFilename}`
           })
 
-          rtn[
-            'original'
-          ] = `${config.googleCloudStorage.origin}/images/${filename}${extension}`
+          rtn['original'] =
+            `${config.googleCloudStorage.origin}/images/${filename}${extension}`
           return Object.assign(empty, rtn)
         },
       }),
@@ -129,5 +130,3 @@ const listConfigurations = list({
     },
   },
 })
-
-export default listConfigurations

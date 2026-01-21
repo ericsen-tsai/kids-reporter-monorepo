@@ -1,12 +1,13 @@
 import { list } from '@keystone-6/core'
-import { timestamp, text, file, relationship } from '@keystone-6/core/fields'
+import { file, relationship, text, timestamp } from '@keystone-6/core/fields'
+import type { ListConfig } from '@keystone-6/core/types'
+
 import {
   allowAllRoles,
   allowRoles,
   RoleEnum,
 } from './utils/access-control-list'
-
-const listConfigurations = list({
+const listConfigurations: ListConfig<any> = list({
   fields: {
     name: text({
       label: '標題',

@@ -1,7 +1,8 @@
+import { DefaultDraftBlockRenderMap } from 'draft-js'
 import Immutable from 'immutable'
 import React from 'react'
 import styled from 'styled-components'
-import { DefaultDraftBlockRenderMap } from 'draft-js'
+
 import { mediaQuery } from '../utils/media-query'
 
 export const Paragraph = styled.div`

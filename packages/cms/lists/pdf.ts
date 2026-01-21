@@ -1,13 +1,14 @@
-import config from '../config'
 import { graphql, list } from '@keystone-6/core'
-import { timestamp, text, file, virtual } from '@keystone-6/core/fields'
+import { file, text, timestamp, virtual } from '@keystone-6/core/fields'
+import type { ListConfig } from '@keystone-6/core/types'
+
+import config from '../config'
 import {
   allowAllRoles,
   allowRoles,
   RoleEnum,
 } from './utils/access-control-list'
-
-const listConfigurations = list({
+const listConfigurations: ListConfig<any> = list({
   fields: {
     name: text({
       label: '標題',

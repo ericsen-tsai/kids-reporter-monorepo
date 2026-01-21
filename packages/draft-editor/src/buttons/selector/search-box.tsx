@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
 import { Button } from '@keystone-ui/button'
 import { TextInput } from '@keystone-ui/fields'
+import { useState } from 'react'
+import styled from 'styled-components'
 
 const SearchBoxWrapper = styled.div`
   display: flex;

@@ -1,51 +1,22 @@
+import type {
+  GetAuthorMetaQuery,
+  GetAuthorPostsQuery,
+} from '__generated__/operations/content.generated'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import PostList from '@/app/components/post-list'
-import Pagination from '@/app/components/pagination'
+
+import Pagination from '@/components/pagination'
+import PostList from '@/components/post-list'
 import {
+  ContentType,
   DEFAULT_AVATAR,
   GENERAL_DESCRIPTION,
-  POST_PER_PAGE,
-  POST_CONTENT_GQL,
   KIDS_URL_ORIGIN,
-  ContentType,
-} from '@/app/constants'
-import { getPostSummaries, sendGQLRequest, log, LogLevel } from '@/app/utils'
-
-const authorGQL = `
-  query($authorWhere2: AuthorWhereUniqueInput!, $take: Int, $skip: Int!, $orderBy: [PostOrderByInput!]!) {
-    author(where: $authorWhere2) {
-      bio
-      name
-      email
-      avatar {
-        resized {
-          tiny
-        }
-      }
-      posts(orderBy: $orderBy, take: $take, skip: $skip) {
-        ${POST_CONTENT_GQL}
-      }
-      postsCount
-    }
-  }
-`
-
-const metaGQL = `
-query($where: AuthorWhereUniqueInput!) {
-  author(where: $where) {
-    slug
-    name
-    bio
-    image {
-      resized {
-        small
-      }
-    }
-  }
-}
-`
+  POST_PER_PAGE,
+} from '@/constants'
+import { getPostSummaries, log, LogLevel } from '@/utils'
+import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export async function generateMetadata({
   params,
@@ -54,8 +25,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const slug = params.slug?.[0]
 
-  const authorMetaRes = await sendGQLRequest({
-    query: metaGQL,
+  const authorMetaRes = await sendRestGqlRequest<GetAuthorMetaQuery>({
+    operation: 'author-meta',
+    method: 'GET',
     variables: {
       where: {
         slug: slug,
@@ -99,10 +71,11 @@ export default async function Author({ params }: { params: { slug: any } }) {
     notFound()
   }
 
-  const response = await sendGQLRequest({
-    query: authorGQL,
+  const response = await sendRestGqlRequest<GetAuthorPostsQuery>({
+    operation: 'author-posts',
+    method: 'GET',
     variables: {
-      authorWhere2: {
+      where: {
         slug: slug,
       },
       orderBy: [
@@ -119,8 +92,8 @@ export default async function Author({ params }: { params: { slug: any } }) {
     log(LogLevel.WARNING, 'Author not found!')
     notFound()
   }
-  const posts = author.posts
-  const postsCount = author.postsCount
+  const posts = author.posts ?? []
+  const postsCount = author.postsCount ?? 0
 
   const avatarURL = author.avatar?.resized?.tiny ?? DEFAULT_AVATAR
 
@@ -138,12 +111,12 @@ export default async function Author({ params }: { params: { slug: any } }) {
   return (
     <main
       style={{ width: '95vw' }}
-      className="flex flex-col justify-center items-center mb-10 gap-10"
+      className="mb-10 flex flex-col items-center justify-center gap-10"
     >
-      <div className="max-w-2xl flex flex-col justify-center items-center pt-10 px-9 bg-white gap-1.5">
-        <div className="max-w-44 max-h-44 overflow-hidden object-cover rounded-full mx-auto mb-1.5">
+      <div className="flex max-w-2xl flex-col items-center justify-center gap-1.5 bg-white px-9 pt-10">
+        <div className="mx-auto mb-1.5 max-h-44 max-w-44 overflow-hidden rounded-full object-cover">
           <img
-            className="max-w-44 max-h-44 w-full object-cover"
+            className="max-h-44 w-full max-w-44 object-cover"
             src={avatarURL}
             alt={author.name}
             loading="lazy"
@@ -151,7 +124,7 @@ export default async function Author({ params }: { params: { slug: any } }) {
         </div>
         <h1
           style={{ lineHeight: '160%', letterSpacing: '.08em' }}
-          className="text-center text-xl text-gray-900 font-bold mt-3 mb-9"
+          className="mt-3 mb-9 text-center text-xl font-bold text-gray-900"
         >
           {author.name}
         </h1>
@@ -162,7 +135,7 @@ export default async function Author({ params }: { params: { slug: any } }) {
               letterSpacing: '.05em',
               color: 'var(--paletteColor1)',
             }}
-            className="text-center not-italic font-medium text-base mb-2"
+            className="mb-2 text-center text-base font-medium not-italic"
             href={`mailto:${author.email}`}
           >
             {author.email}
@@ -170,7 +143,7 @@ export default async function Author({ params }: { params: { slug: any } }) {
         )}
         <p
           style={{ lineHeight: '200%', letterSpacing: '.05em' }}
-          className="text-center not-italic font-normal text-lg text-gray-900 whitespace-pre-wrap"
+          className="text-center text-lg font-normal whitespace-pre-wrap text-gray-900 not-italic"
         >
           {author.bio}
         </p>

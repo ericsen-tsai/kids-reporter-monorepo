@@ -1,14 +1,16 @@
+import { list } from '@keystone-6/core'
+import { timestamp } from '@keystone-6/core/fields'
+import type { ListConfig } from '@keystone-6/core/types'
+import {
+  customFields,
+  richTextEditorButtonNames,
+} from '@kids-reporter/cms-core'
+
 import {
   allowAllRoles,
   allowRoles,
   RoleEnum,
 } from './utils/access-control-list'
-import { list } from '@keystone-6/core'
-import { timestamp } from '@keystone-6/core/fields'
-import {
-  customFields,
-  richTextEditorButtonNames,
-} from '@kids-reporter/cms-core'
 
 const genRichTextEditorConfig = (label: string) => {
   return customFields.richTextEditor({
@@ -44,7 +46,9 @@ const genRichTextEditorConfig = (label: string) => {
   })
 }
 
-const listConfigurations = list({
+const listConfigurations: ListConfig<any> = list({
+  description:
+    'This list is deprecated. Please use CallBaodaozaiIntro instead.',
   fields: {
     home: genRichTextEditorConfig('首頁'),
     topics: genRichTextEditorConfig('專題集合頁'),
@@ -72,12 +76,13 @@ const listConfigurations = list({
     },
   },
   ui: {
-    label: 'Call Baodaozai',
-    singular: 'Call Baodaozai',
-    plural: 'Call Baodaozai',
+    label: 'Call Baodaozai (Deprecated)',
+    singular: 'Call Baodaozai (Deprecated)',
+    plural: 'Call Baodaozai (Deprecated)',
     listView: {
       initialColumns: ['nameTC', 'name'],
     },
+    isHidden: true,
   },
 })
 

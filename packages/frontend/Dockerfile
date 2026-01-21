@@ -1,19 +1,23 @@
-ARG NODE_VERSION=18.18.2
+ARG NODE_VERSION=20.19.5
 
 FROM node:${NODE_VERSION} AS build
 
+RUN corepack enable
+
 WORKDIR /build
 
-COPY package.json yarn.lock /build/
+COPY package.json yarn.lock .yarnrc.yml /build/
 
-RUN yarn install
+RUN yarn install --immutable --ignore-scripts
 
 COPY . /build/
 
-RUN yarn build
+RUN yarn build:cloudbuild
 
 
 FROM node:${NODE_VERSION}
+
+RUN corepack enable
 
 WORKDIR /app
 

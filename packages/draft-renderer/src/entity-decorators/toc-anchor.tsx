@@ -1,5 +1,6 @@
-import React from 'react'
 import { ContentState } from 'draft-js'
+import React from 'react'
+
 import { ENTITY, findEntitiesByType } from '../utils/entity'
 
 const TOCAnchor = (props: {

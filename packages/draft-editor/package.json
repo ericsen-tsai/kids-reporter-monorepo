@@ -1,6 +1,6 @@
 {
   "name": "@kids-reporter/draft-editor",
-  "version": "1.0.17",
+  "version": "1.0.19",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -8,7 +8,9 @@
     "dev": "make dev",
     "build": "make build",
     "clean": "make clean",
-    "build-lib": "make build-lib"
+    "build-lib": "make build-lib",
+    "lint:check": "eslint src --ext .ts,.tsx,.js,.jsx",
+    "type-check": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
@@ -23,23 +25,34 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@kids-reporter/draft-renderer": "1.0.12",
-    "@twreporter/errors": "^1.1.2",
-    "draft-js": "^0.11.7"
-  },
-  "peerDependencies": {
-    "@keystone-6/core": "5.8.0",
+    "@keystone-6/core": "6.5.1",
     "@keystone-ui/button": "^7.0.2",
     "@keystone-ui/fields": "^7.2.0",
     "@keystone-ui/modals": "^6.0.3",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "styled-components": "5.3.5"
+    "@kids-reporter/draft-renderer": "^1.0.15",
+    "@twreporter/errors": "^1.1.2",
+    "axios": "^1.12.2",
+    "draft-js": "^0.11.7"
+  },
+  "peerDependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "styled-components": "6.1.19"
   },
   "devDependencies": {
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "styled-components": "5.3.5"
+    "@babel/cli": "^7.23.9",
+    "@babel/core": "^7.23.9",
+    "@babel/preset-env": "^7.25.0",
+    "@babel/preset-react": "^7.24.7",
+    "@babel/preset-typescript": "^7.24.7",
+    "babel-loader": "^8.3.0",
+    "html-webpack-plugin": "^5.5.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "styled-components": "6.1.19",
+    "webpack": "^5.90.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.15.1"
   },
   "files": [
     "lib"
