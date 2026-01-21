@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "dotenv -e .env.local -- keystone dev",
     "start": "keystone start",
+    "db-migrate:dev": "keystone prisma migrate dev",
     "db-migrate": "keystone prisma migrate deploy",
     "build": "keystone build",
     "lint:check": "eslint . --ext .ts,.tsx,.js,.jsx",
