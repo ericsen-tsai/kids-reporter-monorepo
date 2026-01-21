@@ -8,9 +8,13 @@ const isValidPageNumber = (pageNumber: string): boolean => {
 }
 
 const isValidCategorySlug = (category: string): category is CategorySlug => {
-  return ['news', 'comics', 'campus', 'listening-news', 'classroom'].includes(
-    category
-  )
+  return [
+    'news',
+    'storytelling',
+    'campus',
+    'listening-news',
+    'classroom',
+  ].includes(category)
 }
 
 export const parseCategoryInfoFromPath = (
@@ -98,7 +102,7 @@ export const mapCategorySlugToIntroPageType = (
 ): CallBaodaozaiIntroPageType | undefined => {
   /**
    * news -> category/news
-   * comics -> category/comics
+   * storytelling -> category/storytelling
    * campus -> category/campus
    * listeningNews -> category/listening-news
    * default -> undefined
@@ -107,8 +111,8 @@ export const mapCategorySlugToIntroPageType = (
   switch (category) {
     case 'news':
       return 'news'
-    case 'comics':
-      return 'comics'
+    case 'storytelling':
+      return 'storytelling'
     case 'campus':
       return 'campus'
     case 'listening-news':

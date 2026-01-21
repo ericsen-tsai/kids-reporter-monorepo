@@ -12,7 +12,7 @@ export type Photo = {
 
 export type CategorySlug =
   | 'news'
-  | 'comics'
+  | 'storytelling'
   | 'campus'
   | 'listening-news'
   | 'classroom'
