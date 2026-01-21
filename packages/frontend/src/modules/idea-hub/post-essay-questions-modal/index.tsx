@@ -108,8 +108,13 @@ function PostEssayQuestionsModal({
     )
   }, [post?.postEssayQuestions])
 
+  const handleClose = () => {
+    onClose()
+    setScrolledQuestionIds(new Set())
+  }
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent
         className="gap-0 overflow-hidden bg-neutral-100"
         showCloseButton={false}
