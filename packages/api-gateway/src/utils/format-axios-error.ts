@@ -13,9 +13,16 @@ export const formatAxiosError = (err: unknown): Error => {
     )
   }
 
+  let message = 'failed to make an axios request'
+  if (err.response) {
+    message = `an axios request was made but response with status ${err.response?.status}`
+  } else if (err.request) {
+    message = 'an axios request was made but no response was received'
+  }
+
   const axiosError = {
     name: 'AxiosError',
-    message: err.message,
+    message,
     code: err.code,
     status: err.response?.status,
     method: err.config?.method,
@@ -23,7 +30,7 @@ export const formatAxiosError = (err: unknown): Error => {
     responseData: err.response?.data,
   }
 
-  return errors.helpers.wrap(err, axiosError.name, axiosError.message, {
+  return errors.helpers.wrap(undefined, axiosError.name, axiosError.message, {
     axiosError,
   })
 }
