@@ -46,9 +46,9 @@ export enum Theme {
 }
 
 export enum ThemeColor {
-  YELLOW = '#F8C341',
-  BLUE = '#27B5F7',
-  RED = '#F76977',
+  YELLOW = '#f8c341',
+  BLUE = '#27b3f5',
+  RED = '#f76977',
 }
 
 export enum Color {
