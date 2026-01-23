@@ -1,4 +1,4 @@
-import { GetPostQuery } from '__generated__/operations/post.generated'
+import { GetPostQuery } from '__generated__/operations/content.generated'
 
 import { AuthorRole } from '@/constants'
 import { RecursiveNonNullable } from '@/types/utils'

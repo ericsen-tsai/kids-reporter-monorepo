@@ -1,6 +1,6 @@
 'use client'
 
-import { GetPostQuery } from '__generated__/operations/post.generated'
+import { GetPostQuery } from '__generated__/operations/content.generated'
 import { cn } from '@kids-reporter/routing-ui'
 import { memo, useMemo, useState } from 'react'
 
