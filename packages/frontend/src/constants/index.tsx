@@ -149,8 +149,6 @@ export const IS_LOGIN_ENABLED = true
 
 export const STICKY_HEADER_HEIGHT = 64
 
-export const POPULAR_KEYWORDS = ['氣候變遷', '選舉', '教育', '環境保護']
-
 export const SECTIONS = [
   {
     title: '時時刻刻',

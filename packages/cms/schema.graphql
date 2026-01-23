@@ -2205,6 +2205,56 @@ input PostEssayAnswerRelateToOneForCreateInput {
   connect: PostEssayAnswerWhereUniqueInput
 }
 
+type PopularKeyword {
+  id: ID!
+  name: String
+  order: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PopularKeywordWhereUniqueInput {
+  id: ID
+}
+
+input PopularKeywordWhereInput {
+  AND: [PopularKeywordWhereInput!]
+  OR: [PopularKeywordWhereInput!]
+  NOT: [PopularKeywordWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  order: IntNullableFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input PopularKeywordOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  order: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input PopularKeywordUpdateInput {
+  name: String
+  order: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input PopularKeywordUpdateArgs {
+  where: PopularKeywordWhereUniqueInput!
+  data: PopularKeywordUpdateInput!
+}
+
+input PopularKeywordCreateInput {
+  name: String
+  order: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -2353,6 +2403,12 @@ type Mutation {
   createPostEssayAnswerLikes(data: [PostEssayAnswerLikeCreateInput!]!): [PostEssayAnswerLike]
   deletePostEssayAnswerLike(where: PostEssayAnswerLikeWhereUniqueInput!): PostEssayAnswerLike
   deletePostEssayAnswerLikes(where: [PostEssayAnswerLikeWhereUniqueInput!]!): [PostEssayAnswerLike]
+  createPopularKeyword(data: PopularKeywordCreateInput!): PopularKeyword
+  createPopularKeywords(data: [PopularKeywordCreateInput!]!): [PopularKeyword]
+  updatePopularKeyword(where: PopularKeywordWhereUniqueInput!, data: PopularKeywordUpdateInput!): PopularKeyword
+  updatePopularKeywords(data: [PopularKeywordUpdateArgs!]!): [PopularKeyword]
+  deletePopularKeyword(where: PopularKeywordWhereUniqueInput!): PopularKeyword
+  deletePopularKeywords(where: [PopularKeywordWhereUniqueInput!]!): [PopularKeyword]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -2450,6 +2506,9 @@ type Query {
   postEssayAnswerLike(where: PostEssayAnswerLikeWhereUniqueInput!): PostEssayAnswerLike
   postEssayAnswerLikes(where: PostEssayAnswerLikeWhereInput! = {}, orderBy: [PostEssayAnswerLikeOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostEssayAnswerLikeWhereUniqueInput): [PostEssayAnswerLike!]
   postEssayAnswerLikesCount(where: PostEssayAnswerLikeWhereInput! = {}): Int
+  popularKeyword(where: PopularKeywordWhereUniqueInput!): PopularKeyword
+  popularKeywords(where: PopularKeywordWhereInput! = {}, orderBy: [PopularKeywordOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PopularKeywordWhereUniqueInput): [PopularKeyword!]
+  popularKeywordsCount(where: PopularKeywordWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   searchTWReporterPosts(keywords: String!): [JSON]

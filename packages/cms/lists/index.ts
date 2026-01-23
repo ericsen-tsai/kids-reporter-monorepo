@@ -8,6 +8,7 @@ import { NewsReadingGroup, NewsReadingGroupItem } from './news-reading'
 import OnlineUser from './online-user'
 import PDF from './pdf'
 import Photo from './photo'
+import PopularKeyword from './popular-keyword'
 import Post from './post'
 import PostChoiceAnswer from './post-choice-answer'
 import PostChoiceQuestion from './post-choice-question'
@@ -47,4 +48,5 @@ export const listDefinition = {
   PostEssayAnswer,
   PostEssayQuestion,
   PostEssayAnswerLike,
+  PopularKeyword,
 }

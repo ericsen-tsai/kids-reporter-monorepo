@@ -27,6 +27,15 @@ export const GET_EDITOR_PICKS_SETTINGS_QUERY = gql`
   }
 `
 
+export const GET_POPULAR_KEYWORDS_QUERY = gql`
+  query GetPopularKeywords {
+    popularKeywords(orderBy: [{ order: asc }]) {
+      name
+      order
+    }
+  }
+`
+
 export const GET_CALL_BAODAOZAI_INTRO_QUERY = gql`
   query GetCallBaodaozaiIntro($where: CallBaodaozaiIntroWhereUniqueInput!) {
     callBaodaozaiIntro(where: $where) {

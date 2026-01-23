@@ -443,6 +443,14 @@ model PostEssayAnswerLike {
   @@index([memberId])
 }
 
+model PopularKeyword {
+  id        Int       @id @default(autoincrement())
+  name      String    @default("")
+  order     Int?      @default(0)
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
 enum CallBaodaozaiIntroPageType {
   home
   all

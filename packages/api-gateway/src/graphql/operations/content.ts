@@ -9,6 +9,7 @@ import {
   GET_CATEGORY_SUBCATEGORIES_AND_THEME_COLOR_QUERY,
   GET_EDITOR_PICKS_SETTINGS_QUERY,
   GET_LATEST_POSTS_QUERY,
+  GET_POPULAR_KEYWORDS_QUERY,
   GET_POST_ESSAY_QUESTIONS_QUERY,
   GET_POST_META_QUERY,
   GET_POST_QUERY,
@@ -59,6 +60,16 @@ export const operations: Record<string, Operation> = {
     document: GET_EDITOR_PICKS_SETTINGS_QUERY,
     buildVariables: (input) => {
       return { take: toInt(input.take) }
+    },
+  },
+  'popular-keywords': {
+    method: 'GET',
+    cacheTtl: 300,
+    auth: 'public',
+    operationName: 'GetPopularKeywords',
+    document: GET_POPULAR_KEYWORDS_QUERY,
+    buildVariables: () => {
+      return {}
     },
   },
   'call-baodaozai-intro': {
