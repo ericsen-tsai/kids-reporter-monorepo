@@ -1,4 +1,4 @@
-import { GetPostQuery } from '__generated__/operations/post.generated'
+import { GetPostQuery } from '__generated__/operations/content.generated'
 import { cn, useMediaQuery } from '@kids-reporter/routing-ui'
 import dynamic from 'next/dynamic'
 import { useState } from 'react'
