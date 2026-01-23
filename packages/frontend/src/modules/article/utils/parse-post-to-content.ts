@@ -1,4 +1,4 @@
-import { GetPostQuery } from '__generated__/operations/post.generated'
+import { GetPostQuery } from '__generated__/operations/content.generated'
 
 import { Author } from '@/components/author-card'
 import { PostSummary } from '@/components/types'
