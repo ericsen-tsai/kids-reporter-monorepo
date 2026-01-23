@@ -265,23 +265,32 @@ const SlidesFlexBox = styled.div<{
   ${({ isSliding, duration }) =>
     isSliding ? `transition: transform ${duration}ms ease-in-out;` : ''}
 
-  ${({ translateXUint }) => `
-    ${mediaQuery.smallOnly} {
-      transform: translateX(
-          ${getTranslateX(mockup.mobile, translateXUint) / getContainerWidth(mockup.mobile)} * 100%
-        );
-    }
-    ${mediaQuery.mediumAndDesktopOnly} {
-      transform: translateX(
-          ${getTranslateX(mockup.desktop, translateXUint) / getContainerWidth(mockup.desktop)} * 100%
-        );
-    }
-    ${mediaQuery.largeOnly} {
-      transform: translateX(
-          ${getTranslateX(mockup.hd, translateXUint) / getContainerWidth(mockup.hd)} * 100%
-        );
-    }
-  `}
+  ${({ translateXUint }) => {
+    const mobileTranslateX =
+      (getTranslateX(mockup.mobile, translateXUint) /
+        getContainerWidth(mockup.mobile)) *
+      100
+    const desktopTranslateX =
+      (getTranslateX(mockup.desktop, translateXUint) /
+        getContainerWidth(mockup.desktop)) *
+      100
+    const hdTranslateX =
+      (getTranslateX(mockup.hd, translateXUint) /
+        getContainerWidth(mockup.hd)) *
+      100
+
+    return `
+      ${mediaQuery.smallOnly} {
+        transform: translateX(${mobileTranslateX}%);
+      }
+      ${mediaQuery.mediumAndDesktopOnly} {
+        transform: translateX(${desktopTranslateX}%);
+      }
+      ${mediaQuery.largeOnly} {
+        transform: translateX(${hdTranslateX}%);
+      }
+    `
+  }}
 `
 
 const SlideFlexItem = styled.div`
@@ -502,7 +511,7 @@ export function SlideshowBlock({ className = '', data }: SlideshowBlockProps) {
       setCurSlideIndex(_curSlideIndex)
       setTranslateXUnit(defaultTranslateXUnit - _curSlideIndex)
     }, duration * 2)
-  }, [slideTo, curSlideIndex, translateXUnit])
+  }, [curSlideIndex, defaultTranslateXUnit, slideTo, total])
 
   const isSliding = slideTo !== ''
 
