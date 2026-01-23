@@ -92,7 +92,6 @@ export default async function TopicPage({
     notFound()
   }
 
-  // TODO: maybe we could try apollo-client pkg
   const axiosRes = await sendRestGqlRequest<GetProjectQuery>({
     operation: 'project-detail',
     method: 'GET',

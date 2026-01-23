@@ -57,8 +57,6 @@ model Post {
   ogDescription                              String               @default("")
   ogImage                                    Photo?               @relation("Post_ogImage", fields: [ogImageId], references: [id])
   ogImageId                                  Int?                 @map("ogImage")
-  multipleChoiceQuestionsJSON                Json?                @default("[]")
-  essayQuestionsJSON                         Json?                @default("[]")
   opening                                    String               @default("")
   postChoiceQuestions                        PostChoiceQuestion[] @relation("PostChoiceQuestion_post")
   postEssayQuestions                         PostEssayQuestion[]  @relation("PostEssayQuestion_post")
@@ -316,20 +314,6 @@ model SVG {
   updatedAt        DateTime? @updatedAt
 }
 
-model CallBaodaozai {
-  id        Int       @id @default(autoincrement())
-  home      Json?
-  topics    Json?
-  topic     Json?
-  news      Json?
-  comics    Json?
-  lessons   Json?
-  podcasts  Json?
-  aboutUs   Json?
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
-}
-
 model OnlineUser {
   id            String    @id @default(cuid())
   user          User?     @relation("OnlineUser_user", fields: [userId], references: [id])
@@ -457,6 +441,14 @@ model PostEssayAnswerLike {
 
   @@index([answerId])
   @@index([memberId])
+}
+
+model PopularKeyword {
+  id        Int       @id @default(autoincrement())
+  name      String    @default("")
+  order     Int?      @default(0)
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 enum CallBaodaozaiIntroPageType {

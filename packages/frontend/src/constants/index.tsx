@@ -3,8 +3,6 @@ export { STATUS_CODES } from './status-codes'
 import envVars from '@/environment-variables'
 import { CategorySlug } from '@/types'
 
-export const INTERNAL_API_URL = envVars.internalGqlEndpoint
-export const API_URL = envVars.gqlEndpoint
 export const ACCESS_TOKEN_ENDPOINT = `${envVars.apiGatewayEndpoint}/auth/access-token`
 export const REST_GQL_ENDPOINT = `${envVars.apiGatewayEndpoint}/api/rest`
 export const INTERNAL_REST_GQL_ENDPOINT = `${envVars.internalApiGatewayEndpoint}/api/rest`
@@ -150,8 +148,6 @@ export const DEBOUNCE_THRESHOLD = 100
 export const IS_LOGIN_ENABLED = true
 
 export const STICKY_HEADER_HEIGHT = 64
-
-export const POPULAR_KEYWORDS = ['氣候變遷', '選舉', '教育', '環境保護']
 
 export const SECTIONS = [
   {
