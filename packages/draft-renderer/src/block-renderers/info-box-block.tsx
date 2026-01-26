@@ -36,6 +36,7 @@ const containerStyles = css`
 
   ${mediaQuery.smallOnly} {
     padding: 24px;
+    margin: 0 24px;
   }
 
   ${mediaQuery.mediumOnly} {
@@ -163,11 +164,19 @@ function BoxBorder({
 }
 
 const ArticleBodyContainer = styled.div`
-  max-width: 700px;
+  max-width: 584px;
   margin: 60px auto;
 
   ${mediaQuery.smallOnly} {
     width: 100%;
+  }
+
+  ${mediaQuery.desktopAbove} {
+    max-width: 608px;
+  }
+
+  ${mediaQuery.largeOnly} {
+    max-width: 680px;
   }
 `
 
@@ -175,9 +184,7 @@ const EditorContainer = styled.div`
   position: relative;
 `
 
-function convertFromRawWithoutUnstyledTrailingBlocks(
-  rawContentState: RawDraftContentState
-) {
+function convertFromRawTrimmed(rawContentState: RawDraftContentState) {
   const contentState = convertFromRaw(rawContentState)
   const originalBlocks = contentState.getBlocksAsArray()
 
@@ -212,8 +219,7 @@ function convertFromRawWithoutUnstyledTrailingBlocks(
 
 export function InfoBoxInArticleBody({ className, data }: InfoBoxBlockProps) {
   const { type, rawContentState, showBaodaozai = true } = data
-  const contentState =
-    convertFromRawWithoutUnstyledTrailingBlocks(rawContentState)
+  const contentState = convertFromRawTrimmed(rawContentState)
   const editorState = EditorState.createWithContent(contentState, decorator)
   let Component
   let blockRenderMap = blockRenderMaps.infoBox.default

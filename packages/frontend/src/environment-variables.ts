@@ -1,7 +1,3 @@
-const internalGqlEndpoint =
-  process.env.INTERNAL_GQL_ENDPOINT || 'http://localhost:3001/api/graphql'
-const gqlEndpoint =
-  process.env.NEXT_PUBLIC_GQL_ENDPOINT || 'http://localhost:3001/api/graphql'
 const apiGatewayEndpoint =
   process.env.NEXT_PUBLIC_API_GATEWAY_ENDPOINT || 'http://localhost:3000'
 const internalApiGatewayEndpoint =
@@ -23,8 +19,6 @@ const nodeEnv = process.env.NODE_ENV
 
 const environmentVariables = {
   internalApiGatewayEndpoint,
-  internalGqlEndpoint,
-  gqlEndpoint,
   apiGatewayEndpoint,
   isProduction,
   searchAPIKey,
