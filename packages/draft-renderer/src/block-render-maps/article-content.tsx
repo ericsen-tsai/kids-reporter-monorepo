@@ -7,23 +7,31 @@ import { mediaQuery } from '../utils/media-query'
 
 export const Paragraph = styled.div`
   width: 100%;
-  max-width: 700px;
+  max-width: 512px;
   margin: 0 auto;
 
+  ${mediaQuery.largeOnly} {
+    max-width: 584px;
+  }
+
   ${mediaQuery.smallOnly} {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 24px;
+    padding-right: 24px;
   }
 
   > div[data-block='true']:not(:last-child) {
-    margin-bottom: 27px;
+    margin-bottom: 40px;
   }
 `
 
 export const Heading = styled.div`
   width: 100%;
-  max-width: 700px;
+  max-width: 512px;
   margin: 45px auto 20px auto;
+
+  ${mediaQuery.largeOnly} {
+    max-width: 584px;
+  }
 
   h2,
   h3,
@@ -33,15 +41,19 @@ export const Heading = styled.div`
   }
 
   ${mediaQuery.smallOnly} {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 24px;
+    padding-right: 24px;
   }
 `
 
 export const List = styled.ol`
   width: 100%;
-  max-width: 700px;
+  max-width: 512px;
   margin: 0 auto 27px auto;
+
+  ${mediaQuery.largeOnly} {
+    max-width: 584px;
+  }
 
   padding-left: 2rem;
 

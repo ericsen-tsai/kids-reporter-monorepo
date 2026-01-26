@@ -9,8 +9,6 @@ import {
 import { useRouter } from 'next/navigation'
 import { useCallback, useMemo, useState } from 'react'
 
-import AuthorCard from '@/components/author-card'
-import Tags from '@/components/tags'
 import { FontSizeLevel } from '@/constants'
 import { BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT } from '@/constants/baodaozai-question-count'
 import { SeparateIcon } from '@/icons'
@@ -26,19 +24,22 @@ import {
 } from '@/services/call-baodaozai'
 import getLoginUrl from '@/utils/get-login-url'
 
-import CallToAction from './call-to-action'
 import ArticleBaodaozaiEventTrigger from './components/article-baodaozai-event-trigger'
 import ArticleSummary from './components/article-summary'
+import Authors from './components/authors'
+import ImageModal from './components/image-modal'
+import NewsReading from './components/news-reading'
+import PopularKeywords from './components/popular-keywords'
+import PostRenderer from './components/post-renderer'
 import RelatedArticles from './components/related-articles'
 import StartReadingBaodaozaiEventTrigger from './components/start-reading-baodaozai-event-trigger'
+import SupportAction from './components/support-action'
 import TableOfContentSideMenu from './components/table-of-content-side-menu'
 import TitleHero from './components/title-hero'
 import Toolbar from './components/toolbar'
 import { ArticleContext } from './context'
 import useBatchSubmitAnswers from './hooks/use-batch-submit-answers'
-import ImageModal from './image-modal'
-import NewsReading from './news-reading'
-import PostRenderer from './post-renderer'
+import { Keyword } from './types'
 import parsePostToContent from './utils/parse-post-to-content'
 import parseTocIndexesFromEntityMap from './utils/parse-toc-indexes-from-entity-map'
 
@@ -50,7 +51,6 @@ const ArticleModule = ({
   slug: string
 }) => {
   const {
-    theme,
     topicURL,
     mainTopic,
     authorsInBrief,
@@ -122,27 +122,8 @@ const ArticleModule = ({
     }))
   }, [post?.newsReadingGroup?.items])
 
-  const tags = useMemo(() => {
-    if (!post?.tagsOrdered) return []
-    return post.tagsOrdered.map((tag) => ({
-      name: tag.name ?? '',
-      slug: tag.slug ?? '',
-    }))
-  }, [post.tagsOrdered])
-
-  const showBaodaozai = (() => {
-    if (post?.showBaodaozai === true && !isLogin) {
-      return true
-    }
-    if (
-      post?.showBaodaozai === true &&
-      isLogin &&
-      member?.showBaodaozai === true
-    ) {
-      return true
-    }
-    return false
-  })()
+  const showBaodaozai =
+    post?.showBaodaozai === true && (!isLogin || member?.showBaodaozai === true)
 
   const essayQuestionCount = isLogin
     ? (member?.essayQuestionCount ?? BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT)
@@ -227,6 +208,13 @@ const ArticleModule = ({
     [post.content?.entityMap]
   )
 
+  const keywords = useMemo(() => {
+    if (!post?.tagsOrdered) return []
+    return post.tagsOrdered.filter(
+      (tag): tag is Keyword => tag.name !== undefined
+    )
+  }, [post.tagsOrdered])
+
   return (
     <>
       <BaodaozaiVisibilitySetter show={showBaodaozai} />
@@ -242,7 +230,7 @@ const ArticleModule = ({
           }}
         >
           <Toolbar topicURL={topicURL} postSlug={slug} />
-          <div className="flex w-full max-w-300 flex-col items-center desktop:mx-auto desktop:px-12">
+          <div className="flex w-full max-w-256 flex-col items-center desktop:mx-auto desktop:px-12 hd:max-w-344">
             <ImageModal
               isOpen={isImgModalOpen}
               imgProps={imgProps}
@@ -288,8 +276,8 @@ const ArticleModule = ({
               fontSizeLevel={fontSize}
             />
             <SeparateIcon />
-            <div className="relative">
-              <PostRenderer post={post} theme={theme} />
+            <div className="relative w-full">
+              <PostRenderer content={post?.content ?? {}} />
               {/* middle of the article content enters 50% of the viewport*/}
               <div className="absolute top-[calc(50%+50vh)]">
                 <ArticleBaodaozaiEventTrigger
@@ -305,7 +293,7 @@ const ArticleModule = ({
               </div>
             </div>
 
-            {post?.tagsOrdered && <Tags title="常用關鍵字" tags={tags} />}
+            {keywords.length > 0 && <PopularKeywords keywords={keywords} />}
             <ArticleBaodaozaiEventTrigger
               id="show-ask-questions"
               disabled={!isScrollingDown}
@@ -320,7 +308,7 @@ const ArticleModule = ({
         </ArticleContext.Provider>
       </div>
 
-      <AuthorCard title="誰幫我們完成這篇文章" authors={orderedAuthors} />
+      <Authors authors={orderedAuthors} />
 
       <div className="relative w-full">
         {/* related posts enters 50% of the viewport*/}
@@ -335,8 +323,7 @@ const ArticleModule = ({
           twReporterArticles={twReporterRelatedPosts ?? []}
         />
       </div>
-
-      <CallToAction />
+      <SupportAction />
       {postQuestions && (
         <BaodaozaiQAModal
           questions={postQuestions}
