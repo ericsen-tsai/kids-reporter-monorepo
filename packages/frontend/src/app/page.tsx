@@ -77,12 +77,6 @@ export default async function Home() {
     getPostSummaries(
       firstEditorPicksSettings?.editorPicksOfPostsOrdered ?? []
     ) ?? []
-  const tags = (firstEditorPicksSettings?.editorPicksOfTags ?? []).map(
-    (tag) => ({
-      name: tag?.name ?? '',
-      slug: tag?.slug ?? '',
-    })
-  )
 
   return (
     <CallBaodaozaiProvider>
@@ -100,7 +94,6 @@ export default async function Home() {
           topics={topics}
           latestPosts={latestPosts}
           featuredPosts={featuredPosts}
-          tags={tags}
         />
         <Baodaozai />
         <ScrollUpBaodaozaiEventTrigger />
