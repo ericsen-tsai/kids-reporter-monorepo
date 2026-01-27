@@ -15,6 +15,7 @@ import {
 
 import DiscoverNews from './components/discover-news'
 import Intro from './components/intro'
+import RelatedProducts from './components/related-products'
 import { tellYouItems } from './constants'
 
 type AboutModuleProps = {
@@ -366,6 +367,9 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
     <main className="flex w-full flex-col items-center justify-center">
       <Intro />
       <DiscoverNews />
+      <div className="w-screen bg-yellow-100">
+        <RelatedProducts />
+      </div>
       {us}
       {tellYou}
       {news}
