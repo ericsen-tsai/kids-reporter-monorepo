@@ -3,7 +3,12 @@ import { useCallback, useMemo, useState } from 'react'
 
 import ArticleGrid from '@/components/article-grid'
 import { PostSummary } from '@/components/types'
-import { RelatedPostsIcon, RelatedPostsIconLarge } from '@/icons'
+import {
+  KidsReporterIcon,
+  RelatedPostsIcon,
+  RelatedPostsIconLarge,
+  ReporterIcon,
+} from '@/icons'
 
 import SegmentedSwitcher from './segmented-switcher'
 
@@ -62,6 +67,18 @@ function RelatedArticles({
         <SegmentedSwitcher
           selectedSegment={selectedSegment}
           onSegmentChange={handleSegmentChange}
+          items={[
+            {
+              icon: <KidsReporterIcon />,
+              label: '少年報導者',
+              value: 'kids',
+            },
+            {
+              icon: <ReporterIcon />,
+              label: '報導者',
+              value: 'reporter',
+            },
+          ]}
         />
       </div>
       {renderContent}
