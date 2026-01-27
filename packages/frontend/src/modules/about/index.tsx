@@ -13,6 +13,7 @@ import {
   SUBSCRIBE_URL,
 } from '@/constants'
 
+import Intro from './components/intro'
 import { tellYouItems } from './constants'
 
 type AboutModuleProps = {
@@ -361,7 +362,8 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
   )
 
   return (
-    <main className="flex flex-col items-center justify-center gap-10">
+    <main className="flex w-full flex-col items-center justify-center gap-10">
+      <Intro />
       {us}
       {tellYou}
       {news}
