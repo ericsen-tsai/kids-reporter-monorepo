@@ -13,6 +13,7 @@ import {
   SUBSCRIBE_URL,
 } from '@/constants'
 
+import CrossBorderCollaboration from './components/cross-border-collaboration'
 import DiscoverNews from './components/discover-news'
 import Intro from './components/intro'
 import RelatedProducts from './components/related-products'
@@ -369,6 +370,7 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
       <DiscoverNews />
       <div className="w-screen bg-yellow-100">
         <RelatedProducts />
+        <CrossBorderCollaboration />
       </div>
       {us}
       {tellYou}
