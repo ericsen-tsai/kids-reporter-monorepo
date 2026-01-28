@@ -33,6 +33,7 @@ function CrossBorderCollaboration() {
                   alt={collaboration.title}
                   className="h-full w-full object-cover"
                   fill
+                  sizes="(max-width: 768px) 120px, (max-width: 1024px) 150px, 180px"
                 />
               </div>
 

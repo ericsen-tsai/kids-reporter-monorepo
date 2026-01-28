@@ -1,0 +1,164 @@
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
+
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTitle,
+} from '@/components/dialog'
+import { XIcon } from '@/icons/miscellaneous'
+
+const YOUTUBE_VIDEO_ID = 'Hu5NgkSqSpQ'
+const YOUTUBE_EMBED_URL = `https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}`
+const YOUTUBE_THUMBNAIL_URL = `https://img.youtube.com/vi/${YOUTUBE_VIDEO_ID}/maxresdefault.jpg`
+
+function VideoPlayer() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isInViewport, setIsInViewport] = useState(false)
+  const changedToVideoRef = useRef(false)
+  const videoRef = useRef<HTMLDivElement>(null)
+
+  const handlePauseVideo = () => {
+    const video = videoRef.current?.querySelector('iframe') as HTMLIFrameElement
+    if (!video) return
+    video.contentWindow?.postMessage(
+      '{"event":"command","func":"pauseVideo","args":""}',
+      '*'
+    )
+  }
+
+  const handlePlayVideo = () => {
+    const video = videoRef.current?.querySelector('iframe') as HTMLIFrameElement
+    if (!video) return
+    video.contentWindow?.postMessage(
+      '{"event":"command","func":"playVideo","args":""}',
+      '*'
+    )
+  }
+
+  useEffect(() => {
+    const element = videoRef.current
+    if (!element) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (changedToVideoRef.current) {
+            if (entry.isIntersecting) {
+              handlePlayVideo()
+            } else {
+              handlePauseVideo()
+            }
+            return
+          }
+          setIsInViewport(entry.isIntersecting)
+          changedToVideoRef.current = true
+          if (entry.isIntersecting) {
+            handlePlayVideo()
+          } else {
+            handlePauseVideo()
+          }
+        })
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5,
+      }
+    )
+
+    observer.observe(element)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
+
+  const handleModalOpen = () => {
+    setIsModalOpen(true)
+  }
+
+  return (
+    <>
+      <div
+        ref={videoRef}
+        className="relative aspect-video w-full overflow-hidden rounded-3xl"
+      >
+        {isInViewport ? (
+          <>
+            <iframe
+              src={`${YOUTUBE_EMBED_URL}?autoplay=1&mute=1&enablejsapi=1`}
+              className="absolute inset-0 h-full w-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              title="讀者推薦影片"
+            />
+            <button
+              className="absolute inset-0 z-10 cursor-pointer"
+              onClick={handleModalOpen}
+              aria-label="Open video in modal"
+            />
+          </>
+        ) : (
+          <div
+            className="group relative h-full w-full cursor-pointer"
+            onClick={handleModalOpen}
+          >
+            <img
+              src={YOUTUBE_THUMBNAIL_URL}
+              alt="讀者推薦影片"
+              className="h-full w-full object-cover"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-neutral-900/30"></div>
+            <div className="absolute bottom-6 left-6 flex flex-col gap-2">
+              <p className="prose-h5-small text-neutral-white desktop:prose-h4-small">
+                請問家長們
+              </p>
+              <p className="prose-p1 text-neutral-white desktop:prose-h6-small">
+                當兒少碰上新聞...
+              </p>
+            </div>
+            <div className="absolute top-1/2 left-1/2 flex size-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-neutral-900/80 transition-transform group-hover:scale-110 desktop:size-24">
+              <svg
+                className="ml-1 size-8 text-neutral-white desktop:size-10"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogTitle className="sr-only">讀者推薦影片</DialogTitle>
+        <DialogContent
+          className="flex max-w-5xl items-center justify-center p-0 tablet:p-6 desktop:p-8"
+          showCloseButton={false}
+        >
+          <div className="relative aspect-video w-full">
+            <DialogClose className="absolute top-3 right-3 z-2 flex size-5 cursor-pointer items-center justify-center rounded-xs opacity-70 transition-opacity hover:opacity-100 disabled:pointer-events-none desktop:-top-5 desktop:-right-5 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5">
+              <XIcon />
+              <span className="sr-only">Close</span>
+            </DialogClose>
+            <div className="relative z-1 aspect-video w-full overflow-hidden rounded-3xl">
+              <iframe
+                src={YOUTUBE_EMBED_URL}
+                className="absolute inset-0 h-full w-full rounded-3xl"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title="讀者推薦影片"
+              />
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
+  )
+}
+
+export default VideoPlayer
