@@ -16,6 +16,7 @@ import {
 import CrossBorderCollaboration from './components/cross-border-collaboration'
 import DiscoverNews from './components/discover-news'
 import Intro from './components/intro'
+import JoinUs from './components/join-us'
 import ReaderRecommendations from './components/reader-recommendations'
 import RelatedProducts from './components/related-products'
 import { tellYouItems } from './constants'
@@ -374,6 +375,7 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
         <CrossBorderCollaboration />
       </div>
       <ReaderRecommendations />
+      <JoinUs />
       {us}
       {tellYou}
       {news}
