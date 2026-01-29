@@ -1,5 +1,16 @@
 import { AuthorRole } from '@/constants'
 
+export const ABOUT_TOC_INDEXES: { key: string; label: string }[] = [
+  { key: 'explore', label: '內容特色' },
+  { key: 'products', label: '相關產品' },
+  { key: 'partner', label: '跨界合作' },
+  { key: 'voices', label: '讀者推薦' },
+  { key: 'join', label: '參與我們' },
+  { key: 'team', label: '團隊成員' },
+  { key: 'awards', label: '外界肯定' },
+  { key: 'support', label: '贊助我們' },
+]
+
 export const tellYouItems = [
   { image: '/assets/images/about_tell_pic1.svg', desc: '重要的議題' },
   { image: '/assets/images/about_tell_pic2.svg', desc: '多元的社會' },

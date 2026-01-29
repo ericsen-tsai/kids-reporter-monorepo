@@ -7,10 +7,7 @@ import {
   ThreadsIcon,
 } from '@/icons/miscellaneous'
 
-export const TABLE_OF_CONTENT_ANCHOR_PREFIX = 'toc-anchor'
-export const TABLE_OF_CONTENT_INDEX_PREFIX = 'toc-index'
-export const TABLE_OF_CONTENT_BACK_TO_TOP_KEY = 'back-to-top'
-
+export const ARTICLE_WIDGET_SCROLL_DOWN_DISTANCE = 220
 export const SHARE_ICONS = [
   {
     icon: <FaceBookIcon />,
@@ -60,7 +57,6 @@ export const SHARE_ICONS = [
   },
 ]
 
-export const ARTICLE_WIDGET_SCROLL_DOWN_DISTANCE = 220
 export const ARTICLE_FONT_SIZE_CLASSNAMES = [
   '[&_h2]:prose-h2-small desktop:[&_h2]:prose-h2-large',
   '[&_h3]:prose-h3-small desktop:[&_h3]:prose-h3-large',

@@ -25,6 +25,7 @@ import {
 } from '@/services/call-baodaozai'
 import getLoginUrl from '@/utils/get-login-url'
 
+import { TableOfContentSideMenu } from '@/components/table-of-content'
 import SupportAction from '../../components/support-action'
 import ArticleBaodaozaiEventTrigger from './components/article-baodaozai-event-trigger'
 import ArticleSummary from './components/article-summary'
@@ -36,12 +37,12 @@ import PostRenderer from './components/post-renderer'
 import RelatedArticles from './components/related-articles'
 import StartReadingBaodaozaiEventTrigger from './components/start-reading-baodaozai-event-trigger'
 import SupportActionContent from './components/support-action-content'
-import TableOfContentSideMenu from './components/table-of-content-side-menu'
 import TitleHero from './components/title-hero'
 import Toolbar from './components/toolbar'
 import { ArticleContext } from './context'
 import useBatchSubmitAnswers from './hooks/use-batch-submit-answers'
 import { Keyword } from './types'
+import { ARTICLE_WIDGET_SCROLL_DOWN_DISTANCE } from './constants'
 import parsePostToContent from './utils/parse-post-to-content'
 import parseTocIndexesFromEntityMap from './utils/parse-toc-indexes-from-entity-map'
 
@@ -223,7 +224,12 @@ const ArticleModule = ({
     <>
       <BaodaozaiVisibilitySetter show={showBaodaozai} />
       <HeaderPostTitleSetter postTitle={post?.title} />
-      {tocIndexes.length > 0 && <TableOfContentSideMenu indexes={tocIndexes} />}
+      {tocIndexes.length > 0 && (
+        <TableOfContentSideMenu
+          indexes={tocIndexes}
+          scrollDownDistance={ARTICLE_WIDGET_SCROLL_DOWN_DISTANCE}
+        />
+      )}
       <div className="relative w-screen">
         <ArticleContext.Provider
           value={{

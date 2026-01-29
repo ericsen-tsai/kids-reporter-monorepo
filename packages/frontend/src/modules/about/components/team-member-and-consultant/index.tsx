@@ -46,7 +46,7 @@ function TeamMemberAndConsultant({
         </div>
 
         <div
-          id="consultants"
+          id="advisors"
           style={{ scrollMarginTop: '62px' }}
           className="flex flex-col gap-6 desktop:gap-8 hd:gap-10"
         >

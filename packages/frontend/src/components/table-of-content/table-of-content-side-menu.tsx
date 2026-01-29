@@ -11,56 +11,73 @@ import { STICKY_HEADER_HEIGHT } from '@/constants'
 import useClickOutside from '@/hooks/use-click-outside'
 
 import {
-  ARTICLE_WIDGET_SCROLL_DOWN_DISTANCE,
-  TABLE_OF_CONTENT_ANCHOR_PREFIX,
+  DEFAULT_ANCHOR_ID_PREFIX,
+  DEFAULT_SCROLL_DOWN_DISTANCE,
   TABLE_OF_CONTENT_BACK_TO_TOP_KEY,
   TABLE_OF_CONTENT_INDEX_PREFIX,
-} from '../constants'
+} from './constants'
 
 type TableOfContentSideMenuProps = {
   indexes: { key: string; label: string }[]
+  /** Prefix for section element ids. Empty string means section ids are the raw keys (e.g. id="mission"). Default preserves article/draft-renderer convention. */
+  anchorIdPrefix?: string
+  /** Px to scroll down before TOC hides on mobile. */
+  scrollDownDistance?: number
+  /** Aria-label for the nav element. */
+  ariaLabel?: string
 }
 
 function makeAnchorIndexKey(key: string) {
   return `${TABLE_OF_CONTENT_INDEX_PREFIX}-${key}`
 }
 
-function makeAnchorKey(key: string) {
-  return `${TABLE_OF_CONTENT_ANCHOR_PREFIX}-${key}`
+function makeAnchorKey(
+  key: string,
+  anchorIdPrefix: string = DEFAULT_ANCHOR_ID_PREFIX
+) {
+  return anchorIdPrefix ? `${anchorIdPrefix}${key}` : key
 }
 
-function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
+function TableOfContentSideMenu({
+  indexes,
+  anchorIdPrefix = DEFAULT_ANCHOR_ID_PREFIX,
+  scrollDownDistance = DEFAULT_SCROLL_DOWN_DISTANCE,
+  ariaLabel = '文章目錄',
+}: TableOfContentSideMenuProps) {
   const [currentActiveIndex, setCurrentActiveIndex] = useState<string | null>(
-    makeAnchorKey(TABLE_OF_CONTENT_BACK_TO_TOP_KEY)
+    makeAnchorKey(TABLE_OF_CONTENT_BACK_TO_TOP_KEY, anchorIdPrefix)
   )
   const [isExpanded, setIsExpanded] = useState(false)
-  const anchorRefs = useRef<HTMLSpanElement[]>([])
+  const anchorRefs = useRef<HTMLElement[]>([])
   const menuContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     anchorRefs.current = indexes
       .map(({ key }) => {
+        const id = makeAnchorKey(key, anchorIdPrefix)
         const element = document.querySelector(
-          `#${makeAnchorKey(key)}`
-        ) as HTMLSpanElement | null
+          `#${CSS.escape(id)}`
+        ) as HTMLElement | null
         return element
       })
-      .filter((anchor): anchor is HTMLSpanElement => anchor !== null)
-  }, [indexes])
+      .filter((anchor): anchor is HTMLElement => anchor !== null)
+  }, [indexes, anchorIdPrefix])
 
-  const handleClickAnchorIndex = useCallback((key: string) => {
-    const anchor = anchorRefs.current.find(
-      (anchor) => anchor.id === makeAnchorKey(key)
-    )
-    if (!anchor) return
-    const elementPosition = anchor.getBoundingClientRect().top
-    const offsetPosition =
-      elementPosition + window.scrollY - STICKY_HEADER_HEIGHT
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: 'smooth',
-    })
-  }, [])
+  const handleClickAnchorIndex = useCallback(
+    (key: string) => {
+      const targetId = makeAnchorKey(key, anchorIdPrefix)
+      const anchor = anchorRefs.current.find((anchor) => anchor.id === targetId)
+      if (!anchor) return
+      const elementPosition = anchor.getBoundingClientRect().top
+      const offsetPosition =
+        elementPosition + window.scrollY - STICKY_HEADER_HEIGHT
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      })
+    },
+    [anchorIdPrefix]
+  )
 
   useEffect(() => {
     const anchors = anchorRefs.current
@@ -69,7 +86,9 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
 
     const elementToKeyMap = new Map<HTMLElement, string>()
     anchors.forEach((anchor) => {
-      const key = anchor.id.replace(`${TABLE_OF_CONTENT_ANCHOR_PREFIX}-`, '')
+      const key = anchorIdPrefix
+        ? anchor.id.replace(anchorIdPrefix, '')
+        : anchor.id
       elementToKeyMap.set(anchor, key)
     })
 
@@ -84,7 +103,9 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
 
       if (visibleEntries.length === 0) {
         if (window.scrollY < STICKY_HEADER_HEIGHT) {
-          setCurrentActiveIndex(makeAnchorKey(TABLE_OF_CONTENT_BACK_TO_TOP_KEY))
+          setCurrentActiveIndex(
+            makeAnchorKey(TABLE_OF_CONTENT_BACK_TO_TOP_KEY, anchorIdPrefix)
+          )
         }
         return
       }
@@ -105,7 +126,7 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
       const element = nearestEntry.target as HTMLElement
       const key = elementToKeyMap.get(element)
       if (!key) return
-      setCurrentActiveIndex(makeAnchorKey(key))
+      setCurrentActiveIndex(makeAnchorKey(key, anchorIdPrefix))
     }
 
     const observer = new IntersectionObserver(observerCallback, observerOptions)
@@ -116,7 +137,9 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
 
     const handleScroll = () => {
       if (window.scrollY < STICKY_HEADER_HEIGHT) {
-        setCurrentActiveIndex(makeAnchorKey(TABLE_OF_CONTENT_BACK_TO_TOP_KEY))
+        setCurrentActiveIndex(
+          makeAnchorKey(TABLE_OF_CONTENT_BACK_TO_TOP_KEY, anchorIdPrefix)
+        )
       }
     }
 
@@ -126,7 +149,7 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
       observer.disconnect()
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [indexes])
+  }, [indexes, anchorIdPrefix])
 
   const handleClickOutside = useCallback(() => {
     if (isExpanded) {
@@ -138,7 +161,7 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
 
   const isDesktop = useMediaQuery('(min-width: 1024px)')
   const scrollLevel = useScrollLevel({
-    scrollDownDistance: ARTICLE_WIDGET_SCROLL_DOWN_DISTANCE,
+    scrollDownDistance,
   })
   const isHidden =
     scrollLevel === ScrollLevel.DOWN_HIDDEN && !isDesktop && !isExpanded
@@ -151,7 +174,7 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
     <nav
       ref={menuContainerRef}
       className="fixed top-0 left-0 z-1000 print:hidden"
-      aria-label="文章目錄"
+      aria-label={ariaLabel}
     >
       <button
         type="button"
@@ -195,7 +218,8 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
                 key={key}
                 className={cn(
                   'h-[3px] w-4 rounded-sm bg-neutral-black/10',
-                  currentActiveIndex === makeAnchorKey(key) && 'bg-red-400'
+                  currentActiveIndex === makeAnchorKey(key, anchorIdPrefix) &&
+                    'bg-red-400'
                 )}
               ></div>
             )
@@ -228,16 +252,15 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
           }}
           aria-current={
             currentActiveIndex ===
-            makeAnchorKey(TABLE_OF_CONTENT_BACK_TO_TOP_KEY)
+            makeAnchorKey(TABLE_OF_CONTENT_BACK_TO_TOP_KEY, anchorIdPrefix)
               ? 'location'
               : undefined
           }
           className={cn(
             'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-colors duration-300 ease-in-out hover:bg-neutral-black/5 hover:text-neutral-900 active:bg-neutral-black/10',
-            // Desktop/HD: match Figma design
             'desktop:rounded desktop:px-1 desktop:py-[1px]',
             currentActiveIndex ===
-              makeAnchorKey(TABLE_OF_CONTENT_BACK_TO_TOP_KEY) &&
+              makeAnchorKey(TABLE_OF_CONTENT_BACK_TO_TOP_KEY, anchorIdPrefix) &&
               'font-bold text-red-400 hover:text-red-400'
           )}
         >
@@ -253,13 +276,14 @@ function TableOfContentSideMenu({ indexes }: TableOfContentSideMenuProps) {
               handleClickAnchorIndex(key)
             }}
             aria-current={
-              currentActiveIndex === makeAnchorKey(key) ? 'location' : undefined
+              currentActiveIndex === makeAnchorKey(key, anchorIdPrefix)
+                ? 'location'
+                : undefined
             }
             className={cn(
               'w-full cursor-pointer rounded bg-transparent px-1 py-[1px] text-start prose-p2 break-words text-neutral-600 transition-colors duration-300 ease-in-out hover:bg-neutral-black/5 hover:text-neutral-900 active:bg-neutral-black/10',
-              // Desktop/HD: match Figma design
               'desktop:rounded desktop:px-1 desktop:py-[1px]',
-              currentActiveIndex === makeAnchorKey(key) &&
+              currentActiveIndex === makeAnchorKey(key, anchorIdPrefix) &&
                 'font-bold text-red-400 hover:text-red-400'
             )}
           >
