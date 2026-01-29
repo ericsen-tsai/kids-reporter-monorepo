@@ -93,12 +93,11 @@ export const ADDITIONAL_MENU_ITEMS: MenuItem[] = [
     href: '/about',
     subItems: [],
   },
-  // TODO: add back when about us page is ready
-  // {
-  //   label: '呼叫報導仔',
-  //   href: '/about#callkidsreporter',
-  //   subItems: [],
-  // },
+  {
+    label: '呼叫報導仔',
+    href: '/about#call',
+    subItems: [],
+  },
   {
     label: '小讀者觀點大集合',
     href: '/idea-hub',

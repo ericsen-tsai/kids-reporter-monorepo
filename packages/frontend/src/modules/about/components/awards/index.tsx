@@ -26,7 +26,7 @@ function Awards() {
   return (
     <section
       id="awards"
-      style={{ scrollMarginTop: '62px' }}
+      style={{ scrollMarginTop: '64px' }}
       className="mx-auto flex w-full max-w-300 flex-col px-6 pt-10 pb-14 tablet:px-17 tablet:pt-12 tablet:pb-16 desktop:px-24 desktop:pt-18 desktop:pb-24 hd:px-26 hd:pt-24 hd:pb-30"
     >
       <h2 className="mb-6 flex items-center gap-2 self-start prose-h2-small !font-swei text-neutral-900 tablet:mx-auto tablet:mb-8 desktop:mb-10 desktop:prose-h2-large">

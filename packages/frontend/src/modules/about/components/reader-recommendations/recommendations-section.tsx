@@ -19,7 +19,7 @@ function RecommendationsSection() {
   return (
     <section
       id="voices"
-      style={{ scrollMarginTop: '62px' }}
+      style={{ scrollMarginTop: '64px' }}
       className="w-full bg-yellow-200"
     >
       <div className="mx-auto flex w-full max-w-300 flex-col items-center justify-center pt-10 pb-14 tablet:pt-12 tablet:pb-16 desktop:px-12 desktop:pt-18 desktop:pb-24 hd:px-30 hd:pt-24 hd:pb-30">
