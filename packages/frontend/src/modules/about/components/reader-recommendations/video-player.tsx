@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import {
   Dialog,
@@ -20,23 +20,23 @@ function VideoPlayer() {
   const changedToVideoRef = useRef(false)
   const videoRef = useRef<HTMLDivElement>(null)
 
-  const handlePauseVideo = () => {
+  const handlePauseVideo = useCallback(() => {
     const video = videoRef.current?.querySelector('iframe') as HTMLIFrameElement
     if (!video) return
     video.contentWindow?.postMessage(
       '{"event":"command","func":"pauseVideo","args":""}',
       '*'
     )
-  }
+  }, [])
 
-  const handlePlayVideo = () => {
+  const handlePlayVideo = useCallback(() => {
     const video = videoRef.current?.querySelector('iframe') as HTMLIFrameElement
     if (!video) return
     video.contentWindow?.postMessage(
       '{"event":"command","func":"playVideo","args":""}',
       '*'
     )
-  }
+  }, [])
 
   useEffect(() => {
     const element = videoRef.current
@@ -53,6 +53,8 @@ function VideoPlayer() {
             }
             return
           }
+          if (!entry.isIntersecting) return
+
           setIsInViewport(entry.isIntersecting)
           changedToVideoRef.current = true
           if (entry.isIntersecting) {
@@ -74,7 +76,7 @@ function VideoPlayer() {
     return () => {
       observer.disconnect()
     }
-  }, [])
+  }, [handlePauseVideo, handlePlayVideo])
 
   const handleModalOpen = () => {
     setIsModalOpen(true)
