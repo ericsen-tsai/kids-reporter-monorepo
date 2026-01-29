@@ -1,6 +1,7 @@
 'use client'
 
 import { Author } from '@/components/author-card'
+import SupportAction from '@/components/support-action'
 
 import Awards from './components/awards'
 import CrossBorderCollaboration from './components/cross-border-collaboration'
@@ -9,6 +10,7 @@ import Intro from './components/intro'
 import JoinUs from './components/join-us'
 import ReaderRecommendations from './components/reader-recommendations'
 import RelatedProducts from './components/related-products'
+import SupportActionContent from './components/support-action-content'
 import TeamMemberAndConsultant from './components/team-member-and-consultant'
 
 type AboutModuleProps = {
@@ -34,6 +36,18 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
       <div className="w-screen bg-yellow-100">
         <Awards />
       </div>
+      <SupportAction
+        title={
+          <>
+            為孩子製作好新聞
+            <br />
+            前所未有的重要
+          </>
+        }
+        content={<SupportActionContent />}
+        className="bg-yellow-200"
+        id="support"
+      />
     </main>
   )
 }

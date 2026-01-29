@@ -25,6 +25,7 @@ import {
 } from '@/services/call-baodaozai'
 import getLoginUrl from '@/utils/get-login-url'
 
+import SupportAction from '../../components/support-action'
 import ArticleBaodaozaiEventTrigger from './components/article-baodaozai-event-trigger'
 import ArticleSummary from './components/article-summary'
 import Authors from './components/authors'
@@ -34,7 +35,7 @@ import PopularKeywords from './components/popular-keywords'
 import PostRenderer from './components/post-renderer'
 import RelatedArticles from './components/related-articles'
 import StartReadingBaodaozaiEventTrigger from './components/start-reading-baodaozai-event-trigger'
-import SupportAction from './components/support-action'
+import SupportActionContent from './components/support-action-content'
 import TableOfContentSideMenu from './components/table-of-content-side-menu'
 import TitleHero from './components/title-hero'
 import Toolbar from './components/toolbar'
@@ -330,7 +331,10 @@ const ArticleModule = ({
           twReporterArticles={twReporterRelatedPosts ?? []}
         />
       </div>
-      <SupportAction />
+      <SupportAction
+        title="每一篇好報導，都需要有心人支持"
+        content={<SupportActionContent />}
+      />
       {postQuestions && (
         <BaodaozaiQAModal
           questions={postQuestions}
