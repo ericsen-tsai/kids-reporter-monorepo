@@ -25,7 +25,7 @@ function TopicCard({ url, image, title, subtitle }: TopicCardProp) {
           <Image
             className="desktop:hidden"
             src={'/assets/images/home/topic_icon.svg'}
-            loading="lazy"
+            loading="eager"
             alt="專題"
             width={32}
             height={32}
@@ -33,7 +33,7 @@ function TopicCard({ url, image, title, subtitle }: TopicCardProp) {
           <Image
             className="hidden desktop:block"
             src={'/assets/images/home/topic_icon_large.svg'}
-            loading="lazy"
+            loading="eager"
             alt="專題"
             width={40}
             height={40}
