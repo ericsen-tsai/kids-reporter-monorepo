@@ -1,6 +1,5 @@
 import { Header } from '@kids-reporter/routing-ui'
 import { Metadata } from 'next'
-import { Fragment } from 'react'
 
 import { getCallBaodaozaiIntroContent } from '@/api/call-baodaozai-intro'
 import { getCategoryPosts } from '@/api/category'
@@ -12,14 +11,7 @@ import AllSiteBaodaozaiEventTrigger from '@/components/all-site-baodaozai-event-
 import AuthHeaderLoggedInSetter from '@/components/auth-header-logged-in-setter'
 import ScrollUpBaodaozaiEventTrigger from '@/components/scroll-up-baodaozai-event-trigger'
 import { FALLBACK_IMG, GENERAL_DESCRIPTION, SECTIONS } from '@/constants'
-import CallToAction from '@/home/call-to-action'
-import Divider from '@/home/divider'
-import GoToMainSite from '@/home/go-to-main-site'
-import MainSlider from '@/home/main-slider'
-import MakeFriends from '@/home/make-friend'
-import PostSelection from '@/home/post-selection'
-import SearchAndTags from '@/home/search-and-tags'
-import Section from '@/home/section'
+import HomeModule from '@/modules/home'
 import {
   Baodaozai,
   BaodaozaiVisibilitySetter,
@@ -135,25 +127,13 @@ export default async function Home() {
             <AllSiteBaodaozaiEventTrigger id="hide-intro" />
           </div>
         </div>
-        {topics?.length > 0 && <MainSlider topics={topics} />}
-        <PostSelection
+        <HomeModule
+          topics={topics}
           latestPosts={latestPosts}
           featuredPosts={featuredPosts}
+          sectionPostsArray={sectionPostsArray}
+          tags={tags}
         />
-        {SECTIONS.map((sectionConfig, index) => {
-          const posts = sectionPostsArray?.[index]
-          if (!posts) return null
-          return (
-            <Fragment key={sectionConfig.title}>
-              <Section config={sectionConfig} posts={posts} />
-              {index < SECTIONS.length - 1 ? <Divider /> : null}
-            </Fragment>
-          )
-        })}
-        <SearchAndTags tags={tags} />
-        <MakeFriends />
-        <CallToAction />
-        <GoToMainSite />
         <Baodaozai />
         <ScrollUpBaodaozaiEventTrigger />
       </main>
