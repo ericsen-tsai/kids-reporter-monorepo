@@ -23,6 +23,7 @@ import {
   GET_PROJECTS_FOR_SITEMAP_QUERY,
   GET_PROJECTS_QUERY,
   GET_SUB_SUBCATEGORY_POSTS_QUERY,
+  GET_SUBCATEGORIES_QUERY,
   GET_SUBCATEGORY_POSTS_QUERY,
   GET_TAG_META_QUERY,
   GET_TAG_POSTS_QUERY,
@@ -386,5 +387,13 @@ export const operations: Record<string, Operation> = {
     buildVariables: (input) => {
       return { where: ensureRecord(input.where, 'Missing where') }
     },
+  },
+  subcategories: {
+    method: 'GET',
+    cacheTtl: 120,
+    auth: 'public',
+    operationName: 'GetSubcategories',
+    document: GET_SUBCATEGORIES_QUERY,
+    buildVariables: () => ({}),
   },
 }

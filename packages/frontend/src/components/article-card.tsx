@@ -42,7 +42,7 @@ function ArticleCard({ article, showOverImageCover = false }: ArticleCardProp) {
         </div>
 
         <div className="grid min-w-0 flex-1 grid-rows-1 gap-2">
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center justify-between gap-4 self-start">
             {hasCategoryOrSubcategory && (
               <span className="inline-flex items-center rounded-full bg-neutral-200 px-3 py-1 prose-p3-bold text-neutral-900">
                 {article.subSubcategory ?? article.category}
