@@ -31,6 +31,7 @@ function SegmentedSwitcher<TValue extends string>({
             selectedSegment !== item.value &&
               'bg-transparent hover:bg-neutral-300'
           )}
+          type="button"
         >
           {item.icon ?? null}
           <span className="prose-p2-bold text-nowrap">{item.label}</span>

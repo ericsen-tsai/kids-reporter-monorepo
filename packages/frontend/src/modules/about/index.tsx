@@ -2,6 +2,7 @@
 
 import { Author } from '@/components/author-card'
 
+import Awards from './components/awards'
 import CrossBorderCollaboration from './components/cross-border-collaboration'
 import DiscoverNews from './components/discover-news'
 import Intro from './components/intro'
@@ -30,6 +31,9 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
         teamMembers={teamMembers}
         consultants={consultants}
       />
+      <div className="w-screen bg-yellow-100">
+        <Awards />
+      </div>
     </main>
   )
 }
