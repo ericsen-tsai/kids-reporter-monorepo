@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 
-import AuthorCard, { Author } from '@/components/author-card'
+import { Author } from '@/components/author-card'
 import {
   CONTRIBUTE_FORM,
   CREDIT_DONATE_URL,
@@ -19,6 +19,7 @@ import Intro from './components/intro'
 import JoinUs from './components/join-us'
 import ReaderRecommendations from './components/reader-recommendations'
 import RelatedProducts from './components/related-products'
+import TeamMemberAndConsultant from './components/team-member-and-consultant'
 import { tellYouItems } from './constants'
 
 type AboutModuleProps = {
@@ -50,7 +51,7 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
     >
       <span
         style={{ letterSpacing: '1.08px' }}
-        className="mt-10 mb-10 text-center text-xl font-bold md:text-2xl lg:text-3xl"
+        className="mt-10 mb-10 text-center text-xl font-bold tablet:text-2xl desktop:text-3xl"
       >
         在這裡，我們想告訴你們：
       </span>
@@ -89,7 +90,7 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
     >
       <span
         style={{ letterSpacing: '1.08px' }}
-        className="mt-10 mb-10 text-center text-xl font-bold md:text-2xl lg:text-3xl"
+        className="mt-10 mb-10 text-center text-xl font-bold tablet:text-2xl desktop:text-3xl"
       >
         在這裡，你們可以這樣看新聞：
       </span>
@@ -130,9 +131,9 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
         padding: '30px 50px 30px 50px',
         backgroundColor: 'var(--paletteColor6)',
       }}
-      className="flex max-w-5xl flex-col items-center justify-between rounded-3xl md:flex-row md:justify-center"
+      className="flex max-w-5xl flex-col items-center justify-between rounded-3xl tablet:flex-row tablet:justify-center"
     >
-      <div className="flex flex-col items-center justify-between md:items-start">
+      <div className="flex flex-col items-center justify-between tablet:items-start">
         <div>
           <h3
             style={{
@@ -143,27 +144,27 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
               marginBottom:
                 'calc(var(--has-content-spacing, 1)*(0.3em + 10px))',
             }}
-            className="text-center text-xl font-bold text-white md:text-left md:text-3xl"
+            className="text-center text-xl font-bold text-white tablet:text-left tablet:text-3xl"
           >
             {SUBSCRIBE_TITLE}
           </h3>
           <p
             style={{ letterSpacing: '.08em', lineHeight: '160%' }}
-            className="pb-10 text-sm md:text-lg"
+            className="pb-10 text-sm tablet:text-lg"
           >
             不要錯過和漏接《少年報導者》精彩的專題和報導，請訂閱我們，在新聞推出的第一時間就會收到通知！
           </p>
         </div>
         <Link
           style={{ width: 'fit-content' }}
-          className="rounded-full bg-white p-4 text-sm md:text-lg"
+          className="rounded-full bg-white p-4 text-sm tablet:text-lg"
           href={SUBSCRIBE_URL}
         >
           歡迎訂閱
         </Link>
       </div>
       <img
-        className="w-full max-w-44 md:max-w-72 lg:max-w-80"
+        className="w-full max-w-44 tablet:max-w-72 desktop:max-w-80"
         src="/assets/images/about_CTA_subscribe.svg"
         loading="lazy"
       />
@@ -189,13 +190,13 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
           letterSpacing: '.08em',
           marginBottom: 'calc(var(--has-content-spacing, 1)*(0.3em + 10px))',
         }}
-        className="text-xl font-bold text-white md:text-3xl"
+        className="text-xl font-bold text-white tablet:text-3xl"
       >
         投稿給報導仔，成為小評論員
       </h3>
       <p
         style={{ letterSpacing: '.08em', color: 'var(--paletteColor4)' }}
-        className="mr-auto ml-auto max-w-xl pb-10 text-sm leading-9 md:text-lg"
+        className="mr-auto ml-auto max-w-xl pb-10 text-sm leading-9 tablet:text-lg"
       >
         《少年報導者》是一個開放的公共平台，報導仔希望聽見大家的看法和心聲，歡迎10～15歲的同學投稿給報導仔，針對新聞時事、國家政策、校園生活，或是藝術文化、運動體育，都可以寫下你的觀點、評論，讓報導仔協助你成為我們的評論員。
       </p>
@@ -207,12 +208,12 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
       <div className="mt-10 mb-10 flex flex-row flex-wrap items-start justify-around gap-10">
         <span
           style={{ color: 'var(--paletteColor8)', letterSpacing: '1.08px' }}
-          className="max-w-80 text-lg font-normal md:text-xl"
+          className="max-w-80 text-lg font-normal tablet:text-xl"
         >
           投稿都會刊登嗎？
           <p
             style={{ letterSpacing: '.08em', lineHeight: '160%' }}
-            className="pb-10 text-sm text-black md:text-lg"
+            className="pb-10 text-sm text-black tablet:text-lg"
           >
             <br />
             •編輯群和專家會做討論
@@ -224,12 +225,12 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
         </span>
         <span
           style={{ color: 'var(--paletteColor8)', letterSpacing: '1.08px' }}
-          className="max-w-80 text-lg font-normal md:text-xl"
+          className="max-w-80 text-lg font-normal tablet:text-xl"
         >
           刊登有什麼獎勵？
           <p
             style={{ letterSpacing: '.08em', lineHeight: '160%' }}
-            className="pb-10 text-sm text-black md:text-lg"
+            className="pb-10 text-sm text-black tablet:text-lg"
           >
             <br />
             •你會收到微薄稿酬
@@ -245,11 +246,11 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
       />
       <p
         style={{ letterSpacing: '.08em', lineHeight: '160%' }}
-        className="pb-10 text-sm text-black md:text-lg"
+        className="pb-10 text-sm text-black tablet:text-lg"
       >
         少年報導者評論員證書範例
       </p>
-      <div className="rounded-full bg-white p-4 text-sm md:text-lg">
+      <div className="rounded-full bg-white p-4 text-sm tablet:text-lg">
         <Link href={CONTRIBUTE_FORM}>我要投稿！</Link>
       </div>
     </div>
@@ -264,9 +265,9 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
         padding: '40px 30px 38px 40px',
         backgroundColor: 'var(--paletteColor5)',
       }}
-      className="flex max-w-5xl flex-col items-center justify-center rounded-3xl md:flex-row md:justify-between"
+      className="flex max-w-5xl flex-col items-center justify-center rounded-3xl tablet:flex-row tablet:justify-between"
     >
-      <div className="flex flex-col items-center justify-between md:items-start">
+      <div className="flex flex-col items-center justify-between tablet:items-start">
         <div>
           <h3
             style={{
@@ -277,20 +278,20 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
               marginBottom:
                 'calc(var(--has-content-spacing, 1)*(0.3em + 10px))',
             }}
-            className="text-center text-xl font-bold text-white md:text-left md:text-3xl"
+            className="text-center text-xl font-bold text-white tablet:text-left tablet:text-3xl"
           >
             報導仔信箱，歡迎來信
           </h3>
           <p
             style={{ letterSpacing: '.08em', lineHeight: '160%' }}
-            className="pb-10 text-sm md:text-lg"
+            className="pb-10 text-sm tablet:text-lg"
           >
             如果想給我們的團隊一個鼓勵、一個建議，或提供採訪的線索，請寫信給報導仔，他會幫大家傳達。
           </p>
         </div>
         <span
           style={{ letterSpacing: '.08em', lineHeight: '160%' }}
-          className="text-sm text-white md:text-lg"
+          className="text-sm text-white tablet:text-lg"
         >
           聯絡信箱
           <br />
@@ -298,7 +299,7 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
         </span>
       </div>
       <img
-        className="w-full max-w-44 md:max-w-72 lg:max-w-80"
+        className="w-full max-w-44 tablet:max-w-72 desktop:max-w-80"
         src="/assets/images/about_CTA_mail.svg"
         loading="lazy"
       />
@@ -327,7 +328,7 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
           letterSpacing: '.08em',
           marginBottom: 'calc(var(--has-content-spacing, 1)*(0.3em + 10px))',
         }}
-        className="text-xl font-bold text-white md:text-3xl"
+        className="text-xl font-bold text-white tablet:text-3xl"
       >
         大人通道，了解更多的《報導者》
       </h3>
@@ -376,18 +377,16 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
       </div>
       <ReaderRecommendations />
       <JoinUs />
+      <TeamMemberAndConsultant
+        teamMembers={teamMembers}
+        consultants={consultants}
+      />
       {us}
       {tellYou}
       {news}
       {subscribe}
       {contribute}
       {mail}
-      <div id="team" style={{ width: '95vw', scrollMarginTop: '62px' }}>
-        <AuthorCard title="誰在為你服務" authors={teamMembers} />
-      </div>
-      <div id="consultants" style={{ width: '95vw', scrollMarginTop: '62px' }}>
-        <AuthorCard title="我們的顧問" authors={consultants} />
-      </div>
       {mainSite}
     </main>
   )
