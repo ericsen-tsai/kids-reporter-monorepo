@@ -24,8 +24,8 @@ function RecommendationsSection() {
             src="/assets/images/about/reader-recommendations/icon.svg"
             alt="Reader Recommendations"
             className="size-11 desktop:size-16"
-            width={44}
-            height={44}
+            width={64}
+            height={64}
           />
           讀者推薦
         </h2>
