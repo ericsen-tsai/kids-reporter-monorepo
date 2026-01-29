@@ -599,3 +599,16 @@ export const GET_PROJECTS_FOR_SITEMAP_QUERY = gql`
     }
   }
 `
+
+export const GET_SUBCATEGORIES_QUERY = gql`
+  query GetSubcategories {
+    subcategories {
+      id
+      name
+      slug
+      category {
+        slug
+      }
+    }
+  }
+`
