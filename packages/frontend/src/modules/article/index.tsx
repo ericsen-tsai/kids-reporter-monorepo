@@ -10,6 +10,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { useCallback, useMemo, useState } from 'react'
 
+import { TableOfContentSideMenu } from '@/components/table-of-content'
 import { FontSizeLevel } from '@/constants'
 import { BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT } from '@/constants/baodaozai-question-count'
 import { SeparateIcon } from '@/icons'
@@ -25,7 +26,6 @@ import {
 } from '@/services/call-baodaozai'
 import getLoginUrl from '@/utils/get-login-url'
 
-import { TableOfContentSideMenu } from '@/components/table-of-content'
 import SupportAction from '../../components/support-action'
 import ArticleBaodaozaiEventTrigger from './components/article-baodaozai-event-trigger'
 import ArticleSummary from './components/article-summary'
@@ -39,10 +39,10 @@ import StartReadingBaodaozaiEventTrigger from './components/start-reading-baodao
 import SupportActionContent from './components/support-action-content'
 import TitleHero from './components/title-hero'
 import Toolbar from './components/toolbar'
+import { ARTICLE_WIDGET_SCROLL_DOWN_DISTANCE } from './constants'
 import { ArticleContext } from './context'
 import useBatchSubmitAnswers from './hooks/use-batch-submit-answers'
 import { Keyword } from './types'
-import { ARTICLE_WIDGET_SCROLL_DOWN_DISTANCE } from './constants'
 import parsePostToContent from './utils/parse-post-to-content'
 import parseTocIndexesFromEntityMap from './utils/parse-toc-indexes-from-entity-map'
 
