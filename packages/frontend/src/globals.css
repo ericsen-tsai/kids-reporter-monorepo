@@ -514,6 +514,11 @@
   }
 }
 
+@utility scrollbar-none {
+  scrollbar-width: 0;
+  scrollbar-color: transparent transparent;
+}
+
 @utility theme-red {
   --theme-color: var(--color-red-400);
 }

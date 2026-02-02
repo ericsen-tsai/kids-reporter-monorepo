@@ -4,6 +4,7 @@ import { GetPostQuery } from '__generated__/operations/content.generated'
 import {
   HeaderPostTitleSetter,
   ScrollLevel,
+  useMediaQuery,
   useScrollLevel,
 } from '@kids-reporter/routing-ui'
 import { useRouter } from 'next/navigation'
@@ -215,6 +216,8 @@ const ArticleModule = ({
     )
   }, [post.tagsOrdered])
 
+  const isDesktop = useMediaQuery('(min-width: 1024px)')
+
   return (
     <>
       <BaodaozaiVisibilitySetter show={showBaodaozai} />
@@ -231,11 +234,13 @@ const ArticleModule = ({
         >
           <Toolbar topicURL={topicURL} postSlug={slug} />
           <div className="flex w-full max-w-256 flex-col items-center desktop:mx-auto desktop:px-12 hd:max-w-344">
-            <ImageModal
-              isOpen={isImgModalOpen}
-              imgProps={imgProps}
-              onImageModalClose={onImageModalClose}
-            />
+            {isDesktop && (
+              <ImageModal
+                isOpen={isImgModalOpen}
+                imgProps={imgProps}
+                onImageModalClose={onImageModalClose}
+              />
+            )}
 
             <StartReadingBaodaozaiEventTrigger content={post?.opening ?? ''} />
 

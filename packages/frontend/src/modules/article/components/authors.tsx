@@ -1,11 +1,12 @@
 'use client'
 
-import { Button } from '@kids-reporter/routing-ui'
+import { Button, cn, useMediaQuery } from '@kids-reporter/routing-ui'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useRef } from 'react'
+import { useCallback, useRef, useState } from 'react'
 
 import { DEFAULT_AVATAR } from '@/constants'
+import useClickOutside from '@/hooks/use-click-outside'
 import { OurTeamIcon, OurTeamIconLarge } from '@/icons'
 import { ArrowLeft, ArrowRight } from '@/icons/arrow'
 
@@ -18,9 +19,132 @@ type AuthorsProp = {
 const CARD_WIDTH = 248
 const GAP = 24
 
+function AuthorCard({ author }: { author: Author }) {
+  const avatarURL = author.avatar ?? DEFAULT_AVATAR
+  const roleText = author.roleName ?? author.role
+  const [isClicked, setIsClicked] = useState(false)
+
+  const ref = useRef<HTMLDivElement>(null)
+
+  const handleClick = () => {
+    setIsClicked((prev) => !prev)
+  }
+
+  useClickOutside(ref, () => setIsClicked(false))
+  const isDesktop = useMediaQuery('(min-width: 1024px)')
+
+  if (!isDesktop) {
+    return (
+      <div
+        onClick={handleClick}
+        className="group relative block min-w-62 cursor-pointer snap-start [perspective:1000px]"
+        ref={ref}
+      >
+        <div
+          className={cn(
+            'relative h-[270px] w-full transition-transform duration-500 [transform-style:preserve-3d]',
+            isClicked && '[transform:rotateY(180deg)]'
+          )}
+        >
+          <div className="absolute inset-0 flex [transform:rotateY(0deg)] flex-col items-center justify-center gap-5 rounded-[20px] border-2 border-neutral-200 bg-neutral-white p-6 [backface-visibility:hidden]">
+            <div className="h-30 w-30 overflow-hidden rounded-full">
+              <Image
+                className="h-full w-full object-cover"
+                src={avatarURL}
+                alt={author.name}
+                width={120}
+                height={120}
+                loading="lazy"
+              />
+            </div>
+
+            <div className="flex flex-col items-center gap-1">
+              <span className="text-center prose-h6-large font-bold text-neutral-900">
+                {author.name}
+              </span>
+              <span className="text-center prose-p2-bold text-neutral-700">
+                {roleText}
+              </span>
+            </div>
+          </div>
+
+          <div className="absolute inset-0 flex h-[270px] [transform:rotateY(180deg)] flex-col gap-4 rounded-[20px] bg-neutral-300 p-6 [backface-visibility:hidden]">
+            <div className="flex flex-1 flex-col gap-1">
+              <span className="prose-p1-bold text-neutral-900">
+                {author.name}｜{roleText}
+              </span>
+              <p className="line-clamp-5 text-justify prose-p2 text-neutral-900">
+                {author.bio}
+              </p>
+            </div>
+
+            <div
+              className="flex justify-end"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Link
+                href={author.slug ? `/author/${author.slug}` : '#'}
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-white transition-colors duration-200 hover:bg-red-500 hover:text-neutral-white"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <ArrowRight />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  return (
+    <Link
+      href={author.slug ? `/author/${author.slug}` : '#'}
+      key={author.id}
+      className="group relative block min-w-62 snap-start"
+    >
+      <div className="flex h-[270px] flex-col items-center justify-center gap-5 rounded-[20px] border-2 border-neutral-200 bg-neutral-white p-6 transition-opacity group-hover:opacity-0">
+        <div className="h-30 w-30 overflow-hidden rounded-full">
+          <Image
+            className="h-full w-full object-cover"
+            src={avatarURL}
+            alt={author.name}
+            width={120}
+            height={120}
+            loading="lazy"
+          />
+        </div>
+
+        <div className="flex flex-col items-center gap-1">
+          <span className="text-center prose-h6-large font-bold text-neutral-900">
+            {author.name}
+          </span>
+          <span className="text-center prose-p2-bold text-neutral-700">
+            {roleText}
+          </span>
+        </div>
+      </div>
+
+      <div className="absolute inset-0 z-10 flex h-[270px] flex-col gap-4 rounded-[20px] bg-neutral-300 p-6 opacity-0 transition-opacity group-hover:opacity-100 group-active:opacity-100">
+        <div className="flex flex-1 flex-col gap-1">
+          <span className="prose-p1-bold text-neutral-900">
+            {author.name}｜{roleText}
+          </span>
+          <p className="line-clamp-5 text-justify prose-p2 text-neutral-900">
+            {author.bio}
+          </p>
+        </div>
+
+        <div className="flex justify-end">
+          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-white">
+            <ArrowRight />
+          </div>
+        </div>
+      </div>
+    </Link>
+  )
+}
+
 function Authors({ authors }: AuthorsProp) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
-
   const scrollLeft = useCallback(() => {
     if (scrollContainerRef.current) {
       const scrollAmount = CARD_WIDTH + GAP
@@ -51,14 +175,14 @@ function Authors({ authors }: AuthorsProp) {
         </h2>
         <Button
           variant="secondary"
-          className="mr-4 size-11 p-0"
+          className="mr-2 hidden size-11 p-0 tablet:flex"
           onClick={scrollLeft}
         >
           <ArrowLeft />
         </Button>
         <Button
           variant="secondary"
-          className="size-11 p-0"
+          className="hidden size-11 p-0 tablet:flex"
           onClick={scrollRight}
         >
           <ArrowRight />
@@ -67,58 +191,10 @@ function Authors({ authors }: AuthorsProp) {
 
       <div
         ref={scrollContainerRef}
-        className="flex scrollbar-thin max-w-screen snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 pb-2 tablet:scroll-px-8 tablet:px-8 desktop:w-screen desktop:scroll-px-[max(50vw+56px-600px,48px)] desktop:px-[max(50vw+56px-600px,48px)]"
+        className="flex max-w-screen snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 pb-2 scrollbar-none tablet:scroll-px-8 tablet:px-8 desktop:w-screen desktop:scroll-px-[max(50vw+56px-600px,48px)] desktop:px-[max(50vw+56px-600px,48px)]"
       >
         {authors.map((author) => {
-          const avatarURL = author.avatar ?? DEFAULT_AVATAR
-          const roleText = author.roleName ?? author.role
-
-          return (
-            <Link
-              href={author.slug ? `/author/${author.slug}` : '#'}
-              key={author.id}
-              className="group relative block min-w-62 snap-start"
-            >
-              <div className="flex h-[270px] flex-col items-center justify-center gap-5 rounded-[20px] border-2 border-neutral-200 bg-neutral-white p-6 transition-opacity group-hover:opacity-0">
-                <div className="h-30 w-30 overflow-hidden rounded-full">
-                  <Image
-                    className="h-full w-full object-cover"
-                    src={avatarURL}
-                    alt={author.name}
-                    width={120}
-                    height={120}
-                    loading="lazy"
-                  />
-                </div>
-
-                <div className="flex flex-col items-center gap-1">
-                  <span className="text-center prose-h6-large font-bold text-neutral-900">
-                    {author.name}
-                  </span>
-                  <span className="text-center prose-p2-bold text-neutral-700">
-                    {roleText}
-                  </span>
-                </div>
-              </div>
-
-              <div className="absolute inset-0 z-10 flex h-[270px] flex-col gap-4 rounded-[20px] bg-neutral-300 p-6 opacity-0 transition-opacity group-hover:opacity-100 group-active:opacity-100">
-                <div className="flex flex-1 flex-col gap-1">
-                  <span className="prose-p1-bold text-neutral-900">
-                    {author.name}｜{roleText}
-                  </span>
-                  <p className="line-clamp-5 text-justify prose-p2 text-neutral-900">
-                    {author.bio}
-                  </p>
-                </div>
-
-                <div className="flex justify-end">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-white">
-                    <ArrowRight />
-                  </div>
-                </div>
-              </div>
-            </Link>
-          )
+          return <AuthorCard key={author.id} author={author} />
         })}
       </div>
     </div>
