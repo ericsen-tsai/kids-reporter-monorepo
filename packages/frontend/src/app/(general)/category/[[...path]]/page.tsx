@@ -72,6 +72,14 @@ export async function generateMetadata({
     categoryData?.subcategories?.[0]?.ogImage?.resized?.medium ??
     categoryData?.ogImage?.resized?.medium
 
+  if (!category) {
+    log(
+      LogLevel.INFO,
+      `Category metadata not found. URL path is: /${params.path?.join('/') ?? ''}`
+    )
+    return {}
+  }
+
   return {
     title,
     description,
