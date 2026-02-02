@@ -32,7 +32,7 @@ export default list({
       storage: 'images',
     }),
     member: relationship({
-      ref: 'Member',
+      ref: 'Member.avatar',
       many: false,
       label: 'Member',
     }),
