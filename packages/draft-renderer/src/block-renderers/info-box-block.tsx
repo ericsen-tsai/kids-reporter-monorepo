@@ -165,7 +165,11 @@ function BoxBorder({
 
 const ArticleBodyContainer = styled.div`
   max-width: 584px;
-  margin: 60px auto;
+  margin: 0 auto 60px auto;
+
+  &:last-child {
+    margin: 0 auto 0px auto;
+  }
 
   ${mediaQuery.smallOnly} {
     width: 100%;
