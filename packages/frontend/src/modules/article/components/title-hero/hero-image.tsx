@@ -39,9 +39,9 @@ function HeroImage({
   }
 
   return (
-    <figure className="mx-auto pt-10 pb-12">
+    <figure className="mx-auto pt-10">
       <div
-        className="relative inline-flex w-full overflow-hidden"
+        className="relative inline-flex w-full overflow-hidden hd:!aspect-video hd:w-[1058px]"
         style={{
           aspectRatio: aspectRatio,
         }}
@@ -77,7 +77,7 @@ function HeroImage({
       </div>
       <figcaption
         className={cn(
-          'mt-1 pt-2.5 text-center prose-p2 text-neutral-700',
+          'mx-4 mt-1 pt-2.5 text-center prose-p2 text-neutral-700 tablet:mx-8',
           fontSizeLevel === FontSizeLevel.LARGE && 'text-[17.5px]'
         )}
       >
