@@ -27,7 +27,7 @@ export const Paragraph = styled.div`
 export const Heading = styled.div`
   width: 100%;
   max-width: 512px;
-  margin: 45px auto 20px auto;
+  margin: 0 auto 20px auto;
 
   ${mediaQuery.largeOnly} {
     max-width: 584px;

@@ -275,7 +275,9 @@ const ArticleModule = ({
               authors={authorsInBrief}
               fontSizeLevel={fontSize}
             />
-            <SeparateIcon />
+            <div className="mb-10">
+              <SeparateIcon />
+            </div>
             <div className="relative w-full">
               <PostRenderer content={post?.content ?? {}} />
               {/* middle of the article content enters 50% of the viewport*/}
