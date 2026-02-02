@@ -57,14 +57,15 @@ const FigureCaption = styled.figcaption<{ $alignment?: string }>`
 
           ${mediaQuery.mediumAbove} {
             max-width: 340px;
-            margin-right: 32px;
+            margin-left: 0px;
+            margin-right: 0px;
           }
 
           ${mediaQuery.desktopAbove} {
             max-width: calc(100% - 640px);
             position: absolute;
             right: 0;
-            top: calc(100% + 20px);
+            top: 100%;
             margin-right: 0px;
           }
 
@@ -72,7 +73,7 @@ const FigureCaption = styled.figcaption<{ $alignment?: string }>`
             max-width: 240px;
             position: absolute;
             right: 0;
-            top: calc(100% + 20px);
+            top: 100%;
             margin-right: 0px;
           }
         `
@@ -104,14 +105,15 @@ const FigureCaption = styled.figcaption<{ $alignment?: string }>`
 
           ${mediaQuery.mediumAbove} {
             max-width: 340px;
-            margin-right: 32px;
+            margin-left: 0px;
+            margin-right: 0px;
           }
 
           ${mediaQuery.desktopAbove} {
             max-width: 128px;
             position: absolute;
             right: 0;
-            top: calc(100% + 20px);
+            top: 100%;
             margin-right: 0px;
           }
 
@@ -119,7 +121,7 @@ const FigureCaption = styled.figcaption<{ $alignment?: string }>`
             max-width: 240px;
             position: absolute;
             right: 0;
-            top: calc(100% + 20px);
+            top: 100%;
             margin-right: 0px;
           }
         `
@@ -263,19 +265,19 @@ const ArticleBodyContainer = styled.div<{ $alignment?: string }>`
           ${mediaQuery.mediumAbove} {
             width: 361px;
             float: right;
-            margin: 20px 32px 20px 24px;
+            margin: 0px 32px 20px 24px;
           }
 
           ${mediaQuery.desktopAbove} {
             width: 368px;
             float: right;
-            margin: 20px 0px 0px 32px;
+            margin: 0px 0px 0px 32px;
           }
 
           ${mediaQuery.largeOnly} {
             width: 451px;
             float: right;
-            margin: 20px 0px 0px 40px;
+            margin: 0px 0px 0px 40px;
           }
         `
       default:
