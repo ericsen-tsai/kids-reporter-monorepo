@@ -8,6 +8,7 @@ import {
 } from '@keystone-6/core/fields'
 
 import config from '../config'
+import type { ListType } from '../types/keystone-list-types'
 import { allowAllRoles } from './utils/access-control-list'
 import { memberOwnedOperationAccess } from './utils/member-owned-access'
 
@@ -22,7 +23,7 @@ const ALLOWED_IMAGE_TYPES = [
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024 // 5MB
 
 const operationAccessControl = memberOwnedOperationAccess
-export default list({
+export default list<ListType<'MemberAvatar'>>({
   fields: {
     name: text({
       label: '標題',
@@ -83,11 +84,10 @@ export default list({
     },
   },
   hooks: {
-    validateInput: async ({ resolvedData, addValidationError, operation }) => {
+    validateInput: async ({ inputData, addValidationError, operation }) => {
       // Validate file upload on create and update
       if (operation === 'create' || operation === 'update') {
-        const imageFile = resolvedData.imageFile
-
+        const imageFile = inputData?.imageFile
         if (imageFile?.upload) {
           // Check file size
           const fileSize = imageFile.upload.size
