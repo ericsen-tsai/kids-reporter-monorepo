@@ -9,7 +9,11 @@ import {
 
 import config from '../config'
 import type { ListType } from '../types/keystone-list-types'
-import { allowAllRoles } from './utils/access-control-list'
+import {
+  allowAllRoles,
+  allowRoles,
+  RoleEnum,
+} from './utils/access-control-list'
 import { memberOwnedOperationAccess } from './utils/member-owned-access'
 
 const ALLOWED_IMAGE_TYPES = [
@@ -73,7 +77,7 @@ export default list<ListType<'MemberAvatar'>>({
   access: {
     operation: {
       query: allowAllRoles(),
-      create: operationAccessControl,
+      create: allowRoles([RoleEnum.Member]),
       update: () => false,
       delete: operationAccessControl,
     },
@@ -106,6 +110,26 @@ export default list<ListType<'MemberAvatar'>>({
           }
         }
       }
+    },
+    resolveInput: async ({ resolvedData, context, operation }) => {
+      const sessionMemberId = context.session?.data?.memberId?.toString()
+
+      if (!sessionMemberId) {
+        throw new Error(
+          'You must be signed in as a member to upload a member avatar.'
+        )
+      }
+
+      if (operation === 'create') {
+        // connect the MemberAvatar record to the current member
+        resolvedData.member = {
+          connect: {
+            id: sessionMemberId,
+          },
+        }
+      }
+
+      return resolvedData
     },
   },
 })
