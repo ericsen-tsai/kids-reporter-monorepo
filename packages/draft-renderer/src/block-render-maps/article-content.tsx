@@ -20,14 +20,21 @@ export const Paragraph = styled.div`
   }
 
   > div[data-block='true']:not(:last-child) {
-    margin-bottom: 40px;
+    margin-bottom: 60px;
+    ${mediaQuery.smallOnly} {
+      margin-bottom: 40px;
+    }
   }
 `
 
 export const Heading = styled.div`
   width: 100%;
   max-width: 512px;
-  margin: 0 auto 20px auto;
+  margin: 0 auto 40px auto;
+
+  ${mediaQuery.smallOnly} {
+    margin-bottom: 24px;
+  }
 
   ${mediaQuery.largeOnly} {
     max-width: 584px;
