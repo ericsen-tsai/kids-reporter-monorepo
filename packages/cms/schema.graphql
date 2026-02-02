@@ -1702,6 +1702,7 @@ type Member {
 input MemberWhereUniqueInput {
   id: ID
   twreporter_user_id: String
+  avatar: MemberAvatarWhereUniqueInput
 }
 
 input MemberWhereInput {
@@ -1792,6 +1793,7 @@ type MemberAvatar {
 
 input MemberAvatarWhereUniqueInput {
   id: ID
+  member: MemberWhereUniqueInput
 }
 
 input MemberAvatarWhereInput {

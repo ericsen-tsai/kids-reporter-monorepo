@@ -339,16 +339,14 @@ model Member {
   showBaodaozai                   Boolean               @default(true)
   essayQuestionCount              Int?                  @default(1)
   avatar                          MemberAvatar?         @relation("Member_avatar", fields: [avatarId], references: [id])
-  avatarId                        Int?                  @map("avatar")
+  avatarId                        Int?                  @unique @map("avatar")
   createdAt                       DateTime?             @default(now())
   updatedAt                       DateTime?             @updatedAt
-  from_MemberAvatar_member        MemberAvatar[]        @relation("MemberAvatar_member")
   from_PostChoiceAnswer_member    PostChoiceAnswer[]    @relation("PostChoiceAnswer_member")
   from_PostEssayAnswer_member     PostEssayAnswer[]     @relation("PostEssayAnswer_member")
   from_PostEssayAnswerLike_member PostEssayAnswerLike[] @relation("PostEssayAnswerLike_member")
 
   @@index([email])
-  @@index([avatarId])
 }
 
 model MemberAvatar {
@@ -359,13 +357,9 @@ model MemberAvatar {
   imageFile_width     Int?
   imageFile_height    Int?
   imageFile_extension String?
-  member              Member?   @relation("MemberAvatar_member", fields: [memberId], references: [id])
-  memberId            String?   @map("member")
+  member              Member?   @relation("Member_avatar")
   createdAt           DateTime? @default(now())
   updatedAt           DateTime? @updatedAt
-  from_Member_avatar  Member[]  @relation("Member_avatar")
-
-  @@index([memberId])
 }
 
 model PostChoiceAnswer {

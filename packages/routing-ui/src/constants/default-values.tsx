@@ -1,7 +1,8 @@
 import { SettingsIconSmall } from '../icons'
 import { MenuItem } from '../types'
 
-export const SUBSCRIBE_URL = 'https://solink.soundon.fm/kidstwreporter'
+export const SUBSCRIBE_URL =
+  'https://twreporter.us14.list-manage.com/subscribe?u=4da5a7d3b98dbc9fdad009e7e&id=2154ac40c3'
 export const DONATE_URL = 'https://support.twreporter.org/'
 export const PRIVACY_POLICY = 'https://www.twreporter.org/a/privacy-policy'
 export const SEARCH_PLACEHOLDER = '搜尋更多新聞、議題'
