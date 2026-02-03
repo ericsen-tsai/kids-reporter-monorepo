@@ -18,7 +18,7 @@ const Figure = styled.figure<{ $alignment?: string }>`
           }
 
           ${mediaQuery.largeOnly} {
-            transform: translateX(174px);
+            transform: translateX(160px);
           }
         `
       default:
@@ -57,7 +57,7 @@ const FigureCaption = styled.figcaption<{ $alignment?: string }>`
 
           ${mediaQuery.mediumAbove} {
             max-width: 340px;
-            margin-left: 0px;
+            margin-left: auto;
             margin-right: 0px;
           }
 
@@ -229,7 +229,6 @@ const ArticleBodyContainer = styled.div<{ $alignment?: string }>`
     margin: 0;
   }
 
-  max-width: 72vw;
   margin: 40px auto;
 
   ${mediaQuery.mediumAbove} {
@@ -246,8 +245,23 @@ const ArticleBodyContainer = styled.div<{ $alignment?: string }>`
 
   ${(props) => {
     switch (props.$alignment) {
+      case 'default':
+        return `
+          ${mediaQuery.desktopAbove} {
+            max-width: 768px;
+          }
+          ${mediaQuery.largeOnly} {
+            max-width: 1000px;
+          }
+        `
       case 'paragraph-width':
         return `
+          ${mediaQuery.smallOnly} {
+            max-width: 512px;
+            padding-left: 24px;
+            padding-right: 24px;
+          }
+
           ${mediaQuery.mediumAbove} {
             max-width: 584px;
           }
