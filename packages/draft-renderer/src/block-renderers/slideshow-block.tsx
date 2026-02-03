@@ -33,15 +33,15 @@ const mockup = {
   },
   desktop: {
     container: {
-      width: 752, // px
+      width: 788, // px
     },
     slide: {
-      width: 688, // px
-      height: 387, // px
+      width: 696, // px
+      height: 391, // px
       paddingRight: 4, // px
     },
     offset: {
-      left: 32, // px
+      left: 48, // px
     },
   },
   hd: {
@@ -159,7 +159,7 @@ const CaptionContainer = styled.div`
   ${mediaQuery.desktopAbove} {
     position: absolute;
     right: 0;
-    top: calc(100% - 64px);
+    top: calc(100% - 76px);
   }
 `
 
@@ -177,7 +177,8 @@ const Desc = styled(Multimedia.Caption)`
   margin-bottom: 0;
 
   ${mediaQuery.smallOnly} {
-    width: 179px;
+    width: auto;
+    max-width: 240px;
   }
 
   ${mediaQuery.mediumOnly} {
@@ -299,12 +300,12 @@ const SlideshowFlexBox = styled.div`
 
   ${mediaQuery.desktopAbove} {
     width: ${mockup.desktop.container.width}px;
-    transform: translateX(104px);
+    transform: translateX(70px);
   }
 
   ${mediaQuery.largeOnly} {
     width: ${mockup.hd.container.width}px;
-    transform: translateX(174px);
+    transform: translateX(160px);
   }
 `
 
@@ -312,7 +313,7 @@ const NavigationAndCaptionRow = styled.div`
   display: flex;
   align-items: flex-start;
   gap: 40px;
-  padding: 16px 16px 0px;
+  padding: 20px 32px 0px;
   width: 100%;
 
   ${mediaQuery.smallOnly} {
@@ -511,7 +512,12 @@ export function SlideshowBlock({ className = '', data }: SlideshowBlockProps) {
         // since the items of _images would have the same id,
         // hence, we append `index` on the key
         <SlideFlexItem key={`slide_${img.id}_${index}`}>
-          <div className="w-full h-full relative overflow-hidden">
+          <div
+            className="w-full h-full relative overflow-hidden"
+            style={{
+              backgroundColor: '#f8f8f8',
+            }}
+          >
             <img
               srcSet={imgSrcSetArr.join(',')}
               src={imgSrc}

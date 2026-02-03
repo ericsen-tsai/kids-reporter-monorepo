@@ -29,7 +29,7 @@ const Figure = styled.figure<{ $alignment?: string }>`
           }
 
           ${mediaQuery.largeOnly} {
-            transform: translateX(174px);
+            transform: translateX(160px);
           }
         `
       default:
@@ -68,14 +68,15 @@ const FigureCaption = styled.figcaption<{ $alignment?: string }>`
 
           ${mediaQuery.mediumAbove} {
             max-width: 340px;
-            margin-right: 32px;
+            margin-left: auto;
+            margin-right: 0px;
           }
 
           ${mediaQuery.desktopAbove} {
             max-width: calc(100% - 640px);
             position: absolute;
             right: 0;
-            top: calc(100% + 20px);
+            top: 100%;
             margin-right: 0px;
           }
 
@@ -83,7 +84,7 @@ const FigureCaption = styled.figcaption<{ $alignment?: string }>`
             max-width: 240px;
             position: absolute;
             right: 0;
-            top: calc(100% + 20px);
+            top: 100%;
             margin-right: 0px;
           }
         `
@@ -115,14 +116,15 @@ const FigureCaption = styled.figcaption<{ $alignment?: string }>`
 
           ${mediaQuery.mediumAbove} {
             max-width: 340px;
-            margin-right: 32px;
+            margin-left: 0px;
+            margin-right: 0px;
           }
 
           ${mediaQuery.desktopAbove} {
             max-width: 128px;
             position: absolute;
             right: 0;
-            top: calc(100% + 20px);
+            top: 100%;
             margin-right: 0px;
           }
 
@@ -130,7 +132,7 @@ const FigureCaption = styled.figcaption<{ $alignment?: string }>`
             max-width: 240px;
             position: absolute;
             right: 0;
-            top: calc(100% + 20px);
+            top: 100%;
             margin-right: 0px;
           }
         `
@@ -227,7 +229,6 @@ const ArticleBodyContainer = styled.div<{ $alignment?: string }>`
     margin: 0;
   }
 
-  max-width: 72vw;
   margin: 40px auto;
 
   ${mediaQuery.mediumAbove} {
@@ -244,8 +245,23 @@ const ArticleBodyContainer = styled.div<{ $alignment?: string }>`
 
   ${(props) => {
     switch (props.$alignment) {
+      case 'default':
+        return `
+          ${mediaQuery.desktopAbove} {
+            max-width: 768px;
+          }
+          ${mediaQuery.largeOnly} {
+            max-width: 1000px;
+          }
+        `
       case 'paragraph-width':
         return `
+          ${mediaQuery.smallOnly} {
+            max-width: 512px;
+            padding-left: 24px;
+            padding-right: 24px;
+          }
+
           ${mediaQuery.mediumAbove} {
             max-width: 584px;
           }
@@ -263,19 +279,19 @@ const ArticleBodyContainer = styled.div<{ $alignment?: string }>`
         ${mediaQuery.mediumAbove} {
             width: 361px;
             float: right;
-            margin: 20px 32px 20px 24px;
+            margin: 0px 32px 20px 24px;
           }
 
           ${mediaQuery.desktopAbove} {
             width: 368px;
             float: right;
-            margin: 20px 0px 0px 32px;
+            margin: 0px 0px 0px 32px;
           }
 
           ${mediaQuery.largeOnly} {
             width: 451px;
             float: right;
-            margin: 20px 0px 0px 40px;
+            margin: 0px 0px 0px 40px;
           }
         `
       default:

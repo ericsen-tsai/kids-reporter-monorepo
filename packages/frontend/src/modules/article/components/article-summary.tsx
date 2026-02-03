@@ -54,7 +54,7 @@ function ArticleSummary({
 
       <div
         className={cn(
-          'prose-article-bold text-neutral-700',
+          'mx-[-24px] prose-article-bold text-neutral-700 tablet:mx-0',
           ...ARTICLE_FONT_SIZE_CLASSNAMES,
           fontSizeLevel === FontSizeLevel.LARGE && [
             ...ARTICLE_FONT_SIZE_CLASSNAMES_LARGE,
@@ -69,7 +69,7 @@ function ArticleSummary({
       <Divider className="bg-neutral-400" />
 
       {authors.length > 0 && (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           {authors.map((authorGroup) => (
             <div key={authorGroup.title} className="flex items-center gap-1">
               <span

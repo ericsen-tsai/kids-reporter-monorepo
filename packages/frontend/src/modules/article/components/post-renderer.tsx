@@ -13,6 +13,23 @@ import {
 } from '../constants'
 import { useArticleContext } from '../context'
 
+function trimFinalEmptyBlocks(raw: RawDraftContentState): RawDraftContentState {
+  const { blocks, entityMap } = raw
+  if (blocks.length === 0) return raw
+
+  let end = blocks.length
+  while (
+    end > 0 &&
+    blocks[end - 1].type === 'unstyled' &&
+    blocks[end - 1].text.trim() === ''
+  ) {
+    end--
+  }
+  if (end === blocks.length) return raw
+
+  return { blocks: blocks.slice(0, end), entityMap }
+}
+
 type PostProp = {
   content: RawDraftContentState
 }
@@ -30,7 +47,7 @@ function PostRenderer({ content }: PostProp) {
       )}
     >
       <ArticleBodyDraftRenderer
-        rawContentState={content}
+        rawContentState={trimFinalEmptyBlocks(content)}
         onImageModalOpen={onImageModalOpen}
         initiallyScrollTo={
           typeof window !== 'undefined' ? window.location.hash : undefined
