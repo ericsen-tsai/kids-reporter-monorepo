@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, cn, useMediaQuery } from '@kids-reporter/routing-ui'
+import { Button, cn } from '@kids-reporter/routing-ui'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback, useRef, useState } from 'react'
@@ -31,13 +31,12 @@ function AuthorCard({ author }: { author: Author }) {
   }
 
   useClickOutside(ref, () => setIsClicked(false))
-  const isDesktop = useMediaQuery('(min-width: 1024px)')
 
-  if (!isDesktop) {
-    return (
+  return (
+    <>
       <div
         onClick={handleClick}
-        className="group relative block min-w-62 cursor-pointer snap-start [perspective:1000px]"
+        className="group relative block min-w-62 cursor-pointer snap-start [perspective:1000px] desktop:hidden"
         ref={ref}
       >
         <div
@@ -93,53 +92,51 @@ function AuthorCard({ author }: { author: Author }) {
           </div>
         </div>
       </div>
-    )
-  }
-  return (
-    <Link
-      href={author.slug ? `/author/${author.slug}` : '#'}
-      key={author.id}
-      className="group relative block min-w-62 snap-start"
-    >
-      <div className="flex h-[270px] flex-col items-center justify-center gap-5 rounded-[20px] border-2 border-neutral-200 bg-neutral-white p-6 transition-opacity group-hover:opacity-0">
-        <div className="h-30 w-30 overflow-hidden rounded-full">
-          <Image
-            className="h-full w-full object-cover"
-            src={avatarURL}
-            alt={author.name}
-            width={120}
-            height={120}
-            loading="lazy"
-          />
-        </div>
+      <Link
+        href={author.slug ? `/author/${author.slug}` : '#'}
+        key={author.id}
+        className="group relative hidden min-w-62 snap-start desktop:block"
+      >
+        <div className="flex h-[270px] flex-col items-center justify-center gap-5 rounded-[20px] border-2 border-neutral-200 bg-neutral-white p-6 transition-opacity group-hover:opacity-0">
+          <div className="h-30 w-30 overflow-hidden rounded-full">
+            <Image
+              className="h-full w-full object-cover"
+              src={avatarURL}
+              alt={author.name}
+              width={120}
+              height={120}
+              loading="lazy"
+            />
+          </div>
 
-        <div className="flex flex-col items-center gap-1">
-          <span className="text-center prose-h6-large font-bold text-neutral-900">
-            {author.name}
-          </span>
-          <span className="text-center prose-p2-bold text-neutral-700">
-            {roleText}
-          </span>
-        </div>
-      </div>
-
-      <div className="absolute inset-0 z-10 flex h-[270px] flex-col gap-4 rounded-[20px] bg-neutral-300 p-6 opacity-0 transition-opacity group-hover:opacity-100 group-active:opacity-100">
-        <div className="flex flex-1 flex-col gap-1">
-          <span className="prose-p1-bold text-neutral-900">
-            {author.name}｜{roleText}
-          </span>
-          <p className="line-clamp-5 text-justify prose-p2 text-neutral-900">
-            {author.bio}
-          </p>
-        </div>
-
-        <div className="flex justify-end">
-          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-white">
-            <ArrowRight />
+          <div className="flex flex-col items-center gap-1">
+            <span className="text-center prose-h6-large font-bold text-neutral-900">
+              {author.name}
+            </span>
+            <span className="text-center prose-p2-bold text-neutral-700">
+              {roleText}
+            </span>
           </div>
         </div>
-      </div>
-    </Link>
+
+        <div className="absolute inset-0 z-10 flex h-[270px] flex-col gap-4 rounded-[20px] bg-neutral-300 p-6 opacity-0 transition-opacity group-hover:opacity-100 group-active:opacity-100">
+          <div className="flex flex-1 flex-col gap-1">
+            <span className="prose-p1-bold text-neutral-900">
+              {author.name}｜{roleText}
+            </span>
+            <p className="line-clamp-5 text-justify prose-p2 text-neutral-900">
+              {author.bio}
+            </p>
+          </div>
+
+          <div className="flex justify-end">
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-white">
+              <ArrowRight />
+            </div>
+          </div>
+        </div>
+      </Link>
+    </>
   )
 }
 

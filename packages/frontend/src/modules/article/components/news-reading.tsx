@@ -57,20 +57,17 @@ function NewsReading({ className, items }: NewsReadingProps) {
     <div className="w-full px-4">
       <div
         className={cn(
-          'mx-auto mt-10 mb-10 flex max-w-[584px] flex-col rounded-[20px] border border-neutral-200 p-6 tablet:mt-20 tablet:mb-15 tablet:p-9 hd:max-w-[656px]',
+          'mx-auto mt-10 flex max-w-[584px] flex-col rounded-[20px] border border-neutral-200 p-6 tablet:mt-20 tablet:p-9 hd:max-w-[656px]',
           className
         )}
       >
         <div className="flex flex-col items-center">
-          <h3 className="mb-4 text-center prose-h6-small text-neutral-900 desktop:mb-6 desktop:prose-h6-large">
-            讀報
-          </h3>
           <div className="mx-auto flex w-full flex-wrap justify-center gap-2.5">
             {renderButtons}
           </div>
         </div>
 
-        <Divider className="my-4" />
+        <Divider className="my-6 tablet:my-9" />
         <div dangerouslySetInnerHTML={{ __html: selectedOption.code }} />
       </div>
     </div>

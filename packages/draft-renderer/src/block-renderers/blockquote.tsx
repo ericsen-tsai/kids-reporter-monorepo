@@ -1,18 +1,23 @@
-import React from 'react'
 import styled from 'styled-components'
 
-import { getColorHex } from '../utils/index'
 import { mediaQuery } from '../utils/media-query'
 
 const BorderLeftContainer = styled.blockquote`
-  margin: 0;
-  padding-left: 30px;
-  border-left: 4px solid ${({ theme }) => getColorHex(theme?.themeColor)};
+  display: flex;
+  gap: 16px;
+`
+
+const BorderLeftLine = styled.div`
+  width: 3px;
+  border-radius: 10px;
+  background-color: #c6c6c6;
+  align-self: stretch;
 `
 
 export function BorderLeftBlockquote({ text }: { text: string }) {
   return (
     <BorderLeftContainer>
+      <BorderLeftLine />
       <QuoteText>{text}</QuoteText>
     </BorderLeftContainer>
   )
@@ -20,7 +25,7 @@ export function BorderLeftBlockquote({ text }: { text: string }) {
 
 const QuoteLeftContainer = styled.blockquote`
   margin: 0;
-  padding: 40px;
+  padding: 24px;
   background-color: #f4f4f4;
   display: flex;
   border-radius: 20px;
@@ -35,7 +40,7 @@ const QuoteText = styled.p`
   word-break: break-word;
   font-size: ${({ theme }) =>
     theme?.fontSizeLevel === 'large' ? '22px' : '18px'};
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: 0.9px;
   line-height: 2;
   color: #232323;
@@ -43,28 +48,9 @@ const QuoteText = styled.p`
 
 const SvgBlock = styled.div`
   svg {
-    fill: ${({ theme }) => getColorHex(theme?.themeColor)};
-  }
-
-  ${mediaQuery.smallOnly} {
-    svg {
-      width: 20px;
-      margin-right: 12px;
-    }
-  }
-
-  ${mediaQuery.mediumAndDesktopOnly} {
-    svg {
-      width: 25px;
-      margin-right: 15px;
-    }
-  }
-
-  ${mediaQuery.largeOnly} {
-    svg {
-      width: 30px;
-      margin-right: 18px;
-    }
+    fill: #27b3f5;
+    width: 32px;
+    margin-right: 16px;
   }
 `
 
@@ -92,19 +78,21 @@ export function QuoteLeftBlockquote({ text }: { text: string }) {
 }
 
 const ArticleBodyContainer = styled.div`
-  max-width: 584px;
-  margin: 0 auto 27px auto;
+  max-width: 512px;
+  margin: 0 auto 60px auto;
 
-  ${mediaQuery.desktopAbove} {
-    max-width: 608px;
+  ${mediaQuery.smallOnly} {
+    margin-bottom: 40px;
   }
 
   ${mediaQuery.largeOnly} {
-    max-width: 680px;
+    max-width: 584px;
   }
 
   ${mediaQuery.smallOnly} {
     width: 100%;
+    padding-left: 24px;
+    padding-right: 24px;
   }
 `
 

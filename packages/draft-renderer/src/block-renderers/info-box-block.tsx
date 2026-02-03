@@ -34,9 +34,11 @@ const containerStyles = css`
   border-radius: 30px;
   position: relative;
 
+  margin: 0 auto 60px auto;
+
   ${mediaQuery.smallOnly} {
     padding: 24px;
-    margin: 0 24px;
+    margin: 0 24px 40px;
   }
 
   ${mediaQuery.mediumOnly} {
