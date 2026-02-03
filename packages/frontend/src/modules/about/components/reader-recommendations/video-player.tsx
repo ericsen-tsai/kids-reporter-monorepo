@@ -80,6 +80,7 @@ function VideoPlayer() {
 
   const handleModalOpen = () => {
     setIsModalOpen(true)
+    handlePauseVideo()
   }
 
   return (
@@ -136,7 +137,15 @@ function VideoPlayer() {
         )}
       </div>
 
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+      <Dialog
+        open={isModalOpen}
+        onOpenChange={(open) => {
+          setIsModalOpen(open)
+          if (!open) {
+            handlePauseVideo()
+          }
+        }}
+      >
         <DialogTitle className="sr-only">讀者推薦影片</DialogTitle>
         <DialogContent
           className="flex max-w-5xl items-center justify-center p-0 tablet:p-6 desktop:p-8"

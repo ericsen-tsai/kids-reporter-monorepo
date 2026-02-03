@@ -15,6 +15,7 @@ function SwiperButton({ onClick, type, className }: SwiperButtonProps) {
         className
       )}
       type="button"
+      aria-label={type === 'prev' ? 'Previous Button' : 'Next Button'}
     >
       {type === 'prev' ? (
         <svg
