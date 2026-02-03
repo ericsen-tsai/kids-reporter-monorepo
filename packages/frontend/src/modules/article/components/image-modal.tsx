@@ -1,4 +1,4 @@
-import { cn, useMediaQuery } from '@kids-reporter/routing-ui'
+import { cn } from '@kids-reporter/routing-ui'
 import { useEffect, useState } from 'react'
 
 import { XIcon } from '@/icons/miscellaneous'
@@ -10,7 +10,6 @@ type ImageModalProps = {
 }
 
 function ImageModal({ isOpen, imgProps, onImageModalClose }: ImageModalProps) {
-  const isDesktop = useMediaQuery('(min-width: 1024px)')
   const [isImageLoaded, setIsImageLoaded] = useState(false)
 
   useEffect(() => {
@@ -24,12 +23,6 @@ function ImageModal({ isOpen, imgProps, onImageModalClose }: ImageModalProps) {
       window.removeEventListener('keydown', handleESCPress)
     }
   }, [onImageModalClose])
-
-  useEffect(() => {
-    if (!isDesktop) {
-      onImageModalClose()
-    }
-  }, [isDesktop, onImageModalClose])
 
   useEffect(() => {
     if (!isOpen) {

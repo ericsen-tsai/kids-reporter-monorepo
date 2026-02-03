@@ -2,6 +2,7 @@
 
 import { GetPostQuery } from '__generated__/operations/content.generated'
 import { cn } from '@kids-reporter/routing-ui'
+import DOMPurify from 'dompurify'
 import { memo, useMemo, useState } from 'react'
 
 import Divider from '@/components/divider'
@@ -36,7 +37,7 @@ function NewsReading({ className, items }: NewsReadingProps) {
             key={option.name}
             onClick={() => setSelectedOption(option)}
             className={cn(
-              'w-[75px] cursor-pointer rounded-[30px] border-[2.5px] border-solid text-center prose-p2 transition-colors tablet:w-[90px]',
+              'w-[75px] cursor-pointer rounded-[30px] border-[2.5px] border-solid text-center prose-p2 transition-colors',
               isActive
                 ? 'border-blue-400 bg-blue-400 text-neutral-white hover:border-blue-500 hover:bg-blue-500 hover:text-neutral-white'
                 : 'border-blue-400 text-neutral-900 hover:border-blue-500 hover:bg-blue-500 hover:text-neutral-white'
@@ -54,30 +55,27 @@ function NewsReading({ className, items }: NewsReadingProps) {
   }
 
   return (
-    <div className="w-full px-4 tablet:px-[93px]">
+    <div className="w-full px-4">
       <div
         className={cn(
-          'mx-auto flex max-w-[584px] flex-col rounded-[20px] border border-neutral-200 p-6 tablet:flex-row tablet:items-stretch tablet:p-9 desktop:p-12 hd:max-w-[656px]',
+          'mx-auto mt-10 flex max-w-[584px] flex-col rounded-[20px] border border-neutral-200 p-6 tablet:mt-20 tablet:p-9 hd:max-w-[656px]',
           className
         )}
       >
-        <div className="flex flex-col items-center tablet:items-start">
-          <h3 className="mb-2 text-center prose-h6-small text-neutral-900 tablet:mb-4 tablet:prose-h6-large">
-            讀報
-          </h3>
-          <div className="mx-auto flex w-full flex-wrap justify-center gap-2.5 tablet:flex-col">
+        <div className="flex flex-col items-center">
+          <div className="mx-auto flex w-full flex-wrap justify-center gap-2.5">
             {renderButtons}
           </div>
         </div>
 
-        <Divider className="my-4 tablet:hidden" />
-        <Divider
-          className="mx-6 hidden h-auto self-stretch tablet:block"
-          direction="vertical"
+        <Divider className="my-6 tablet:my-9" />
+        <div
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(selectedOption.code, {
+              ALLOWED_TAGS: ['iframe'],
+            }),
+          }}
         />
-        <div className="tablet:flex-1">
-          <div dangerouslySetInnerHTML={{ __html: selectedOption.code }} />
-        </div>
       </div>
     </div>
   )

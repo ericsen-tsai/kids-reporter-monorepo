@@ -27,11 +27,11 @@ function TitleHero({
 }: TitleHeroProps) {
   return (
     <div className="mt-6 desktop:mt-10 hd:mt-12">
-      <div className="flex max-w-[790px] flex-col tablet:mx-[129px] desktop:mx-[176px]">
+      <div className="flex max-w-[790px] flex-col tablet:mx-[129px] desktop:w-[672px] hd:mx-auto hd:w-auto">
         {topicBreadcrumb && (
           <Link
             href={topicBreadcrumb.link}
-            className="relative mb-6 flex w-min items-center gap-2 bg-blue-100 py-2 pl-6 tablet:rounded-l-[8px] tablet:pl-2 hd:mb-8"
+            className="group relative mb-6 flex w-min items-center gap-2 bg-blue-100 py-2 pl-6 transition-colors duration-200 hover:bg-blue-200 tablet:rounded-l-[8px] tablet:pl-2 hd:mb-8"
           >
             <div className="flex size-8 items-center justify-center">
               <Image
@@ -52,7 +52,7 @@ function TitleHero({
               height="48"
               viewBox="0 0 25 48"
               fill="none"
-              className="absolute top-0 -right-6 text-blue-100"
+              className="absolute top-0 -right-6 text-blue-100 transition-colors duration-200 group-hover:text-blue-200"
             >
               <path
                 d="M0 0H0.686291C2.80802 0 4.84285 0.842855 6.34315 2.34315L22.3431 18.3431C25.4673 21.4673 25.4673 26.5327 22.3431 29.6569L6.34315 45.6569C4.84286 47.1571 2.80802 48 0.686291 48H0V0Z"

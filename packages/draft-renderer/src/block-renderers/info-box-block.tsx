@@ -34,9 +34,11 @@ const containerStyles = css`
   border-radius: 30px;
   position: relative;
 
+  margin: 0 auto 60px auto;
+
   ${mediaQuery.smallOnly} {
     padding: 24px;
-    margin: 0 24px;
+    margin: 0 24px 40px;
   }
 
   ${mediaQuery.mediumOnly} {
@@ -165,7 +167,11 @@ function BoxBorder({
 
 const ArticleBodyContainer = styled.div`
   max-width: 584px;
-  margin: 60px auto;
+  margin: 0 auto 60px auto;
+
+  &:last-child {
+    margin: 0 auto 0px auto;
+  }
 
   ${mediaQuery.smallOnly} {
     width: 100%;

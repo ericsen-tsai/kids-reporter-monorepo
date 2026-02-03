@@ -4756,7 +4756,7 @@ __metadata:
     "@keystone-ui/button": "npm:^7.0.2"
     "@keystone-ui/fields": "npm:^7.2.0"
     "@keystone-ui/modals": "npm:^6.0.3"
-    "@kids-reporter/draft-editor": "npm:^1.0.23"
+    "@kids-reporter/draft-editor": "npm:^1.0.24"
     "@twreporter/errors": "npm:^1.1.1"
     axios: "npm:^0.26.0"
     draft-convert: "npm:^2.1.12"
@@ -4818,7 +4818,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@kids-reporter/draft-editor@npm:^1.0.23, @kids-reporter/draft-editor@workspace:packages/draft-editor":
+"@kids-reporter/draft-editor@npm:^1.0.24, @kids-reporter/draft-editor@workspace:packages/draft-editor":
   version: 0.0.0-use.local
   resolution: "@kids-reporter/draft-editor@workspace:packages/draft-editor"
   dependencies:
@@ -4831,7 +4831,7 @@ __metadata:
     "@keystone-ui/button": "npm:^7.0.2"
     "@keystone-ui/fields": "npm:^7.2.0"
     "@keystone-ui/modals": "npm:^6.0.3"
-    "@kids-reporter/draft-renderer": "npm:^1.0.19"
+    "@kids-reporter/draft-renderer": "npm:^1.0.20"
     "@twreporter/errors": "npm:^1.1.2"
     axios: "npm:^1.12.2"
     babel-loader: "npm:^8.3.0"
@@ -4850,7 +4850,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@kids-reporter/draft-renderer@npm:^1.0.13, @kids-reporter/draft-renderer@npm:^1.0.19, @kids-reporter/draft-renderer@workspace:packages/draft-renderer":
+"@kids-reporter/draft-renderer@npm:^1.0.13, @kids-reporter/draft-renderer@npm:^1.0.20, @kids-reporter/draft-renderer@workspace:packages/draft-renderer":
   version: 0.0.0-use.local
   resolution: "@kids-reporter/draft-renderer@workspace:packages/draft-renderer"
   dependencies:
@@ -4915,6 +4915,7 @@ __metadata:
     class-variance-authority: "npm:^0.7.1"
     clsx: "npm:^2.1.1"
     concurrently: "npm:^9.1.2"
+    dompurify: "npm:^3.3.1"
     draft-js: "npm:^0.11.7"
     encoding: "npm:^0.1.13"
     graphql: "npm:^16.8.1"
@@ -7445,6 +7446,13 @@ __metadata:
   version: 4.0.5
   resolution: "@types/tough-cookie@npm:4.0.5"
   checksum: 10c0/68c6921721a3dcb40451543db2174a145ef915bc8bcbe7ad4e59194a0238e776e782b896c7a59f4b93ac6acefca9161fccb31d1ce3b3445cb6faa467297fb473
+  languageName: node
+  linkType: hard
+
+"@types/trusted-types@npm:^2.0.7":
+  version: 2.0.7
+  resolution: "@types/trusted-types@npm:2.0.7"
+  checksum: 10c0/4c4855f10de7c6c135e0d32ce462419d8abbbc33713b31d294596c0cc34ae1fa6112a2f9da729c8f7a20707782b0d69da3b1f8df6645b0366d08825ca1522e0c
   languageName: node
   linkType: hard
 
@@ -9998,6 +10006,18 @@ __metadata:
   dependencies:
     domelementtype: "npm:^2.2.0"
   checksum: 10c0/5c199c7468cb052a8b5ab80b13528f0db3d794c64fc050ba793b574e158e67c93f8336e87fd81e9d5ee43b0e04aea4d8b93ed7be4899cb726a1601b3ba18538b
+  languageName: node
+  linkType: hard
+
+"dompurify@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "dompurify@npm:3.3.1"
+  dependencies:
+    "@types/trusted-types": "npm:^2.0.7"
+  dependenciesMeta:
+    "@types/trusted-types":
+      optional: true
+  checksum: 10c0/fa0a8c55a436ba0d54389195e3d2337e311f56de709a2fc9efc98dbbc7746fa53bb4b74b6ac043b77a279a8f2ebd8685f0ebaa6e58c9e32e92051d529bc0baf8
   languageName: node
   linkType: hard
 

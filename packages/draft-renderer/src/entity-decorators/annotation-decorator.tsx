@@ -26,10 +26,16 @@ const AnnotationBody = styled.div`
   border-top: 2px solid #27b3f5;
   background-color: #f8f8f8;
   padding: 24px 24px;
+
+  & [data-contents='true'] {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
 `
 
 const ArrowIcon = styled.span<{ $showContent: boolean }>`
-  margin-left: 3px;
+  margin: 0 3px;
   display: inline-block;
   vertical-align: middle;
   width: 24px;
