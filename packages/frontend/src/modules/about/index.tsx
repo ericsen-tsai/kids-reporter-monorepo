@@ -13,8 +13,11 @@ import {
   SUBSCRIBE_URL,
 } from '@/constants'
 
+import CrossBorderCollaboration from './components/cross-border-collaboration'
 import DiscoverNews from './components/discover-news'
 import Intro from './components/intro'
+import ReaderRecommendations from './components/reader-recommendations'
+import RelatedProducts from './components/related-products'
 import { tellYouItems } from './constants'
 
 type AboutModuleProps = {
@@ -366,6 +369,11 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
     <main className="flex w-full flex-col items-center justify-center">
       <Intro />
       <DiscoverNews />
+      <div className="w-screen bg-yellow-100">
+        <RelatedProducts />
+        <CrossBorderCollaboration />
+      </div>
+      <ReaderRecommendations />
       {us}
       {tellYou}
       {news}

@@ -4934,7 +4934,7 @@ __metadata:
     react-transition-group: "npm:^4.4.5"
     sonner: "npm:^2.0.7"
     styled-components: "npm:6.1.19"
-    swiper: "npm:^10.1.0"
+    swiper: "npm:^12.0.3"
     tailwind-merge: "npm:^3.3.1"
     tailwindcss: "npm:^4.1.14"
     tw-animate-css: "npm:^1.4.0"
@@ -17403,10 +17403,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swiper@npm:^10.1.0":
-  version: 10.3.1
-  resolution: "swiper@npm:10.3.1"
-  checksum: 10c0/1e9ad5480cbf451d99fab280553d5105eb314f381d98610771f0808cac03962d87967a190696686d62bce8e4ebcbf34962c369f9d502b34fef1582ced17f6f98
+"swiper@npm:^12.0.3":
+  version: 12.0.3
+  resolution: "swiper@npm:12.0.3"
+  checksum: 10c0/a854531791ba45cb0f6086904a99878fd207b42024820df68fbf64e01c20d542438c023ec4765b223f4dbffabf6858d311ec749bdca4ea4b4a7b74150a010162
   languageName: node
   linkType: hard
 
