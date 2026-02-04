@@ -28,8 +28,8 @@ function DiscoverNews() {
           src="/assets/images/about/discover-news/icon.svg"
           alt="Discover News"
           className="size-11 desktop:size-16"
-          width={44}
-          height={44}
+          width={64}
+          height={64}
         />
         探索新聞
       </h2>

@@ -12,8 +12,8 @@ function RelatedProducts() {
           src="/assets/images/about/related-products/icon.svg"
           alt="Related Products"
           className="size-11 desktop:size-16"
-          width={44}
-          height={44}
+          width={64}
+          height={64}
         />
         相關產品
       </h2>

@@ -12,8 +12,8 @@ function CrossBorderCollaboration() {
           src="/assets/images/about/cross-border-collaboration/icon.svg"
           alt="Cross-Border Collaboration"
           className="size-11 desktop:size-16"
-          width={44}
-          height={44}
+          width={64}
+          height={64}
         />
         跨界合作
       </h2>

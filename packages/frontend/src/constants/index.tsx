@@ -87,6 +87,7 @@ export enum AuthorRole {
   READERS = '讀報',
   DONATION_CONTACT = '捐書聯繫窗口',
   MARKETING = '行銷',
+  LITTLE_HELPER = '小幫手',
 }
 
 export const AUTHOR_ROLES_IN_ORDER = [
