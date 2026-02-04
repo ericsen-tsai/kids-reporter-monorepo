@@ -17,7 +17,7 @@ import VideoPlayer from './video-player'
 function RecommendationsSection() {
   const swiperRef = useRef<SwiperCore>()
   return (
-    <section className="w-full bg-yellow-200">
+    <section id="voices" className="w-full scroll-margin-anchor bg-yellow-200">
       <div className="mx-auto flex w-full max-w-300 flex-col items-center justify-center pt-10 pb-14 tablet:pt-12 tablet:pb-16 desktop:px-12 desktop:pt-18 desktop:pb-24 hd:px-30 hd:pt-24 hd:pb-30">
         <h2 className="mb-6 flex items-center gap-2 px-6 prose-h2-small !font-swei text-neutral-900 tablet:mb-8 tablet:px-8 desktop:mb-10 desktop:px-0 desktop:prose-h2-large">
           <Image

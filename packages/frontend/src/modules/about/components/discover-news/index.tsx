@@ -22,7 +22,10 @@ function DiscoverNews() {
   }, [selectedSegment])
 
   return (
-    <div className="flex w-full flex-col items-center justify-center bg-yellow-100 px-6 pt-10 pb-14 tablet:px-8 tablet:pt-12 tablet:pb-16 desktop:px-12 desktop:pt-18 desktop:pb-24 hd:px-30 hd:pt-24 hd:pb-30">
+    <div
+      id="explore"
+      className="flex w-full scroll-margin-anchor flex-col items-center justify-center bg-yellow-100 px-6 pt-10 pb-14 tablet:px-8 tablet:pt-12 tablet:pb-16 desktop:px-12 desktop:pt-18 desktop:pb-24 hd:px-30 hd:pt-24 hd:pb-30"
+    >
       <h2 className="mb-4 flex items-center gap-1 prose-h2-small !font-swei text-neutral-900 desktop:mb-6 desktop:prose-h2-large">
         <Image
           src="/assets/images/about/discover-news/icon.svg"

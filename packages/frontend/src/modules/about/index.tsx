@@ -2,6 +2,7 @@
 
 import { Author } from '@/components/author-card'
 import SupportAction from '@/components/support-action'
+import { TableOfContentSideMenu } from '@/components/table-of-content'
 
 import Awards from './components/awards'
 import CrossBorderCollaboration from './components/cross-border-collaboration'
@@ -12,6 +13,7 @@ import ReaderRecommendations from './components/reader-recommendations'
 import RelatedProducts from './components/related-products'
 import SupportActionContent from './components/support-action-content'
 import TeamMemberAndConsultant from './components/team-member-and-consultant'
+import { ABOUT_TOC_INDEXES } from './constants'
 
 type AboutModuleProps = {
   teamMembers: Author[]
@@ -21,6 +23,11 @@ type AboutModuleProps = {
 function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
   return (
     <main className="flex w-full flex-col items-center justify-center overflow-x-hidden">
+      <TableOfContentSideMenu
+        indexes={ABOUT_TOC_INDEXES}
+        anchorIdPrefix=""
+        ariaLabel="關於我們目錄"
+      />
       <Intro />
       <DiscoverNews />
       <div className="w-screen bg-yellow-100">

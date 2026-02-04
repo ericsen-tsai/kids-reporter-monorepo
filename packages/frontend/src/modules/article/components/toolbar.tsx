@@ -3,6 +3,7 @@ import { cn, ScrollLevel, useScrollLevel } from '@kids-reporter/routing-ui'
 import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+import { DEFAULT_SCROLL_DOWN_DISTANCE } from '@/components/table-of-content'
 import { FontSizeLevel } from '@/constants'
 import useClickOutside from '@/hooks/use-click-outside'
 import {
@@ -15,7 +16,7 @@ import {
 import { useArticleContext } from '@/modules/article/context'
 import PostEssayQuestionsModal from '@/modules/idea-hub/post-essay-questions-modal'
 
-import { ARTICLE_WIDGET_SCROLL_DOWN_DISTANCE, SHARE_ICONS } from '../constants'
+import { SHARE_ICONS } from '../constants'
 
 type MobileToolbarProp = {
   topicURL?: string
@@ -25,7 +26,7 @@ type MobileToolbarProp = {
 function MobileToolbar({ topicURL, onCheckAnswerClick }: MobileToolbarProp) {
   const [isSharePanelOpen, setIsSharePanelOpen] = useState(false)
   const scrollLevel = useScrollLevel({
-    scrollDownDistance: ARTICLE_WIDGET_SCROLL_DOWN_DISTANCE,
+    scrollDownDistance: DEFAULT_SCROLL_DOWN_DISTANCE,
   })
   const { onFontSizeChange } = useArticleContext()
   const toolbarRef = useRef<HTMLDivElement>(null)

@@ -2,6 +2,7 @@
 import {
   ADDITIONAL_MENU_ITEMS,
   DONATE_URL,
+  JOIN_US_URL,
   MENU_ITEMS,
   READING_SETTINGS_URL,
   SEARCH_PLACEHOLDER,
@@ -28,6 +29,7 @@ type HeaderProps = {
   subscribeUrl?: string
   donateUrl?: string
   readingSettingsUrl?: string
+  joinUsUrl?: string
 }
 
 function Header({
@@ -38,6 +40,7 @@ function Header({
   subscribeUrl = SUBSCRIBE_URL,
   donateUrl = DONATE_URL,
   readingSettingsUrl = READING_SETTINGS_URL,
+  joinUsUrl = JOIN_US_URL,
 }: HeaderProps) {
   const context = useHeaderContext()
   const postTitle = context?.postTitle
@@ -80,6 +83,7 @@ function Header({
         isLoggedIn={isLoggedIn}
         loginUrl={loginUrl}
         readingSettingsUrl={readingSettingsUrl}
+        joinUsUrl={joinUsUrl}
       />
       <MobileHeader
         onCloseMenu={onCloseMenu}

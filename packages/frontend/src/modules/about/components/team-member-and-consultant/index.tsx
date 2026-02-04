@@ -3,6 +3,7 @@
 import Image from 'next/image'
 
 import { Author } from '@/components/author-card'
+import { AuthorRole } from '@/constants'
 
 import MemberCard from './team-member-card'
 
@@ -20,8 +21,7 @@ function TeamMemberAndConsultant({
       <div className="mx-auto flex w-full max-w-full flex-col gap-10 tablet:w-max">
         <div
           id="team"
-          style={{ scrollMarginTop: '62px' }}
-          className="my-10 flex flex-col gap-6 tablet:my-24 desktop:my-32 desktop:gap-8 hd:my-36 hd:gap-10"
+          className="my-10 flex scroll-margin-anchor flex-col gap-6 tablet:my-24 desktop:my-32 desktop:gap-8 hd:my-36 hd:gap-10"
         >
           <div className="flex items-center gap-3 px-6 tablet:mx-auto tablet:px-8">
             <Image
@@ -39,16 +39,18 @@ function TeamMemberAndConsultant({
           <div className="flex scrollbar-thin min-w-0 snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 pb-2 tablet:grid tablet:snap-none tablet:grid-cols-2 desktop:grid-cols-3 desktop:gap-8 hd:grid-cols-4">
             {teamMembers.map((member) => (
               <div key={member.id} className="w-[248px] shrink-0 snap-start">
-                <MemberCard member={member} isTeamMember />
+                <MemberCard
+                  member={member}
+                  isTeamMember={member.role !== AuthorRole.LITTLE_HELPER}
+                />
               </div>
             ))}
           </div>
         </div>
 
         <div
-          id="consultants"
-          style={{ scrollMarginTop: '62px' }}
-          className="flex flex-col gap-6 desktop:gap-8 hd:gap-10"
+          id="advisors"
+          className="flex scroll-margin-anchor flex-col gap-6 desktop:gap-8 hd:gap-10"
         >
           <div className="flex items-center gap-3 px-6 tablet:mx-auto tablet:px-8">
             <Image
