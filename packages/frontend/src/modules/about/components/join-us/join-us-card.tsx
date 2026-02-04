@@ -51,7 +51,7 @@ function JoinUsCard({ card }: JoinUsCardProps) {
     <div
       id={card.anchorId}
       className="flex h-full flex-col overflow-hidden rounded-3xl bg-neutral-white shadow-custom"
-      style={card.anchorId ? { scrollMarginTop: '80px' } : undefined}
+      style={card.anchorId ? { scrollMarginTop: '64px' } : undefined}
     >
       <div className="flex flex-1 flex-col gap-3 p-6 desktop:gap-4 desktop:p-8">
         <h3 className="flex items-center gap-3 prose-p1-bold text-neutral-900 desktop:prose-h6-large">
