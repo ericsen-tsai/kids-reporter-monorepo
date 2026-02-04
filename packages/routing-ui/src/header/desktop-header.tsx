@@ -21,7 +21,6 @@ type DesktopHeaderProps = {
   menuItems: MenuItem[]
   isLoggedIn?: boolean
   loginUrl?: string
-  readingSettingsUrl: string
   joinUsUrl: string
 }
 
@@ -36,7 +35,6 @@ export function DesktopHeader({
   menuItems,
   isLoggedIn,
   loginUrl,
-  readingSettingsUrl,
   joinUsUrl,
 }: DesktopHeaderProps) {
   return (
@@ -104,7 +102,6 @@ export function DesktopHeader({
                   hideCtaButtons={compactMode}
                   searchPlaceholder={searchPlaceholder}
                   subscribeUrl={subscribeUrl}
-                  readingSettingsUrl={readingSettingsUrl}
                   joinUsUrl={joinUsUrl}
                 />
                 <a
