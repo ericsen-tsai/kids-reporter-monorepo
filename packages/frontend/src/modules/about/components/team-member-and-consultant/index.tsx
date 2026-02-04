@@ -21,8 +21,7 @@ function TeamMemberAndConsultant({
       <div className="mx-auto flex w-full max-w-full flex-col gap-10 tablet:w-max">
         <div
           id="team"
-          style={{ scrollMarginTop: '64px' }}
-          className="my-10 flex flex-col gap-6 tablet:my-24 desktop:my-32 desktop:gap-8 hd:my-36 hd:gap-10"
+          className="my-10 flex scroll-margin-anchor flex-col gap-6 tablet:my-24 desktop:my-32 desktop:gap-8 hd:my-36 hd:gap-10"
         >
           <div className="flex items-center gap-3 px-6 tablet:mx-auto tablet:px-8">
             <Image
@@ -51,8 +50,7 @@ function TeamMemberAndConsultant({
 
         <div
           id="advisors"
-          style={{ scrollMarginTop: '64px' }}
-          className="flex flex-col gap-6 desktop:gap-8 hd:gap-10"
+          className="flex scroll-margin-anchor flex-col gap-6 desktop:gap-8 hd:gap-10"
         >
           <div className="flex items-center gap-3 px-6 tablet:mx-auto tablet:px-8">
             <Image

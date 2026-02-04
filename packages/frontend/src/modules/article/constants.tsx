@@ -7,7 +7,6 @@ import {
   ThreadsIcon,
 } from '@/icons/miscellaneous'
 
-export const ARTICLE_WIDGET_SCROLL_DOWN_DISTANCE = 220
 export const SHARE_ICONS = [
   {
     icon: <FaceBookIcon />,

@@ -6,8 +6,7 @@ function Intro() {
   return (
     <section
       id="mission"
-      style={{ scrollMarginTop: '64px' }}
-      className="relative w-full max-w-300 bg-neutral-white"
+      className="relative w-full max-w-300 scroll-margin-anchor bg-neutral-white"
     >
       <div className="relative z-1 flex w-full flex-col gap-6 px-6 pt-6 pb-[45.5px] tablet:flex-row tablet:items-start tablet:justify-center tablet:px-8 tablet:pt-8 tablet:pb-[85px] desktop:items-center desktop:gap-8 desktop:px-12 desktop:pt-12 desktop:pb-[90px] hd:translate-x-[55px] hd:gap-28 hd:pb-25">
         <div className="flex w-full flex-1 flex-col gap-6 tablet:gap-8">

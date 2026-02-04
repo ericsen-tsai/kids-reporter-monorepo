@@ -39,7 +39,6 @@ import StartReadingBaodaozaiEventTrigger from './components/start-reading-baodao
 import SupportActionContent from './components/support-action-content'
 import TitleHero from './components/title-hero'
 import Toolbar from './components/toolbar'
-import { ARTICLE_WIDGET_SCROLL_DOWN_DISTANCE } from './constants'
 import { ArticleContext } from './context'
 import useBatchSubmitAnswers from './hooks/use-batch-submit-answers'
 import { Keyword } from './types'
@@ -224,12 +223,7 @@ const ArticleModule = ({
     <>
       <BaodaozaiVisibilitySetter show={showBaodaozai} />
       <HeaderPostTitleSetter postTitle={post?.title} />
-      {tocIndexes.length > 0 && (
-        <TableOfContentSideMenu
-          indexes={tocIndexes}
-          scrollDownDistance={ARTICLE_WIDGET_SCROLL_DOWN_DISTANCE}
-        />
-      )}
+      {tocIndexes.length > 0 && <TableOfContentSideMenu indexes={tocIndexes} />}
       <div className="relative w-screen">
         <ArticleContext.Provider
           value={{

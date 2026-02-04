@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@kids-reporter/routing-ui'
+import { Button, cn } from '@kids-reporter/routing-ui'
 import Image from 'next/image'
 
 import { useFeatureIntroDialogContext } from '@/services/feature-intro/context'
@@ -50,8 +50,10 @@ function JoinUsCard({ card }: JoinUsCardProps) {
   return (
     <div
       id={card.anchorId}
-      className="flex h-full flex-col overflow-hidden rounded-3xl bg-neutral-white shadow-custom"
-      style={card.anchorId ? { scrollMarginTop: '64px' } : undefined}
+      className={cn(
+        'flex h-full flex-col overflow-hidden rounded-3xl bg-neutral-white shadow-custom',
+        card.anchorId && 'scroll-margin-anchor'
+      )}
     >
       <div className="flex flex-1 flex-col gap-3 p-6 desktop:gap-4 desktop:p-8">
         <h3 className="flex items-center gap-3 prose-p1-bold text-neutral-900 desktop:prose-h6-large">

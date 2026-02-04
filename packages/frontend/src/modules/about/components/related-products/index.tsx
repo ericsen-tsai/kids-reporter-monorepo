@@ -8,8 +8,7 @@ function RelatedProducts() {
   return (
     <section
       id="products"
-      style={{ scrollMarginTop: '64px' }}
-      className="mx-auto flex w-full max-w-300 flex-col items-center justify-center px-6 pt-10 pb-20 tablet:px-8 tablet:pt-12 tablet:pb-24 desktop:px-12 desktop:pt-18 desktop:pb-32 hd:px-30 hd:pt-24 hd:pb-36"
+      className="mx-auto flex w-full max-w-300 scroll-margin-anchor flex-col items-center justify-center px-6 pt-10 pb-20 tablet:px-8 tablet:pt-12 tablet:pb-24 desktop:px-12 desktop:pt-18 desktop:pb-32 hd:px-30 hd:pt-24 hd:pb-36"
     >
       <h2 className="mb-6 flex items-center gap-2 self-start prose-h2-small !font-swei text-neutral-900 desktop:mb-10 desktop:prose-h2-large">
         <Image
