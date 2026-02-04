@@ -3,6 +3,7 @@
 import Image from 'next/image'
 
 import { Author } from '@/components/author-card'
+import { AuthorRole } from '@/constants'
 
 import MemberCard from './team-member-card'
 
@@ -39,7 +40,10 @@ function TeamMemberAndConsultant({
           <div className="flex scrollbar-thin min-w-0 snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 pb-2 tablet:grid tablet:snap-none tablet:grid-cols-2 desktop:grid-cols-3 desktop:gap-8 hd:grid-cols-4">
             {teamMembers.map((member) => (
               <div key={member.id} className="w-[248px] shrink-0 snap-start">
-                <MemberCard member={member} isTeamMember />
+                <MemberCard
+                  member={member}
+                  isTeamMember={member.role !== AuthorRole.LITTLE_HELPER}
+                />
               </div>
             ))}
           </div>
