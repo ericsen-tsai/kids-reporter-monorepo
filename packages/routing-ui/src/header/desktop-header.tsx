@@ -22,6 +22,7 @@ type DesktopHeaderProps = {
   isLoggedIn?: boolean
   loginUrl?: string
   readingSettingsUrl: string
+  joinUsUrl: string
 }
 
 export function DesktopHeader({
@@ -36,6 +37,7 @@ export function DesktopHeader({
   isLoggedIn,
   loginUrl,
   readingSettingsUrl,
+  joinUsUrl,
 }: DesktopHeaderProps) {
   return (
     <>
@@ -103,6 +105,7 @@ export function DesktopHeader({
                   searchPlaceholder={searchPlaceholder}
                   subscribeUrl={subscribeUrl}
                   readingSettingsUrl={readingSettingsUrl}
+                  joinUsUrl={joinUsUrl}
                 />
                 <a
                   href={isLoggedIn ? '/member' : (loginUrl ?? '/login')}

@@ -197,12 +197,14 @@ export function ActionButtons({
   searchPlaceholder,
   subscribeUrl,
   readingSettingsUrl,
+  joinUsUrl,
 }: {
   hideCtaButtons?: boolean
   tags: string[]
   searchPlaceholder: string
   subscribeUrl: string
   readingSettingsUrl: string
+  joinUsUrl: string
 }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
 
@@ -235,7 +237,7 @@ export function ActionButtons({
         {!hideCtaButtons && !isSearchOpen && (
           <div className="gap-4 flex items-center">
             <Button variant="secondary" size={32} asChild>
-              <a href="/about#post">投稿</a>
+              <a href={joinUsUrl}>加入我們</a>
             </Button>
             <Button variant="primary" size={32} asChild>
               <a href={subscribeUrl} target="_blank" rel="noopener noreferrer">
