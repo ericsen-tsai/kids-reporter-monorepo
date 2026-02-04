@@ -16,14 +16,14 @@ function TeamMemberAndConsultant({
   consultants,
 }: TeamMemberAndConsultantProps) {
   return (
-    <section className="mx-auto w-full max-w-300 px-6 pb-14 tablet:px-8 tablet:pb-16 desktop:pb-24 hd:pb-30">
-      <div className="mx-auto flex w-max flex-col gap-10">
+    <section className="mx-auto w-full max-w-300 pb-14 tablet:pb-16 desktop:pb-24 hd:pb-30">
+      <div className="mx-auto flex w-full max-w-full flex-col gap-10 tablet:w-max">
         <div
           id="team"
           style={{ scrollMarginTop: '62px' }}
           className="my-10 flex flex-col gap-6 tablet:my-24 desktop:my-32 desktop:gap-8 hd:my-36 hd:gap-10"
         >
-          <div className="flex items-center gap-3 tablet:mx-auto">
+          <div className="flex items-center gap-3 px-6 tablet:mx-auto tablet:px-8">
             <Image
               src="/assets/images/about/team-member-and-consultant/team_icon.svg"
               alt="Team icon"
@@ -36,9 +36,9 @@ function TeamMemberAndConsultant({
             </h2>
           </div>
 
-          <div className="flex scrollbar-thin snap-x snap-mandatory gap-6 overflow-x-auto pb-2 tablet:grid tablet:snap-none tablet:grid-cols-2 tablet:overflow-x-hidden desktop:grid-cols-3 desktop:gap-8 hd:grid-cols-4">
+          <div className="flex scrollbar-thin min-w-0 snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 pb-2 tablet:grid tablet:snap-none tablet:grid-cols-2 desktop:grid-cols-3 desktop:gap-8 hd:grid-cols-4">
             {teamMembers.map((member) => (
-              <div key={member.id} className="w-[248px] snap-start">
+              <div key={member.id} className="w-[248px] shrink-0 snap-start">
                 <MemberCard member={member} isTeamMember />
               </div>
             ))}
@@ -50,7 +50,7 @@ function TeamMemberAndConsultant({
           style={{ scrollMarginTop: '62px' }}
           className="flex flex-col gap-6 desktop:gap-8 hd:gap-10"
         >
-          <div className="flex items-center gap-3 tablet:mx-auto">
+          <div className="flex items-center gap-3 px-6 tablet:mx-auto tablet:px-8">
             <Image
               src="/assets/images/about/team-member-and-consultant/consultant_icon.svg"
               alt="Consultant icon"
@@ -63,9 +63,12 @@ function TeamMemberAndConsultant({
             </h2>
           </div>
 
-          <div className="flex scrollbar-thin snap-x snap-mandatory gap-6 overflow-x-auto pb-2 tablet:grid tablet:snap-none tablet:grid-cols-2 tablet:overflow-x-hidden desktop:grid-cols-3 desktop:gap-8 hd:grid-cols-4">
+          <div className="flex scrollbar-thin min-w-0 snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 pb-2 tablet:grid tablet:snap-none tablet:grid-cols-2 desktop:grid-cols-3 desktop:gap-8 hd:grid-cols-4">
             {consultants.map((consultant) => (
-              <div key={consultant.id} className="w-[248px] snap-start">
+              <div
+                key={consultant.id}
+                className="w-[248px] shrink-0 snap-start"
+              >
                 <MemberCard member={consultant} />
               </div>
             ))}
