@@ -8,7 +8,6 @@ import {
   HamburgerIcon,
   HamburgerIconSmall,
   SearchIcon,
-  SettingsIcon,
 } from '../icons'
 import type { MenuItem } from '../types'
 import { cn } from '../utils/cn'
@@ -196,14 +195,12 @@ export function ActionButtons({
   tags,
   searchPlaceholder,
   subscribeUrl,
-  readingSettingsUrl,
   joinUsUrl,
 }: {
   hideCtaButtons?: boolean
   tags: string[]
   searchPlaceholder: string
   subscribeUrl: string
-  readingSettingsUrl: string
   joinUsUrl: string
 }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -263,13 +260,6 @@ export function ActionButtons({
       >
         {isSearchOpen ? <ClearIcon /> : <SearchIcon />}
       </button>
-      <a
-        className="w-8 h-8 flex items-center justify-center rounded-full text-neutral-600 transition-all duration-200 hover:text-neutral-800"
-        aria-label="設定"
-        href={readingSettingsUrl}
-      >
-        <SettingsIcon />
-      </a>
     </div>
   )
 }
