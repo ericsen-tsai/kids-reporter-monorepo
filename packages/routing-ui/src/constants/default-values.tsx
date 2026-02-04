@@ -1,4 +1,4 @@
-import { SettingsIconSmall } from '../icons'
+import { MyReadingIconSmall, SettingsIconSmall } from '../icons'
 import { MenuItem } from '../types'
 
 export const SUBSCRIBE_URL =
@@ -78,15 +78,30 @@ export const MENU_ITEMS: MenuItem[] = [
   },
 ]
 
+export const MY_READING_URL = '/myreading'
 export const READING_SETTINGS_URL = '/custom'
 
 export const ADDITIONAL_MENU_ITEMS: MenuItem[] = [
   {
-    label: '閱讀探索設定',
+    label: '我的回答',
+    href: MY_READING_URL,
+    subItems: [],
+    showIcon: true,
+    icon: <MyReadingIconSmall />,
+    hideInFooter: true,
+  },
+  {
+    label: '閱讀設定',
     href: READING_SETTINGS_URL,
     subItems: [],
     showIcon: true,
     icon: <SettingsIconSmall />,
+    hideInFooter: true,
+  },
+  {
+    label: '小讀者觀點大集合',
+    href: '/idea-hub',
+    subItems: [],
     hideInFooter: true,
   },
   {
@@ -99,12 +114,7 @@ export const ADDITIONAL_MENU_ITEMS: MenuItem[] = [
     href: '/about#call',
     subItems: [],
   },
-  {
-    label: '小讀者觀點大集合',
-    href: '/idea-hub',
-    subItems: [],
-    hideInFooter: true,
-  },
+
   {
     label: '我要投稿',
     href: 'https://forms.gle/49AEG8kFj7QWjgij8',

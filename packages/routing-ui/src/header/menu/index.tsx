@@ -133,9 +133,14 @@ function Menu({
 
             <Divider />
 
-            {/* Reading Settings */}
+            {/* My Reading */}
             <HeaderMenuItem
               {...additionalMenuItems?.[0]}
+              contentClassName="text-neutral-600 [&_span]:[font-family:var(--font-family-noto)] [&_span]:[font-size:var(--font-size-p2)] [&_span]:[font-weight:500] [&_span]:[line-height:var(--line-height-normal)] [&_span]:[letter-spacing:var(--letter-spacing-wide)] hover:text-neutral-900"
+            />
+            {/* Reading Settings */}
+            <HeaderMenuItem
+              {...additionalMenuItems?.[1]}
               contentClassName="text-neutral-600 [&_span]:[font-family:var(--font-family-noto)] [&_span]:[font-size:var(--font-size-p2)] [&_span]:[font-weight:500] [&_span]:[line-height:var(--line-height-normal)] [&_span]:[letter-spacing:var(--letter-spacing-wide)] hover:text-neutral-900"
             />
 
@@ -143,9 +148,9 @@ function Menu({
 
             {/* About Us Section */}
             <div className="py-2">
-              {additionalMenuItems.slice(1).map((item, index) => (
+              {additionalMenuItems.slice(2).map((item) => (
                 <HeaderMenuItem
-                  key={index}
+                  key={item.label}
                   label={item.label}
                   href={item.href}
                   external={item.external}
