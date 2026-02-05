@@ -2,7 +2,6 @@
 
 import { GetPostQuery } from '__generated__/operations/content.generated'
 import { cn } from '@kids-reporter/routing-ui'
-import DOMPurify from 'isomorphic-dompurify'
 import { memo, useMemo, useState } from 'react'
 
 import Divider from '@/components/divider'
@@ -71,9 +70,7 @@ function NewsReading({ className, items }: NewsReadingProps) {
         <Divider className="my-6 tablet:my-9" />
         <div
           dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(selectedOption.code, {
-              ALLOWED_TAGS: ['iframe'],
-            }),
+            __html: selectedOption.code,
           }}
         />
       </div>

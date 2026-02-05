@@ -857,7 +857,7 @@ export const ToolbarCheckAnswerIcon = () => {
     >
       <path
         d="M15.6445 5.00063L15.6445 11.2037C15.6445 12.3083 14.7491 13.2037 13.6445 13.2037L5.21378 13.2037L2.00026 16.2471L2.00026 13.2037L2.00026 5.00063C2.00026 3.89606 2.89569 3.00063 4.00026 3.00063L13.6445 3.00063C14.7491 3.00063 15.6445 3.89606 15.6445 5.00063Z"
-        stroke="white"
+        stroke="currentColor"
         strokeWidth="2.2"
         strokeMiterlimit="10"
         strokeLinecap="round"
@@ -865,7 +865,7 @@ export const ToolbarCheckAnswerIcon = () => {
       />
       <path
         d="M18.7872 9.28481L20.0007 9.28481C21.1053 9.28481 22.0007 10.1802 22.0007 11.2848L22.0007 18.4879L22.0007 21.5312L18.7872 18.4879L10.3439 18.4879C9.24624 18.4879 8.35645 17.5981 8.35645 16.5005"
-        stroke="white"
+        stroke="currentColor"
         strokeWidth="2.2"
         strokeMiterlimit="10"
         strokeLinecap="round"
