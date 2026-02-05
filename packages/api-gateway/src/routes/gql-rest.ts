@@ -198,10 +198,15 @@ export function createGqlRestRouter({
           console.log(
             JSON.stringify({
               severity: 'ERROR',
-              message: errors.helpers.printAll(annotatedErr, {
-                withStack: true,
-                withPayload: true,
-              }),
+              message: errors.helpers.printAll(
+                annotatedErr,
+                {
+                  withStack: true,
+                  withPayload: true,
+                },
+                0,
+                0
+              ),
               ...res?.locals?.globalLogFields,
             })
           )
