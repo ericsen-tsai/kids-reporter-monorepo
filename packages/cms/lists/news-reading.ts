@@ -1,7 +1,7 @@
 import { list } from '@keystone-6/core'
 import { integer, relationship, text, timestamp } from '@keystone-6/core/fields'
 import type { ListConfig } from '@keystone-6/core/types'
-import DOMPurify from 'isomorphic-dompurify'
+import sanitizeHtml from 'sanitize-html'
 
 import {
   allowAllRoles,
@@ -76,23 +76,26 @@ const NewsReadingGroupItem: ListConfig<any> = list({
         (operation === 'create' || operation === 'update') &&
         resolvedData.embedCode != null
       ) {
-        resolvedData.embedCode = DOMPurify.sanitize(resolvedData.embedCode, {
-          ADD_TAGS: ['iframe'],
-          ADD_ATTR: [
-            'align',
-            'allow',
-            'fetchpriority',
-            'frameborder',
-            'height',
-            'loading',
-            'name',
-            'referrerpolicy',
-            'fullscreen',
-            'src',
-            'style',
-            'title',
-            'width',
-          ],
+        resolvedData.embedCode = sanitizeHtml(resolvedData.embedCode, {
+          allowedTags: ['iframe'],
+          allowedAttributes: {
+            iframe: [
+              'align',
+              'allow',
+              'fetchpriority',
+              'frameborder',
+              'allowfullscreen',
+              'height',
+              'loading',
+              'name',
+              'referrerpolicy',
+              'fullscreen',
+              'src',
+              'style',
+              'title',
+              'width',
+            ],
+          },
         })
       }
 
