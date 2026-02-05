@@ -62,7 +62,7 @@ function NavBar({
   return (
     <div
       className={cn(
-        'sticky bottom-0 left-0 z-1001 opacity-0 transition-opacity duration-200',
+        'sticky bottom-0 left-0 z-nav opacity-0 transition-opacity duration-200',
         showNavBar && 'opacity-100'
       )}
     >
