@@ -26,7 +26,8 @@ function AllAnswers({ onOpenModal }: AllAnswersProps) {
   const loadMoreRef = useRef<HTMLDivElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
-  const [hasShownToast, setHasShownToast] = useState(false)
+  const hasShownToastRef = useRef(false)
+  const showNavBarRef = useRef(false)
   const [showNavBar, setShowNavBar] = useState(false)
   const {
     data: posts,
@@ -79,23 +80,25 @@ function AllAnswers({ onOpenModal }: AllAnswersProps) {
   }, [hasNextPage, isFetchingNextPage, fetchNextPage])
 
   useEffect(() => {
-    if (!titleRef.current) return
-    const title = titleRef.current
     const handleScroll = () => {
+      const title = titleRef.current
+      if (!title) return
       const titleRect = title.getBoundingClientRect()
       const threshold = 120
-      if (titleRect.top < threshold && !hasShownToast) {
+      if (titleRect.top < threshold && !hasShownToastRef.current) {
         toast.success('向左滑動可以看到更多文章喔！', {
           className: 'desktop:!bottom-19',
         })
-        setHasShownToast(true)
+        hasShownToastRef.current = true
       }
 
-      if (titleRect.top < threshold && !showNavBar) {
+      if (titleRect.top < threshold && !showNavBarRef.current) {
+        showNavBarRef.current = true
         setShowNavBar(true)
       }
 
-      if (titleRect.top > threshold && showNavBar) {
+      if (titleRect.top > threshold && showNavBarRef.current) {
+        showNavBarRef.current = false
         setShowNavBar(false)
       }
     }
@@ -105,7 +108,7 @@ function AllAnswers({ onOpenModal }: AllAnswersProps) {
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [hasShownToast, showNavBar])
+  }, [])
 
   const showLoading = isLoading || isFetchingNextPage
   const handleScrollToTop = () => {
@@ -157,7 +160,7 @@ function AllAnswers({ onOpenModal }: AllAnswersProps) {
               <div
                 key={`skeleton-${index}`}
                 className="shrink-0 snap-start"
-                data-card-index={index - 1}
+                data-card-index={(posts?.length ?? 0) + index - 1}
               >
                 <PostAnswerCardSkeleton />
               </div>

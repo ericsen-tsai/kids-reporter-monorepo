@@ -21,8 +21,7 @@ const getScrollAmount = (container: HTMLDivElement): number => {
   if (!firstCard) return 0
 
   const cardWidth = firstCard.offsetWidth
-  const gap =
-    parseInt(window.getComputedStyle(container).gap.replace('px', ''), 10) || 24
+  const gap = parseInt(window.getComputedStyle(container).gap, 10) || 24
   return cardWidth + gap
 }
 
@@ -58,8 +57,8 @@ function NavBar({
   return (
     <div
       className={cn(
-        'sticky bottom-0 left-0 z-nav opacity-0 transition-opacity duration-200',
-        showNavBar && 'opacity-100'
+        'pointer-events-none sticky bottom-0 left-0 z-nav opacity-0 transition-opacity duration-200',
+        showNavBar && 'pointer-events-auto opacity-100'
       )}
     >
       <div
