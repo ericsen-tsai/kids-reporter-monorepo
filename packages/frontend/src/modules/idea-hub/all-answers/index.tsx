@@ -101,7 +101,7 @@ function AllAnswers({ onOpenModal }: AllAnswersProps) {
   const showLoading = isLoading || isFetchingNextPage
 
   return (
-    <div className="flex w-[calc(100%+48px)] flex-col gap-6 bg-neutral-100 pt-10 pb-12 tablet:w-[calc(100%+64px)] tablet:gap-8 tablet:pt-12 tablet:pb-14 desktop:w-[calc(100%+96px)] desktop:gap-10 desktop:pt-18 desktop:pb-22 hd:w-screen hd:pt-24 hd:pb-28">
+    <div className="flex w-[calc(100%+48px)] flex-col gap-6 bg-neutral-100 pt-10 pb-12 tablet:w-[calc(100%+64px)] tablet:gap-8 tablet:pt-12 tablet:pb-14 desktop:w-screen desktop:gap-10 desktop:pt-18 desktop:pb-22 hd:w-screen hd:pt-24 hd:pb-28">
       <div
         ref={titleRef}
         className="flex items-center gap-3 pl-6 tablet:pl-8 desktop:pl-12 hd:pl-[calc(50vw-600px+64px)]"
