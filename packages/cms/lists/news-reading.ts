@@ -96,7 +96,6 @@ const NewsReadingGroupItem: ListConfig<any> = list({
         })
       }
 
-      console.log({ embedCode: resolvedData.embedCode })
       return resolvedData
     },
   },
