@@ -14,6 +14,18 @@ type NavBarProps = {
 
 const CARD_DATA_INDEX_ATTR = 'data-card-index'
 
+const getScrollAmount = (container: HTMLDivElement): number => {
+  const firstCard = container.querySelector<HTMLElement>(
+    `[${CARD_DATA_INDEX_ATTR}="0"]`
+  )
+  if (!firstCard) return 0
+
+  const cardWidth = firstCard.offsetWidth
+  const gap =
+    parseInt(window.getComputedStyle(container).gap.replace('px', ''), 10) || 24
+  return cardWidth + gap
+}
+
 function NavBar({
   scrollContainerRef,
   onScrollToTop,
@@ -22,18 +34,10 @@ function NavBar({
   const scrollLeft = useCallback(() => {
     const container = scrollContainerRef.current
     if (!container) return
-    const firstCard = container.querySelector<HTMLElement>(
-      `[${CARD_DATA_INDEX_ATTR}="0"]`
-    )
-    if (firstCard) {
-      const cardWidth = firstCard.offsetWidth
-      const gap =
-        parseInt(
-          window.getComputedStyle(container).gap.replace('px', ''),
-          10
-        ) || 24
+    const scrollAmount = getScrollAmount(container)
+    if (scrollAmount > 0) {
       container.scrollBy({
-        left: -(cardWidth + gap),
+        left: -scrollAmount,
         behavior: 'smooth',
       })
     }
@@ -42,18 +46,10 @@ function NavBar({
   const scrollRight = useCallback(() => {
     const container = scrollContainerRef.current
     if (!container) return
-    const firstCard = container.querySelector<HTMLElement>(
-      `[${CARD_DATA_INDEX_ATTR}="0"]`
-    )
-    if (firstCard) {
-      const cardWidth = firstCard.offsetWidth
-      const gap =
-        parseInt(
-          window.getComputedStyle(container).gap.replace('px', ''),
-          10
-        ) || 24
+    const scrollAmount = getScrollAmount(container)
+    if (scrollAmount > 0) {
       container.scrollBy({
-        left: cardWidth + gap,
+        left: scrollAmount,
         behavior: 'smooth',
       })
     }
