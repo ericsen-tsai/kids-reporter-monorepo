@@ -76,8 +76,27 @@ const NewsReadingGroupItem: ListConfig<any> = list({
         (operation === 'create' || operation === 'update') &&
         resolvedData.embedCode != null
       ) {
-        resolvedData.embedCode = DOMPurify.sanitize(resolvedData.embedCode)
+        resolvedData.embedCode = DOMPurify.sanitize(resolvedData.embedCode, {
+          ADD_TAGS: ['iframe'],
+          ADD_ATTR: [
+            'align',
+            'allow',
+            'fetchpriority',
+            'frameborder',
+            'height',
+            'loading',
+            'name',
+            'referrerpolicy',
+            'fullscreen',
+            'src',
+            'style',
+            'title',
+            'width',
+          ],
+        })
       }
+
+      console.log({ embedCode: resolvedData.embedCode })
       return resolvedData
     },
   },
