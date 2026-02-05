@@ -2,7 +2,7 @@
 
 import { GetPostQuery } from '__generated__/operations/content.generated'
 import { cn } from '@kids-reporter/routing-ui'
-import DOMPurify from 'dompurify'
+import DOMPurify from 'isomorphic-dompurify'
 import { memo, useMemo, useState } from 'react'
 
 import Divider from '@/components/divider'
