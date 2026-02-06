@@ -78,7 +78,7 @@ export const createMultipartRewriteHandler = ({
           'GraphQLRestMultipartServerError',
           'GraphQL REST multipart server error'
         )
-        console.log(
+        console.error(
           JSON.stringify({
             severity: 'ERROR',
             message: errors.helpers.printAll(

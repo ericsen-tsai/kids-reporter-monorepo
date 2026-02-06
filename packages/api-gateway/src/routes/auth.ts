@@ -176,7 +176,7 @@ export function createAuthRouter() {
         }
       }
 
-      console.log(
+      console.error(
         JSON.stringify({
           severity: 'ERROR',
           message:
