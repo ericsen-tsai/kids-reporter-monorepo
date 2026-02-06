@@ -8,6 +8,7 @@ import consts from './constants.js'
 import middlewareCreator from './middlewares/index.js'
 import { createAuthRouter } from './routes/auth.js'
 import { createGqlRestRouter } from './routes/gql-rest.js'
+import { createHealthRouter } from './routes/health.js'
 
 // @twreporter/errors is a cjs module, therefore, we need to use its default property
 const errors = _errors.default
@@ -55,6 +56,9 @@ export function createApp({
 
   // Set the global JSON body limit to 1MB to support typical GraphQL payloads
   app.use(express.json({ limit: '1mb' }))
+
+  // Health check route
+  app.use(createHealthRouter())
 
   // RESTful GraphQL routes
   app.use(createGqlRestRouter(gql))

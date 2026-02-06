@@ -195,7 +195,7 @@ export function createGqlRestRouter({
             'GraphQLRestError',
             'Failed to call CMS GraphQL'
           )
-          console.log(
+          console.error(
             JSON.stringify({
               severity: 'ERROR',
               message: errors.helpers.printAll(
