@@ -10,6 +10,7 @@ const LinkWrapper = styled.a`
   transition: text-decoration-color 0.1s ease-in;
   cursor: pointer;
   text-decoration-color: #c6c6c6;
+  text-underline-offset: 3px;
 
   &:hover {
     text-decoration-color: #27b3f5;

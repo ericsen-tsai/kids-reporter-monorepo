@@ -205,7 +205,13 @@ function ImageBlockInner({ className = '', data }: ImageBlockProps) {
         }
       />
       {desc && (
-        <FigureCaption $alignment={data.alignment}>{desc}</FigureCaption>
+        <FigureCaption
+          data-image-block-caption="true"
+          data-image-block-caption-alignment={data.alignment}
+          $alignment={data.alignment}
+        >
+          {desc}
+        </FigureCaption>
       )}
     </Figure>
   )
@@ -253,6 +259,7 @@ const ArticleBodyContainer = styled.div<{ $alignment?: string }>`
           ${mediaQuery.largeOnly} {
             max-width: 1000px;
           }
+
         `
       case 'paragraph-width':
         return `
@@ -305,7 +312,11 @@ export function ImageInArticleBody({
   data,
 }: ImageBlockInArticleBodyProps) {
   return (
-    <ArticleBodyContainer $alignment={data.alignment} className={className}>
+    <ArticleBodyContainer
+      data-image-block-container="true"
+      $alignment={data.alignment}
+      className={className}
+    >
       <ImageBlock data={data} />
     </ArticleBodyContainer>
   )
