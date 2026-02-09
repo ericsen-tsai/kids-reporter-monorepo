@@ -42,7 +42,7 @@ function Illustrations() {
         alt="subcategories marquee illustrations"
         width={272}
         height={200}
-        className="absolute right-30 bottom-8 z-1 hidden desktop:block hd:right-[calc(max(120px,10vw))]"
+        className="absolute right-30 bottom-8 z-1 hidden desktop:block hd:right-[calc(max(120px,50vw-600px))]"
       />
     </div>
   )
