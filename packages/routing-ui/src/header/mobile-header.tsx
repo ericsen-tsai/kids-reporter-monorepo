@@ -39,7 +39,7 @@ export function MobileHeader({
       ></div>
       <div
         className={cn(
-          'px-6 tablet:px-8 ease-in-out top-0 translate-y-0 pointer-events-auto fixed z-1002 w-full opacity-100 transition-all duration-300 tablet:z-1000 desktop:hidden',
+          'px-6 tablet:px-8 ease-in-out top-0 translate-y-0 pointer-events-auto fixed z-modal w-full opacity-100 transition-all duration-300 tablet:z-bar desktop:hidden',
           hide && 'pointer-events-none -translate-y-full opacity-0',
           showBackgroundColor && 'bg-neutral-white'
         )}

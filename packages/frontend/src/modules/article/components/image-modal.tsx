@@ -32,7 +32,7 @@ function ImageModal({ isOpen, imgProps, onImageModalClose }: ImageModalProps) {
 
   return (
     isOpen && (
-      <div className="fixed top-0 left-0 z-1001 hidden h-screen w-screen items-center justify-center bg-black/50 lg:flex lg:flex-col">
+      <div className="fixed top-0 left-0 z-overlay hidden h-screen w-screen items-center justify-center bg-black/50 lg:flex lg:flex-col">
         <div className="relative">
           <div
             className={cn(
