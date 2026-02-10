@@ -75,7 +75,7 @@ function TitleHero({
           )}
           <h1
             className={cn(
-              'prose-h2-small text-neutral-900 desktop:prose-h2-large',
+              'prose-h2-small font-swei! text-neutral-900 desktop:prose-h2-large',
               fontSizeLevel === FontSizeLevel.LARGE &&
                 'text-[35px] desktop:text-[50px]'
             )}

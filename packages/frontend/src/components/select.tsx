@@ -40,7 +40,7 @@ function SelectTrigger({
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       className={cn(
-        'flex w-fit items-center justify-between gap-1.5 rounded-full border border-neutral-200 bg-white px-4 py-2 whitespace-nowrap text-neutral-900 transition-colors outline-none select-none',
+        'flex w-fit items-center justify-between gap-1.5 rounded-full border-2 border-neutral-200 bg-white px-4 py-2 whitespace-nowrap text-neutral-900 transition-colors outline-none select-none',
         'data-[placeholder]:[&_[data-slot=select-value]]:text-neutral-600',
         'hover:border-neutral-300',
         'transition-all focus-visible:outline-none data-[state=open]:border-neutral-400 data-[state=open]:text-neutral-400 data-[state=open]:[&_[data-slot=select-value]]:text-neutral-400',
@@ -75,7 +75,7 @@ function SelectContent({
         data-slot="select-content"
         data-align-trigger={position === 'item-aligned'}
         className={cn(
-          'bg-popover text-popover-foreground relative z-50 max-h-(--radix-select-content-available-height) min-w-36 origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-[20px] border border-neutral-200 bg-white py-2 shadow-baodaozai-card duration-100 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+          'bg-popover text-popover-foreground relative z-50 max-h-(--radix-select-content-available-height) min-w-36 origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-[20px] border-2 border-neutral-200 bg-white py-2 shadow-baodaozai-card duration-100 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
           position === 'popper' &&
             'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
           className
@@ -123,7 +123,7 @@ function SelectItem({
       className={cn(
         'relative flex w-full cursor-default items-center gap-1.5 bg-white py-2 pr-8 pl-4 text-neutral-900 outline-none select-none',
         'prose-p1 data-[state=checked]:prose-p1-bold',
-        'data-[highlighted]:bg-neutral-100 data-[state=checked]:bg-red-100',
+        'data-[highlighted]:bg-neutral-100 data-[state=checked]:bg-[rgba(255,196,202,0.50)]',
         'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         '*:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2',
@@ -131,7 +131,7 @@ function SelectItem({
       )}
       {...props}
     >
-      <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center text-red-400">
+      <span className="pointer-events-none absolute right-4 flex items-center justify-center text-red-400">
         <SelectPrimitive.ItemIndicator>
           <CheckIcon />
         </SelectPrimitive.ItemIndicator>

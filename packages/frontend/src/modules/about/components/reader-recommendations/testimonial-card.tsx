@@ -6,7 +6,7 @@ type TestimonialCardProps = {
 
 function TestimonialCard({ testimonial }: TestimonialCardProps) {
   return (
-    <div className="flex h-full flex-col rounded-3xl bg-neutral-white p-6 desktop:p-8">
+    <div className="flex h-full flex-col rounded-3xl border-2 border-neutral-200 bg-neutral-white p-6 desktop:p-8">
       <p className="mb-6 flex-1 prose-p1 text-neutral-900">
         {testimonial.text}
       </p>

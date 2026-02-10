@@ -39,7 +39,7 @@ function HeroImage({
   }
 
   return (
-    <figure className="mx-auto pt-10 tablet:mx-8 hd:w-[1058px]">
+    <figure className="mx-auto pt-10 hd:w-[1058px]">
       <div
         className="relative inline-flex w-full overflow-hidden hd:!aspect-video"
         style={{
@@ -55,7 +55,8 @@ function HeroImage({
         {image && (
           <ImageWithFallback
             className={cn(
-              'max-w-full object-contain',
+              'max-w-full object-fill',
+
               isLoading && 'opacity-0'
             )}
             {...commonImgProps}
@@ -77,7 +78,7 @@ function HeroImage({
       </div>
       <figcaption
         className={cn(
-          'mx-4 mt-1 max-w-[1058px] pt-2.5 text-center prose-p2 text-neutral-700',
+          'mx-4 mt-1 max-w-[1058px] pt-2.5 text-center prose-p2 text-neutral-700 tablet:mx-8',
           fontSizeLevel === FontSizeLevel.LARGE && 'text-[17.5px]'
         )}
       >

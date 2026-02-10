@@ -9,13 +9,13 @@ function JoinUs() {
   return (
     <section
       id="join"
-      className="mx-auto flex w-full max-w-300 scroll-margin-anchor flex-col items-center justify-center px-6 pt-41 pb-14 tablet:px-8 tablet:pt-49.5 tablet:pb-16 desktop:px-12 desktop:pt-76 desktop:pb-24 hd:px-30 hd:pt-82 hd:pb-30"
+      className="mx-auto flex w-full max-w-300 scroll-margin-anchor flex-col items-center justify-center px-6 pt-41 pb-14 tablet:px-8 tablet:pt-49 tablet:pb-16 desktop:px-12 desktop:pt-76 desktop:pb-24 hd:px-14 hd:pt-82 hd:pb-30"
     >
       <div className="relative w-full grid-cols-1 gap-6 rounded-[40px] bg-neutral-100 p-6 pt-20 tablet:p-8 tablet:pt-20 desktop:p-14 desktop:pt-20">
         <Image
           src="/assets/images/about/join-us/illustration.svg"
           alt="Join Us"
-          className="absolute bottom-[calc(100%-24px)] left-1/2 h-45 w-70 -translate-x-1/2 tablet:bottom-[calc(100%-32px)] tablet:h-51 tablet:w-80 desktop:bottom-[calc(100%-56px)] desktop:h-64 desktop:w-100"
+          className="absolute bottom-[calc(100%-56px)] left-1/2 h-45 w-70 -translate-x-1/2 tablet:bottom-[calc(100%-56px)] tablet:h-51 tablet:w-80 desktop:bottom-[calc(100%-48px)] desktop:h-64 desktop:w-100"
           width={280}
           height={180}
         />

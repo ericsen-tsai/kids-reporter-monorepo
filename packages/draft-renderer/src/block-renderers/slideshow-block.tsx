@@ -33,11 +33,11 @@ const mockup = {
   },
   desktop: {
     container: {
-      width: 788, // px
+      width: 768, // px
     },
     slide: {
-      width: 696, // px
-      height: 391, // px
+      width: 676, // px
+      height: 370, // px
       paddingRight: 4, // px
     },
     offset: {
@@ -46,11 +46,11 @@ const mockup = {
   },
   hd: {
     container: {
-      width: 1034, // px
+      width: 1000, // px
     },
     slide: {
-      width: 944, // px
-      height: 531, // px
+      width: 910, // px
+      height: 500, // px
       paddingRight: 4, // px
     },
     offset: {
@@ -300,7 +300,7 @@ const SlideshowFlexBox = styled.div`
 
   ${mediaQuery.desktopAbove} {
     width: ${mockup.desktop.container.width}px;
-    transform: translateX(70px);
+    transform: translateX(80px);
   }
 
   ${mediaQuery.largeOnly} {
@@ -587,7 +587,7 @@ export function SlideshowBlock({ className = '', data }: SlideshowBlockProps) {
             <NextArrowSvg />
           </IconButton>
         </PrevNextSection>
-        <CaptionContainer>
+        <CaptionContainer data-image-slideshow-caption-alignment="default">
           <SequenceNumberContainer>
             <ImageSequenceNumber>
               <ImageNumber>{curSlideIndex + 1}</ImageNumber>

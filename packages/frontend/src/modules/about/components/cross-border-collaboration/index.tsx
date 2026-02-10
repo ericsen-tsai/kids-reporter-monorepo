@@ -8,7 +8,7 @@ function CrossBorderCollaboration() {
   return (
     <section
       id="partner"
-      className="mx-auto flex w-full max-w-300 scroll-margin-anchor flex-col items-center justify-center px-6 pt-10 pb-20 tablet:px-8 tablet:pt-12 tablet:pb-24 desktop:px-12 desktop:pt-18 desktop:pb-32 hd:px-30 hd:pt-24 hd:pb-36"
+      className="mx-auto flex w-full max-w-300 scroll-margin-anchor flex-col items-center justify-center px-6 pb-20 tablet:px-8 tablet:pb-24 desktop:px-12 desktop:pb-32 hd:px-14 hd:pb-36"
     >
       <h2 className="mb-6 flex items-center gap-2 self-start prose-h2-small !font-swei text-neutral-900 desktop:mb-10 desktop:prose-h2-large">
         <Image
@@ -21,7 +21,7 @@ function CrossBorderCollaboration() {
         跨界合作
       </h2>
 
-      <div className="flex w-full flex-col gap-6 tablet:gap-8 desktop:grid desktop:grid-cols-2 desktop:gap-x-12 desktop:gap-y-8 hd:gap-x-14">
+      <div className="flex w-full flex-col gap-6 desktop:grid desktop:grid-cols-2 desktop:gap-x-12 desktop:gap-y-8 hd:gap-x-14">
         {COLLABORATIONS.map((collaboration) => {
           const imagePath = `/assets/images/about/cross-border-collaboration/${collaboration.image}`
 
@@ -30,7 +30,7 @@ function CrossBorderCollaboration() {
               key={collaboration.id}
               className="flex w-full flex-row items-start gap-4"
             >
-              <div className="relative aspect-square size-30 overflow-hidden rounded-3xl">
+              <div className="relative aspect-square size-30 overflow-hidden rounded-[12px]">
                 <Image
                   src={imagePath}
                   alt={collaboration.title}

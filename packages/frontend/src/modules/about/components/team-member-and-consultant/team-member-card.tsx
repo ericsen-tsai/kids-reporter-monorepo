@@ -39,7 +39,7 @@ function MemberCard({ member, isTeamMember = false }: MemberCardProps) {
 
   const frontFace = (
     <div className="flex h-full flex-col items-center justify-center gap-5">
-      <div className="h-30 w-30 overflow-hidden rounded-full">
+      <div className="h-30 w-30">
         <Image
           className="h-full w-full object-cover"
           src={avatarURL}
@@ -73,7 +73,7 @@ function MemberCard({ member, isTeamMember = false }: MemberCardProps) {
 
   const backFaceArrow = isTeamMember ? (
     <div className="flex justify-end">
-      <div className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-white">
+      <div className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-white hover:bg-red-500 hover:text-neutral-white">
         <ArrowRight />
       </div>
     </div>

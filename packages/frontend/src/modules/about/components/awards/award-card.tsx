@@ -16,14 +16,14 @@ function isInternalHref(href: string) {
 
 function AwardCard({ card }: AwardCardProps) {
   return (
-    <div className="flex gap-3 overflow-hidden rounded-3xl border border-neutral-200 bg-neutral-white p-6">
+    <div className="flex gap-3 rounded-3xl border-2 border-neutral-200 bg-neutral-white p-6">
       <div
         className="mt-1.5 h-5 w-1 shrink-0 self-stretch rounded-[6px] bg-red-400"
         aria-hidden
       />
-      <div className="flex flex-1 flex-col gap-3 desktop:gap-4">
-        <h3 className="prose-h6-large text-neutral-900">{card.title}</h3>
-        <p className="prose-p1 text-neutral-900">
+      <div className="flex flex-1 flex-col">
+        <h3 className="mb-2 prose-h6-large text-neutral-900">{card.title}</h3>
+        <p className="mb-1 prose-p1 text-neutral-900">
           {card.workParts.map((part) => {
             if (part.type === 'text') {
               return <span key={part.value}>{part.value}</span>
