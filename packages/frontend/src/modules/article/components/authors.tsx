@@ -36,16 +36,16 @@ function AuthorCard({ author }: { author: Author }) {
     <>
       <div
         onClick={handleClick}
-        className="group relative block min-w-62 cursor-pointer snap-start [perspective:1000px] desktop:hidden"
+        className="group relative block min-w-62 cursor-pointer snap-start perspective-[1000px] desktop:hidden"
         ref={ref}
       >
         <div
           className={cn(
-            'relative h-[270px] w-full transition-transform duration-500 [transform-style:preserve-3d]',
-            isClicked && '[transform:rotateY(180deg)]'
+            'relative h-[270px] w-full transition-transform duration-500 transform-3d',
+            isClicked && 'transform-[rotateY(180deg)]'
           )}
         >
-          <div className="absolute inset-0 flex [transform:rotateY(0deg)] flex-col items-center justify-center gap-5 rounded-[20px] border-2 border-neutral-200 bg-neutral-white p-6 [backface-visibility:hidden]">
+          <div className="absolute inset-0 flex transform-[rotateY(0deg)] flex-col items-center justify-center gap-5 rounded-[20px] border-2 border-neutral-200 bg-neutral-white p-6 backface-hidden">
             <div className="h-30 w-30 overflow-hidden rounded-full">
               <Image
                 className="h-full w-full object-cover"
@@ -67,7 +67,7 @@ function AuthorCard({ author }: { author: Author }) {
             </div>
           </div>
 
-          <div className="absolute inset-0 flex h-[270px] [transform:rotateY(180deg)] flex-col gap-4 rounded-[20px] bg-neutral-300 p-6 [backface-visibility:hidden]">
+          <div className="absolute inset-0 flex h-[270px] transform-[rotateY(180deg)] flex-col gap-4 rounded-[20px] bg-neutral-300 p-6 backface-hidden">
             <div className="flex flex-1 flex-col gap-1">
               <span className="prose-p1-bold text-neutral-900">
                 {author.name}｜{roleText}
@@ -130,7 +130,7 @@ function AuthorCard({ author }: { author: Author }) {
           </div>
 
           <div className="flex justify-end">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-white">
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-white transition-colors duration-200 hover:bg-red-500 hover:text-neutral-white">
               <ArrowRight />
             </div>
           </div>
@@ -163,11 +163,11 @@ function Authors({ authors }: AuthorsProp) {
   }, [])
 
   return (
-    <div className="flex flex-col gap-6 pt-14 tablet:pt-20">
+    <div className="flex flex-col gap-6 pt-14 tablet:gap-8 tablet:pt-20 desktop:gap-10">
       <div className="mx-auto flex w-[min(100vw,1200px)] items-center gap-2 px-6 tablet:px-8 desktop:px-12 hd:px-14">
         <OurTeamIcon className="desktop:hidden" />
         <OurTeamIconLarge className="hidden desktop:block" />
-        <h2 className="mr-auto prose-h2-small font-swei text-neutral-900 desktop:prose-h2-large">
+        <h2 className="mr-auto prose-h2-small font-swei! text-neutral-900 desktop:prose-h2-large">
           誰幫我們完成這篇文章
         </h2>
         <Button

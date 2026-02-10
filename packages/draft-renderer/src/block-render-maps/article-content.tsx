@@ -83,13 +83,15 @@ export const Atomic = styled.div`
 
   ${mediaQuery.desktopAbove} {
     div:has(+ div [data-image-block-caption-alignment='default'])
-      [data-image-block-caption-alignment='default'] {
+      [data-image-block-caption-alignment='default'],
+    [data-image-slideshow-caption-alignment='default'] {
       position: relative !important;
     }
   }
   ${mediaQuery.largeOnly} {
     div:has(+ div [data-image-block-caption-alignment='default'])
-      [data-image-block-caption-alignment='default'] {
+      [data-image-block-caption-alignment='default'],
+    [data-image-slideshow-caption-alignment='default'] {
       position: relative !important;
     }
   }

@@ -4,6 +4,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import { ArticleBodyDraftRenderer } from '@kids-reporter/draft-renderer'
 import { cn } from '@kids-reporter/routing-ui'
 import { RawDraftContentState } from 'draft-js'
+import { useEffect, useState } from 'react'
 
 import { FontSizeLevel, STICKY_HEADER_HEIGHT } from '@/constants'
 
@@ -31,6 +32,10 @@ type PostProp = {
 
 function PostRenderer({ content }: PostProp) {
   const { onImageModalOpen, fontSize } = useArticleContext()
+  const [isMounted, setIsMounted] = useState(false)
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
   return (
     <div
       className={cn(
@@ -41,14 +46,16 @@ function PostRenderer({ content }: PostProp) {
         ]
       )}
     >
-      <ArticleBodyDraftRenderer
-        rawContentState={trimEmptyBlocks(content)}
-        onImageModalOpen={onImageModalOpen}
-        initiallyScrollTo={
-          typeof window !== 'undefined' ? window.location.hash : undefined
-        }
-        offsetTop={STICKY_HEADER_HEIGHT}
-      />
+      {isMounted && (
+        <ArticleBodyDraftRenderer
+          rawContentState={trimEmptyBlocks(content)}
+          onImageModalOpen={onImageModalOpen}
+          initiallyScrollTo={
+            typeof window !== 'undefined' ? window.location.hash : undefined
+          }
+          offsetTop={STICKY_HEADER_HEIGHT}
+        />
+      )}
     </div>
   )
 }

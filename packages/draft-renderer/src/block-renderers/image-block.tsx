@@ -58,7 +58,7 @@ const FigureCaption = styled.figcaption<{ $alignment?: string }>`
           ${mediaQuery.mediumAbove} {
             max-width: 340px;
             margin-left: auto;
-            margin-right: 0px;
+            margin-right: 32px;
           }
 
           ${mediaQuery.desktopAbove} {
@@ -79,6 +79,14 @@ const FigureCaption = styled.figcaption<{ $alignment?: string }>`
         `
       case 'paragraph-width':
         return `
+          ${mediaQuery.smallOnly} {
+            width: 100%;
+            text-align: left;
+          }
+          ${mediaQuery.mediumAbove} {
+            width: 100%;
+            text-align: left;
+          }
           ${mediaQuery.desktopAbove} {
             position: absolute;
             left: calc(100% + 32px);
@@ -133,7 +141,9 @@ const FigureCaption = styled.figcaption<{ $alignment?: string }>`
 
 const Img = styled.img<{ $isDesktopAndAbove: boolean }>`
   width: 100%;
-  object-fit: contain;
+  height: 100%;
+  display: block;
+  object-fit: cover;
   ${(props) => (props.$isDesktopAndAbove ? 'cursor: zoom-in;' : '')};
 `
 
