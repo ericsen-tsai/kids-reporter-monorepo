@@ -4,7 +4,7 @@ import {
   PostEssayAnswerOrderByInput,
   PostOrderByInput,
 } from '__generated__/types'
-import { memo, useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
 import { DEFAULT_PAGE_ITEM_COUNT } from '@/api-utils/react-query/constants'
@@ -29,6 +29,8 @@ function AllAnswers({ onOpenModal }: AllAnswersProps) {
   const hasShownToastRef = useRef(false)
   const showNavBarRef = useRef(false)
   const [showNavBar, setShowNavBar] = useState(false)
+  const [isAtStart, setIsAtStart] = useState(true)
+  const [isAtEnd, setIsAtEnd] = useState(false)
   const {
     data: posts,
     isLoading,
@@ -110,6 +112,26 @@ function AllAnswers({ onOpenModal }: AllAnswersProps) {
     }
   }, [])
 
+  const updateScrollEdges = useCallback(() => {
+    const container = scrollContainerRef.current
+    if (!container) return
+    const { scrollLeft, clientWidth, scrollWidth } = container
+    setIsAtStart(scrollLeft <= 0)
+    setIsAtEnd(Math.abs(scrollLeft + clientWidth - scrollWidth) < 1)
+  }, [])
+
+  useEffect(() => {
+    const container = scrollContainerRef.current
+    if (!container) return
+
+    updateScrollEdges()
+
+    container.addEventListener('scroll', updateScrollEdges, { passive: true })
+    return () => {
+      container.removeEventListener('scroll', updateScrollEdges)
+    }
+  }, [updateScrollEdges])
+
   const showLoading = isLoading || isFetchingNextPage
   const handleScrollToTop = () => {
     titleRef.current?.scrollIntoView({
@@ -119,10 +141,10 @@ function AllAnswers({ onOpenModal }: AllAnswersProps) {
     })
   }
   return (
-    <div className="relative flex w-[calc(100%+48px)] flex-col gap-6 bg-neutral-100 pt-10 pb-12 tablet:w-[calc(100%+64px)] tablet:gap-8 tablet:pt-12 tablet:pb-14 desktop:w-screen desktop:gap-10 desktop:pt-18 desktop:pb-22 hd:w-screen hd:pt-24 hd:pb-28">
+    <div className="relative flex w-[calc(100%+48px)] flex-col bg-neutral-100 pt-10 tablet:w-[calc(100%+64px)] tablet:pt-12 desktop:w-screen desktop:pt-18 hd:w-screen hd:pt-24">
       <div
         ref={titleRef}
-        className="flex items-center gap-3 pl-6 tablet:pl-8 desktop:pl-12 hd:pl-[calc(50vw-600px+64px)]"
+        className="mb-6 flex items-center gap-3 pl-6 tablet:mb-8 tablet:pl-8 desktop:mb-10 desktop:pl-12 hd:pl-[calc(50vw-600px+64px)]"
       >
         <div className="h-8 w-1.5 rounded-md bg-blue-400" />
         <h3 className="prose-h3-small font-swei text-neutral-900 desktop:prose-h3-large">
@@ -131,12 +153,12 @@ function AllAnswers({ onOpenModal }: AllAnswersProps) {
       </div>
       <div
         ref={scrollContainerRef}
-        className="flex scrollbar-thin snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 pb-2 tablet:scroll-px-8 tablet:px-8 desktop:scroll-px-12 desktop:gap-8 desktop:px-12 hd:scroll-pr-14 hd:scroll-pl-[calc(50vw-600px+64px)] hd:pr-14 hd:pl-[calc(50vw-600px+64px)]"
+        className="flex snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 pb-10 scrollbar-none tablet:scroll-px-8 tablet:px-8 tablet:pb-12 desktop:scroll-px-12 desktop:gap-8 desktop:px-12 desktop:pb-20 hd:scroll-pr-14 hd:scroll-pl-[calc(50vw-600px+64px)] hd:pr-14 hd:pb-26 hd:pl-[calc(50vw-600px+64px)]"
       >
         {posts?.map((post, index) => (
           <div
             key={post.id}
-            className="shrink-0 snap-start"
+            className="shrink-0 snap-start pb-px"
             data-card-index={index}
           >
             <PostAnswerCard post={post} onOpenModal={onOpenModal} />
@@ -159,7 +181,7 @@ function AllAnswers({ onOpenModal }: AllAnswersProps) {
             {[1, 2, 3].map((index) => (
               <div
                 key={`skeleton-${index}`}
-                className="shrink-0 snap-start"
+                className="shrink-0 snap-start pb-px"
                 data-card-index={(posts?.length ?? 0) + index - 1}
               >
                 <PostAnswerCardSkeleton />
@@ -172,6 +194,8 @@ function AllAnswers({ onOpenModal }: AllAnswersProps) {
         scrollContainerRef={scrollContainerRef}
         onScrollToTop={handleScrollToTop}
         showNavBar={showNavBar}
+        isAtStart={isAtStart}
+        isAtEnd={isAtEnd}
       />
     </div>
   )
