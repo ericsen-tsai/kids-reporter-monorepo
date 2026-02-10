@@ -8,7 +8,7 @@ const BorderLeftContainer = styled.blockquote`
 `
 
 const BorderLeftLine = styled.div`
-  width: 3px;
+  width: 4px;
   border-radius: 10px;
   background-color: #c6c6c6;
   align-self: stretch;
@@ -79,10 +79,10 @@ export function QuoteLeftBlockquote({ text }: { text: string }) {
 
 const ArticleBodyContainer = styled.div`
   max-width: 512px;
-  margin: 0 auto 60px auto;
+  margin: 0 auto 38px auto;
 
   ${mediaQuery.smallOnly} {
-    margin-bottom: 40px;
+    margin-bottom: 38px;
   }
 
   ${mediaQuery.largeOnly} {

@@ -2,6 +2,7 @@ import { ArticleIntroductionDraftRenderer } from '@kids-reporter/draft-renderer'
 import { cn } from '@kids-reporter/routing-ui'
 import { RawDraftContentState } from 'draft-js'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 import Divider from '@/components/divider'
 import { FontSizeLevel } from '@/constants'
@@ -38,6 +39,10 @@ function ArticleSummary({
   authors,
   fontSizeLevel,
 }: ArticleSummaryProps) {
+  const [isMounted, setIsMounted] = useState(false)
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
   return (
     <div className="relative mx-4 mt-10 mb-10 flex flex-col gap-4 rounded-3xl bg-neutral-100 p-6 tablet:mx-[93px] tablet:mt-20 tablet:mb-15 tablet:gap-6 tablet:p-9 desktop:p-12">
       <div className="flex items-center justify-between gap-6">
@@ -61,7 +66,7 @@ function ArticleSummary({
           ]
         )}
       >
-        {content && (
+        {content && isMounted && (
           <ArticleIntroductionDraftRenderer rawContentState={content} />
         )}
       </div>

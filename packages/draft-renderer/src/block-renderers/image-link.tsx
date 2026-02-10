@@ -143,8 +143,9 @@ const FigureCaption = styled.figcaption<{ $alignment?: string }>`
 `
 
 const Img = styled.img<{ $isDesktopAndAbove: boolean }>`
+  display: block;
   width: 100%;
-  object-fit: contain;
+  object-fit: cover;
   ${(props) => (props.$isDesktopAndAbove ? 'cursor: zoom-in;' : '')};
 `
 

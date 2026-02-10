@@ -20,10 +20,7 @@ export const Paragraph = styled.div`
   }
 
   > div[data-block='true'] {
-    margin-bottom: 60px;
-    ${mediaQuery.smallOnly} {
-      margin-bottom: 40px;
-    }
+    margin-bottom: 38px;
   }
 `
 
@@ -56,7 +53,7 @@ export const Heading = styled.div`
 export const List = styled.ol`
   width: 100%;
   max-width: 512px;
-  margin: 0 auto 60px auto;
+  margin: 0 auto 38px auto;
   list-style-position: inside;
 
   > li > div {
@@ -64,7 +61,7 @@ export const List = styled.ol`
   }
 
   ${mediaQuery.smallOnly} {
-    margin-bottom: 40px;
+    margin-bottom: 38px;
     padding-left: 24px;
     padding-right: 24px;
   }
@@ -83,11 +80,26 @@ export const Atomic = styled.div`
   > figure {
     margin: 0;
   }
+
+  ${mediaQuery.desktopAbove} {
+    div:has(+ div [data-image-block-caption-alignment='default'])
+      [data-image-block-caption-alignment='default'],
+    [data-image-slideshow-caption-alignment='default'] {
+      position: relative !important;
+    }
+  }
+  ${mediaQuery.largeOnly} {
+    div:has(+ div [data-image-block-caption-alignment='default'])
+      [data-image-block-caption-alignment='default'],
+    [data-image-slideshow-caption-alignment='default'] {
+      position: relative !important;
+    }
+  }
 `
 
 const _blockRenderMap = Immutable.Map({
   atomic: {
-    element: 'figure',
+    element: 'div',
     wrapper: <Atomic />,
   },
   'header-two': {
