@@ -9,7 +9,7 @@ function JoinUs() {
   return (
     <section
       id="join"
-      className="mx-auto flex w-full max-w-300 scroll-margin-anchor flex-col items-center justify-center px-6 pt-41 pb-14 tablet:px-8 tablet:pt-49.5 tablet:pb-16 desktop:px-12 desktop:pt-76 desktop:pb-24 hd:px-30 hd:pt-82 hd:pb-30"
+      className="mx-auto flex w-full max-w-300 scroll-margin-anchor flex-col items-center justify-center px-6 pt-41 pb-14 tablet:px-8 tablet:pt-49.5 tablet:pb-16 desktop:px-12 desktop:pt-76 desktop:pb-24 hd:px-14 hd:pt-82 hd:pb-30"
     >
       <div className="relative w-full grid-cols-1 gap-6 rounded-[40px] bg-neutral-100 p-6 pt-20 tablet:p-8 tablet:pt-20 desktop:p-14 desktop:pt-20">
         <Image
