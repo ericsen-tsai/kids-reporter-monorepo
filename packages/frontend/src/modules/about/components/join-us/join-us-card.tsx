@@ -51,12 +51,12 @@ function JoinUsCard({ card }: JoinUsCardProps) {
     <div
       id={card.anchorId}
       className={cn(
-        'flex h-full flex-col overflow-hidden rounded-3xl bg-neutral-white shadow-custom',
+        'flex h-full flex-col rounded-3xl border-2 border-neutral-200 bg-neutral-white',
         card.anchorId && 'scroll-margin-anchor'
       )}
     >
-      <div className="flex flex-1 flex-col gap-3 p-6 desktop:gap-4 desktop:p-8">
-        <h3 className="flex items-center gap-3 prose-p1-bold text-neutral-900 desktop:prose-h6-large">
+      <div className="flex flex-1 flex-col p-6 desktop:p-8">
+        <h3 className="mb-3 flex items-center gap-3 prose-p1-bold text-neutral-900 desktop:prose-h6-large">
           <Image
             src={card.icon}
             alt={`${card.title} icon`}
@@ -66,7 +66,9 @@ function JoinUsCard({ card }: JoinUsCardProps) {
           />
           {card.title}
         </h3>
-        <p className="prose-p1 text-neutral-700">{card.description}</p>
+        <p className="mb-4 prose-p1 text-neutral-700 desktop:mb-5">
+          {card.description}
+        </p>
         <div className="mt-auto pt-2">{getButtonContent()}</div>
       </div>
     </div>

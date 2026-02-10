@@ -63,7 +63,10 @@ function Awards() {
       </div>
 
       <div className="hidden tablet:flex tablet:gap-8 desktop:gap-10">
-        <nav className="flex shrink-0 flex-col gap-4" aria-label="選擇年份">
+        <nav
+          className="mt-3 flex shrink-0 flex-col gap-4"
+          aria-label="選擇年份"
+        >
           {AWARDS_BY_YEAR.map(({ year }) => (
             <button
               key={year}

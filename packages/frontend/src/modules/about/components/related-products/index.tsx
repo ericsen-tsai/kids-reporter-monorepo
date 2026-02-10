@@ -8,7 +8,7 @@ function RelatedProducts() {
   return (
     <section
       id="products"
-      className="mx-auto flex w-full max-w-300 scroll-margin-anchor flex-col items-center justify-center px-6 pt-10 pb-20 tablet:px-8 tablet:pt-12 tablet:pb-24 desktop:px-12 desktop:pt-18 desktop:pb-32 hd:px-30 hd:pt-24 hd:pb-36"
+      className="mx-auto flex w-full max-w-300 scroll-margin-anchor flex-col items-center justify-center px-6 pt-10 pb-20 tablet:px-8 tablet:pt-12 tablet:pb-24 desktop:px-12 desktop:pt-18 desktop:pb-32 hd:px-14 hd:pt-24 hd:pb-36"
     >
       <h2 className="mb-6 flex items-center gap-2 self-start prose-h2-small !font-swei text-neutral-900 desktop:mb-10 desktop:prose-h2-large">
         <Image
@@ -21,7 +21,7 @@ function RelatedProducts() {
         相關產品
       </h2>
 
-      <div className="flex w-full flex-col gap-6 tablet:flex-row tablet:gap-8 desktop:gap-10">
+      <div className="flex w-full flex-col gap-6 tablet:flex-row desktop:gap-8">
         {PRODUCTS.map((product) => {
           const iconPath = `/assets/images/about/related-products/${product.iconType}_icon.svg`
           const illustrationPath = `/assets/images/about/related-products/${product.illustration}`
@@ -43,17 +43,17 @@ function RelatedProducts() {
                   <Image
                     src={iconPath}
                     alt={`${product.title} icon`}
-                    className="size-8 desktop:size-10"
-                    width={32}
-                    height={32}
+                    className="size-12"
+                    width={48}
+                    height={48}
                   />
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3 p-6 desktop:gap-4 desktop:p-8">
-                <h3 className="prose-h4-small text-neutral-900 desktop:prose-h3-small">
+              <div className="flex flex-col gap-2 p-6 desktop:p-8">
+                <h5 className="prose-h5-small text-neutral-900 desktop:prose-h5-large">
                   {product.title}
-                </h3>
+                </h5>
                 <p className="prose-p1 text-neutral-700">
                   {product.description}
                 </p>

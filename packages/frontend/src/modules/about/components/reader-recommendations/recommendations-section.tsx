@@ -18,7 +18,7 @@ function RecommendationsSection() {
   const swiperRef = useRef<SwiperCore>()
   return (
     <section id="voices" className="w-full scroll-margin-anchor bg-yellow-200">
-      <div className="mx-auto flex w-full max-w-300 flex-col items-center justify-center pt-10 pb-14 tablet:pt-12 tablet:pb-16 desktop:px-12 desktop:pt-18 desktop:pb-24 hd:px-30 hd:pt-24 hd:pb-30">
+      <div className="mx-auto flex w-full max-w-300 flex-col items-center justify-center pt-10 pb-14 tablet:pt-12 tablet:pb-16 desktop:px-12 desktop:pt-18 desktop:pb-24 hd:px-14 hd:pt-24 hd:pb-30">
         <h2 className="mb-6 flex items-center gap-2 px-6 prose-h2-small !font-swei text-neutral-900 tablet:mb-8 tablet:px-8 desktop:mb-10 desktop:px-0 desktop:prose-h2-large">
           <Image
             src="/assets/images/about/reader-recommendations/icon.svg"
@@ -30,7 +30,7 @@ function RecommendationsSection() {
           讀者推薦
         </h2>
 
-        <div className="mb-10 w-full px-6 tablet:mb-12 tablet:px-8 desktop:mb-14 desktop:px-40 hd:mb-16 hd:px-37.5">
+        <div className="mb-10 w-full px-6 tablet:mb-12 tablet:px-14 desktop:mb-14 desktop:px-40 hd:mb-16 hd:px-37.5">
           <VideoPlayer />
         </div>
         <div className="flex w-full max-w-300 gap-5">
