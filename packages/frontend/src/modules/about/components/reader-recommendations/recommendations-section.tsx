@@ -30,7 +30,7 @@ function RecommendationsSection() {
           讀者推薦
         </h2>
 
-        <div className="mb-10 w-full px-6 tablet:mb-12 tablet:px-8 desktop:mb-14 desktop:px-40 hd:mb-16 hd:px-37.5">
+        <div className="mb-10 w-full px-6 tablet:mb-12 tablet:px-14 desktop:mb-14 desktop:px-40 hd:mb-16 hd:px-37.5">
           <VideoPlayer />
         </div>
         <div className="flex w-full max-w-300 gap-5">

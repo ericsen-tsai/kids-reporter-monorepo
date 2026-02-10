@@ -8,7 +8,7 @@ import {
   DialogContent,
   DialogTitle,
 } from '@/components/dialog'
-import { XIcon } from '@/icons/miscellaneous'
+import { PlayIcon, PlayIconLarge, XIcon } from '@/icons/miscellaneous'
 
 const YOUTUBE_VIDEO_ID = 'Hu5NgkSqSpQ'
 const YOUTUBE_EMBED_URL = `https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}`
@@ -80,7 +80,6 @@ function VideoPlayer() {
 
   const handleModalOpen = () => {
     setIsModalOpen(true)
-    handlePauseVideo()
   }
 
   return (
@@ -92,17 +91,22 @@ function VideoPlayer() {
         {isInViewport ? (
           <>
             <iframe
-              src={`${YOUTUBE_EMBED_URL}?autoplay=1&mute=1&enablejsapi=1`}
+              src={`${YOUTUBE_EMBED_URL}?autoplay=1&mute=1&enablejsapi=1&showinfo=0&controls=0`}
               className="absolute inset-0 h-full w-full"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               title="讀者推薦影片"
             />
             <button
-              className="absolute inset-0 z-10 cursor-pointer"
+              className="group absolute inset-0 z-10 cursor-pointer"
               onClick={handleModalOpen}
               aria-label="Open video in modal"
-            />
+            >
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-neutral-white/40 group-hover:text-neutral-white/60">
+                <PlayIcon className="desktop:hidden" />
+                <PlayIconLarge className="hidden desktop:block" />
+              </div>
+            </button>
           </>
         ) : (
           <div
@@ -141,9 +145,6 @@ function VideoPlayer() {
         open={isModalOpen}
         onOpenChange={(open) => {
           setIsModalOpen(open)
-          if (!open) {
-            handlePauseVideo()
-          }
         }}
       >
         <DialogTitle className="sr-only">讀者推薦影片</DialogTitle>
@@ -152,7 +153,7 @@ function VideoPlayer() {
           showCloseButton={false}
         >
           <div className="relative aspect-video w-full">
-            <DialogClose className="absolute top-3 right-3 z-2 flex size-5 cursor-pointer items-center justify-center rounded-xs opacity-70 transition-opacity hover:opacity-100 disabled:pointer-events-none desktop:-top-5 desktop:-right-5 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5">
+            <DialogClose className="absolute -top-9 right-0 z-2 flex size-5 cursor-pointer items-center justify-center rounded-xs text-neutral-white opacity-70 transition-colors transition-opacity duration-300 hover:text-neutral-200 hover:opacity-100 disabled:pointer-events-none desktop:-top-9 desktop:-right-9 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5">
               <XIcon />
               <span className="sr-only">Close</span>
             </DialogClose>
