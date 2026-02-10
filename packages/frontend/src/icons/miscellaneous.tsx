@@ -1589,3 +1589,30 @@ export const CheckIcon = () => {
     </svg>
   )
 }
+
+export const BackToTopIcon = () => {
+  return (
+    <svg
+      width="19"
+      height="20"
+      viewBox="0 0 19 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M17.5 18.4299L9.5 10.5L1.5 18.4299"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M17.5 9.42987L9.5 1.49999L1.5 9.42987"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}

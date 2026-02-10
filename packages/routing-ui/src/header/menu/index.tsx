@@ -77,7 +77,7 @@ function Menu({
       {/* Overlay */}
       <div
         className={cn(
-          'inset-0 fixed z-1001 bg-neutral-500/50 transition-opacity duration-300',
+          'inset-0 fixed z-overlay bg-neutral-500/50 transition-opacity duration-300',
           isOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
         )}
         onClick={onClose}
@@ -86,7 +86,7 @@ function Menu({
       {/* Menu */}
       <div
         className={cn(
-          'top-0 left-0 tablet:w-80 bg-white shadow-2xl ease-in-out tablet:pt-0 fixed z-1001 h-full scrollbar-thin w-full transform pt-(--mobile-header-height) transition-transform duration-300',
+          'top-0 left-0 tablet:w-80 bg-white shadow-2xl ease-in-out tablet:pt-0 fixed z-overlay h-full scrollbar-thin w-full transform pt-(--mobile-header-height) transition-transform duration-300',
           isOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >

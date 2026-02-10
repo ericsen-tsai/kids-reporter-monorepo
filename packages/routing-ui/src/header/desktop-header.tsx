@@ -42,7 +42,7 @@ export function DesktopHeader({
       <div className="hidden h-(--desktop-header-height) desktop:block"></div>
       <div
         className={cn(
-          'top-0 ease-in-out fixed left-1/2 z-1000 hidden w-full -translate-x-1/2 transform transition-all duration-500 desktop:block',
+          'top-0 ease-in-out fixed left-1/2 z-bar hidden w-full -translate-x-1/2 transform transition-all duration-500 desktop:block',
           compactMode && 'bg-white',
           hide
             ? 'pointer-events-none -translate-y-full opacity-0'

@@ -21,12 +21,12 @@ function SubcategoriesMarquee() {
   return (
     <div className="mt-4 w-screen tablet:mt-6 desktop:mt-8 hd:mt-10">
       {!isLoading && subcategoriesWithLinks.length > 0 && (
-        <Marquee pauseOnHover pauseOnClick autoFill>
+        <Marquee pauseOnHover pauseOnClick autoFill className="pb-4">
           {subcategoriesWithLinks?.map((subcategory) => (
             <Link
               key={subcategory.id}
               href={subcategory.link}
-              className="px-6 py-4 prose-h3-small font-normal text-neutral-900 hover:text-red-400 hover:underline desktop:px-10 desktop:prose-h2-small desktop:font-normal"
+              className="px-4 py-4 prose-h3-small font-normal! text-neutral-900 hover:text-red-400 hover:underline desktop:prose-h2-small desktop:font-normal"
             >
               #{subcategory.name}
             </Link>

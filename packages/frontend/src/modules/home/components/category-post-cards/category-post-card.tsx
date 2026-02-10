@@ -26,13 +26,13 @@ function CategoryPostCard({ post, className }: CategoryPostCardProps) {
       )}
     >
       <Link href={post.url} className="group relative flex h-full flex-col">
-        <div className="flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-[0px_4px_10px_rgba(0,0,0,0.05)]">
+        <div className="flex h-full flex-col overflow-hidden rounded-[30px] bg-white shadow-[0px_4px_10px_rgba(0,0,0,0.05)]">
           {/* Image */}
-          <div className="relative h-[156px] w-full overflow-hidden rounded-t-xl tablet:h-[123px] desktop:h-[162px] hd:h-[191px]">
+          <div className="relative aspect-video w-full overflow-hidden rounded-t-[30px]">
             <ImageWithFallback
               src={post.image ?? FALLBACK_IMG}
               alt={post.title}
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-120"
             />
           </div>
 
