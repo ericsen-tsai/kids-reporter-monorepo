@@ -75,7 +75,7 @@ function CategoryPostCards({
           variant="secondary"
           size={44}
           asChild
-          className="mx-auto mt-6 flex w-max tablet:mt-6 desktop:mt-8"
+          className="mx-auto mt-4 flex w-max tablet:mt-6 desktop:mt-8"
         >
           <Link href={`/category/${category}`}>看全部</Link>
         </Button>

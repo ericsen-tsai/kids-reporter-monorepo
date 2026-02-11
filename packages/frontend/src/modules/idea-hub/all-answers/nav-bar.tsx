@@ -10,6 +10,8 @@ type NavBarProps = {
   scrollContainerRef: RefObject<HTMLDivElement | null>
   onScrollToTop: () => void
   showNavBar: boolean
+  isAtStart: boolean
+  isAtEnd: boolean
 }
 
 const CARD_DATA_INDEX_ATTR = 'data-card-index'
@@ -29,6 +31,8 @@ function NavBar({
   scrollContainerRef,
   onScrollToTop,
   showNavBar,
+  isAtStart,
+  isAtEnd,
 }: NavBarProps) {
   const scrollLeft = useCallback(() => {
     const container = scrollContainerRef.current
@@ -62,23 +66,25 @@ function NavBar({
       )}
     >
       <div
-        className="absolute bottom-8 left-[50vw] hidden w-min -translate-x-1/2 items-center rounded-full bg-white p-2 shadow-md desktop:inline-flex"
+        className="absolute bottom-6 left-[50vw] hidden w-min -translate-x-1/2 items-center rounded-full bg-white p-2 shadow-md tablet:bottom-8 desktop:inline-flex"
         role="group"
         aria-label="捲動導覽"
       >
         <button
           type="button"
           onClick={scrollLeft}
-          className="flex h-7 w-[50px] cursor-pointer items-center justify-center text-neutral-400 transition-colors duration-200 hover:text-neutral-600"
+          className="flex h-7 w-[50px] cursor-pointer items-center justify-center text-neutral-600 transition-colors duration-200 hover:text-neutral-900 disabled:cursor-not-allowed disabled:text-neutral-400"
           aria-label="向左捲動"
+          disabled={isAtStart}
         >
           <ArrowLeft />
         </button>
         <button
           type="button"
           onClick={scrollRight}
-          className="flex h-7 w-[50px] cursor-pointer items-center justify-center text-neutral-400 transition-colors duration-200 hover:text-neutral-600"
+          className="flex h-7 w-[50px] cursor-pointer items-center justify-center text-neutral-600 transition-colors duration-200 hover:text-neutral-900 disabled:cursor-not-allowed disabled:text-neutral-400"
           aria-label="向右捲動"
+          disabled={isAtEnd}
         >
           <ArrowRight />
         </button>
@@ -86,7 +92,7 @@ function NavBar({
       <button
         type="button"
         onClick={onScrollToTop}
-        className="absolute bottom-8 left-[100vw] flex h-11 w-11 -translate-x-[calc(100%+24px)] cursor-pointer items-center justify-center rounded-full bg-white text-neutral-400 shadow-md transition-colors duration-200 hover:text-neutral-600 tablet:-translate-x-[calc(100%+32px)]"
+        className="absolute bottom-6 left-[100vw] flex h-11 w-11 -translate-x-[calc(100%+24px)] cursor-pointer items-center justify-center rounded-full bg-white text-neutral-600 shadow-md transition-colors duration-200 hover:text-neutral-900 tablet:bottom-8 tablet:-translate-x-[calc(100%+32px)]"
         aria-label="回到頂部"
       >
         <BackToTopIcon />

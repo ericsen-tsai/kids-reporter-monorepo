@@ -26,7 +26,7 @@ function SubcategoriesMarquee() {
             <Link
               key={subcategory.id}
               href={subcategory.link}
-              className="px-4 py-4 prose-h3-small font-normal! text-neutral-900 hover:text-red-400 hover:underline desktop:prose-h2-small desktop:font-normal"
+              className="px-4 py-4 prose-h3-small font-normal! text-neutral-900 hover:text-red-400 hover:underline desktop:px-5 desktop:prose-h2-small desktop:font-normal!"
             >
               #{subcategory.name}
             </Link>
