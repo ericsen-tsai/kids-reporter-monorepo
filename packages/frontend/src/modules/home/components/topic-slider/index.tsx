@@ -76,12 +76,12 @@ function TopicSlider({ topics }: TopicSliderProp) {
           <SwiperButton
             variant="prev"
             onClick={() => swiperRef.current?.slidePrev()}
-            className="absolute top-26 left-0 z-[900] -translate-y-1/2 scale-[0.625] tablet:top-42 tablet:left-[calc(50%-320px)] tablet:-translate-x-1/2 desktop:top-48 desktop:left-[calc(50%-416px)] desktop:scale-100 hd:top-64 hd:left-[calc(50%-544px)] hd:scale-100"
+            className="absolute top-26 left-0 z-[900] -translate-y-1/2 scale-[0.625] tablet:top-42 tablet:left-[calc(50%-320px)] tablet:-translate-x-1/2 desktop:top-52 desktop:left-[calc(50%-416px)] desktop:scale-100 hd:top-62 hd:left-[calc(50%-544px)] hd:scale-100"
           />
           <SwiperButton
             variant="next"
             onClick={() => swiperRef.current?.slideNext()}
-            className="absolute top-26 right-0 z-[900] -translate-y-1/2 scale-[0.625] tablet:top-42 tablet:right-[calc(50%-320px)] tablet:translate-x-1/2 desktop:top-48 desktop:right-[calc(50%-416px)] desktop:scale-100 hd:top-64 hd:right-[calc(50%-544px)] hd:scale-100"
+            className="absolute top-26 right-0 z-[900] -translate-y-1/2 scale-[0.625] tablet:top-42 tablet:right-[calc(50%-320px)] tablet:translate-x-1/2 desktop:top-52 desktop:right-[calc(50%-416px)] desktop:scale-100 hd:top-62 hd:right-[calc(50%-544px)] hd:scale-100"
           />
         </div>
         <WaveIllustrations />

@@ -117,7 +117,7 @@ function EditorRecommendation({ posts }: EditorRecommendationProps) {
 
   return (
     <div className="relative w-full bg-yellow-100 pt-10 pb-14 tablet:pt-12 tablet:pb-16 desktop:pt-18 desktop:pb-24 hd:pt-24 hd:pb-30">
-      <div className="mx-auto mb-6 flex max-w-300 items-center gap-2 px-6 tablet:mb-8 tablet:px-8 desktop:mb-10 hd:px-14">
+      <div className="mx-auto mb-6 flex max-w-300 items-center gap-2 px-6 tablet:mb-8 tablet:px-8 desktop:mb-10 desktop:px-12 hd:px-14">
         <EditorRecommendationIcon className="desktop:hidden" />
         <EditorRecommendationIconLarge className="hidden desktop:block" />
         <h2 className="prose-h2-small font-swei! desktop:prose-h2-large">
