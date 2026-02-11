@@ -124,11 +124,17 @@ function AllAnswers({ onOpenModal }: AllAnswersProps) {
     const container = scrollContainerRef.current
     if (!container) return
 
+    const handleUpdate = () => updateScrollEdges()
+
     updateScrollEdges()
 
-    container.addEventListener('scroll', updateScrollEdges, { passive: true })
+    container.addEventListener('scroll', handleUpdate, { passive: true })
+    const resizeObserver = new ResizeObserver(handleUpdate)
+    resizeObserver.observe(container)
+
     return () => {
-      container.removeEventListener('scroll', updateScrollEdges)
+      container.removeEventListener('scroll', handleUpdate)
+      resizeObserver.disconnect()
     }
   }, [updateScrollEdges])
 
