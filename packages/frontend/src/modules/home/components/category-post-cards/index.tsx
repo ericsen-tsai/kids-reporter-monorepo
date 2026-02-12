@@ -64,7 +64,7 @@ function CategoryPostCards({
           />
           {categoryName}
         </h2>
-        <div className="flex scrollbar-thin w-full snap-x snap-mandatory scroll-px-12 gap-6 overflow-x-auto px-12 pb-2 tablet:grid tablet:grid-cols-3 tablet:px-6 desktop:scroll-px-8 desktop:gap-8 desktop:px-12 hd:px-14">
+        <div className="flex w-full snap-x snap-mandatory scroll-px-12 gap-6 overflow-x-auto px-12 pb-2 scrollbar-none tablet:grid tablet:grid-cols-3 tablet:px-6 desktop:scroll-px-8 desktop:gap-8 desktop:px-12 hd:px-14">
           {!isLoading ? (
             posts.map((post) => <CategoryPostCard key={post.url} post={post} />)
           ) : (

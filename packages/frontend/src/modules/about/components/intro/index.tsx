@@ -18,11 +18,11 @@ function Intro() {
           </p>
         </div>
 
-        <div className="relative w-full flex-1 tablet:mt-4 tablet:shrink-0 desktop:mt-0">
+        <div className="relative shrink-0">
           <Image
             src="/assets/images/about/intro/illustration.svg"
             alt="少年報導者介紹圖"
-            className="mx-auto w-full max-w-120"
+            className="relative top-0 left-0 mx-auto h-[273px] w-[327px] max-w-120 tablet:top-[calc((100vw-768px)*0.15)] tablet:h-[284px] tablet:w-[340px] desktop:top-[calc((100vw-1024px)*0.08)] desktop:h-[374px] desktop:w-[448px] hd:top-[calc((100vw-1440px)*0.05)] hd:h-[400px] hd:w-[480px]"
             loading="eager"
             width={327}
             height={273}
@@ -30,6 +30,7 @@ function Intro() {
           />
         </div>
       </div>
+
       <WaveIllustrations />
     </section>
   )
