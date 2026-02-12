@@ -188,7 +188,7 @@ function Authors({ authors }: AuthorsProp) {
 
       <div
         ref={scrollContainerRef}
-        className="flex max-w-screen snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 pb-2 scrollbar-none tablet:scroll-px-8 tablet:px-8 desktop:w-screen desktop:scroll-px-[max(50vw+56px-600px,48px)] desktop:px-[max(50vw+56px-600px,48px)]"
+        className="flex max-w-screen snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 pb-2 scrollbar-none tablet:scroll-px-8 tablet:px-8 desktop:w-screen desktop:scroll-px-[max(calc(50vw+56px-600px),48px)] desktop:px-[max(calc(50vw+56px-600px),48px)]"
       >
         {authors.map((author) => {
           return <AuthorCard key={author.id} author={author} />
