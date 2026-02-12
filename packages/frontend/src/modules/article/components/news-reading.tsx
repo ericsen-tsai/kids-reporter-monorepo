@@ -57,7 +57,7 @@ function NewsReading({ className, items }: NewsReadingProps) {
     <div className="w-full px-4">
       <div
         className={cn(
-          'mx-auto mt-10 flex max-w-[584px] flex-col rounded-[20px] border border-neutral-200 p-6 tablet:mt-20 tablet:p-9 hd:max-w-[656px]',
+          'mx-auto mt-10 flex max-w-[512px] flex-col rounded-[20px] border border-neutral-200 p-6 tablet:mt-20 tablet:max-w-[584px] tablet:p-9 hd:max-w-[656px]',
           className
         )}
       >

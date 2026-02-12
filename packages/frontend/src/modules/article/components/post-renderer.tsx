@@ -39,7 +39,7 @@ function PostRenderer({ content }: PostProp) {
   return (
     <div
       className={cn(
-        'prose-article text-neutral-900',
+        'mb-10 prose-article text-neutral-900 tablet:mb-15',
         ...ARTICLE_FONT_SIZE_CLASSNAMES,
         fontSize === FontSizeLevel.LARGE && [
           ...ARTICLE_FONT_SIZE_CLASSNAMES_LARGE,

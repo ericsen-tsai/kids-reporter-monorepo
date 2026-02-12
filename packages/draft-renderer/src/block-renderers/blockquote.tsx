@@ -12,6 +12,7 @@ const BorderLeftLine = styled.div`
   border-radius: 10px;
   background-color: #c6c6c6;
   align-self: stretch;
+  flex-shrink: 0;
 `
 
 export function BorderLeftBlockquote({ text }: { text: string }) {

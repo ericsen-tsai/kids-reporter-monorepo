@@ -10,7 +10,7 @@ type PopularKeywordsProp = {
 
 function PopularKeywords({ keywords }: PopularKeywordsProp) {
   return (
-    <div className="-mt-1 flex w-[min(100vw,512px)] flex-col items-start gap-5 px-6 tablet:mt-4 tablet:px-0 hd:w-[584px]">
+    <div className="mt-4 flex w-[min(100vw,512px)] flex-col items-start gap-5 px-6 tablet:px-0 desktop:mt-5 hd:w-[584px]">
       <div className="flex flex-row items-center gap-2">
         <PopularKeywordsIcon />
         <h5 className="prose-h5-small desktop:prose-h5-large">常用關鍵字</h5>

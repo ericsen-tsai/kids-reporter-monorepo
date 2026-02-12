@@ -22,6 +22,13 @@ export const Paragraph = styled.div`
   > div[data-block='true'] {
     margin-bottom: 38px;
   }
+
+  &:has(+ div:not([data-paragraph-block='true'])) {
+    margin-bottom: 40px;
+    ${mediaQuery.desktopAbove} {
+      margin-bottom: 60px;
+    }
+  }
 `
 
 export const Heading = styled.div`
@@ -48,6 +55,14 @@ export const Heading = styled.div`
     padding-left: 24px;
     padding-right: 24px;
   }
+
+  /* when the next sibling div contains a blockquote */
+  & + div:has(blockquote) {
+    margin-top: 0px;
+    ${mediaQuery.desktopAbove} {
+      margin-top: 0px;
+    }
+  }
 `
 
 export const List = styled.ol`
@@ -73,12 +88,26 @@ export const List = styled.ol`
   > li {
     margin-bottom: 6px;
   }
+
+  &:has(+ div:not([data-paragraph-block='true'])) {
+    margin-bottom: 40px;
+    ${mediaQuery.desktopAbove} {
+      margin-bottom: 60px;
+    }
+  }
 `
 
 export const Atomic = styled.div`
   /* reset browser default styles */
   > figure {
     margin: 0;
+  }
+
+  &:has(blockquote) {
+    margin-top: -2px;
+    ${mediaQuery.desktopAbove} {
+      margin-top: -22px;
+    }
   }
 
   ${mediaQuery.desktopAbove} {
@@ -120,15 +149,15 @@ const _blockRenderMap = Immutable.Map({
   },
   'ordered-list-item': {
     element: 'li',
-    wrapper: <List />,
+    wrapper: <List data-paragraph-block="true" />,
   },
   'unordered-list-item': {
     element: 'li',
-    wrapper: <List as="ul" />,
+    wrapper: <List as="ul" data-paragraph-block="true" />,
   },
   unstyled: {
     element: 'div',
-    wrapper: <Paragraph />,
+    wrapper: <Paragraph data-paragraph-block="true" />,
   },
 })
 
