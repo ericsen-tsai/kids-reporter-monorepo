@@ -286,7 +286,7 @@ const ArticleModule = ({
             </div>
             <div className="relative w-full">
               <PostRenderer content={post?.content ?? {}} />
-              <div className="absolute top-[calc(50%+50vh)]">
+              <div className="absolute top-[calc(25%+50vh)]">
                 <ArticleBaodaozaiEventTrigger
                   id="change-encourage-reading"
                   disabled={!isScrollingDown}
