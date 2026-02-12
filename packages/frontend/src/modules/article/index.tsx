@@ -286,17 +286,26 @@ const ArticleModule = ({
             </div>
             <div className="relative w-full">
               <PostRenderer content={post?.content ?? {}} />
-              {/* middle of the article content enters 50% of the viewport*/}
               <div className="absolute top-[calc(50%+50vh)]">
+                <ArticleBaodaozaiEventTrigger
+                  id="change-encourage-reading"
+                  disabled={!isScrollingDown}
+                />
+                <ArticleBaodaozaiEventTrigger
+                  id="change-start-reading"
+                  disabled={isScrollingDown}
+                  startReadingContent={post?.opening ?? ''}
+                />
+              </div>
+              <div className="absolute top-[calc(75%+50vh)]">
                 <ArticleBaodaozaiEventTrigger
                   id="change-ask-questions"
                   disabled={!isScrollingDown}
                   onAskQuestionsConfirm={handleBaodaozaiConfirm}
                 />
                 <ArticleBaodaozaiEventTrigger
-                  id="change-start-reading"
+                  id="change-encourage-reading"
                   disabled={isScrollingDown}
-                  startReadingContent={post?.opening ?? ''}
                 />
               </div>
             </div>
@@ -319,13 +328,6 @@ const ArticleModule = ({
       <Authors authors={orderedAuthors} />
 
       <div className="relative w-full">
-        {/* related posts enters 50% of the viewport*/}
-        <div className="absolute top-[calc(50%+50vh)]">
-          <ArticleBaodaozaiEventTrigger
-            id="show-related-articles"
-            disabled={!isScrollingDown}
-          />
-        </div>
         <RelatedArticles
           articles={relatedPosts ?? []}
           twReporterArticles={twReporterRelatedPosts ?? []}
