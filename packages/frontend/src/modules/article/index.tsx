@@ -332,7 +332,7 @@ const ArticleModule = ({
         />
       </div>
       <SupportAction
-        title="每一篇好報導，都需要有心人支持"
+        title="兒少好新聞，需要您的行動支持"
         content={<SupportActionContent />}
       />
       {postQuestions && (

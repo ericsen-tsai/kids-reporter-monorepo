@@ -245,10 +245,10 @@ const ArticleBodyContainer = styled.div<{ $alignment?: string }>`
     margin: 0;
   }
 
-  margin: 40px auto;
+  margin: 0 auto 40px auto;
 
   ${mediaQuery.mediumAbove} {
-    margin: 60px auto;
+    margin: 0 auto 60px auto;
   }
 
   ${mediaQuery.smallOnly} {
@@ -275,8 +275,6 @@ const ArticleBodyContainer = styled.div<{ $alignment?: string }>`
         return `
           ${mediaQuery.smallOnly} {
             max-width: 512px;
-            padding-left: 24px;
-            padding-right: 24px;
           }
 
           ${mediaQuery.mediumAbove} {

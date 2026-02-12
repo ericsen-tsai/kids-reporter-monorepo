@@ -11,9 +11,23 @@ const LinkWrapper = styled.a`
   cursor: pointer;
   text-decoration-color: #c6c6c6;
   text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
 
   &:hover {
     text-decoration-color: #27b3f5;
+  }
+
+  & > span {
+    color: #27b3f5 !important;
+    text-decoration: underline !important;
+    text-decoration-color: #c6c6c6 !important;
+    text-underline-offset: 3px !important;
+    text-decoration-thickness: 1px !important;
+    transition: text-decoration-color 0.1s ease-in !important;
+
+    &:hover {
+      text-decoration-color: #27b3f5 !important;
+    }
   }
 `
 

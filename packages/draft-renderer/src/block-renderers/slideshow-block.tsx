@@ -616,11 +616,11 @@ export function SlideshowBlock({ className = '', data }: SlideshowBlockProps) {
 
 const ArticleBodyContainer = styled.div`
   ${mediaQuery.smallOnly} {
-    margin: 40px auto;
+    margin: 0 auto 40px auto;
   }
 
   ${mediaQuery.mediumAbove} {
-    margin: 60px auto;
+    margin: 0 auto 60px auto;
   }
 `
 

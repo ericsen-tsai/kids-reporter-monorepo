@@ -3,6 +3,7 @@ import Immutable from 'immutable'
 import React from 'react'
 import styled from 'styled-components'
 
+import { mediaQuery } from '../utils/media-query'
 import { Atomic, Paragraph } from './article-content'
 
 const ParagraphForImageLink = styled(Paragraph)`
@@ -15,7 +16,16 @@ const ParagraphForImageLink = styled(Paragraph)`
   color: rgb(58, 79, 102);
   letter-spacing: 0.7px;
   line-height: 28px;
-  text-align: center;
+  text-align: left;
+
+  ${mediaQuery.smallOnly} {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
+  > div[data-block='true'] {
+    margin-bottom: 0px;
+  }
 `
 
 const _blockRenderMapForAnnotation = Immutable.Map({

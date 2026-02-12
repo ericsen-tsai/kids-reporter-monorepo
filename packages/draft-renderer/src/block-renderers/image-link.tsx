@@ -39,7 +39,7 @@ const Figure = styled.figure<{ $alignment?: string }>`
 `
 
 const FigureCaption = styled.figcaption<{ $alignment?: string }>`
-  width: fit-content;
+  width: 100%;
   max-width: 100%;
   font-size: ${({ theme }) =>
     theme?.fontSizeLevel === 'large' ? '18px' : '14px'};
@@ -48,7 +48,7 @@ const FigureCaption = styled.figcaption<{ $alignment?: string }>`
   color: #575757;
   letter-spacing: 0.7px;
   line-height: 28px;
-  text-align: center;
+  text-align: left;
   padding: 16px 0 20px 0;
   border-bottom: 2px solid #c6c6c6;
 
@@ -69,7 +69,7 @@ const FigureCaption = styled.figcaption<{ $alignment?: string }>`
           ${mediaQuery.mediumAbove} {
             max-width: 340px;
             margin-left: auto;
-            margin-right: 0px;
+            margin-right: 32px;
           }
 
           ${mediaQuery.desktopAbove} {
@@ -230,10 +230,10 @@ const ArticleBodyContainer = styled.div<{ $alignment?: string }>`
     margin: 0;
   }
 
-  margin: 40px auto;
+  margin: 0 auto 40px auto;
 
   ${mediaQuery.mediumAbove} {
-    margin: 60px auto;
+    margin: 0 auto 60px auto;
   }
 
   ${mediaQuery.smallOnly} {
@@ -259,8 +259,6 @@ const ArticleBodyContainer = styled.div<{ $alignment?: string }>`
         return `
           ${mediaQuery.smallOnly} {
             max-width: 512px;
-            padding-left: 24px;
-            padding-right: 24px;
           }
 
           ${mediaQuery.mediumAbove} {
@@ -306,7 +304,11 @@ export const ImageLinkInArticleBody = ({
   data,
 }: ImageBlockInArticleBodyProps) => {
   return (
-    <ArticleBodyContainer $alignment={data.alignment} className={className}>
+    <ArticleBodyContainer
+      $alignment={data.alignment}
+      className={className}
+      data-image-link-block="true"
+    >
       <ImageLinkBlock data={data} />
     </ArticleBodyContainer>
   )
