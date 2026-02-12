@@ -69,7 +69,7 @@ function JoinUsCard({ card }: JoinUsCardProps) {
         <p className="mb-4 prose-p1 text-neutral-700 desktop:mb-5">
           {card.description}
         </p>
-        <div className="mt-auto pt-2">{getButtonContent()}</div>
+        <div className="mt-auto">{getButtonContent()}</div>
       </div>
     </div>
   )
