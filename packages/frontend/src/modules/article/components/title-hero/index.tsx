@@ -61,7 +61,7 @@ function TitleHero({
             </svg>
           </Link>
         )}
-        <header className="ml-6 flex flex-col gap-1 tablet:ml-0 tablet:gap-2">
+        <header className="mx-6 flex flex-col gap-1 tablet:mx-0 tablet:gap-2">
           {subtitle && (
             <h4
               className={cn(
