@@ -12,6 +12,7 @@ type EventId =
   | 'show-start-reading'
   | 'hide-start-reading'
   | 'change-start-reading'
+  | 'change-encourage-reading'
   | 'change-ask-questions'
   | 'show-ask-questions'
   | 'show-related-articles'
@@ -29,6 +30,9 @@ type ArticleBaodaozaiEventTriggerProps = {
   onAskQuestionsConfirm?: BaodaozaiActionSetter
   startReadingContent?: string
 }
+
+const ENCOURAGE_READING_CONTENT =
+  '進度很棒！再看一下下，最後會有小挑戰等你破解！'
 
 function createBaodaozaiEventConfig({
   onAskQuestionsConfirm,
@@ -70,6 +74,19 @@ function createBaodaozaiEventConfig({
         hideCancelButton: true,
         confirmText: '開始閱讀',
         content: startReadingContent || '',
+        confirmAction: () => {},
+      },
+      baodaozaiState: {
+        isActive: false,
+        action: 'none',
+      },
+    },
+    'change-encourage-reading': {
+      dialogState: {
+        isOpen: false,
+        hideCancelButton: true,
+        confirmText: '繼續閱讀',
+        content: ENCOURAGE_READING_CONTENT,
         confirmAction: () => {},
       },
       baodaozaiState: {
