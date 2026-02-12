@@ -1,5 +1,6 @@
 'use client'
 
+import { cn } from '@kids-reporter/routing-ui'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import {
@@ -91,18 +92,24 @@ function VideoPlayer() {
         {isInViewport ? (
           <>
             <iframe
-              src={`${YOUTUBE_EMBED_URL}?autoplay=1&mute=1&enablejsapi=1&showinfo=0&controls=0`}
+              src={`${YOUTUBE_EMBED_URL}?autoplay=1&mute=1&enablejsapi=1&showinfo=0&controls=0&rel=0`}
               className="absolute inset-0 h-full w-full"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               title="讀者推薦影片"
             />
+            <div
+              className={cn(
+                'absolute inset-0 z-5 bg-neutral-900 opacity-0 transition-opacity duration-300',
+                isModalOpen && 'pointer-events-none opacity-100'
+              )}
+            ></div>
             <button
               className="group absolute inset-0 z-10 cursor-pointer"
               onClick={handleModalOpen}
               aria-label="Open video in modal"
             >
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-neutral-white/40 group-hover:text-neutral-white/60">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 [&_path]:first-of-type:opacity-60 group-hover:[&_path]:first-of-type:opacity-40">
                 <PlayIcon className="desktop:hidden" />
                 <PlayIconLarge className="hidden desktop:block" />
               </div>
@@ -128,14 +135,9 @@ function VideoPlayer() {
                 當兒少碰上新聞...
               </p>
             </div>
-            <div className="absolute top-1/2 left-1/2 flex size-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-neutral-900/80 transition-transform group-hover:scale-110 desktop:size-24">
-              <svg
-                className="ml-1 size-8 text-neutral-white desktop:size-10"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M8 5v14l11-7z" />
-              </svg>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 [&_path]:first-of-type:opacity-60 group-hover:[&_path]:first-of-type:opacity-40">
+              <PlayIcon className="desktop:hidden" />
+              <PlayIconLarge className="hidden desktop:block" />
             </div>
           </div>
         )}

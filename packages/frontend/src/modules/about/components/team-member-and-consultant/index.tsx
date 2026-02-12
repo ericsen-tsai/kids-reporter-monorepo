@@ -18,7 +18,7 @@ function TeamMemberAndConsultant({
 }: TeamMemberAndConsultantProps) {
   return (
     <section className="mx-auto w-full max-w-300 pb-14 tablet:pb-16 desktop:pb-24 hd:pb-30">
-      <div className="mx-auto flex w-full max-w-full flex-col gap-20 tablet:w-max tablet:gap-24 desktop:gap-32 hd:gap-36">
+      <div className="mx-auto flex w-full max-w-full flex-col gap-20 tablet:w-max tablet:gap-24 desktop:gap-32 hd:gap-28">
         <div
           id="team"
           className="mt-6 flex scroll-margin-anchor flex-col gap-6 tablet:mt-8 desktop:mt-8 desktop:gap-8 hd:my-6 hd:gap-10"
@@ -36,7 +36,7 @@ function TeamMemberAndConsultant({
             </h2>
           </div>
 
-          <div className="flex scrollbar-thin min-w-0 snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 pb-2 tablet:grid tablet:snap-none tablet:grid-cols-2 desktop:grid-cols-3 desktop:gap-8 hd:grid-cols-4">
+          <div className="flex min-w-0 snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 pb-2 scrollbar-none tablet:grid tablet:snap-none tablet:grid-cols-2 desktop:grid-cols-3 desktop:gap-8 hd:grid-cols-4">
             {teamMembers.map((member) => (
               <div key={member.id} className="w-[248px] shrink-0 snap-start">
                 <MemberCard

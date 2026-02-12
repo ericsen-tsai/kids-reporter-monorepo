@@ -27,7 +27,7 @@ function SegmentedSwitcher<TValue extends string>({
           key={item.value}
           onClick={() => onSegmentChange(item.value)}
           className={cn(
-            'flex min-w-40 flex-1 cursor-pointer items-center justify-center gap-2 rounded-[20px] px-4 py-[5px] transition-all duration-200',
+            'flex min-w-40 flex-1 cursor-pointer items-center justify-center gap-2 rounded-[20px] px-4 py-[5px] prose-p2-bold transition-all duration-200',
             selectedSegment === item.value && 'bg-neutral-white shadow-sm',
             selectedSegment !== item.value &&
               'bg-transparent hover:bg-neutral-300',
@@ -36,7 +36,7 @@ function SegmentedSwitcher<TValue extends string>({
           type="button"
         >
           {item.icon ?? null}
-          <span className="prose-p2-bold text-nowrap">{item.label}</span>
+          <span className="text-nowrap">{item.label}</span>
         </button>
       ))}
     </div>
