@@ -6,7 +6,7 @@ function WaveIllustrations() {
         aria-hidden="true"
       />
       <div
-        className="absolute bottom-0 left-0 z-3 h-[104px] w-full bg-[url(/assets/images/home/topic_wave_front_s.svg)] bg-size-[100%_100%] tablet:hidden"
+        className="absolute bottom-[-3px] left-0 z-3 h-[104px] w-full bg-[url(/assets/images/home/topic_wave_front_s.svg)] bg-size-[100%_100%] tablet:hidden"
         aria-hidden="true"
       />
       <div
