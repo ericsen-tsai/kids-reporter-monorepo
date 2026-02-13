@@ -3,7 +3,7 @@
 import { Button, cn } from '@kids-reporter/routing-ui'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { DEFAULT_AVATAR } from '@/constants'
 import useClickOutside from '@/hooks/use-click-outside'
@@ -142,6 +142,31 @@ function AuthorCard({ author }: { author: Author }) {
 
 function Authors({ authors }: AuthorsProp) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const [isAtStart, setIsAtStart] = useState(true)
+  const [isAtEnd, setIsAtEnd] = useState(false)
+
+  const updateScrollState = useCallback(() => {
+    const el = scrollContainerRef.current
+    if (!el) return
+    const atStart = el.scrollLeft <= 0
+    const atEnd = el.scrollLeft >= el.scrollWidth - el.clientWidth - 1
+    setIsAtStart(atStart)
+    setIsAtEnd(atEnd)
+  }, [])
+
+  useEffect(() => {
+    const el = scrollContainerRef.current
+    if (!el) return
+    updateScrollState()
+    el.addEventListener('scroll', updateScrollState)
+    const resizeObserver = new ResizeObserver(updateScrollState)
+    resizeObserver.observe(el)
+    return () => {
+      el.removeEventListener('scroll', updateScrollState)
+      resizeObserver.disconnect()
+    }
+  }, [updateScrollState])
+
   const scrollLeft = useCallback(() => {
     if (scrollContainerRef.current) {
       const scrollAmount = CARD_WIDTH + GAP
@@ -174,6 +199,7 @@ function Authors({ authors }: AuthorsProp) {
           variant="secondary"
           className="mr-2 hidden size-11 p-0 tablet:flex"
           onClick={scrollLeft}
+          disabled={isAtStart}
         >
           <ArrowLeft />
         </Button>
@@ -181,6 +207,7 @@ function Authors({ authors }: AuthorsProp) {
           variant="secondary"
           className="hidden size-11 p-0 tablet:flex"
           onClick={scrollRight}
+          disabled={isAtEnd}
         >
           <ArrowRight />
         </Button>

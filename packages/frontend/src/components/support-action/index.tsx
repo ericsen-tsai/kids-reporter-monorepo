@@ -11,17 +11,10 @@ type SupportActionProps = {
   title: React.ReactNode
   content: React.ReactNode
   className?: string
-  contentClassName?: string
   id?: string
 }
 
-function SupportAction({
-  title,
-  content,
-  className,
-  contentClassName,
-  id,
-}: SupportActionProps) {
+function SupportAction({ title, content, className, id }: SupportActionProps) {
   return (
     <div
       className={cn(
@@ -33,12 +26,7 @@ function SupportAction({
       <div className="relative w-full">
         <TriangleIllustrations />
 
-        <div
-          className={cn(
-            'relative z-10 flex flex-col items-center justify-center px-14 py-12 tablet:px-12 desktop:px-16 desktop:py-16',
-            contentClassName
-          )}
-        >
+        <div className="relative z-10 flex flex-col items-center justify-center px-14 py-14 tablet:px-12 desktop:px-16 desktop:py-16">
           <div className="flex w-full max-w-[510px] flex-col hd:max-w-[584px]">
             <div className="flex flex-col gap-4">
               <h3 className="text-center prose-h3-small !font-swei text-neutral-900 desktop:prose-h3-large">

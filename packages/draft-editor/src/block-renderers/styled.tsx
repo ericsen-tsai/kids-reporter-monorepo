@@ -96,7 +96,7 @@ export const EditableBlock = (props: {
   onClick: () => void
 }) => {
   return (
-    <_EditableBlock className={props.className}>
+    <_EditableBlock className={props.className} onClick={props.onClick}>
       {props.component}
       <EditButton onClick={props.onClick}>
         <i className="fa-solid fa-pen"></i>
