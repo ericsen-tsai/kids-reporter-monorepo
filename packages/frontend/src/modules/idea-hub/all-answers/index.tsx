@@ -150,7 +150,7 @@ function AllAnswers({ onOpenModal }: AllAnswersProps) {
     <div className="relative flex w-[calc(100%+48px)] flex-col bg-neutral-100 pt-10 tablet:w-[calc(100%+64px)] tablet:pt-12 desktop:w-screen desktop:pt-18 hd:w-screen hd:pt-24">
       <div
         ref={titleRef}
-        className="mb-6 flex scroll-mt-[104px] items-center gap-3 pl-6 tablet:mb-8 tablet:scroll-mt-[112px] tablet:pl-8 desktop:mb-10 desktop:scroll-mt-[136px] desktop:pl-[max(calc(50vw+56px-600px),48px)] hd:scroll-mt-[160px] hd:pl-[calc(50vw-600px+64px)]"
+        className="mb-6 flex scroll-mt-[40px] items-center gap-3 pl-6 tablet:mb-8 tablet:scroll-mt-[48px] tablet:pl-8 desktop:mb-10 desktop:scroll-mt-[136px] desktop:pl-[max(calc(50vw+56px-600px),48px)] hd:scroll-mt-[160px] hd:pl-[calc(50vw-600px+56px)]"
       >
         <div className="h-8 w-1.5 rounded-md bg-blue-400" />
         <h3 className="prose-h3-small font-swei text-neutral-900 desktop:prose-h3-large">
@@ -159,7 +159,7 @@ function AllAnswers({ onOpenModal }: AllAnswersProps) {
       </div>
       <div
         ref={scrollContainerRef}
-        className="flex snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 pb-14 scrollbar-none tablet:scroll-px-8 tablet:px-8 tablet:pb-16 desktop:scroll-px-[max(calc(50vw+56px-600px),48px)] desktop:gap-8 desktop:px-[max(calc(50vw+56px-600px),48px)] desktop:pb-24 hd:scroll-pr-14 hd:scroll-pl-[calc(50vw-600px+64px)] hd:pr-14 hd:pb-30 hd:pl-[calc(50vw-600px+64px)]"
+        className="flex snap-x snap-mandatory scroll-px-6 gap-6 overflow-x-auto px-6 pb-14 scrollbar-none tablet:scroll-px-8 tablet:px-8 tablet:pb-16 desktop:scroll-px-[max(calc(50vw+56px-600px),48px)] desktop:gap-8 desktop:px-[max(calc(50vw+56px-600px),48px)] desktop:pb-24 hd:scroll-pr-14 hd:scroll-pl-[calc(50vw-600px+56px)] hd:pr-14 hd:pb-30 hd:pl-[calc(50vw-600px+56px)]"
       >
         {posts?.map((post, index) => (
           <div
