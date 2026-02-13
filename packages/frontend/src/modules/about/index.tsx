@@ -53,7 +53,6 @@ function AboutModule({ teamMembers, consultants }: AboutModuleProps) {
         }
         content={<SupportActionContent />}
         className="bg-yellow-200"
-        contentClassName="py-14 desktop:py-16"
         id="support"
       />
     </main>

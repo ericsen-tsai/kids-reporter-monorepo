@@ -112,7 +112,6 @@ const FigureCaption = styled.figcaption<{ $alignment?: string }>`
           }
 
           ${mediaQuery.mediumAbove} {
-            max-width: 340px;
             margin-left: 0px;
             margin-right: 0px;
           }
@@ -275,6 +274,7 @@ const ArticleBodyContainer = styled.div<{ $alignment?: string }>`
         return `
           ${mediaQuery.smallOnly} {
             max-width: 512px;
+            padding: 0 24px;
           }
 
           ${mediaQuery.mediumAbove} {
