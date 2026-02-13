@@ -25,7 +25,7 @@ export const Paragraph = styled.div`
 
   &:has(+ div:not([data-paragraph-block='true'])) {
     margin-bottom: 40px;
-    ${mediaQuery.desktopAbove} {
+    ${mediaQuery.mediumAbove} {
       margin-bottom: 60px;
     }
   }
@@ -91,7 +91,7 @@ export const List = styled.ol`
 
   &:has(+ div:not([data-paragraph-block='true'])) {
     margin-bottom: 40px;
-    ${mediaQuery.desktopAbove} {
+    ${mediaQuery.mediumAbove} {
       margin-bottom: 60px;
     }
   }
@@ -105,22 +105,27 @@ export const Atomic = styled.div`
 
   &:has(blockquote) {
     margin-top: -2px;
-    ${mediaQuery.desktopAbove} {
+    ${mediaQuery.mediumAbove} {
       margin-top: -22px;
     }
   }
 
   ${mediaQuery.desktopAbove} {
     div:has(+ div [data-image-block-caption-alignment='default'])
-      [data-image-block-caption-alignment='default'],
-    [data-image-slideshow-caption-alignment='default'] {
+      [data-image-block-caption-alignment='default'] {
       position: relative !important;
     }
-  }
-  ${mediaQuery.largeOnly} {
     div:has(+ div [data-image-block-caption-alignment='default'])
-      [data-image-block-caption-alignment='default'],
-    [data-image-slideshow-caption-alignment='default'] {
+      [data-image-slideshow-caption-alignment='default'] {
+      position: relative !important;
+    }
+
+    div:has(+ div [data-image-slideshow-caption-alignment='default'])
+      [data-image-block-caption-alignment='default'] {
+      position: relative !important;
+    }
+    div:has(+ div [data-image-slideshow-caption-alignment='default'])
+      [data-image-slideshow-caption-alignment='default'] {
       position: relative !important;
     }
   }
