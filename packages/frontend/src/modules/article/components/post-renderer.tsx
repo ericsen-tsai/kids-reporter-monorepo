@@ -28,14 +28,12 @@ function trimEmptyBlocks(raw: RawDraftContentState): RawDraftContentState {
 
 type PostProp = {
   content: RawDraftContentState
+  shouldMount?: boolean
 }
 
-function PostRenderer({ content }: PostProp) {
+function PostRenderer({ content, shouldMount }: PostProp) {
   const { onImageModalOpen, fontSize } = useArticleContext()
-  const [isMounted, setIsMounted] = useState(false)
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
+
   return (
     <div
       className={cn(
@@ -46,7 +44,7 @@ function PostRenderer({ content }: PostProp) {
         ]
       )}
     >
-      {isMounted && (
+      {shouldMount && (
         <ArticleBodyDraftRenderer
           rawContentState={trimEmptyBlocks(content)}
           onImageModalOpen={onImageModalOpen}
