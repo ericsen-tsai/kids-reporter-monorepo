@@ -4,7 +4,6 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import { ArticleBodyDraftRenderer } from '@kids-reporter/draft-renderer'
 import { cn } from '@kids-reporter/routing-ui'
 import { RawDraftContentState } from 'draft-js'
-import { useEffect, useState } from 'react'
 
 import { FontSizeLevel, STICKY_HEADER_HEIGHT } from '@/constants'
 
