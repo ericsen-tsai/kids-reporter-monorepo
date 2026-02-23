@@ -295,7 +295,7 @@ const ArticleModule = ({
             </div>
             <div className="relative w-full">
               <PostRenderer
-                content={post?.content ?? {}}
+                content={post?.content ?? { blocks: [], entityMap: {} }}
                 shouldMount={isMounted}
               />
               <div className="absolute top-[calc(25%+50vh)]">
