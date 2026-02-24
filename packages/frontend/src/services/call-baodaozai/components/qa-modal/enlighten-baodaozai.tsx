@@ -8,17 +8,12 @@ import {
 } from '@rive-app/react-webgl2'
 import { useEffect } from 'react'
 
+import { QaBaodaozaiState } from '../../types'
+
 const ROOT_VIEW_MODEL_NAME = 'VM_EnlightenSelector'
 
-type QABaodaozaiValue =
-  | 'default'
-  | 'enlighten-send'
-  | 'enlighten-fault'
-  | 'enlighten-correct'
-  | 'enlighten-ask'
-
 type EnlightenBaodaozaiProps = {
-  state: QABaodaozaiValue
+  state: QaBaodaozaiState
 }
 
 function EnlightenBaodaozai({ state }: EnlightenBaodaozaiProps) {
