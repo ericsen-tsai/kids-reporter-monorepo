@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { CallBaodaozaiProps, useCallBaodaozaiContext } from '../../context'
 import { BaodaozaiAction, BaodaozaiQuestions } from '../../types'
 import { UPDATE_QA_MODAL_OVERRIDES } from './constants'
+import EnlightenBaodaozai from './enlighten-baodaozai'
 import { QAModalMode } from './types'
 import {
   getDefaultAnswerFromQuestions,
@@ -292,19 +293,9 @@ function QAModal({
                   <div className="flex h-full w-full items-center justify-center">
                     {answers[currentModalStep.questionIndex] ===
                     currentModalStep.correctAnswerIndex.toString() ? (
-                      <Image
-                        src="/assets/images/baodaozai/correct_answer.svg"
-                        alt="Correct Answer"
-                        width={300}
-                        height={120}
-                      />
+                      <EnlightenBaodaozai state="enlighten-correct" />
                     ) : (
-                      <Image
-                        src="/assets/images/baodaozai/incorrect_answer.svg"
-                        alt="Incorrect Answer"
-                        width={300}
-                        height={120}
-                      />
+                      <EnlightenBaodaozai state="enlighten-fault" />
                     )}
                   </div>
                 </div>
@@ -340,14 +331,8 @@ function QAModal({
 
               <div className="mb-6 flex w-full justify-center px-6">
                 <div className="flex h-[120px] w-[300px] items-center justify-center">
-                  {/* Placeholder for result image - would be replaced with actual image component */}
                   <div className="flex h-full w-full items-center justify-center">
-                    <Image
-                      src="/assets/images/baodaozai/send.svg"
-                      alt="Correct Answer"
-                      width={300}
-                      height={120}
-                    />
+                    <EnlightenBaodaozai state="enlighten-send" />
                   </div>
                 </div>
               </div>
@@ -460,9 +445,10 @@ function QAModal({
     currentModalStep,
     handleCancelLeaving,
     handleConfirmLeaving,
-    currentAnswer,
     mode,
     handleLeaving,
+    currentAnswer,
+    isCleanAnswers,
     isLastQuestion,
   ])
 
