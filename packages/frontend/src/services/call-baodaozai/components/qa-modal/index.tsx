@@ -17,7 +17,8 @@ import {
 
 export type QAModalEvent = {
   setHide: (hide: boolean) => void
-  setIsActive: (isActive: boolean) => void
+  setActionEntered: (action: BaodaozaiAction, isEntered: boolean) => void
+  setIsIdelReadStoned: (isIdelReadStoned: boolean) => void
   setAction: (action: BaodaozaiAction) => void
   onDialogPropsChange: (
     dialogProps: Partial<CallBaodaozaiProps['dialogWithActionProps']>
@@ -28,7 +29,8 @@ type QAModalProps = {
   questions: BaodaozaiQuestions
   onClose: ({
     setHide,
-    setIsActive,
+    setActionEntered,
+    setIsIdelReadStoned,
     setAction,
     onDialogPropsChange,
   }: QAModalEvent) => void
@@ -63,7 +65,12 @@ function QAModal({
   const [isLeaving, setIsLeaving] = useState(false)
 
   const {
-    baodaozaiProps: { setHide, setIsActive, setAction },
+    baodaozaiProps: {
+      setHide,
+      setActionEntered,
+      setIsIdelReadStoned,
+      setAction,
+    },
     onDialogPropsChange,
   } = useCallBaodaozaiContext()
 
@@ -92,8 +99,20 @@ function QAModal({
   }, [])
 
   const events = useMemo(
-    () => ({ setHide, setIsActive, setAction, onDialogPropsChange }),
-    [setHide, setIsActive, setAction, onDialogPropsChange]
+    () => ({
+      setHide,
+      setActionEntered,
+      setIsIdelReadStoned,
+      setAction,
+      onDialogPropsChange,
+    }),
+    [
+      setHide,
+      setActionEntered,
+      setIsIdelReadStoned,
+      setAction,
+      onDialogPropsChange,
+    ]
   )
 
   const handleConfirmLeaving = useCallback(() => {
@@ -131,13 +150,16 @@ function QAModal({
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add('no-scroll')
+      document.documentElement.style.overflow = 'hidden'
     } else {
       handleReset()
       document.body.classList.remove('no-scroll')
+      document.documentElement.style.overflow = 'auto'
     }
     return () => {
       handleReset()
       document.body.classList.remove('no-scroll')
+      document.documentElement.style.overflow = 'auto'
     }
   }, [isOpen, handleReset])
 
