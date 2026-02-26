@@ -8,8 +8,13 @@ import {
 } from '@rive-app/react-webgl2'
 import { useEffect } from 'react'
 
-import { QaBaodaozaiState } from '../../types'
+import envVars from '@/environment-variables'
 
+import {
+  ARTBOARD_ENLIGHTEN_NAME,
+  STATE_MACHINE_NAME,
+} from '../../context/constants'
+import { QaBaodaozaiState } from '../../types'
 const ROOT_VIEW_MODEL_NAME = 'VM_EnlightenSelector'
 
 type EnlightenBaodaozaiProps = {
@@ -18,10 +23,10 @@ type EnlightenBaodaozaiProps = {
 
 function EnlightenBaodaozai({ state }: EnlightenBaodaozaiProps) {
   const { RiveComponent, rive } = useRive({
-    src: '/baodaozai-db-enlighten.riv',
-    stateMachines: 'State Machine',
+    src: envVars.baodaozaiEnlightenRiveFilePath,
+    stateMachines: STATE_MACHINE_NAME,
     autoplay: true,
-    artboard: 'Master-Enlighten',
+    artboard: ARTBOARD_ENLIGHTEN_NAME,
   })
 
   const rootViewModel = useViewModel(rive, { name: ROOT_VIEW_MODEL_NAME })
