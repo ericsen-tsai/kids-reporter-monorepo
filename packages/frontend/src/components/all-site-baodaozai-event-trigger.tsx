@@ -45,6 +45,9 @@ function createBaodaozaiEventConfig({
         confirmText: '開始介紹',
         confirmAction,
         cancelText: '跳過',
+        cancelAction: ({ setActionEntered }) => {
+          setActionEntered('dialog-speaker', false)
+        },
       },
       baodaozaiState: {
         isActive: false,
