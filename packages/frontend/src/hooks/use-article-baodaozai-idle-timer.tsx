@@ -9,22 +9,28 @@ function useArticleBaodaozaiIdleTimer() {
     baodaozaiProps: { setAction, setIsIdelReadStoned, isInitialized, hide },
   } = useCallBaodaozaiContext()
 
-  const idleTimerProps = useMemo(
-    () => ({
-      idleCallback: async () => {
-        setAction('idel-read')
-        await new Promise((resolve) =>
-          setTimeout(resolve, DEFAULT_ANIMATION_DELAY)
-        )
+  const idleTimerProps = useMemo(() => {
+    let idleGeneration = 0
+    const idleCallback = async () => {
+      const currentGeneration = ++idleGeneration
+      setAction('idel-read')
+      await new Promise((resolve) =>
+        setTimeout(resolve, DEFAULT_ANIMATION_DELAY)
+      )
+      if (currentGeneration === idleGeneration) {
         setIsIdelReadStoned(true)
-      },
-      interactCallback: () => {
-        setIsIdelReadStoned(false)
-      },
+      }
+    }
+    const interactCallback = () => {
+      idleGeneration++
+      setIsIdelReadStoned(false)
+    }
+    return {
+      idleCallback,
+      interactCallback,
       disabled: !isInitialized || hide,
-    }),
-    [setAction, setIsIdelReadStoned, isInitialized, hide]
-  )
+    }
+  }, [setAction, setIsIdelReadStoned, isInitialized, hide])
 
   return useIdleTimer(idleTimerProps)
 }

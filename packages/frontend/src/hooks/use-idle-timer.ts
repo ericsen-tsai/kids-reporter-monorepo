@@ -15,6 +15,9 @@ export type UseIdleTimerOptions = {
 
 const DEFAULT_TIMEOUT_MS = 30000
 
+/** Throttle activity handling so we don't reset the timer on every mousemove/scroll tick */
+const ACTIVITY_THROTTLE_MS = 200
+
 const ACTIVITY_EVENTS = [
   'mousedown',
   'mousemove',
@@ -33,6 +36,7 @@ function useIdleTimer({
   const [isIdle, setIsIdle] = useState(false)
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const isIdleRef = useRef(false)
+  const lastActivityHandledAtRef = useRef(0)
   const idleCallbackRef = useRef(idleCallback)
   const interactCallbackRef = useRef(interactCallback)
 
@@ -55,17 +59,22 @@ function useIdleTimer({
   }, [disabled, timeoutMs])
 
   const handleActivity = useCallback(() => {
-    if (disabled) return
-
     const wasIdle = isIdleRef.current
-    isIdleRef.current = false
-    scheduleIdleTimer()
+    const now = Date.now()
+    const shouldResetTimer =
+      wasIdle || now - lastActivityHandledAtRef.current >= ACTIVITY_THROTTLE_MS
 
-    if (wasIdle) {
-      interactCallbackRef.current()
-      setIsIdle(false)
+    if (shouldResetTimer) {
+      lastActivityHandledAtRef.current = now
+      isIdleRef.current = false
+      scheduleIdleTimer()
+
+      if (wasIdle) {
+        interactCallbackRef.current()
+        setIsIdle(false)
+      }
     }
-  }, [disabled, scheduleIdleTimer])
+  }, [scheduleIdleTimer])
 
   const handleActivityCallback = useCallback(() => {
     const opts = { passive: true }
@@ -75,7 +84,15 @@ function useIdleTimer({
   }, [handleActivity])
 
   useEffect(() => {
-    if (disabled) return
+    if (disabled) {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+        timeoutRef.current = null
+      }
+      isIdleRef.current = false
+      setIsIdle(false)
+      return
+    }
 
     scheduleIdleTimer()
 

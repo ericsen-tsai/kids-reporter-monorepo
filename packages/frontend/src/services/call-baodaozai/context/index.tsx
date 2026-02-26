@@ -46,7 +46,9 @@ export type CallBaodaozaiProps = {
     setHide: (hide: boolean) => void
     isInitialized: boolean
     clickBaodaozaiAction: BaodaozaiAction | null
-    setClickBaodaozaiAction: (clickBaodaozaiAction: BaodaozaiAction) => void
+    setClickBaodaozaiAction: (
+      clickBaodaozaiAction: BaodaozaiAction | null
+    ) => void
   }
   renderBaodaozai: React.ReactNode
 }
