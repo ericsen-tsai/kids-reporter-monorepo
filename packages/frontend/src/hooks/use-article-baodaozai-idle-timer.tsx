@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 
 import useIdleTimer from '@/hooks/use-idle-timer'
 import { useCallBaodaozaiContext } from '@/services/call-baodaozai'
+import { DEFAULT_ANIMATION_DELAY } from '@/services/call-baodaozai/context/constants'
 
 function useArticleBaodaozaiIdleTimer() {
   const {
@@ -12,7 +13,9 @@ function useArticleBaodaozaiIdleTimer() {
     () => ({
       idleCallback: async () => {
         setAction('idel-read')
-        await new Promise((resolve) => setTimeout(resolve, 1000))
+        await new Promise((resolve) =>
+          setTimeout(resolve, DEFAULT_ANIMATION_DELAY)
+        )
         setIsIdelReadStoned(true)
       },
       interactCallback: () => {

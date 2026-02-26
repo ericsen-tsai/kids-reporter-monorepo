@@ -9,3 +9,5 @@ export const STATE_MACHINE_NAME = 'State Machine'
 export const VIEW_MODEL_NAME = 'VM_IdelDialogSelector'
 export const ARTBOARD_IDEL_NAME = 'Master-IdelDialog'
 export const ARTBOARD_ENLIGHTEN_NAME = 'Master-Enlighten'
+
+export const DEFAULT_ANIMATION_DELAY = 1000

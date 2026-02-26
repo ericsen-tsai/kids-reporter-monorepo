@@ -15,6 +15,7 @@ import {
   STATE_MACHINE_NAME,
 } from '../../context/constants'
 import { QaBaodaozaiState } from '../../types'
+import { ENLIGHTEN_BAODAOZAI_STATE_CHANGE_DELAY } from './constants'
 const ROOT_VIEW_MODEL_NAME = 'VM_EnlightenSelector'
 
 type EnlightenBaodaozaiProps = {
@@ -49,7 +50,9 @@ function EnlightenBaodaozai({ state }: EnlightenBaodaozaiProps) {
       setEnlighten(state)
       if (state === 'enlighten-send') {
         setEnlightenSendEnterState('enter')
-        await new Promise((resolve) => setTimeout(resolve, 2000))
+        await new Promise((resolve) =>
+          setTimeout(resolve, ENLIGHTEN_BAODAOZAI_STATE_CHANGE_DELAY)
+        )
         setEnlightenSendEnterState('exit')
       }
     }

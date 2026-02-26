@@ -22,6 +22,7 @@ import { DialogBoxProps } from '../components/dialog-box'
 import { BaodaozaiAction, BaodaozaiActionSetter } from '../types'
 import {
   ARTBOARD_IDEL_NAME,
+  DEFAULT_ANIMATION_DELAY,
   DIALOG_DEFAULT_CANCEL_TEXT,
   DIALOG_DEFAULT_CONFIRM_TEXT,
   DIALOG_DEFAULT_CONTENT,
@@ -202,11 +203,15 @@ export function CallBaodaozaiProvider({
         action !== 'default'
       ) {
         getEnterStateControl(action as BaodaozaiAction)?.setState('exit')
-        await new Promise((resolve) => setTimeout(resolve, 1000))
+        await new Promise((resolve) =>
+          setTimeout(resolve, DEFAULT_ANIMATION_DELAY)
+        )
       }
       setAction(nextState)
       getEnterStateControl(nextState)?.setState('enter')
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await new Promise((resolve) =>
+        setTimeout(resolve, DEFAULT_ANIMATION_DELAY)
+      )
       setIsAnimating(false)
     },
     [action, setAction, getEnterStateControl]
@@ -223,7 +228,9 @@ export function CallBaodaozaiProvider({
       setIsAnimating(true)
       setAction(nextState)
       getEnterStateControl(nextState)?.setState(isEntered ? 'enter' : 'exit')
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await new Promise((resolve) =>
+        setTimeout(resolve, DEFAULT_ANIMATION_DELAY)
+      )
       setIsAnimating(false)
     },
     [getEnterStateControl, setAction]
