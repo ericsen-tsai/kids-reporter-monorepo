@@ -133,10 +133,12 @@ export function SearchInputSection(props: SearchInputSectionProps) {
       ref.current?.focus()
       setIsFocused(true)
       document.body.classList.add('no-scroll')
+      document.documentElement.style.overflow = 'hidden'
       return
     }
     setIsFocused(false)
     document.body.classList.remove('no-scroll')
+    document.documentElement.style.overflow = 'auto'
   }, [mode, isSearchOpen])
 
   return (
