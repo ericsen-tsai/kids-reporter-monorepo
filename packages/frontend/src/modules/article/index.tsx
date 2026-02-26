@@ -27,6 +27,7 @@ import {
 import getLoginUrl from '@/utils/get-login-url'
 
 import SupportAction from '../../components/support-action'
+import useArticleBaodaozaiIdleTimer from '../../hooks/use-article-baodaozai-idle-timer'
 import ArticleBaodaozaiEventTrigger from './components/article-baodaozai-event-trigger'
 import ArticleSummary from './components/article-summary'
 import Authors from './components/authors'
@@ -83,25 +84,22 @@ const ArticleModule = ({
     setIsImgModalOpen(true)
     setImgProps(imgProps)
     document.body.classList.add('no-scroll')
+    document.documentElement.style.overflow = 'hidden'
   }
   const onImageModalClose = () => {
     setIsImgModalOpen(false)
     setImgProps({})
     document.body.classList.remove('no-scroll')
+    document.documentElement.style.overflow = 'auto'
   }
 
   const [isQAModalOpen, setIsQAModalOpen] = useState(false)
 
   const handleBaodaozaiConfirm = useCallback(
-    ({
-      setHide,
-      setIsActive,
-      setAction,
-    }: Parameters<BaodaozaiActionSetter>[0]) => {
+    ({ setHide, setAction }: Parameters<BaodaozaiActionSetter>[0]) => {
       setIsQAModalOpen(true)
       setHide(true)
-      setIsActive(false)
-      setAction('none')
+      setAction('dialog-speaker')
     },
     []
   )
@@ -112,10 +110,14 @@ const ArticleModule = ({
 
   const isLogin = !!member
 
-  const handleQAModalClose = useCallback(({ setHide }: QAModalEvent) => {
-    setIsQAModalOpen(false)
-    setHide(false)
-  }, [])
+  const handleQAModalClose = useCallback(
+    ({ setHide, setAction }: QAModalEvent) => {
+      setIsQAModalOpen(false)
+      setHide(false)
+      setAction('idel-enlighten')
+    },
+    []
+  )
 
   const newsReadingGroupItems = useMemo(() => {
     if (!post?.newsReadingGroup?.items) return []
@@ -177,8 +179,6 @@ const ArticleModule = ({
       }
       setIsQAModalOpen(false)
       events.setHide(false)
-      events.setIsActive(true)
-      events.setAction('speak')
       events.onDialogPropsChange({
         isOpen: true,
         content: isLogin
@@ -193,6 +193,9 @@ const ArticleModule = ({
           } else {
             router.push(getLoginUrl())
           }
+        },
+        cancelAction: () => {
+          events.setAction('idel-enlighten')
         },
       })
     },
@@ -229,6 +232,8 @@ const ArticleModule = ({
     return trimEmptyBlocks(post?.brief ?? { blocks: [], entityMap: {} })
   }, [post?.brief])
 
+  const { isIdle: isArticleBaodaozaiIdle } = useArticleBaodaozaiIdleTimer()
+
   return (
     <>
       <BaodaozaiVisibilitySetter show={showBaodaozai} />
@@ -258,7 +263,10 @@ const ArticleModule = ({
               />
             )}
 
-            <StartReadingBaodaozaiEventTrigger content={post?.opening ?? ''} />
+            <StartReadingBaodaozaiEventTrigger
+              content={post?.opening ?? ''}
+              isIdle={isArticleBaodaozaiIdle}
+            />
 
             <TitleHero
               topicBreadcrumb={
@@ -285,7 +293,7 @@ const ArticleModule = ({
 
             <ArticleBaodaozaiEventTrigger
               id="hide-start-reading"
-              disabled={!isScrollingDown}
+              disabled={!isScrollingDown || isArticleBaodaozaiIdle}
               startReadingContent={post?.opening ?? ''}
             />
             {trimmedBrief.blocks.length > 0 ? (
@@ -314,23 +322,23 @@ const ArticleModule = ({
               <div className="absolute top-[calc(25%+50vh)]">
                 <ArticleBaodaozaiEventTrigger
                   id="change-encourage-reading"
-                  disabled={!isScrollingDown}
+                  disabled={!isScrollingDown || isArticleBaodaozaiIdle}
                 />
                 <ArticleBaodaozaiEventTrigger
                   id="change-start-reading"
-                  disabled={isScrollingDown}
+                  disabled={isScrollingDown || isArticleBaodaozaiIdle}
                   startReadingContent={post?.opening ?? ''}
                 />
               </div>
               <div className="absolute top-[calc(75%+50vh)]">
                 <ArticleBaodaozaiEventTrigger
                   id="change-ask-questions"
-                  disabled={!isScrollingDown}
+                  disabled={!isScrollingDown || isArticleBaodaozaiIdle}
                   onAskQuestionsConfirm={handleBaodaozaiConfirm}
                 />
                 <ArticleBaodaozaiEventTrigger
                   id="change-encourage-reading"
-                  disabled={isScrollingDown}
+                  disabled={isScrollingDown || isArticleBaodaozaiIdle}
                 />
               </div>
             </div>
@@ -338,12 +346,12 @@ const ArticleModule = ({
             {keywords.length > 0 && <PopularKeywords keywords={keywords} />}
             <ArticleBaodaozaiEventTrigger
               id="show-ask-questions"
-              disabled={!isScrollingDown}
+              disabled={!isScrollingDown || isArticleBaodaozaiIdle}
               onAskQuestionsConfirm={handleBaodaozaiConfirm}
             />
             <ArticleBaodaozaiEventTrigger
               id="change-ask-questions"
-              disabled={isScrollingDown}
+              disabled={isScrollingDown || isArticleBaodaozaiIdle}
               onAskQuestionsConfirm={handleBaodaozaiConfirm}
             />
           </div>
