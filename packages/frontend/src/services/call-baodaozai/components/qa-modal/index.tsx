@@ -150,16 +150,16 @@ function QAModal({
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add('no-scroll')
-      document.documentElement.style.overflow = 'hidden'
+      document.documentElement.classList.add('no-scroll')
     } else {
       handleReset()
       document.body.classList.remove('no-scroll')
-      document.documentElement.style.overflow = 'auto'
+      document.documentElement.classList.remove('no-scroll')
     }
     return () => {
       handleReset()
       document.body.classList.remove('no-scroll')
-      document.documentElement.style.overflow = 'auto'
+      document.documentElement.classList.remove('no-scroll')
     }
   }, [isOpen, handleReset])
 

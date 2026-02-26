@@ -84,13 +84,13 @@ const ArticleModule = ({
     setIsImgModalOpen(true)
     setImgProps(imgProps)
     document.body.classList.add('no-scroll')
-    document.documentElement.style.overflow = 'hidden'
+    document.documentElement.classList.add('no-scroll')
   }
   const onImageModalClose = () => {
     setIsImgModalOpen(false)
     setImgProps({})
     document.body.classList.remove('no-scroll')
-    document.documentElement.style.overflow = 'auto'
+    document.documentElement.classList.remove('no-scroll')
   }
 
   const [isQAModalOpen, setIsQAModalOpen] = useState(false)

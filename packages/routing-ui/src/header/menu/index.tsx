@@ -47,15 +47,15 @@ function Menu({
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add('no-scroll')
-      document.documentElement.style.overflow = 'hidden'
+      document.documentElement.classList.add('no-scroll')
     } else {
       document.body.classList.remove('no-scroll')
-      document.documentElement.style.overflow = 'auto'
+      document.documentElement.classList.remove('no-scroll')
     }
 
     return () => {
       document.body.classList.remove('no-scroll')
-      document.documentElement.style.overflow = 'auto'
+      document.documentElement.classList.remove('no-scroll')
     }
   }, [isOpen])
 

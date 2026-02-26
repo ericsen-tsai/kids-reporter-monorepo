@@ -292,6 +292,7 @@
     list-style-type: disc;
   }
 
+  html.no-scroll,
   body.no-scroll {
     overflow: hidden;
   }
