@@ -67,15 +67,19 @@ function useIdleTimer({
     }
   }, [disabled, scheduleIdleTimer])
 
+  const handleActivityCallback = useCallback(() => {
+    const opts = { passive: true }
+    ACTIVITY_EVENTS.forEach((event) => {
+      window.addEventListener(event, handleActivity, opts)
+    })
+  }, [handleActivity])
+
   useEffect(() => {
     if (disabled) return
 
     scheduleIdleTimer()
 
-    const opts = { passive: true }
-    ACTIVITY_EVENTS.forEach((event) => {
-      window.addEventListener(event, handleActivity, opts)
-    })
+    handleActivityCallback()
 
     return () => {
       if (timeoutRef.current) {
@@ -86,7 +90,7 @@ function useIdleTimer({
         window.removeEventListener(event, handleActivity)
       })
     }
-  }, [disabled, scheduleIdleTimer, handleActivity])
+  }, [disabled, scheduleIdleTimer, handleActivityCallback, handleActivity])
 
   return { isIdle }
 }
