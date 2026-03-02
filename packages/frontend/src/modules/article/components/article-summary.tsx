@@ -61,6 +61,7 @@ function ArticleSummary({
         className={cn(
           'mx-[-24px] prose-article-bold text-neutral-700 tablet:mx-0',
           ...ARTICLE_FONT_SIZE_CLASSNAMES,
+          fontSizeLevel === FontSizeLevel.LARGE && 'text-[22.5px]',
           fontSizeLevel === FontSizeLevel.LARGE && [
             ...ARTICLE_FONT_SIZE_CLASSNAMES_LARGE,
           ]

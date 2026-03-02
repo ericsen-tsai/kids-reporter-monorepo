@@ -27,6 +27,7 @@ function PostRenderer({ content, shouldMount }: PostProp) {
       className={cn(
         'mb-10 prose-article text-neutral-900 tablet:mb-15',
         ...ARTICLE_FONT_SIZE_CLASSNAMES,
+        fontSize === FontSizeLevel.LARGE && 'text-[22.5px]',
         fontSize === FontSizeLevel.LARGE && [
           ...ARTICLE_FONT_SIZE_CLASSNAMES_LARGE,
         ]
