@@ -4,7 +4,6 @@ import { extendTailwindMerge } from 'tailwind-merge'
 const twMerge = extendTailwindMerge<'prose-typography'>({
   extend: {
     classGroups: {
-      // Custom group so prose typography only conflicts with itself, not with font-size (text-*)
       'prose-typography': [
         'prose-p1',
         'prose-p1-bold',
