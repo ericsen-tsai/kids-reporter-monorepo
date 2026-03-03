@@ -1,5 +1,6 @@
 import { PostSummary } from '@/components/types'
 import { FALLBACK_IMG } from '@/constants'
+import { Breakpoint } from '@/types'
 
 import { RELATED_POSTS_PER_ROW } from './constants'
 
@@ -21,10 +22,10 @@ export const normalizePhoto = (photo: {
 
 export const groupPostsByRow = (
   posts: PostSummary[],
-  viewPort: keyof typeof RELATED_POSTS_PER_ROW
+  breakpoint: Breakpoint
 ) => {
   return posts.reduce((acc, post, index) => {
-    const row = Math.floor(index / RELATED_POSTS_PER_ROW[viewPort])
+    const row = Math.floor(index / RELATED_POSTS_PER_ROW[breakpoint])
     if (!acc[row]) {
       acc[row] = []
     }

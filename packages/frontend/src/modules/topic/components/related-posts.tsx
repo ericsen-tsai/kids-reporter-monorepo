@@ -7,12 +7,11 @@ import { useEffect, useState } from 'react'
 
 import { PostSummary } from '@/components/types'
 import { FALLBACK_IMG } from '@/constants'
+import { Breakpoint } from '@/types'
 import { getFormattedDate } from '@/utils'
 
 import { RELATED_POSTS_PER_ROW } from '../constants'
 import { groupPostsByRow } from '../utils'
-
-type ViewPort = keyof typeof RELATED_POSTS_PER_ROW
 
 const ImageWithFallback = dynamic(
   () => import('@/components/image-with-fallback'),
@@ -69,7 +68,7 @@ function RelatedPosts({ posts = [] }: RelatedPostsProps) {
   const isTablet = useMediaQuery('(min-width: 768px)')
   const isDesktop = useMediaQuery('(min-width: 1024px)')
 
-  const [viewPort, setViewPort] = useState<ViewPort>('mobile')
+  const [viewPort, setViewPort] = useState<Breakpoint>('mobile')
   useEffect(() => {
     setViewPort(isDesktop ? 'desktop' : isTablet ? 'tablet' : 'mobile')
   }, [isTablet, isDesktop])

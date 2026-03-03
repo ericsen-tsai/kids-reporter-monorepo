@@ -6,7 +6,7 @@ import { ImageWithFallback } from '@/components/image-with-fallback'
 import { FALLBACK_IMG, STICKY_HEADER_HEIGHT } from '@/constants'
 import { ArrowDown } from '@/icons'
 import { Photo } from '@/types'
-import { mediaQuery } from '@/utils/media-query'
+import { breakpoints } from '@/utils'
 
 import { TitlePosition } from '../types'
 import PositionedTitle from './positioned-title'
@@ -45,17 +45,17 @@ function HeroTitle({
       <picture>
         {mobileBgImage ? (
           <source
-            media={mediaQuery.smallOnly.replace('@media ', '')}
+            media={`(max-width: ${breakpoints.tablet - 1}px)`}
             srcSet={`${mobileBgImage?.resized?.small}`}
           />
         ) : (
           <source
-            media={mediaQuery.smallOnly.replace('@media ', '')}
+            media={`(max-width: ${breakpoints.mobile - 1}px)`}
             srcSet={`${backgroundImage?.resized?.small} 1x, ${backgroundImage?.resized?.medium} 2x`}
           />
         )}
         <source
-          media={mediaQuery.largeOnly.replace('@media ', '')}
+          media={`(min-width: ${breakpoints.hd}px)`}
           srcSet={`${backgroundImage?.resized?.large} 1x`}
         />
         <ImageWithFallback
