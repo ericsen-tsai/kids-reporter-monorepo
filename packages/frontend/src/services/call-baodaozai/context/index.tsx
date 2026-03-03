@@ -266,7 +266,7 @@ export function CallBaodaozaiProvider({
     if (isAnimating) return
     if (stateQueue.length === 0) return
     const nextState = stateQueue[0]
-    setStateQueue(stateQueue.slice(1))
+    setStateQueue((prev) => prev.slice(1))
     if (nextState.isEntered !== undefined) {
       handleSwitchEntered({
         state: nextState.state,

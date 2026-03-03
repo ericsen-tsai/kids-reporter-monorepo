@@ -78,19 +78,27 @@ const ArticleModule = ({
   const [imgProps, setImgProps] = useState<
     React.ImgHTMLAttributes<HTMLImageElement>
   >({})
+
+  useEffect(() => {
+    if (isImgModalOpen) {
+      document.body.classList.add('no-scroll')
+      document.documentElement.classList.add('no-scroll')
+    }
+    return () => {
+      document.body.classList.remove('no-scroll')
+      document.documentElement.classList.remove('no-scroll')
+    }
+  }, [isImgModalOpen])
+
   const onImageModalOpen = (
     imgProps: React.ImgHTMLAttributes<HTMLImageElement>
   ) => {
     setIsImgModalOpen(true)
     setImgProps(imgProps)
-    document.body.classList.add('no-scroll')
-    document.documentElement.classList.add('no-scroll')
   }
   const onImageModalClose = () => {
     setIsImgModalOpen(false)
     setImgProps({})
-    document.body.classList.remove('no-scroll')
-    document.documentElement.classList.remove('no-scroll')
   }
 
   const [isQAModalOpen, setIsQAModalOpen] = useState(false)

@@ -126,19 +126,23 @@ export function SearchInputSection(props: SearchInputSectionProps) {
   const searchPlaceholder = props.searchPlaceholder
 
   useEffect(() => {
+    const removeNoScroll = () => {
+      document.body.classList.remove('no-scroll')
+      document.documentElement.classList.remove('no-scroll')
+    }
     if (mode === 'inline') {
-      return
+      return removeNoScroll
     }
     if (isSearchOpen) {
       ref.current?.focus()
       setIsFocused(true)
       document.body.classList.add('no-scroll')
       document.documentElement.classList.add('no-scroll')
-      return
+      return removeNoScroll
     }
     setIsFocused(false)
-    document.body.classList.remove('no-scroll')
-    document.documentElement.classList.remove('no-scroll')
+    removeNoScroll()
+    return removeNoScroll
   }, [mode, isSearchOpen])
 
   return (
