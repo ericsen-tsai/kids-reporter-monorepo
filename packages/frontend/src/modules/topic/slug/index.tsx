@@ -1,12 +1,12 @@
 import { HeaderPostTitleSetter } from '@kids-reporter/routing-ui'
 import { RawDraftContentState } from 'draft-js'
 
-import { RelatedPosts } from '@/app/(general)/_components/topic/related-posts'
 import { PostSummary } from '@/components/types'
 import { SeparateIcon } from '@/icons'
 import { Photo } from '@/types'
 
 import HeroTitle from '../components/hero-title'
+import RelatedPosts from '../components/related-posts'
 import TopicContentWithMask from '../components/topic-content-with-mask'
 import TopicRenderer from '../components/topic-renderer'
 import { TitlePosition } from '../types'
