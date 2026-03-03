@@ -7,34 +7,33 @@ import { RawDraftContentState } from 'draft-js'
 import { useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 
-import { Theme } from '@/constants'
 import { ARTICLE_FONT_SIZE_CLASSNAMES } from '@/modules/article/constants'
 
-export type DraftRendererProp = {
+export type TopicRendererProp = {
   rawContentState: RawDraftContentState
-  theme: Theme
+  className?: string
 }
 
-export const DraftRenderer = ({ rawContentState }: DraftRendererProp) => {
+function TopicRenderer({ rawContentState, className }: TopicRendererProp) {
   const [isMounted, setIsMounted] = useState(false)
   useEffect(() => {
     setIsMounted(true)
   }, [])
-
   return isMounted && rawContentState ? (
     <div
       className={cn(
         'mb-10 prose-article text-neutral-900 tablet:mb-15',
-        ...ARTICLE_FONT_SIZE_CLASSNAMES
+        ...ARTICLE_FONT_SIZE_CLASSNAMES,
+        className
       )}
     >
       <ProjectContentDraftRenderer rawContentState={rawContentState} />
     </div>
   ) : (
-    <div className="w-full leading-[200%]">
-      <Skeleton width={'80%'} count={5} />
+    <div className="mx-auto w-[calc(100%-48px)] max-w-[512px] leading-[200%] desktop:max-w-[584px]">
+      <Skeleton count={10} />
     </div>
   )
 }
 
-export default DraftRenderer
+export default TopicRenderer

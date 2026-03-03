@@ -1,16 +1,14 @@
 import { HeaderPostTitleSetter } from '@kids-reporter/routing-ui'
 import { RawDraftContentState } from 'draft-js'
 
-import { Content } from '@/app/(general)/_components/topic/content'
-import { Credits } from '@/app/(general)/_components/topic/credits'
-import Leading from '@/app/(general)/_components/topic/leading'
 import { RelatedPosts } from '@/app/(general)/_components/topic/related-posts'
-import { PublishedDate } from '@/app/(general)/_components/topic/styled'
 import { PostSummary } from '@/components/types'
-import { Theme } from '@/constants'
+import { SeparateIcon } from '@/icons'
 import { Photo } from '@/types'
-import { getFormattedDate } from '@/utils'
 
+import HeroTitle from '../components/hero-title'
+import TopicContentWithMask from '../components/topic-content-with-mask'
+import TopicRenderer from '../components/topic-renderer'
 import { TitlePosition } from '../types'
 
 type TopicSlugModuleProps = {
@@ -39,24 +37,28 @@ function TopicSlugModule({
   return (
     <div>
       <HeaderPostTitleSetter postTitle={title} />
-      <Leading
+      <HeroTitle
         title={title}
         subtitle={subtitle}
         titlePosition={titlePosition}
         backgroundImage={backgroundImage}
         mobileBgImage={mobileBgImage}
+        publishedDate={publishedDate}
+        articleCount={relatedPosts.length}
       />
-      {publishedDate ? (
-        <PublishedDate>
-          {getFormattedDate(publishedDate)} 最後更新
-        </PublishedDate>
-      ) : null}
-      {content ? (
-        <Content rawContentState={content} theme={Theme.BLUE} />
-      ) : null}
-      {credits ? (
-        <Credits rawContentState={credits} theme={Theme.BLUE} />
-      ) : null}
+      <div className="my-10 tablet:my-16 desktop:my-20">
+        <TopicContentWithMask rawContentState={content} />
+        <div className="my-6 tablet:my-10 [&>svg]:mx-auto">
+          <SeparateIcon />
+        </div>
+        <div className="text-center">
+          <TopicRenderer
+            rawContentState={credits}
+            className="prose-p2 leading-[30px]"
+          />
+        </div>
+      </div>
+
       <RelatedPosts posts={relatedPosts} />
     </div>
   )

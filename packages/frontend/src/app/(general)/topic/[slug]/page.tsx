@@ -14,7 +14,7 @@ import {
 import TopicSlugModule from '@/modules/topic/slug'
 import { TitlePosition } from '@/modules/topic/types'
 import { normalizePhoto } from '@/modules/topic/utils'
-import { getPostSummaries, log, LogLevel } from '@/utils'
+import { getFormattedDate, getPostSummaries, log, LogLevel } from '@/utils'
 import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export async function generateMetadata({
@@ -98,7 +98,7 @@ export default async function TopicPage({
       titlePosition={(project.titlePosition ?? 'center') as TitlePosition}
       backgroundImage={heroImage}
       mobileBgImage={mobileHeroImage}
-      publishedDate={project.publishedDate ?? ''}
+      publishedDate={getFormattedDate(project.publishedDate ?? '')}
       content={project.content}
       credits={project.credits}
       relatedPosts={relatedPosts}
