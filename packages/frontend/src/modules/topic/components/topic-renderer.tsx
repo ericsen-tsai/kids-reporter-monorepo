@@ -10,7 +10,7 @@ import Skeleton from 'react-loading-skeleton'
 import { ARTICLE_FONT_SIZE_CLASSNAMES } from '@/modules/article/constants'
 
 export type TopicRendererProp = {
-  rawContentState: RawDraftContentState
+  rawContentState?: RawDraftContentState
   className?: string
 }
 

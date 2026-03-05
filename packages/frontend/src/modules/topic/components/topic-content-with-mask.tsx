@@ -10,7 +10,7 @@ const MOBILE_MAX_HEIGHT = 1200
 const TABLET_MAX_HEIGHT = 700
 
 type TopicContentWithMaskProps = {
-  rawContentState: RawDraftContentState
+  rawContentState?: RawDraftContentState
 }
 
 function TopicContentWithMask({ rawContentState }: TopicContentWithMaskProps) {

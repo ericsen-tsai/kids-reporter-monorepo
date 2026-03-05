@@ -31,7 +31,7 @@ function HeroTitle({
   articleCount,
 }: HeroTitleProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const onDownButtonClick = () => {
+  const handleScrollToContent = () => {
     if (ref.current) {
       window.scrollTo({
         behavior: 'smooth',
@@ -63,6 +63,8 @@ function HeroTitle({
           style={{ height: `calc(100vh - ${STICKY_HEADER_HEIGHT}px)` }}
           src={backgroundImage?.resized?.medium ?? FALLBACK_IMG}
           srcSet={`${backgroundImage?.resized?.medium} 1x, ${backgroundImage?.resized?.large} 2x`}
+          alt={title}
+          aria-hidden="true"
         />
       </picture>
       <PositionedTitle
@@ -75,7 +77,8 @@ function HeroTitle({
       <Button
         variant="secondary"
         className="absolute bottom-14 left-1/2 size-11 -translate-x-1/2 p-0 desktop:size-16"
-        onClick={onDownButtonClick}
+        onClick={handleScrollToContent}
+        aria-label="Scroll to content"
       >
         <ArrowDown />
       </Button>

@@ -18,8 +18,8 @@ type TopicSlugModuleProps = {
   backgroundImage: Photo
   mobileBgImage?: Photo
   publishedDate: string
-  content: RawDraftContentState
-  credits: RawDraftContentState
+  content?: RawDraftContentState
+  credits?: RawDraftContentState
   relatedPosts: PostSummary[]
 }
 
