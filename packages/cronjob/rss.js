@@ -3,7 +3,13 @@ import axios from 'axios'
 import RSS from 'rss'
 
 import { config } from './configs.js'
-import { errorHandling, errors, logWithSlack, TokenManager } from './utils.js'
+import {
+  errorHandling,
+  errors,
+  formatAxiosError,
+  logWithSlack,
+  TokenManager,
+} from './utils.js'
 
 // fetch keystone session cookie token
 const tokenManager = new TokenManager(
@@ -88,7 +94,7 @@ const fetchData = async () => {
     })
     return data
   } catch (err) {
-    throw errors.helpers.annotateAxiosError(err)
+    throw formatAxiosError(err)
   }
 }
 
@@ -151,7 +157,12 @@ const main = async () => {
   } catch (err) {
     errorHandling(err)
   }
-  console.log(`Cronjob RSS feed completed.`)
+  console.log(
+    JSON.stringify({
+      severity: 'NOTICE',
+      message: 'Cronjob RSS feed completed.',
+    })
+  )
 }
 
 main()
