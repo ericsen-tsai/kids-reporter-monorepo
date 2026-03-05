@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, cn } from '@kids-reporter/routing-ui'
+import { Button, cn, useBodyScrollLock } from '@kids-reporter/routing-ui'
 import Image from 'next/image'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -147,19 +147,17 @@ function QAModal({
     setIsLeaving(false)
   }, [defaultAnswers])
 
+  useBodyScrollLock({
+    toLock: isOpen,
+    lockID: 'call-baodaozai-qa-modal',
+  })
+
   useEffect(() => {
-    if (isOpen) {
-      document.body.classList.add('no-scroll')
-      document.documentElement.classList.add('no-scroll')
-    } else {
+    if (!isOpen) {
       handleReset()
-      document.body.classList.remove('no-scroll')
-      document.documentElement.classList.remove('no-scroll')
     }
     return () => {
       handleReset()
-      document.body.classList.remove('no-scroll')
-      document.documentElement.classList.remove('no-scroll')
     }
   }, [isOpen, handleReset])
 

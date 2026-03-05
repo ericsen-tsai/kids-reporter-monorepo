@@ -4,6 +4,7 @@ import { GetPostQuery } from '__generated__/operations/content.generated'
 import {
   HeaderPostTitleSetter,
   ScrollLevel,
+  useBodyScrollLock,
   useMediaQuery,
   useScrollLevel,
 } from '@kids-reporter/routing-ui'
@@ -79,16 +80,10 @@ const ArticleModule = ({
     React.ImgHTMLAttributes<HTMLImageElement>
   >({})
 
-  useEffect(() => {
-    if (isImgModalOpen) {
-      document.body.classList.add('no-scroll')
-      document.documentElement.classList.add('no-scroll')
-    }
-    return () => {
-      document.body.classList.remove('no-scroll')
-      document.documentElement.classList.remove('no-scroll')
-    }
-  }, [isImgModalOpen])
+  useBodyScrollLock({
+    toLock: isImgModalOpen,
+    lockID: 'article-image-modal',
+  })
 
   const onImageModalOpen = (
     imgProps: React.ImgHTMLAttributes<HTMLImageElement>
