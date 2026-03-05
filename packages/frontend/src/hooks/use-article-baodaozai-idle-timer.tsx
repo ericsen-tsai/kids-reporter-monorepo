@@ -1,3 +1,4 @@
+'use client'
 import { useMemo } from 'react'
 
 import useIdleTimer from '@/hooks/use-idle-timer'
