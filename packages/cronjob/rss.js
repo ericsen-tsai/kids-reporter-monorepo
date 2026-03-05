@@ -3,7 +3,14 @@ import axios from 'axios'
 import RSS from 'rss'
 
 import { config } from './configs.js'
-import { errorHandling, errors, logWithSlack } from './utils.js'
+import { errorHandling, errors, logWithSlack, TokenManager } from './utils.js'
+
+// fetch keystone session cookie token
+const tokenManager = new TokenManager(
+  config.cronjobAccount.email,
+  config.cronjobAccount.password,
+  config.apiUrl
+)
 
 const storage =
   config.gcs.projectId && config.gcs.keyFilename
@@ -65,7 +72,13 @@ const fetchData = async () => {
     },
   }
   try {
-    const dataRes = await axios.post(config.apiUrl, payload)
+    const token = await tokenManager.getToken()
+    const dataRes = await axios.post(config.apiUrl, payload, {
+      withCredentials: true,
+      headers: {
+        Cookie: `keystonejs-session=${token}`,
+      },
+    })
     const data = [
       ...(dataRes?.data?.data?.posts || []),
       ...(dataRes?.data?.data?.projects || []),
