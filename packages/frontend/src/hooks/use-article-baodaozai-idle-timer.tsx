@@ -1,5 +1,5 @@
 'use client'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 
 import useIdleTimer from '@/hooks/use-idle-timer'
 import { useCallBaodaozaiContext } from '@/services/call-baodaozai'
@@ -10,27 +10,36 @@ function useArticleBaodaozaiIdleTimer() {
     baodaozaiProps: { setAction, setIsIdelReadStoned, isInitialized, hide },
   } = useCallBaodaozaiContext()
 
-  const idleTimerProps = useMemo(() => {
-    let idleGeneration = 0
-    const idleCallback = async () => {
-      const currentGeneration = ++idleGeneration
-      setAction('idel-read')
-      await new Promise((resolve) =>
-        setTimeout(resolve, DEFAULT_ANIMATION_DELAY)
-      )
-      if (currentGeneration === idleGeneration) {
-        setIsIdelReadStoned(true)
+  const stoneTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (stoneTimerRef.current) {
+        clearTimeout(stoneTimerRef.current)
+        stoneTimerRef.current = null
       }
     }
+  }, [])
+
+  const idleTimerProps = useMemo(() => {
+    const cleanTimer = () => {
+      if (stoneTimerRef.current) {
+        clearTimeout(stoneTimerRef.current)
+        stoneTimerRef.current = null
+      }
+    }
+    const idleCallback = () => {
+      setAction('idel-read')
+      cleanTimer()
+      stoneTimerRef.current = setTimeout(() => {
+        setIsIdelReadStoned(true)
+      }, DEFAULT_ANIMATION_DELAY)
+    }
     const interactCallback = () => {
-      idleGeneration++
+      cleanTimer()
       setIsIdelReadStoned(false)
     }
-    return {
-      idleCallback,
-      interactCallback,
-      disabled: !isInitialized || hide,
-    }
+    return { idleCallback, interactCallback, disabled: !isInitialized || hide }
   }, [setAction, setIsIdelReadStoned, isInitialized, hide])
 
   return useIdleTimer(idleTimerProps)

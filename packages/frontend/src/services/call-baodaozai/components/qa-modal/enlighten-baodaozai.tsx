@@ -6,7 +6,7 @@ import {
   useViewModelInstance,
   useViewModelInstanceEnum,
 } from '@rive-app/react-webgl2'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 import envVars from '@/environment-variables'
 
@@ -45,18 +45,31 @@ function EnlightenBaodaozai({ state }: EnlightenBaodaozaiProps) {
     rootInstance
   )
 
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
   useEffect(() => {
+    const cleanTimer = () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current)
+        timerRef.current = null
+      }
+    }
+
     async function setState() {
       setEnlighten(state)
       if (state === 'enlighten-send') {
         setEnlightenSendEnterState('enter')
-        await new Promise((resolve) =>
-          setTimeout(resolve, ENLIGHTEN_BAODAOZAI_STATE_CHANGE_DELAY)
-        )
-        setEnlightenSendEnterState('exit')
+        cleanTimer()
+        timerRef.current = setTimeout(() => {
+          setEnlightenSendEnterState('exit')
+        }, ENLIGHTEN_BAODAOZAI_STATE_CHANGE_DELAY)
       }
     }
     setState()
+
+    return () => {
+      cleanTimer()
+    }
   }, [state, setEnlighten, setEnlightenSendEnterState])
 
   return (

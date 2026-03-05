@@ -13,6 +13,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react'
 
@@ -189,6 +190,27 @@ export function CallBaodaozaiProvider({
   const { value: isStoned, setValue: setIsStoned } =
     useViewModelInstanceBoolean('vmi_idel-read/Bool_Stoned', rootInstance)
 
+  const switchStateTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const switchStateInnerTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  )
+  const cleanSwitchStateTimer = useCallback(() => {
+    if (switchStateTimerRef.current) {
+      clearTimeout(switchStateTimerRef.current)
+      switchStateTimerRef.current = null
+    }
+    if (switchStateInnerTimerRef.current) {
+      clearTimeout(switchStateInnerTimerRef.current)
+      switchStateInnerTimerRef.current = null
+    }
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      cleanSwitchStateTimer()
+    }
+  }, [cleanSwitchStateTimer])
+
   const handleSwitchState = useCallback(
     async ({
       state: nextState,
@@ -205,18 +227,24 @@ export function CallBaodaozaiProvider({
         action !== 'default'
       ) {
         getEnterStateControl(action as BaodaozaiAction)?.setState('exit')
-        await new Promise((resolve) =>
-          setTimeout(resolve, DEFAULT_ANIMATION_DELAY)
-        )
+        cleanSwitchStateTimer()
+        switchStateTimerRef.current = setTimeout(() => {
+          setAction(nextState)
+          getEnterStateControl(nextState)?.setState('enter')
+          switchStateInnerTimerRef.current = setTimeout(() => {
+            setIsAnimating(false)
+          }, DEFAULT_ANIMATION_DELAY)
+        }, DEFAULT_ANIMATION_DELAY)
+      } else {
+        setAction(nextState)
+        getEnterStateControl(nextState)?.setState('enter')
+        cleanSwitchStateTimer()
+        switchStateTimerRef.current = setTimeout(() => {
+          setIsAnimating(false)
+        }, DEFAULT_ANIMATION_DELAY)
       }
-      setAction(nextState)
-      getEnterStateControl(nextState)?.setState('enter')
-      await new Promise((resolve) =>
-        setTimeout(resolve, DEFAULT_ANIMATION_DELAY)
-      )
-      setIsAnimating(false)
     },
-    [action, setAction, getEnterStateControl]
+    [action, setAction, getEnterStateControl, cleanSwitchStateTimer]
   )
 
   const handleSwitchEntered = useCallback(
@@ -230,12 +258,12 @@ export function CallBaodaozaiProvider({
       setIsAnimating(true)
       setAction(nextState)
       getEnterStateControl(nextState)?.setState(isEntered ? 'enter' : 'exit')
-      await new Promise((resolve) =>
-        setTimeout(resolve, DEFAULT_ANIMATION_DELAY)
-      )
-      setIsAnimating(false)
+      cleanSwitchStateTimer()
+      switchStateTimerRef.current = setTimeout(() => {
+        setIsAnimating(false)
+      }, DEFAULT_ANIMATION_DELAY)
     },
-    [getEnterStateControl, setAction]
+    [getEnterStateControl, setAction, cleanSwitchStateTimer]
   )
 
   const handlePipeState = useCallback(
