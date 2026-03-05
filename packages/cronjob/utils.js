@@ -23,7 +23,7 @@ export const formatAxiosError = (err) => {
 
   let message = 'failed to make an axios request'
   if (err.response) {
-    message = `an axios request was made but response with status ${err.response?.status}`
+    message = `an axios request was made but responded with status ${err.response?.status}`
   } else if (err.request) {
     message = 'an axios request was made but no response was received'
   }
@@ -125,6 +125,14 @@ export class TokenManager {
   static instance
 
   constructor(email, password, apiEndpoint = config.apiUrl) {
+    if (!email || !password || !apiEndpoint) {
+      const annotatedErr = errors.helpers.wrap(
+        new Error('Email, password, and apiEndpoint are required'),
+        'TokenManangerError',
+        'Email, password, and apiEndpoint are required'
+      )
+      throw annotatedErr
+    }
     this.email = email
     this.password = password
     this.apiEndpoint = apiEndpoint
