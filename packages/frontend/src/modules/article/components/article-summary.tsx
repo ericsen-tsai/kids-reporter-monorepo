@@ -107,23 +107,41 @@ function ArticleSummary({
                   fontSizeLevel === FontSizeLevel.LARGE && 'text-[17.5px]'
                 )}
               >
-                {authorGroup.authors.map((author, authorIndex) => (
-                  <span key={author.name}>
-                    {author.link ? (
-                      <Link
-                        href={author.link}
-                        className="transition-colors duration-200 hover:underline"
-                      >
-                        {author.name}
-                      </Link>
-                    ) : (
-                      author.name
-                    )}
-                    {authorIndex < authorGroup.authors.length - 1 && (
-                      <span>、</span>
-                    )}
-                  </span>
-                ))}
+                {authorGroup.authors
+                  .reduce(
+                    (acc, author) => {
+                      const splittedAuthorName = author.name.split('、')
+                      if (splittedAuthorName.length > 1) {
+                        acc.push(
+                          ...splittedAuthorName.map((name) => ({
+                            name,
+                            link: author.link,
+                          }))
+                        )
+                      } else {
+                        acc.push(author)
+                      }
+                      return acc
+                    },
+                    [] as { name: string; link: string }[]
+                  )
+                  .map((author, authorIndex, splittedAuthors) => {
+                    return (
+                      <span key={author.name}>
+                        {author.link ? (
+                          <Link
+                            href={author.link}
+                            className="transition-colors duration-200 hover:underline"
+                          >
+                            {author.name}
+                          </Link>
+                        ) : (
+                          author.name
+                        )}
+                        {authorIndex < splittedAuthors.length - 1 && '、'}
+                      </span>
+                    )
+                  })}
               </div>
             </div>
           ))}
