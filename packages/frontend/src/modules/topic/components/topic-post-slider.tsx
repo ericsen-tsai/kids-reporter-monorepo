@@ -1,6 +1,6 @@
 import 'swiper/css'
 
-import { useMediaQuery } from '@kids-reporter/routing-ui'
+import { cn, useMediaQuery } from '@kids-reporter/routing-ui'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -113,9 +113,13 @@ function TopicPostSlider({ posts }: { posts: PostSummary[] }) {
               role="tab"
               aria-label={`第 ${index + 1} 頁`}
               aria-selected={activeIndex === index}
-              className={`size-[8px] shrink-0 cursor-pointer rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 ${
-                activeIndex === index ? 'bg-red-400' : 'bg-neutral-300'
-              }`}
+              className={cn(
+                'size-[8px] shrink-0 cursor-pointer rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2',
+                {
+                  'bg-red-400': activeIndex === index,
+                  'bg-neutral-300 hover:bg-neutral-500': activeIndex !== index,
+                }
+              )}
               onClick={() => {
                 swiperRef.current?.slideToLoop(index)
               }}

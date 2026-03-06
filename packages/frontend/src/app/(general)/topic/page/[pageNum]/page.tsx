@@ -1,13 +1,18 @@
-import type { GetProjectsQuery } from '__generated__/operations/content.generated'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { getCallBaodaozaiIntroContent } from '@/api/call-baodaozai-intro'
-import { FALLBACK_IMG, GENERAL_DESCRIPTION, POST_PER_PAGE } from '@/constants'
+import { getTopicProjectsPaged } from '@/api/project'
+import {
+  FALLBACK_IMG,
+  FIRST_PAGE_TOPIC_PER_PAGE,
+  GENERAL_DESCRIPTION,
+  OTHER_PAGE_TOPIC_PER_PAGE,
+  POST_PER_PAGE,
+} from '@/constants'
 import TopicAllModule from '@/modules/topic/all'
 import { TopicSummary } from '@/modules/topic/types'
 import { getPostSummaries, log, LogLevel } from '@/utils'
-import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export const metadata: Metadata = {
   title: '彙整: 專題 - 少年報導者 The Reporter for Kids',
@@ -19,11 +24,6 @@ export default async function Topic({
 }: {
   params: { pageNum: string }
 }) {
-  if (!pageNum) {
-    log(LogLevel.WARNING, `Incorrect routing path! ${pageNum}`)
-    notFound()
-  }
-
   if (isNaN(Number(pageNum))) {
     log(LogLevel.WARNING, `Incorrect page number! ${pageNum}`)
     notFound()
@@ -33,19 +33,20 @@ export default async function Topic({
 
   const [projectsRes, topicsIntroContentRes] = await Promise.allSettled([
     // Fetch projects of specific page
-    sendRestGqlRequest<GetProjectsQuery>({
-      operation: 'projects-paged',
-      method: 'GET',
-      variables: {
-        orderBy: [
-          {
-            publishedDate: 'desc',
-          },
-        ],
-        take: POST_PER_PAGE,
-        skip: (currentPage - 1) * POST_PER_PAGE,
-        includeRelatedPosts: currentPage === 1,
-      },
+    getTopicProjectsPaged({
+      orderBy: [
+        {
+          publishedDate: 'desc',
+        },
+      ],
+      take:
+        currentPage === 1
+          ? FIRST_PAGE_TOPIC_PER_PAGE
+          : OTHER_PAGE_TOPIC_PER_PAGE,
+      skip:
+        (currentPage - 1) * OTHER_PAGE_TOPIC_PER_PAGE +
+        (FIRST_PAGE_TOPIC_PER_PAGE - OTHER_PAGE_TOPIC_PER_PAGE),
+      includeRelatedPosts: true,
     }),
     getCallBaodaozaiIntroContent({ where: { page: 'topics' } }),
   ])
@@ -55,8 +56,8 @@ export default async function Topic({
   }
 
   const projects = projectsRes.value
-  const topics = projects?.data?.data?.projects
-  const topicsCount = projects?.data?.data?.projectsCount ?? 0
+  const topics = projects?.projects
+  const topicsCount = projects?.projectsCount ?? 0
   const totalPages = Math.ceil(topicsCount / POST_PER_PAGE)
   if (currentPage > 1 && currentPage > totalPages) {
     log(
