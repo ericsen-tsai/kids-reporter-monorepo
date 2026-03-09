@@ -8,7 +8,6 @@ import {
   FIRST_PAGE_TOPIC_PER_PAGE,
   GENERAL_DESCRIPTION,
   OTHER_PAGE_TOPIC_PER_PAGE,
-  POST_PER_PAGE,
 } from '@/constants'
 import TopicAllModule from '@/modules/topic/all'
 import { TopicSummary } from '@/modules/topic/types'
@@ -44,8 +43,10 @@ export default async function Topic({
           ? FIRST_PAGE_TOPIC_PER_PAGE
           : OTHER_PAGE_TOPIC_PER_PAGE,
       skip:
-        (currentPage - 1) * OTHER_PAGE_TOPIC_PER_PAGE +
-        (FIRST_PAGE_TOPIC_PER_PAGE - OTHER_PAGE_TOPIC_PER_PAGE),
+        currentPage === 1
+          ? 0
+          : FIRST_PAGE_TOPIC_PER_PAGE +
+            (currentPage - 2) * OTHER_PAGE_TOPIC_PER_PAGE,
       includeRelatedPosts: true,
     }),
     getCallBaodaozaiIntroContent({ where: { page: 'topics' } }),
@@ -58,7 +59,14 @@ export default async function Topic({
   const projects = projectsRes.value
   const topics = projects?.projects
   const topicsCount = projects?.projectsCount ?? 0
-  const totalPages = Math.ceil(topicsCount / POST_PER_PAGE)
+  const totalPages =
+    topicsCount > 0
+      ? 1 +
+        Math.ceil(
+          Math.max(0, topicsCount - FIRST_PAGE_TOPIC_PER_PAGE) /
+            OTHER_PAGE_TOPIC_PER_PAGE
+        )
+      : 0
   if (currentPage > 1 && currentPage > totalPages) {
     log(
       LogLevel.WARNING,
