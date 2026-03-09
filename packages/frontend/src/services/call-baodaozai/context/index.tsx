@@ -72,6 +72,7 @@ export function CallBaodaozaiProvider({
     stateMachines: STATE_MACHINE_NAME,
     autoplay: true,
     artboard: ARTBOARD_IDEL_NAME,
+    isTouchScrollEnabled: true,
   })
 
   const rootViewModel = useViewModel(rive, { name: VIEW_MODEL_NAME })
