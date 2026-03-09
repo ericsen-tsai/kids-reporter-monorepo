@@ -12,7 +12,6 @@ type PaginationProp = {
 
 /* Figma: 32px circles, 12px gap, red-400 active, neutral-200 inactive */
 const PAGE_BOX_SIZE = 32
-const GAP_PX = 12
 const N_CENTER_PAGES = 4
 const N_MARGIN_PAGES = 1
 const PAGES_ARRAY_MAX_LENGTH = N_CENTER_PAGES + (N_MARGIN_PAGES + 1) * 2
@@ -149,8 +148,7 @@ export const Pagination = (props: PaginationProp) => {
   return (
     totalPages > 0 && (
       <nav
-        className="flex w-full flex-row flex-wrap items-center justify-center"
-        style={{ gap: GAP_PX }}
+        className="flex w-full flex-row flex-wrap items-center justify-center gap-3"
         role="navigation"
         aria-label="分頁導航"
       >
