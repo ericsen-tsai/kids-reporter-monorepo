@@ -1,0 +1,26 @@
+{
+  "name": "@kids-reporter/logger",
+  "version": "0.0.1",
+  "type": "module",
+  "license": "MIT",
+  "description": "Shared structured logger for Kids Reporter services",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "postinstall": "yarn build",
+    "lint:check": "eslint src --config ./eslint.config.mjs --ext .ts",
+    "type-check": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0",
+    "typescript": "^5.9.2"
+  }
+}
