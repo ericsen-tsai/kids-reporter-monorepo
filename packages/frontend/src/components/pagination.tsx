@@ -1,5 +1,6 @@
 'use client'
 
+import { cn } from '@kids-reporter/routing-ui'
 import Link from 'next/link'
 
 import { ArrowLeft, ArrowRight } from '@/icons'
@@ -11,7 +12,6 @@ type PaginationProp = {
 }
 
 /* Figma: 32px circles, 12px gap, red-400 active, neutral-200 inactive */
-const PAGE_BOX_SIZE = 32
 const N_CENTER_PAGES = 4
 const N_MARGIN_PAGES = 1
 const PAGES_ARRAY_MAX_LENGTH = N_CENTER_PAGES + (N_MARGIN_PAGES + 1) * 2
@@ -34,8 +34,13 @@ export const Pagination = (props: PaginationProp) => {
       >
         <Link
           href={`${routingPrefix}/${pageIndex}`}
-          className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-center prose-p1-bold transition-colors duration-120 ${isActive ? 'pointer-events-none bg-red-400 text-neutral-white' : 'bg-neutral-200 text-neutral-900 hover:bg-neutral-300'}`}
-          style={{ minWidth: PAGE_BOX_SIZE, minHeight: PAGE_BOX_SIZE }}
+          className={cn(
+            'flex h-8 min-h-8 w-8 min-w-8 cursor-pointer items-center justify-center rounded-full text-center prose-p1-bold transition-colors duration-120',
+            isActive
+              ? 'pointer-events-none bg-red-400 text-neutral-white'
+              : 'bg-neutral-200 text-neutral-900 hover:bg-neutral-300'
+          )}
+          aria-current={isActive ? 'page' : undefined}
         >
           {pageIndex}
         </Link>
@@ -72,11 +77,8 @@ export const Pagination = (props: PaginationProp) => {
     const leftEllipsisJSX = (
       <div
         key="left-ellipsis"
-        className={ellipsisClass}
-        style={{
-          minWidth: PAGE_BOX_SIZE,
-          minHeight: PAGE_BOX_SIZE,
-        }}
+        className={cn(ellipsisClass, 'min-h-8 min-w-8')}
+        aria-hidden="true"
       >
         {ellipsis}
       </div>
@@ -84,11 +86,8 @@ export const Pagination = (props: PaginationProp) => {
     const rightEllipsisJSX = (
       <div
         key="right-ellipsis"
-        className={ellipsisClass}
-        style={{
-          minWidth: PAGE_BOX_SIZE,
-          minHeight: PAGE_BOX_SIZE,
-        }}
+        className={cn(ellipsisClass, 'min-h-8 min-w-8')}
+        aria-hidden="true"
       >
         {ellipsis}
       </div>
@@ -155,8 +154,8 @@ export const Pagination = (props: PaginationProp) => {
         {!belowFirstPage && (
           <Link
             href={`${routingPrefix}/${currentPage - 1}`}
-            className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center text-neutral-600 transition-colors duration-120 hover:text-neutral-800"
-            style={{ minWidth: PAGE_BOX_SIZE, minHeight: PAGE_BOX_SIZE }}
+            className="flex h-8 min-h-8 w-8 min-w-8 shrink-0 cursor-pointer items-center justify-center text-neutral-600 transition-colors duration-120 hover:text-neutral-800"
+            aria-hidden="true"
             aria-label="上一頁"
           >
             <ArrowLeft />
@@ -166,8 +165,8 @@ export const Pagination = (props: PaginationProp) => {
         {!aboveFinalPage && (
           <Link
             href={`${routingPrefix}/${currentPage + 1}`}
-            className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center text-neutral-600 transition-colors duration-120 hover:text-neutral-800"
-            style={{ minWidth: PAGE_BOX_SIZE, minHeight: PAGE_BOX_SIZE }}
+            className="flex h-8 min-h-8 w-8 min-w-8 shrink-0 cursor-pointer items-center justify-center text-neutral-600 transition-colors duration-120 hover:text-neutral-800"
+            aria-hidden="true"
             aria-label="下一頁"
           >
             <ArrowRight />
