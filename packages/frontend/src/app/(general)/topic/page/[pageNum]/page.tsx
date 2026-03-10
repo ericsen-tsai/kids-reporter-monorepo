@@ -23,7 +23,11 @@ export default async function Topic({
 }: {
   params: { pageNum: string }
 }) {
-  if (isNaN(Number(pageNum))) {
+  if (
+    isNaN(Number(pageNum)) ||
+    !Number.isInteger(Number(pageNum)) ||
+    Number(pageNum) <= 0
+  ) {
     log(LogLevel.WARNING, `Incorrect page number! ${pageNum}`)
     notFound()
   }
