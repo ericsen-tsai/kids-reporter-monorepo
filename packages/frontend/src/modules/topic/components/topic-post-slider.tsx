@@ -1,3 +1,4 @@
+'use client'
 import 'swiper/css'
 
 import { cn, useMediaQuery } from '@kids-reporter/routing-ui'
