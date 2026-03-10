@@ -26,6 +26,11 @@ export async function callCmsGraphql({
   timeoutMs?: number
 }) {
   const endpoint = `${apiOrigin}/api/graphql`
+  const traceHeaders = Object.fromEntries(
+    Object.entries(headers).filter(([key]) =>
+      ['x-cloud-trace-context', 'traceparent'].includes(key.toLowerCase())
+    )
+  )
   const doCall = async (customHeaders = headers) =>
     axios.post(
       endpoint,
@@ -46,7 +51,7 @@ export async function callCmsGraphql({
       tokenManager
     ) {
       try {
-        const token = await tokenManager.renewToken()
+        const token = await tokenManager.renewToken(traceHeaders)
         // Retry with the refreshed headless token stitched back into the Cookie header
         const refreshedHeaders = {
           ...headers,

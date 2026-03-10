@@ -1,3 +1,4 @@
+import { normalizeTraceContext } from '@kids-reporter/logger'
 import axios from 'axios'
 import express from 'express'
 
@@ -35,33 +36,33 @@ export class TokenManager {
   /**
    *  This function will return a cached token if a token exists and is not expired.
    */
-  async getToken() {
+  async getToken(traceHeaders?: Record<string, string>) {
     if (this.token && this.expiredAt && this.expiredAt >= Date.now()) {
       return this.token
     }
 
-    return this.queueRenewal()
+    return this.queueRenewal(traceHeaders)
   }
 
   /**
    *  This function will return a new token.
    */
-  async renewToken() {
+  async renewToken(traceHeaders?: Record<string, string>) {
     this.token = ''
     this.expiredAt = undefined
-    return this.queueRenewal()
+    return this.queueRenewal(traceHeaders)
   }
 
-  private async queueRenewal() {
+  private async queueRenewal(traceHeaders?: Record<string, string>) {
     if (!this.renewPromise) {
-      this.renewPromise = this.fetchToken().finally(() => {
+      this.renewPromise = this.fetchToken(traceHeaders).finally(() => {
         this.renewPromise = undefined
       })
     }
     return this.renewPromise
   }
 
-  private async fetchToken() {
+  private async fetchToken(traceHeaders?: Record<string, string>) {
     const gqlQuery = `
       mutation AuthenticateUserWithPassword($email: String!, $password: String!) {
         authenticateUserWithPassword(email: $email, password: $password) {
@@ -78,13 +79,19 @@ export class TokenManager {
     let axiosRes
     // fetch token
     try {
-      axiosRes = await axios.post(this.apiEndpoint, {
-        query: gqlQuery,
-        variables: {
-          email: this.email,
-          password: this.password,
+      axiosRes = await axios.post(
+        this.apiEndpoint,
+        {
+          query: gqlQuery,
+          variables: {
+            email: this.email,
+            password: this.password,
+          },
         },
-      })
+        {
+          headers: traceHeaders,
+        }
+      )
     } catch (err) {
       throw formatAxiosError(err)
     }
@@ -130,6 +137,11 @@ export async function buildAuthContext({
   originalCookie?: string
   tokenManager?: TokenManager
 }> {
+  const traceHeaders =
+    normalizeTraceContext(req.headers, {
+      generateIfMissing: true,
+    })?.traceHeaders || {}
+
   if (auth === 'auth') {
     const authorization = req.get('authorization') || ''
     if (!authorization) {
@@ -137,7 +149,10 @@ export async function buildAuthContext({
     }
     return {
       mode: 'jwt',
-      headers: { Authorization: authorization },
+      headers: {
+        Authorization: authorization,
+        ...traceHeaders,
+      },
     }
   }
 
@@ -146,14 +161,17 @@ export async function buildAuthContext({
     headlessAccount.password,
     apiOrigin + '/api/graphql'
   )
-  const token = await tokenManager.getToken()
+  const token = await tokenManager.getToken(traceHeaders)
   const originalCookie = req.get('Cookie') || ''
   // Preserve client cookies while adding/refreshing the headless session token
   const cookie = appendSessionCookie(originalCookie, token)
 
   return {
     mode: 'cookie',
-    headers: { Cookie: cookie },
+    headers: {
+      Cookie: cookie,
+      ...traceHeaders,
+    },
     originalCookie,
     tokenManager,
   }
