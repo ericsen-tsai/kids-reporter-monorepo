@@ -21,6 +21,8 @@ const baodaozaiRiveFilePath =
 
 const nodeEnv = process.env.NODE_ENV
 
+const isPreviewMode = process.env.NEXT_PUBLIC_IS_PREVIEW_MODE === 'true'
+
 const environmentVariables = {
   internalApiGatewayEndpoint,
   apiGatewayEndpoint,
@@ -32,6 +34,7 @@ const environmentVariables = {
   loginWidgetUrl,
   nodeEnv,
   baodaozaiRiveFilePath,
+  isPreviewMode,
 }
 
 export default environmentVariables
