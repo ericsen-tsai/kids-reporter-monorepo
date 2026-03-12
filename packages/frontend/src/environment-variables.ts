@@ -22,11 +22,8 @@ const baodaozaiRiveFilePath =
 const nodeEnv = process.env.NODE_ENV
 
 const isPreviewMode = process.env.NEXT_PUBLIC_IS_PREVIEW_MODE === 'true'
-const requestTimeoutMs = Number.isNaN(
-  Number(process.env.NEXT_PUBLIC_REQUEST_TIMEOUT_MS)
-)
-  ? 10000
-  : Number(process.env.NEXT_PUBLIC_REQUEST_TIMEOUT_MS)
+const requestTimeoutMs =
+  Number(process.env.NEXT_PUBLIC_REQUEST_TIMEOUT_MS) || 10000
 
 const environmentVariables = {
   internalApiGatewayEndpoint,

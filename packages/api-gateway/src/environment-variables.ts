@@ -41,9 +41,7 @@ const envVar = {
             ? 'https://staging-go-api.twreporter.org'
             : 'http://localhost:8080',
     },
-    requestTimeoutMs: Number.isNaN(Number(REQUEST_TIMEOUT_MS))
-      ? 10000
-      : Number(REQUEST_TIMEOUT_MS),
+    requestTimeoutMs: Number(REQUEST_TIMEOUT_MS) || 10000,
   },
   cors: {
     allowOrigins: getAllowOrigins(CORS_ALLOW_ORIGINS || ''),
