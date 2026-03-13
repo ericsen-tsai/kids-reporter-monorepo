@@ -4,12 +4,8 @@ import {
   TraceHeaderInput,
 } from './types.js'
 
-const TRACEPARENT_HEADER = 'traceparent'
 const XCLOUD_TRACE_HEADER = 'x-cloud-trace-context'
-const TRACEPARENT_VERSION = '00'
-
 const TRACE_ID_REGEX = /^[a-f0-9]{32}$/i
-const SPAN_ID_REGEX = /^[a-f0-9]{16}$/i
 
 const CONSOLE_BY_SEVERITY: Record<string, 'log' | 'warn' | 'error'> = {
   ALERT: 'error',
@@ -21,6 +17,25 @@ const CONSOLE_BY_SEVERITY: Record<string, 'log' | 'warn' | 'error'> = {
   DEBUG: 'log',
 }
 
+function normalizeHeaderValue(
+  value: string | string[] | undefined | unknown
+): string | undefined {
+  if (value === undefined || value === null) {
+    return undefined
+  }
+  if (typeof value === 'string') {
+    return value
+  }
+  if (
+    Array.isArray(value) &&
+    value.length > 0 &&
+    typeof value[0] === 'string'
+  ) {
+    return value[0]
+  }
+  return undefined
+}
+
 function getHeaderValue(input: TraceHeaderInput, headerName: string) {
   if (!input) {
     return undefined
@@ -30,8 +45,8 @@ function getHeaderValue(input: TraceHeaderInput, headerName: string) {
   }
   const lowered = headerName.toLowerCase()
   for (const [key, value] of Object.entries(input)) {
-    if (key.toLowerCase() === lowered && typeof value === 'string') {
-      return value
+    if (key.toLowerCase() === lowered) {
+      return normalizeHeaderValue(value)
     }
   }
   return undefined
@@ -54,68 +69,22 @@ function getRandomHex(length: number) {
     .slice(0, length)
 }
 
-function parseTraceparent(
-  traceparent?: string
-): { traceId: string; spanId: string; sampled: boolean } | undefined {
-  if (!traceparent) {
-    return undefined
-  }
-  const parts = traceparent.trim().split('-')
-  if (parts.length !== 4) {
-    return undefined
-  }
-  const [, traceId, spanId, traceFlags] = parts
-  if (!TRACE_ID_REGEX.test(traceId) || !SPAN_ID_REGEX.test(spanId)) {
-    return undefined
-  }
-  return {
-    traceId: traceId.toLowerCase(),
-    spanId: spanId.toLowerCase(),
-    sampled: traceFlags.toLowerCase() === '01',
-  }
-}
-
-function parseSpanId(rawSpanId?: string) {
-  if (!rawSpanId) {
-    return undefined
-  }
-  const span = rawSpanId.trim()
-  if (SPAN_ID_REGEX.test(span)) {
-    return span.toLowerCase()
-  }
-  if (/^\d+$/.test(span)) {
-    try {
-      const normalized = BigInt(span).toString(16).padStart(16, '0').slice(-16)
-      if (SPAN_ID_REGEX.test(normalized)) {
-        return normalized
-      }
-    } catch {
-      return undefined
-    }
-  }
-  return undefined
-}
-
+/**
+ * Parses traceId from GCP X-Cloud-Trace-Context.
+ * Accepts "traceId;o=1" or "traceId/spanId;o=1" (spanId is ignored).
+ */
 function parseXCloudTraceContext(
   xCloudTraceContext?: string
-): { traceId: string; spanId: string; sampled: boolean } | undefined {
+): string | undefined {
   if (!xCloudTraceContext) {
     return undefined
   }
-  const [traceAndSpan, options] = xCloudTraceContext.trim().split(';')
-  const [traceId, rawSpanId] = traceAndSpan.split('/')
-  if (!TRACE_ID_REGEX.test(traceId)) {
+  const [traceAndSpan] = xCloudTraceContext.trim().split(';')
+  const traceId = traceAndSpan.split('/')[0]?.trim()
+  if (!traceId || !TRACE_ID_REGEX.test(traceId)) {
     return undefined
   }
-  return {
-    traceId: traceId.toLowerCase(),
-    spanId: parseSpanId(rawSpanId) || getRandomHex(16),
-    sampled: options ? options.includes('o=1') : false,
-  }
-}
-
-function formatXCloudSpanId(spanId: string) {
-  return BigInt(`0x${spanId}`).toString(10)
+  return traceId.toLowerCase()
 }
 
 // Overloads: when generateIfMissing is true, return is always NormalizedTraceContext
@@ -134,33 +103,20 @@ export function normalizeTraceContext(
 ) {
   /* eslint-enable no-redeclare */
   const shouldGenerate = options.generateIfMissing !== false
-  const traceparent = getHeaderValue(headersInput, TRACEPARENT_HEADER)
   const xCloudTraceContext = getHeaderValue(headersInput, XCLOUD_TRACE_HEADER)
-  const parsed =
-    parseTraceparent(traceparent) || parseXCloudTraceContext(xCloudTraceContext)
+  const traceId = parseXCloudTraceContext(xCloudTraceContext)
 
-  if (!parsed && !shouldGenerate) {
+  if (!traceId && !shouldGenerate) {
     return undefined
   }
 
-  const context = parsed || {
-    traceId: getRandomHex(32),
-    spanId: getRandomHex(16),
-    sampled: true,
-  }
-  const traceFlags = context.sampled ? '01' : '00'
-  const normalizedTraceparent = `${TRACEPARENT_VERSION}-${context.traceId}-${context.spanId}-${traceFlags}`
-  const normalizedXCloudTraceContext = `${context.traceId}/${formatXCloudSpanId(context.spanId)};o=${context.sampled ? 1 : 0}`
+  const resolvedTraceId = traceId ?? getRandomHex(32)
+  const xCloudValue = `${resolvedTraceId};o=1`
 
   return {
-    traceId: context.traceId,
-    spanId: context.spanId,
-    sampled: context.sampled,
-    traceparent: normalizedTraceparent,
-    xCloudTraceContext: normalizedXCloudTraceContext,
+    traceId: resolvedTraceId,
     traceHeaders: {
-      'X-Cloud-Trace-Context': normalizedXCloudTraceContext,
-      traceparent: normalizedTraceparent,
+      'X-Cloud-Trace-Context': xCloudValue,
     },
   }
 }
@@ -201,9 +157,6 @@ export function getTraceLogFields(
   return {
     ...(traceField ? { 'logging.googleapis.com/trace': traceField } : {}),
     traceId: traceContext.traceId,
-    spanId: traceContext.spanId,
-    traceparent: traceContext.traceparent,
-    'x-cloud-trace-context': traceContext.xCloudTraceContext,
   }
 }
 

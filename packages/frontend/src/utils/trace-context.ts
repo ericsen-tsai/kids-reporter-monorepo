@@ -11,9 +11,8 @@ export function buildTraceHeaders(input?: TraceHeaderInput) {
 }
 
 export function getServerTraceHeaders(requestHeaders: Headers) {
-  const record: Record<string, string> = {}
-  requestHeaders.forEach((value, key) => {
-    record[key] = value
+  const normalized = normalizeTraceContext(requestHeaders, {
+    generateIfMissing: true,
   })
-  return buildTraceHeaders(record)
+  return normalized.traceHeaders
 }

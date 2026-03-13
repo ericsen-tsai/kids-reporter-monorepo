@@ -1,4 +1,3 @@
-import { normalizeTraceContext } from '@kids-reporter/logger'
 import axios from 'axios'
 
 import envVars from '../environment-variables.js'
@@ -27,15 +26,15 @@ export async function callCmsGraphql({
   timeoutMs?: number
 }) {
   const endpoint = `${apiOrigin}/api/graphql`
-  const traceHeaders = normalizeTraceContext(headers, {
-    generateIfMissing: false,
-  })?.traceHeaders
   const doCall = async (customHeaders = headers) =>
     axios.post(
       endpoint,
       { query: document, variables, operationName },
       {
-        headers: { ...customHeaders, 'content-type': 'application/json' },
+        headers: {
+          ...customHeaders,
+          'content-type': 'application/json',
+        },
         timeout: timeoutMs,
       }
     )
@@ -50,7 +49,7 @@ export async function callCmsGraphql({
       tokenManager
     ) {
       try {
-        const token = await tokenManager.renewToken(traceHeaders)
+        const token = await tokenManager.renewToken()
         // Retry with the refreshed headless token stitched back into the Cookie header
         const refreshedHeaders = {
           ...headers,

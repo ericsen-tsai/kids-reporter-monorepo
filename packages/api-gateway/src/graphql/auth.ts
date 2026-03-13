@@ -36,33 +36,33 @@ export class TokenManager {
   /**
    *  This function will return a cached token if a token exists and is not expired.
    */
-  async getToken(traceHeaders?: Record<string, string>) {
+  async getToken() {
     if (this.token && this.expiredAt && this.expiredAt >= Date.now()) {
       return this.token
     }
 
-    return this.queueRenewal(traceHeaders)
+    return this.queueRenewal()
   }
 
   /**
    *  This function will return a new token.
    */
-  async renewToken(traceHeaders?: Record<string, string>) {
+  async renewToken() {
     this.token = ''
     this.expiredAt = undefined
-    return this.queueRenewal(traceHeaders)
+    return this.queueRenewal()
   }
 
-  private async queueRenewal(traceHeaders?: Record<string, string>) {
+  private async queueRenewal() {
     if (!this.renewPromise) {
-      this.renewPromise = this.fetchToken(traceHeaders).finally(() => {
+      this.renewPromise = this.fetchToken().finally(() => {
         this.renewPromise = undefined
       })
     }
     return this.renewPromise
   }
 
-  private async fetchToken(traceHeaders?: Record<string, string>) {
+  private async fetchToken() {
     const gqlQuery = `
       mutation AuthenticateUserWithPassword($email: String!, $password: String!) {
         authenticateUserWithPassword(email: $email, password: $password) {
@@ -75,6 +75,12 @@ export class TokenManager {
         }
       }
     `
+
+    // Use a fresh trace for the singleton token renewal so concurrent requests
+    // don't attribute this auth request to the wrong trace.
+    const traceHeaders = normalizeTraceContext(undefined, {
+      generateIfMissing: true,
+    }).traceHeaders
 
     let axiosRes
     // fetch token
@@ -161,7 +167,7 @@ export async function buildAuthContext({
     headlessAccount.password,
     apiOrigin + '/api/graphql'
   )
-  const token = await tokenManager.getToken(traceHeaders)
+  const token = await tokenManager.getToken()
   const originalCookie = req.get('Cookie') || ''
   // Preserve client cookies while adding/refreshing the headless session token
   const cookie = appendSessionCookie(originalCookie, token)

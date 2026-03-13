@@ -24,9 +24,11 @@ async function start() {
       })
     })
   } catch (err) {
+    const message =
+      err instanceof Error ? (err.stack ?? err.message) : String(err)
     emitStructured({
       severity: 'ALERT',
-      message: 'Error to start server',
+      message,
       error: err instanceof Error ? err.stack : String(err),
     })
   }
