@@ -11,10 +11,6 @@ import consts from '../constants.js'
  *  Follow [Writing structured logs](https://cloud.google.com/run/docs/logging#writing_structured_logs)
  *  doc to do logging.
  *
- *  @param {Object} req
- *  @param {Function} req
- *  @param {string} projectId
- *  @return {Object} globalLogFields
  */
 function getGlobalLogFields(req: express.Request, projectId: string) {
   const globalLogFields: { 'logging.googleapis.com/trace'?: string } = {}
@@ -23,7 +19,7 @@ function getGlobalLogFields(req: express.Request, projectId: string) {
   })
   const traceLogField = getGcpTraceField({
     projectId,
-    traceId: traceContext?.traceId || '',
+    traceId: traceContext.traceId,
   })
   if (traceLogField) {
     globalLogFields['logging.googleapis.com/trace'] = traceLogField

@@ -1,5 +1,5 @@
 import { graphql } from '@keystone-6/core'
-import { emitStructured, getTraceLogFields } from '@kids-reporter/logger'
+import { emitStructured } from '@kids-reporter/logger'
 import { Prisma } from '@prisma/client'
 // @ts-ignore `@twreporter/errors` does not have typescript definition file yet
 import _errors from '@twreporter/errors'
@@ -54,7 +54,7 @@ export const extendGraphqlSchema = graphql.extend(() => {
         },
         async resolve(root, args, ctx: Context) {
           const { postId } = args as { postId: string }
-          const traceLogFields = getTraceLogFields(ctx.req?.headers)
+          const traceLogFields = ctx.res?.locals?.traceLogFields || {}
           try {
             const post = await ctx.query.Post.findOne({
               where: { id: postId },
@@ -222,7 +222,7 @@ export const extendGraphqlSchema = graphql.extend(() => {
         },
         async resolve(root, args, ctx: Context) {
           const { keywords } = args
-          const traceLogFields = getTraceLogFields(ctx.req?.headers)
+          const traceLogFields = ctx.res?.locals?.traceLogFields || {}
 
           const session = ctx.session
           const isUnauthorized = !session
@@ -358,7 +358,7 @@ export const extendGraphqlSchema = graphql.extend(() => {
         },
         async resolve(root, args, ctx: Context) {
           const { take = 5, cursor } = args
-          const traceLogFields = getTraceLogFields(ctx.req?.headers)
+          const traceLogFields = ctx.res?.locals?.traceLogFields || {}
           const memberId =
             ctx.session?.data && 'memberId' in ctx.session.data
               ? ctx.session?.data?.memberId
@@ -605,7 +605,7 @@ export const extendGraphqlSchema = graphql.extend(() => {
         },
         async resolve(root, args, ctx: Context) {
           const { essayAnswerIds } = args
-          const traceLogFields = getTraceLogFields(ctx.req?.headers)
+          const traceLogFields = ctx.res?.locals?.traceLogFields || {}
           const memberId =
             ctx.session?.data && 'memberId' in ctx.session.data
               ? ctx.session?.data?.memberId

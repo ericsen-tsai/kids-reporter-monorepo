@@ -118,10 +118,21 @@ function formatXCloudSpanId(spanId: string) {
   return BigInt(`0x${spanId}`).toString(10)
 }
 
+// Overloads: when generateIfMissing is true, return is always NormalizedTraceContext
+/* eslint-disable no-redeclare -- overload signatures + implementation */
+export function normalizeTraceContext(
+  headersInput: TraceHeaderInput | undefined,
+  options: { generateIfMissing: true }
+): NormalizedTraceContext
+export function normalizeTraceContext(
+  headersInput?: TraceHeaderInput,
+  options?: { generateIfMissing?: boolean }
+): NormalizedTraceContext | undefined
 export function normalizeTraceContext(
   headersInput?: TraceHeaderInput,
   options: { generateIfMissing?: boolean } = {}
-): NormalizedTraceContext | undefined {
+) {
+  /* eslint-enable no-redeclare */
   const shouldGenerate = options.generateIfMissing !== false
   const traceparent = getHeaderValue(headersInput, TRACEPARENT_HEADER)
   const xCloudTraceContext = getHeaderValue(headersInput, XCLOUD_TRACE_HEADER)

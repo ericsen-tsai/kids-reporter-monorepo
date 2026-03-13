@@ -1,5 +1,4 @@
 import {
-  NormalizedTraceContext,
   normalizeTraceContext,
   type TraceHeaderInput,
 } from '@kids-reporter/logger'
@@ -8,10 +7,7 @@ export function buildTraceHeaders(input?: TraceHeaderInput) {
   const normalized = normalizeTraceContext(input, {
     generateIfMissing: true,
   })
-  return (
-    normalized?.traceHeaders ??
-    ({} as Partial<NormalizedTraceContext['traceHeaders']>)
-  )
+  return normalized.traceHeaders
 }
 
 export function getServerTraceHeaders(requestHeaders: Headers) {

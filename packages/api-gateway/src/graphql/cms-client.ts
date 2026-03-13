@@ -1,3 +1,4 @@
+import { normalizeTraceContext } from '@kids-reporter/logger'
 import axios from 'axios'
 
 import envVars from '../environment-variables.js'
@@ -26,11 +27,9 @@ export async function callCmsGraphql({
   timeoutMs?: number
 }) {
   const endpoint = `${apiOrigin}/api/graphql`
-  const traceHeaders = Object.fromEntries(
-    Object.entries(headers).filter(([key]) =>
-      ['x-cloud-trace-context', 'traceparent'].includes(key.toLowerCase())
-    )
-  )
+  const traceHeaders = normalizeTraceContext(headers, {
+    generateIfMissing: false,
+  })?.traceHeaders
   const doCall = async (customHeaders = headers) =>
     axios.post(
       endpoint,
