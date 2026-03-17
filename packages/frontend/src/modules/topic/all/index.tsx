@@ -61,10 +61,17 @@ function TopicAllModule({
             </div>
             <Image
               alt="topic illustration"
+              width={404}
+              height={280}
+              className="relative z-2 hidden h-[220px] w-[318px] tablet:mt-[10px] tablet:block tablet:h-[280px] tablet:w-[404px] desktop:mt-0 desktop:h-[360px] desktop:w-[520px]"
+              src="/assets/images/topic/illustration.svg"
+            />
+            <Image
+              alt="topic illustration"
               width={318}
               height={220}
-              className="relative z-2 h-[220px] w-[318px] tablet:mt-[10px] tablet:h-[280px] tablet:w-[404px] desktop:mt-0 desktop:h-[360px] desktop:w-[520px]"
-              src="/assets/images/topic/illustration.svg"
+              className="relative z-2 h-[220px] w-[318px] tablet:hidden"
+              src="/assets/images/topic/illustration_s.svg"
             />
 
             <div className="absolute top-0 left-1/2 z-1 h-full w-screen -translate-x-1/2 bg-neutral-white"></div>

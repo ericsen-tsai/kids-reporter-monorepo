@@ -25,7 +25,7 @@ function FeaturedTopicArticleCard({ post }: { post: PostSummary }) {
     >
       <div className="relative size-20 shrink-0 overflow-hidden rounded-[11px] desktop:size-[88px] desktop:rounded-[12px]">
         <ImageWithFallback
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-120"
           src={post.image ?? FALLBACK_IMG}
           loading="lazy"
         />
@@ -97,6 +97,9 @@ function TopicPostSlider({ posts }: { posts: PostSummary[] }) {
                   post={post}
                 />
               ))}
+              {row.length % 2 === 1 && (
+                <div aria-hidden className="w-full min-w-0" />
+              )}
             </div>
           </SwiperSlide>
         ))}
