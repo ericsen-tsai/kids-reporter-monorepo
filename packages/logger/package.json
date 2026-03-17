@@ -15,7 +15,6 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "postinstall": "yarn build",
     "lint:check": "eslint src --config ./eslint.config.mjs --ext .ts",
     "type-check": "tsc --noEmit -p tsconfig.json"
   },
