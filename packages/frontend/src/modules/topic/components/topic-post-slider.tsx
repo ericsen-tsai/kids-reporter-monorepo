@@ -97,7 +97,7 @@ function TopicPostSlider({ posts }: { posts: PostSummary[] }) {
                   post={post}
                 />
               ))}
-              {row.length % 2 === 1 && (
+              {!isDesktop && row.length % 2 === 1 && (
                 <div aria-hidden className="w-full min-w-0" />
               )}
             </div>
@@ -106,7 +106,7 @@ function TopicPostSlider({ posts }: { posts: PostSummary[] }) {
       </Swiper>
       {slideCount > 1 && (
         <div
-          className="mt-5 flex shrink-0 items-center gap-3"
+          className="flex shrink-0 items-center gap-3 tablet:mt-5"
           role="tablist"
           aria-label="投影片分頁"
         >
