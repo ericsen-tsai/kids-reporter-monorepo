@@ -13,7 +13,7 @@
     "type-check": "tsc --noEmit",
     "codegen:local": "graphql-codegen --config codegen.local.ts",
     "codegen:cloudbuild": "graphql-codegen --config codegen.cloudbuild.ts",
-    "postinstall": "yarn codegen:local && cd ../logger && yarn build && cd ../routing-ui && yarn build"
+    "postinstall": "yarn codegen:local && yarn workspace @kids-reporter/logger build && yarn workspace @kids-reporter/routing-ui build"
   },
   "dependencies": {
     "@googleapis/customsearch": "^1.0.4",
