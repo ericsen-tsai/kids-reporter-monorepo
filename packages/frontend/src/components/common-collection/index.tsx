@@ -2,6 +2,7 @@
 
 import { Button } from '@kids-reporter/routing-ui'
 import Image from 'next/image'
+import type { ReactNode } from 'react'
 
 import Pagination from '../pagination'
 import { PostSummary } from '../types'
@@ -12,6 +13,7 @@ type CommonCollectionProps = {
   illustration: string
   illustrationSmall: string
   posts: PostSummary[]
+  subcategoryNav?: ReactNode
 } & (
   | {
       morePostsMode: 'pagination'
@@ -28,7 +30,14 @@ type CommonCollectionProps = {
 )
 
 function CommonCollection(props: CommonCollectionProps) {
-  const { title, illustration, illustrationSmall, morePostsMode, posts } = props
+  const {
+    title,
+    illustration,
+    illustrationSmall,
+    morePostsMode,
+    posts,
+    subcategoryNav,
+  } = props
   return (
     <div className="w-screen bg-neutral-100 pb-14 tablet:pb-16 desktop:pb-24 hd:pb-30">
       <div className="mx-auto flex w-full flex-col items-center justify-center px-6 tablet:px-8 desktop:px-12 hd:max-w-300 hd:px-0">
@@ -61,6 +70,12 @@ function CommonCollection(props: CommonCollectionProps) {
           <div className="absolute bottom-0 left-1/2 z-3 hidden h-[120px] w-screen -translate-x-1/2 bg-[url(/assets/images/common-collection/wave_l.svg)] bg-[length:1024px_120px] bg-center bg-repeat-x desktop:block hd:hidden" />
           <div className="absolute bottom-0 left-1/2 z-3 hidden h-[120px] w-screen -translate-x-1/2 bg-[url(/assets/images/common-collection/wave_xl.svg)] bg-[length:1440px_120px] bg-center bg-repeat-x hd:block" />
         </div>
+
+        {subcategoryNav != null && (
+          <div className="mb-14 w-full px-6 tablet:px-8 desktop:px-12 hd:max-w-300 hd:px-0">
+            <div className="hd:px-14">{subcategoryNav}</div>
+          </div>
+        )}
 
         <div className="px-6 tablet:px-8 desktop:px-12 hd:max-w-300 hd:px-0">
           <div className="grid w-full grid-cols-1 gap-y-6 tablet:grid-cols-2 tablet:gap-x-6 tablet:gap-y-8 desktop:grid-cols-3 desktop:gap-x-8 desktop:gap-y-10 hd:gap-y-14 hd:px-14">

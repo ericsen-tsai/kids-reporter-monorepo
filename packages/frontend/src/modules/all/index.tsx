@@ -4,7 +4,7 @@ import { usePostsPagedInfiniteQuery } from '@/api-utils/react-query/hooks/posts-
 import AllSiteBaodaozaiEventTrigger from '@/components/all-site-baodaozai-event-trigger'
 import CommonCollection from '@/components/common-collection'
 import { PostSummary } from '@/components/types'
-import { POST_PER_PAGE_ALL } from '@/constants'
+import { POST_PER_PAGE } from '@/constants'
 import useAllSiteBaodaozaiIdleTimer from '@/hooks/use-site-baodaozai-idle-timer'
 import { BaodaozaiVisibilitySetter } from '@/services/call-baodaozai'
 
@@ -19,7 +19,7 @@ function AllModule({ introContent, posts }: AllModuleProps) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     usePostsPagedInfiniteQuery({
       orderBy: [{ publishedDate: 'desc' }],
-      take: POST_PER_PAGE_ALL,
+      take: POST_PER_PAGE,
       initialPosts: posts,
     })
 

@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 
 import { getCallBaodaozaiIntroContent } from '@/api/call-baodaozai-intro'
 import { getPostsPaged } from '@/api/post'
-import { ERROR_PAGE, GENERAL_DESCRIPTION, POST_PER_PAGE_ALL } from '@/constants'
+import { ERROR_PAGE, GENERAL_DESCRIPTION, POST_PER_PAGE } from '@/constants'
 import AllModule from '@/modules/all'
 import { getPostSummaries } from '@/utils'
 import { getServerTraceHeaders } from '@/utils/trace-context'
@@ -26,7 +26,7 @@ export default async function LatestPosts() {
             publishedDate: 'desc',
           },
         ],
-        take: POST_PER_PAGE_ALL,
+        take: POST_PER_PAGE,
       },
       traceHeaders
     ),
