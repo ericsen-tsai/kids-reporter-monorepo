@@ -1,13 +1,9 @@
-import type {
-  GetAuthorMetaQuery,
-  GetAuthorPostsQuery,
-} from '__generated__/operations/content.generated'
 import { emitStructured } from '@kids-reporter/logger'
 import { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 
-import CommonCollection from '@/components/common-collection'
+import { getAuthorMetaBySlug, getAuthorPostsBySlugPaged } from '@/api/author'
 import {
   ContentType,
   DEFAULT_AVATAR,
@@ -15,8 +11,9 @@ import {
   KIDS_URL_ORIGIN,
   POST_PER_PAGE,
 } from '@/constants'
+import AuthorCollectionModule from '@/modules/author/collection'
 import { getPostSummaries } from '@/utils'
-import { sendRestGqlRequest } from '@/utils/send-rest-gql'
+import { getSanitizedCurrentPage } from '@/utils/get-sanitized-current-page'
 import { getServerTraceHeaders } from '@/utils/trace-context'
 
 export async function generateMetadata({
@@ -26,16 +23,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const slug = params.slug?.[0]
 
-  const authorMetaRes = await sendRestGqlRequest<GetAuthorMetaQuery>({
-    operation: 'author-meta',
-    method: 'GET',
-    variables: {
-      where: {
-        slug: slug,
-      },
-    },
-  })
-  const authorMeta = authorMetaRes?.data?.data?.author
+  const authorMeta = slug ? await getAuthorMetaBySlug({ slug }) : null
   if (!authorMeta) {
     emitStructured({
       severity: 'WARNING',
@@ -68,9 +56,9 @@ export async function generateMetadata({
 // Author's routing path: /author/[slug]/[page num], ex: /author/yunruchen/1
 export default async function Author({ params }: { params: { slug: any } }) {
   const slug = params.slug?.[0]
-  const currentPage = !params.slug?.[1] ? 1 : Number(params.slug[1])
+  const currentPage = getSanitizedCurrentPage(params.slug?.[1])
   const traceHeaders = getServerTraceHeaders(headers())
-  if (params.slug?.length > 2 || !slug || !(currentPage > 0)) {
+  if (params.slug?.length > 2 || !slug || currentPage == null) {
     emitStructured({
       severity: 'WARNING',
       message: 'Incorrect author routing!',
@@ -78,10 +66,8 @@ export default async function Author({ params }: { params: { slug: any } }) {
     notFound()
   }
 
-  const response = await sendRestGqlRequest<GetAuthorPostsQuery>({
-    operation: 'author-posts',
-    method: 'GET',
-    variables: {
+  const author = await getAuthorPostsBySlugPaged(
+    {
       where: {
         slug: slug,
       },
@@ -93,9 +79,8 @@ export default async function Author({ params }: { params: { slug: any } }) {
       take: POST_PER_PAGE,
       skip: (currentPage - 1) * POST_PER_PAGE,
     },
-    traceHeaders,
-  })
-  const author = response?.data?.data?.author
+    traceHeaders
+  )
   if (!author) {
     emitStructured({ severity: 'WARNING', message: 'Author not found!' })
     notFound()
@@ -117,51 +102,17 @@ export default async function Author({ params }: { params: { slug: any } }) {
   const postSummaries = getPostSummaries(posts)
 
   return (
-    <main className="mx-auto flex flex-col items-center justify-center">
-      <CommonCollection
-        hero={{
-          type: 'customized',
-          content: (
-            <div className="flex w-full flex-col items-center px-6 pt-12 pb-17 tablet:px-8 tablet:pt-16 tablet:pb-40 desktop:px-12 desktop:pt-20 desktop:pb-45 hd:px-0">
-              <div className="flex w-full flex-col items-center gap-6 text-center tablet:max-w-[582px] tablet:flex-row tablet:items-start tablet:gap-12 tablet:text-left desktop:max-w-[608px] hd:max-w-[790px]">
-                <div className="h-[120px] w-[120px] shrink-0 overflow-hidden tablet:h-[160px] tablet:w-[160px]">
-                  <img
-                    src={avatarURL}
-                    alt={author.name ?? ''}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="flex w-full flex-col gap-4">
-                  <div className="flex w-full flex-col gap-1">
-                    <h1 className="prose-h5-small text-neutral-900 desktop:prose-h5-large">
-                      {author.name ?? ''}
-                    </h1>
-                    {author.email != null && author.email !== '' && (
-                      <a
-                        href={`mailto:${author.email}`}
-                        className="prose-p2 text-blue-400 underline decoration-neutral-400 underline-offset-2 desktop:prose-p1"
-                      >
-                        {author.email}
-                      </a>
-                    )}
-                  </div>
-                  {author.bio != null && author.bio !== '' && (
-                    <p className="prose-p2 whitespace-pre-wrap text-neutral-900 desktop:prose-p1">
-                      {author.bio}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          ),
-        }}
-        morePostsMode="pagination"
-        totalPages={totalPages}
-        currentPage={currentPage}
-        routingPrefix={`/author/${slug}`}
-        posts={postSummaries}
-      />
-    </main>
+    <AuthorCollectionModule
+      author={{
+        name: author.name ?? '',
+        bio: author.bio,
+        email: author.email,
+        avatarURL,
+      }}
+      posts={postSummaries}
+      totalPages={totalPages}
+      currentPage={currentPage}
+      routingPrefix={`/author/${slug}`}
+    />
   )
 }

@@ -1,13 +1,9 @@
-import type {
-  GetTagMetaQuery,
-  GetTagPostsQuery,
-} from '__generated__/operations/content.generated'
 import { emitStructured } from '@kids-reporter/logger'
 import { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 
-import CommonCollection from '@/components/common-collection'
+import { getTagMetaBySlug, getTagPostsBySlugPaged } from '@/api/tag'
 import {
   ContentType,
   GENERAL_DESCRIPTION,
@@ -15,8 +11,9 @@ import {
   OG_SUFFIX,
   POST_PER_PAGE,
 } from '@/constants'
+import TagCollectionModule from '@/modules/tag/collection'
 import { getPostSummaries } from '@/utils'
-import { sendRestGqlRequest } from '@/utils/send-rest-gql'
+import { getSanitizedCurrentPage } from '@/utils/get-sanitized-current-page'
 import { getServerTraceHeaders } from '@/utils/trace-context'
 
 export async function generateMetadata({
@@ -26,16 +23,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const slug = params.slug?.[0]
 
-  const tagOGRes = await sendRestGqlRequest<GetTagMetaQuery>({
-    operation: 'tag-meta',
-    method: 'GET',
-    variables: {
-      where: {
-        slug: slug,
-      },
-    },
-  })
-  const tagMeta = tagOGRes?.data?.data?.tag
+  const tagMeta = slug ? await getTagMetaBySlug({ slug }) : null
   if (!tagMeta) {
     emitStructured({
       severity: 'WARNING',
@@ -67,17 +55,15 @@ export async function generateMetadata({
 // Tag's routing path: /tag/[slug]/[page num], ex: /tag/life/1
 export default async function Tag({ params }: { params: { slug: any } }) {
   const slug = params.slug?.[0]
-  const currentPage = !params.slug?.[1] ? 1 : Number(params.slug[1])
+  const currentPage = getSanitizedCurrentPage(params.slug?.[1])
   const traceHeaders = getServerTraceHeaders(headers())
-  if (params.slug?.length > 2 || !slug || !(currentPage > 0)) {
+  if (params.slug?.length > 2 || !slug || currentPage == null) {
     emitStructured({ severity: 'WARNING', message: 'Incorrect tag routing!' })
     notFound()
   }
 
-  const response = await sendRestGqlRequest<GetTagPostsQuery>({
-    operation: 'tag-posts',
-    method: 'GET',
-    variables: {
+  const tag = await getTagPostsBySlugPaged(
+    {
       where: {
         slug: slug,
       },
@@ -89,10 +75,8 @@ export default async function Tag({ params }: { params: { slug: any } }) {
       take: POST_PER_PAGE,
       skip: (currentPage - 1) * POST_PER_PAGE,
     },
-    traceHeaders,
-  })
-
-  const tag = response?.data?.data?.tag
+    traceHeaders
+  )
   if (!tag) {
     emitStructured({ severity: 'WARNING', message: 'Tag not found!' })
     notFound()
@@ -112,24 +96,12 @@ export default async function Tag({ params }: { params: { slug: any } }) {
   const postSummaries = getPostSummaries(posts)
 
   return (
-    <main className="mx-auto flex flex-col items-center justify-center">
-      <CommonCollection
-        hero={{
-          type: 'customized',
-          content: (
-            <div className="flex h-[260px] w-full items-start justify-center desktop:h-[320px] hd:mb-10">
-              <h1 className="mt-24 px-6 text-center prose-h1-small font-swei! text-neutral-900 desktop:prose-h1-large">
-                {`#${tag.name}`}
-              </h1>
-            </div>
-          ),
-        }}
-        morePostsMode="pagination"
-        totalPages={totalPages}
-        currentPage={currentPage}
-        routingPrefix={`/tag/${slug}`}
-        posts={postSummaries}
-      />
-    </main>
+    <TagCollectionModule
+      tagName={tag.name ?? ''}
+      posts={postSummaries}
+      totalPages={totalPages}
+      currentPage={currentPage}
+      routingPrefix={`/tag/${slug}`}
+    />
   )
 }
