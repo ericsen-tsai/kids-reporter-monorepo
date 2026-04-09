@@ -122,7 +122,7 @@ export default async function Author({ params }: { params: { slug: any } }) {
         hero={{
           type: 'customized',
           content: (
-            <div className="flex w-full flex-col items-center px-6 pt-12 pb-22 tablet:px-8 tablet:pt-16 tablet:pb-44 desktop:px-12 desktop:pt-20 desktop:pb-50 hd:px-0">
+            <div className="flex w-full flex-col items-center px-6 pt-12 pb-17 tablet:px-8 tablet:pt-16 tablet:pb-40 desktop:px-12 desktop:pt-20 desktop:pb-45 hd:px-0">
               <div className="flex w-full flex-col items-center gap-6 text-center tablet:max-w-[582px] tablet:flex-row tablet:items-start tablet:gap-12 tablet:text-left desktop:max-w-[608px] hd:max-w-[790px]">
                 <div className="h-[120px] w-[120px] shrink-0 overflow-hidden tablet:h-[160px] tablet:w-[160px]">
                   <img
