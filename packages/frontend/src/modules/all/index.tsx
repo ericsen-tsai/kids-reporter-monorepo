@@ -42,9 +42,12 @@ function AllModule({ introContent, posts }: AllModuleProps) {
         </div>
       </div>
       <CommonCollection
-        title="最新文章"
-        illustration="/assets/images/all/illustration.svg"
-        illustrationSmall="/assets/images/all/illustration_s.svg"
+        hero={{
+          type: 'illustrated',
+          title: '最新文章',
+          illustration: '/assets/images/all/illustration.svg',
+          illustrationSmall: '/assets/images/all/illustration_s.svg',
+        }}
         morePostsMode="loadingMore"
         posts={allPosts}
         onLoadMore={() => fetchNextPage()}

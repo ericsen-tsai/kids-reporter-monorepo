@@ -5,11 +5,9 @@ import type {
 import { emitStructured } from '@kids-reporter/logger'
 import { Metadata } from 'next'
 import { headers } from 'next/headers'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
-import Pagination from '@/components/pagination'
-import PostList from '@/components/post-list'
+import CommonCollection from '@/components/common-collection'
 import {
   ContentType,
   DEFAULT_AVATAR,
@@ -119,53 +117,21 @@ export default async function Author({ params }: { params: { slug: any } }) {
   const postSummeries = getPostSummaries(posts)
 
   return (
-    <main
-      style={{ width: '95vw' }}
-      className="mx-auto mb-10 flex flex-col items-center justify-center gap-10"
-    >
-      <div className="flex max-w-2xl flex-col items-center justify-center gap-1.5 bg-white px-9 pt-10">
-        <div className="mx-auto mb-1.5 max-h-44 max-w-44 overflow-hidden rounded-full object-cover">
-          <img
-            className="max-h-44 w-full max-w-44 object-cover"
-            src={avatarURL}
-            alt={author.name}
-            loading="lazy"
-          />
-        </div>
-        <h1
-          style={{ lineHeight: '160%', letterSpacing: '.08em' }}
-          className="mt-3 mb-9 text-center text-xl font-bold text-gray-900"
-        >
-          {author.name}
-        </h1>
-        {author.email && (
-          <Link
-            style={{
-              lineHeight: '160%',
-              letterSpacing: '.05em',
-              color: 'var(--paletteColor1)',
-            }}
-            className="mb-2 text-center text-base font-medium not-italic"
-            href={`mailto:${author.email}`}
-          >
-            {author.email}
-          </Link>
-        )}
-        <p
-          style={{ lineHeight: '200%', letterSpacing: '.05em' }}
-          className="text-center text-lg font-normal whitespace-pre-wrap text-gray-900 not-italic"
-        >
-          {author.bio}
-        </p>
-      </div>
-      <PostList posts={postSummeries} />
-      {totalPages && totalPages > 0 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          routingPrefix={`/author/${slug}`}
-        />
-      )}
+    <main className="mx-auto flex flex-col items-center justify-center">
+      <CommonCollection
+        hero={{
+          type: 'author',
+          name: author.name ?? '',
+          email: author.email ?? undefined,
+          bio: author.bio ?? undefined,
+          avatarUrl: avatarURL,
+        }}
+        morePostsMode="pagination"
+        totalPages={totalPages}
+        currentPage={currentPage}
+        routingPrefix={`/author/${slug}`}
+        posts={postSummeries}
+      />
     </main>
   )
 }

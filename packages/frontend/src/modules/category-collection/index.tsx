@@ -63,9 +63,12 @@ function CategoryCollectionModule({
         </>
       )}
       <CommonCollection
-        title={title}
-        illustration={illustrations.illustration}
-        illustrationSmall={illustrations.illustrationSmall}
+        hero={{
+          type: 'illustrated',
+          title,
+          illustration: illustrations.illustration,
+          illustrationSmall: illustrations.illustrationSmall,
+        }}
         morePostsMode="pagination"
         totalPages={totalPages}
         currentPage={currentPage}

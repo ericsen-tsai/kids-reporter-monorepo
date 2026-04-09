@@ -7,8 +7,7 @@ import { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 
-import Pagination from '@/components/pagination'
-import PostList from '@/components/post-list'
+import CommonCollection from '@/components/common-collection'
 import {
   ContentType,
   GENERAL_DESCRIPTION,
@@ -110,29 +109,18 @@ export default async function Tag({ params }: { params: { slug: any } }) {
     notFound()
   }
 
-  const postSummeries = getPostSummaries(posts)
+  const postSummaries = getPostSummaries(posts)
 
   return (
-    <main
-      style={{ width: '95vw' }}
-      className="mx-auto mb-10 flex flex-col items-center justify-center gap-10 px-9 pt-10"
-    >
-      <div className="flex w-full flex-col items-center justify-center bg-white">
-        <h1
-          style={{ lineHeight: '160%' }}
-          className="text-center text-3xl font-bold tracking-wider text-gray-900"
-        >
-          #{tag.name}
-        </h1>
-      </div>
-      <PostList posts={postSummeries} />
-      {totalPages && totalPages > 0 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          routingPrefix={`/tag/${slug}`}
-        />
-      )}
+    <main className="mx-auto flex flex-col items-center justify-center">
+      <CommonCollection
+        hero={{ type: 'tag', title: `#${tag.name}` }}
+        morePostsMode="pagination"
+        totalPages={totalPages}
+        currentPage={currentPage}
+        routingPrefix={`/tag/${slug}`}
+        posts={postSummaries}
+      />
     </main>
   )
 }
