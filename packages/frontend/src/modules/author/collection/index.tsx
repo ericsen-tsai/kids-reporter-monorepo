@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 import CommonCollection from '@/components/common-collection'
 import type { PostSummary } from '@/components/types'
 
@@ -22,19 +24,20 @@ export default function AuthorCollectionModule({
   routingPrefix,
 }: AuthorCollectionModuleProps) {
   return (
-    <main className="mx-auto flex flex-col items-center justify-center">
+    <main>
       <CommonCollection
         hero={{
           type: 'customized',
           content: (
             <div className="flex w-full flex-col items-center px-6 pt-12 pb-17 tablet:px-8 tablet:pt-16 tablet:pb-40 desktop:px-12 desktop:pt-20 desktop:pb-45 hd:px-0">
               <div className="flex w-full flex-col items-center gap-6 text-center tablet:max-w-[582px] tablet:flex-row tablet:items-start tablet:gap-12 tablet:text-left desktop:max-w-[608px] hd:max-w-[790px]">
-                <div className="h-[120px] w-[120px] shrink-0 overflow-hidden tablet:h-[160px] tablet:w-[160px]">
-                  <img
+                <div className="relative h-[120px] w-[120px] shrink-0 overflow-hidden tablet:h-[160px] tablet:w-[160px]">
+                  <Image
                     src={author.avatarURL}
                     alt={author.name}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 120px, 160px"
                   />
                 </div>
                 <div className="flex w-full flex-col gap-4">

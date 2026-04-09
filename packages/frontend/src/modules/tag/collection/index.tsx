@@ -17,7 +17,7 @@ export default function TagCollectionModule({
   routingPrefix,
 }: TagCollectionModuleProps) {
   return (
-    <main className="mx-auto flex flex-col items-center justify-center">
+    <main>
       <CommonCollection
         hero={{
           type: 'customized',

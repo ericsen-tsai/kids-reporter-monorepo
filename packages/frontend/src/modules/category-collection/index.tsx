@@ -40,9 +40,11 @@ function CategoryCollectionModule({
 }: CategoryCollectionModuleProps) {
   const { isIdle: isAllSiteBaodaozaiIdle } = useAllSiteBaodaozaiIdleTimer()
   const illustrations = CATEGORY_COLLECTION_ILLUSTRATIONS[categorySlug]
+  const showSubcategoryNav =
+    categorySlug !== 'classroom' && navigationItems.length > 0
 
   return (
-    <main className="mx-auto flex flex-col items-center justify-center">
+    <main>
       {showIntro && (
         <>
           <BaodaozaiVisibilitySetter show={true} />
@@ -75,9 +77,9 @@ function CategoryCollectionModule({
         routingPrefix={routingPrefix}
         posts={posts}
         subcategoryNav={
-          categorySlug !== 'classroom' && (
+          showSubcategoryNav ? (
             <CategoryPillNav items={navigationItems} />
-          )
+          ) : null
         }
       />
     </main>

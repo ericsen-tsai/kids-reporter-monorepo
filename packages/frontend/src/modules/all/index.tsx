@@ -25,7 +25,7 @@ function AllModule({ introContent, posts }: AllModuleProps) {
 
   const allPosts = data?.pages.flat() ?? posts
   return (
-    <main className="mx-auto flex flex-col items-center justify-center">
+    <main>
       <BaodaozaiVisibilitySetter show={true} />
       <AllSiteBaodaozaiEventTrigger
         id="show-intro"
