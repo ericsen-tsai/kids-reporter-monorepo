@@ -114,7 +114,16 @@ export default async function Tag({ params }: { params: { slug: any } }) {
   return (
     <main className="mx-auto flex flex-col items-center justify-center">
       <CommonCollection
-        hero={{ type: 'tag', title: `#${tag.name}` }}
+        hero={{
+          type: 'customized',
+          content: (
+            <div className="flex h-[360px] w-full items-start justify-center hd:mb-10">
+              <h1 className="mt-24 px-6 text-center prose-h1-small font-swei! text-neutral-900 desktop:prose-h1-large">
+                {`#${tag.name}`}
+              </h1>
+            </div>
+          ),
+        }}
         morePostsMode="pagination"
         totalPages={totalPages}
         currentPage={currentPage}
