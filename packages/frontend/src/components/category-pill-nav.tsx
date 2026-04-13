@@ -11,7 +11,7 @@ type CategoryPillNavProps = {
   items: CategoryPillNavItem[]
 }
 
-export function CategoryPillNav({ items }: CategoryPillNavProps) {
+function CategoryPillNav({ items }: CategoryPillNavProps) {
   return (
     <nav
       className="flex w-full flex-row flex-wrap items-center gap-4"
