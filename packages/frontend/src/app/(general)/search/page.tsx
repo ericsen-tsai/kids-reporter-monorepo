@@ -29,7 +29,9 @@ export async function generateMetadata({
 }: {
   searchParams: { q?: string }
 }): Promise<Metadata> {
-  const q = searchParams?.q?.trim()
+  const q = (
+    Array.isArray(searchParams.q) ? searchParams.q[0] : searchParams.q
+  )?.trim()
   const title = q ? `搜尋「${q}」 - ${OG_SUFFIX}` : `搜尋 - ${OG_SUFFIX}`
   const description = q ? `搜尋「${q}」的結果。` : GENERAL_DESCRIPTION
 
@@ -108,7 +110,7 @@ export default async function SearchPage({
     ? await transferItemsToCards(data.items)
     : []
 
-  const apiQuery = `${searchParams.q} ${filterParams}`
+  const apiQuery = `${searchParams.q} (${filterParams})`
 
   return (
     <SearchModule
