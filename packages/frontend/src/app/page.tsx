@@ -90,6 +90,12 @@ export default async function Home() {
       firstEditorPicksSettings?.editorPicksOfPostsOrdered ?? []
     ) ?? []
 
+  const featuredTags =
+    firstEditorPicksSettings?.editorPicksOfTags?.map((tag) => ({
+      name: tag.name ?? '',
+      slug: tag.slug ?? '',
+    })) ?? []
+
   return (
     <CallBaodaozaiProvider>
       <main className="flex w-screen flex-col items-center">
@@ -101,6 +107,7 @@ export default async function Home() {
           topics={topics}
           latestPosts={latestPosts}
           featuredPosts={featuredPosts}
+          featuredTags={featuredTags}
           introContent={introContent ?? ''}
         />
         <Baodaozai />
