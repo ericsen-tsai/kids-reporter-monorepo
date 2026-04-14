@@ -13,7 +13,7 @@ function FeaturedTagsMarquee({ tags }: FeaturedTagsMarqueeProps) {
     <div className="mt-4 w-screen tablet:mt-6 desktop:mt-8 hd:mt-10">
       {tags.length > 0 && (
         <Marquee pauseOnHover pauseOnClick autoFill className="pb-4">
-          {tags?.map((tag) => (
+          {tags.map((tag) => (
             <Link
               key={tag.slug}
               href={`/tag/${tag.slug}`}

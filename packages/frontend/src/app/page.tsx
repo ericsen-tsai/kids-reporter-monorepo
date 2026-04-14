@@ -91,10 +91,15 @@ export default async function Home() {
     ) ?? []
 
   const featuredTags =
-    firstEditorPicksSettings?.editorPicksOfTags?.map((tag) => ({
-      name: tag.name ?? '',
-      slug: tag.slug ?? '',
-    })) ?? []
+    firstEditorPicksSettings?.editorPicksOfTags
+      ?.filter(
+        (tag): tag is { name: string; slug: string } =>
+          tag.name !== undefined && tag.slug !== undefined
+      )
+      .map((tag) => ({
+        name: tag.name,
+        slug: tag.slug,
+      })) ?? []
 
   return (
     <CallBaodaozaiProvider>
