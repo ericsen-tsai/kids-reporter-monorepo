@@ -33,8 +33,8 @@ const listConfigurations: ListConfig<any> = list({
   },
   ui: {
     listView: {
-      initialColumns: ['name', 'order'],
-      initialSort: { field: 'order', direction: 'ASC' },
+      initialColumns: ['name'],
+      initialSort: { field: 'name', direction: 'ASC' },
     },
   },
 })
