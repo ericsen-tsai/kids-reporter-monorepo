@@ -165,7 +165,10 @@ export const createMultipartRewriteHandler = ({
           })
         })
 
-        file.on('data', (chunk: unknown) => {
+        const onData = (chunk: unknown) => {
+          if (uploadStarted) {
+            return
+          }
           // Guard: some clients submit an empty "file" field when no avatar is chosen.
           const size =
             typeof chunk === 'string'
@@ -177,6 +180,7 @@ export const createMultipartRewriteHandler = ({
           // Defer starting the CMS upload until we see at least one byte.
           if (!uploadStarted && uploadBytes > 0) {
             uploadStarted = true
+            file.off('data', onData)
 
             const nameForUpload = deriveUploadName(fileName)
             // Build a fixed GraphQL multipart payload (no client query allowed).
@@ -224,7 +228,9 @@ export const createMultipartRewriteHandler = ({
                 )
               })
           }
-        })
+        }
+
+        file.on('data', onData)
 
         file.pipe(uploadStream)
         file.on('limit', () => {
