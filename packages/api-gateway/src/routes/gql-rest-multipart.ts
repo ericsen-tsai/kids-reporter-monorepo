@@ -151,6 +151,8 @@ export const createMultipartRewriteHandler = ({
         const { filename: fileName, mimeType } = info
         // Pipe the incoming file into a pass-through stream for forwarding to CMS GraphQL.
         const uploadStream = new PassThrough()
+        let uploadStarted = false
+        let uploadBytes = 0
 
         uploadStream.on('error', () => {
           uploadStream.destroy()
@@ -161,6 +163,67 @@ export const createMultipartRewriteHandler = ({
               message: 'Failed to process upload stream',
             },
           })
+        })
+
+        file.on('data', (chunk: unknown) => {
+          // Guard: some clients submit an empty "file" field when no avatar is chosen.
+          const size =
+            typeof chunk === 'string'
+              ? Buffer.byteLength(chunk)
+              : Buffer.isBuffer(chunk)
+                ? chunk.length
+                : 0
+          uploadBytes += size
+          // Defer starting the CMS upload until we see at least one byte.
+          if (!uploadStarted && uploadBytes > 0) {
+            uploadStarted = true
+
+            const nameForUpload = deriveUploadName(fileName)
+            // Build a fixed GraphQL multipart payload (no client query allowed).
+            const operationsPayload = {
+              query: print(document),
+              operationName,
+              variables: buildVariables({ name: nameForUpload }),
+            }
+
+            // Rebuild multipart with server-side operations/map and the file stream.
+            const form = new FormData()
+            form.append('operations', JSON.stringify(operationsPayload))
+            form.append('map', JSON.stringify(map))
+            form.append('1', uploadStream, {
+              filename: fileName,
+              contentType: mimeType || 'application/octet-stream',
+            })
+
+            // Forward only validated auth headers from buildAuthContext.
+            const authContext = (res.locals?.gqlRestAuthContext || {}) as {
+              headers?: Record<string, string>
+            }
+            const headers = {
+              ...(authContext.headers || {}),
+              'x-apollo-operation-name': operationName,
+            }
+
+            // Stream the rebuilt multipart payload to CMS GraphQL.
+            uploadController = new AbortController()
+            uploadPromise = axios
+              .post(`${apiOrigin}/api/graphql`, form, {
+                headers,
+                signal: uploadController.signal,
+                maxBodyLength: Infinity,
+              })
+              .then((axiosRes) => axiosRes.data)
+              .catch((error) => {
+                abortWith(
+                  statusCodes.internalServerError,
+                  {
+                    status: 'error',
+                    message: 'Failed to process upload request',
+                  },
+                  formatAxiosError(error)
+                )
+              })
+          }
         })
 
         file.pipe(uploadStream)
@@ -176,51 +239,19 @@ export const createMultipartRewriteHandler = ({
           })
         })
 
-        const nameForUpload = deriveUploadName(fileName)
-        // Build a fixed GraphQL multipart payload (no client query allowed).
-        const operationsPayload = {
-          query: print(document),
-          operationName,
-          variables: buildVariables({ name: nameForUpload }),
-        }
-
-        // Rebuild multipart with server-side operations/map and the file stream.
-        const form = new FormData()
-        form.append('operations', JSON.stringify(operationsPayload))
-        form.append('map', JSON.stringify(map))
-        form.append('1', uploadStream, {
-          filename: fileName,
-          contentType: mimeType || 'application/octet-stream',
-        })
-
-        // Forward only validated auth headers from buildAuthContext.
-        const authContext = (res.locals?.gqlRestAuthContext || {}) as {
-          headers?: Record<string, string>
-        }
-        const headers = {
-          ...(authContext.headers || {}),
-          'x-apollo-operation-name': operationName,
-        }
-
-        // Stream the rebuilt multipart payload to CMS GraphQL.
-        uploadController = new AbortController()
-        uploadPromise = axios
-          .post(`${apiOrigin}/api/graphql`, form, {
-            headers,
-            signal: uploadController.signal,
-            maxBodyLength: Infinity,
-          })
-          .then((axiosRes) => axiosRes.data)
-          .catch((error) => {
-            abortWith(
-              statusCodes.internalServerError,
-              {
-                status: 'error',
-                message: 'Failed to process upload request',
+        file.on('end', () => {
+          // If the client submitted an empty file field, treat as missing avatar.
+          if (!uploadStarted && uploadBytes === 0 && !responded) {
+            uploadStream.destroy()
+            return abortWith(statusCodes.badRequest, {
+              status: 'fail',
+              data: {
+                code: 'MISSING_FILE',
+                message: 'Missing upload file',
               },
-              formatAxiosError(error)
-            )
-          })
+            })
+          }
+        })
       }
     )
 
