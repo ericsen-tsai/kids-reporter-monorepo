@@ -11,7 +11,8 @@ export const getMemberDisplayName = (member: MemberDisplay | undefined) => {
 
 export const formatChineseDate = (dateStr: string) => {
   const date = new Date(dateStr)
-  return `${date.getMonth() + 1}月${date.getDate()}日`
+  if (isNaN(date.getTime())) return ''
+  return date.getMonth() + 1 + '月' + date.getDate() + '日'
 }
 
 export const getDisplayLikesCount = (likesCount: number | null | undefined) => {

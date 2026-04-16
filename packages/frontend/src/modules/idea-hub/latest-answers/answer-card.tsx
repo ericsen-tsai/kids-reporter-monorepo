@@ -61,7 +61,7 @@ function AnswerCard({
         </div>
       </div>
       <div className="flex flex-col gap-1">
-        <p className="prose-p1-bold text-neutral-900">{content}</p>
+        <p className="line-clamp-3 prose-p1-bold text-neutral-900">{content}</p>
         <p className="truncate prose-p1 text-neutral-800">
           回應問題：{questionTitle}
         </p>
