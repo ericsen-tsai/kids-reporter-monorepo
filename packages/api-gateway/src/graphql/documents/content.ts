@@ -30,6 +30,7 @@ export const GET_EDITOR_PICKS_SETTINGS_QUERY = gql`
   }
 `
 
+// only take the first editor picks setting
 export const GET_POPULAR_KEYWORDS_QUERY = gql`
   query GetPopularKeywords {
     editorPicksSettings(take: 1) {
