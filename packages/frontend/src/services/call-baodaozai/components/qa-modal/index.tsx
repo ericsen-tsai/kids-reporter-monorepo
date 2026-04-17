@@ -578,7 +578,7 @@ function QAModal({
       case 'choice':
       case 'essay':
         return (
-          <div className="pointer-events-none absolute -top-20 -left-12 z-4 tablet:-top-18 tablet:-left-6">
+          <div className="pointer-events-none absolute -top-24 -left-12 -z-1 tablet:-left-10">
             {riveFile && (
               <EnlightenBaodaozai state="enlighten-ask" riveFile={riveFile} />
             )}
