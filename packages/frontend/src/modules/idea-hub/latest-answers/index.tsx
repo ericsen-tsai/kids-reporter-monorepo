@@ -63,7 +63,7 @@ function LatestAnswers({ onOpenModal }: LatestAnswersProps) {
           <div className="flex flex-col">
             {answers.map((answer, index) => (
               <Fragment key={answer.id}>
-                {index > 0 && <Divider className="mx-5 w-auto" />}
+                {index > 0 && <Divider className="mx-5 w-auto desktop:mx-10" />}
                 <AnswerCard
                   {...answer}
                   onClick={() => handleAnswerCardClick(answer.postSlug)}

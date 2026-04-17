@@ -27,13 +27,13 @@ function AnswerCard({
   onClick,
 }: AnswerCardProps) {
   return (
-    <div
-      className="cursor-pointer p-5 desktop:p-0 desktop:px-5 desktop:pt-5 desktop:last:pb-5"
-      onClick={onClick}
-      role="button"
-      aria-label={`View answer: ${content}`}
-    >
-      <div className="flex flex-col gap-3 transition-all duration-300 hover:bg-neutral-200 desktop:m-5">
+    <div className="p-5 desktop:p-0 desktop:px-5 desktop:first:pt-5 desktop:last:pb-5">
+      <div
+        className="flex cursor-pointer flex-col gap-3 transition-all duration-300 hover:bg-neutral-200 desktop:m-5"
+        onClick={onClick}
+        role="button"
+        aria-label={`View answer: ${content}`}
+      >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="relative size-[52px] shrink-0 overflow-hidden rounded-full border-2 border-neutral-200">
