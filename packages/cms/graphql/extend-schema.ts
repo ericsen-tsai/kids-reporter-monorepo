@@ -222,7 +222,7 @@ export const extendGraphqlSchema = graphql.extend(() => {
             ogImgSrc: string
             ogTitle: string
             ogDescription: string
-            publishedDate: string
+            publishedDate: string | null
             subcategory: string | null
             category: string | null
           }>()({
@@ -317,7 +317,7 @@ export const extendGraphqlSchema = graphql.extend(() => {
                   ogTitle: metaTag['og:title'],
                   ogDescription: metaTag['og:description'],
                   publishedDate:
-                    metaTag['article:published_time'] ?? publishedDate ?? null,
+                    metaTag['article:published_time'] ?? publishedDate,
                   subcategory: metaTag['twreporter:subcategory'] ?? null,
                   category: metaTag['twreporter:category'] ?? null,
                 }

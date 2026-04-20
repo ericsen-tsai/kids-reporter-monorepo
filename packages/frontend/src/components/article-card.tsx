@@ -46,8 +46,8 @@ function ArticleCard({ article, showOverImageCover = false }: ArticleCardProp) {
           <div className="flex items-center justify-between gap-4 self-stretch">
             <span
               className={cn(
-                'inline-flex items-center rounded-full px-3 py-1 prose-p3-bold text-neutral-900',
-                hasCategoryOrSubcategory ? 'bg-neutral-200' : 'transparent'
+                'inline-flex items-center rounded-full prose-p3-bold text-neutral-900',
+                hasCategoryOrSubcategory && 'bg-neutral-200 px-3 py-1'
               )}
             >
               {article.subSubcategory ?? article.category}

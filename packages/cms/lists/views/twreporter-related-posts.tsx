@@ -23,9 +23,9 @@ type TWReporterPost = {
   ogImgSrc: string
   ogTitle: string
   ogDescription: string
-  publishedDate: string
-  subcategory?: string
-  category?: string
+  publishedDate: string | null
+  subcategory: string | null
+  category: string | null
 }
 
 type PostTag = {
