@@ -23,7 +23,9 @@ type TWReporterPost = {
   ogImgSrc: string
   ogTitle: string
   ogDescription: string
-  publishedDate?: string
+  publishedDate: string
+  subcategory?: string
+  category?: string
 }
 
 type PostTag = {
@@ -87,7 +89,15 @@ const SearchResultItem = styled.div`
 
 const SearchTWReporterPostsQuery = `
 query SearchTWReporterPosts($keywords: String!) {
-  searchTWReporterPosts(keywords: $keywords)
+  searchTWReporterPosts(keywords: $keywords) {
+   src
+   ogImgSrc
+   ogTitle
+   ogDescription
+   publishedDate
+   subcategory
+   category
+  }
 }
 `
 

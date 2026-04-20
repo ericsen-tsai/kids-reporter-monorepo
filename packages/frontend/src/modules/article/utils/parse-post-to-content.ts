@@ -108,13 +108,15 @@ function parsePostToContent(post: NonNullable<GetPostQuery['post']>) {
         ogImgSrc: string
         ogDescription: string
         publishedDate: string
+        subcategory?: string
+        category?: string
       }) => ({
         title: twReporterPost.ogTitle,
         url: twReporterPost.src,
         image: twReporterPost.ogImgSrc,
         desc: twReporterPost.ogDescription,
-        category: '',
-        subSubcategory: '',
+        category: twReporterPost.category ?? '',
+        subSubcategory: twReporterPost.subcategory ?? '',
         publishedDate: twReporterPost.publishedDate,
       })
     ) ?? []

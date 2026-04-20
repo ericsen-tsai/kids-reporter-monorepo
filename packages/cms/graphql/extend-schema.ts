@@ -216,7 +216,28 @@ export const extendGraphqlSchema = graphql.extend(() => {
     },
     query: {
       searchTWReporterPosts: graphql.field({
-        type: graphql.list(graphql.JSON),
+        type: graphql.list(
+          graphql.object<{
+            src: string
+            ogImgSrc: string
+            ogTitle: string
+            ogDescription: string
+            publishedDate: string
+            subcategory: string | null
+            category: string | null
+          }>()({
+            name: 'searchTWReporterPostsResult',
+            fields: {
+              src: graphql.field({ type: graphql.String }),
+              ogImgSrc: graphql.field({ type: graphql.String }),
+              ogTitle: graphql.field({ type: graphql.String }),
+              ogDescription: graphql.field({ type: graphql.String }),
+              publishedDate: graphql.field({ type: graphql.String }),
+              subcategory: graphql.field({ type: graphql.String }),
+              category: graphql.field({ type: graphql.String }),
+            },
+          })
+        ),
         args: {
           keywords: graphql.arg({ type: graphql.nonNull(graphql.String) }),
         },
@@ -290,13 +311,15 @@ export const extendGraphqlSchema = graphql.extend(() => {
                 const publishedDate = isNaN(publishedDateObj.getTime())
                   ? null
                   : publishedDateObj.toISOString()
-
                 return {
                   src: item.link,
                   ogImgSrc: metaTag['og:image'],
                   ogTitle: metaTag['og:title'],
                   ogDescription: metaTag['og:description'],
-                  publishedDate,
+                  publishedDate:
+                    metaTag['article:published_time'] ?? publishedDate ?? null,
+                  subcategory: metaTag['twreporter:subcategory'] ?? null,
+                  category: metaTag['twreporter:category'] ?? null,
                 }
               })
 
