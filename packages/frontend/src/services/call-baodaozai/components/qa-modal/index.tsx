@@ -686,7 +686,7 @@ function QAModal({
         className={cn(
           'relative z-1 flex flex-col shadow-baodaozai-card transition-all duration-300',
           displayState === 'mobile-expanded' &&
-            'h-[calc(100vh-106px)] w-full rounded-t-[30px]',
+            'h-[calc(100dvh-106px)] w-full rounded-t-[30px]',
           displayState === 'mobile-collapsed' && 'h-16 w-full rounded-t-[30px]',
           displayState === 'fullscreen' && 'h-144 w-120 rounded-[30px]',
           displayState === 'docked' && 'h-144 w-120 rounded-t-[30px]',
