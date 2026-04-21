@@ -130,18 +130,19 @@ function QAModal({
     [isMobile, displayState]
   )
 
-  const previousDisplayState = useRef<QAModalDisplayState>(displayState)
+  const previousNonMobileDisplayState =
+    useRef<QAModalDisplayState>(displayState)
 
   const handleTitleClick = useCallback(() => {
     switch (displayState) {
       case 'docked':
       case 'fullscreen': {
-        previousDisplayState.current = displayState
+        previousNonMobileDisplayState.current = displayState
         setDisplayState('minimized')
         return
       }
       case 'minimized': {
-        setDisplayState(previousDisplayState.current)
+        setDisplayState(previousNonMobileDisplayState.current)
         return
       }
       case 'mobile-collapsed': {
@@ -159,17 +160,17 @@ function QAModal({
 
   const handleMaximize = useCallback(() => {
     setDisplayState('docked')
-    previousDisplayState.current = 'docked'
+    previousNonMobileDisplayState.current = 'docked'
   }, [])
 
   const handleFullscreen = useCallback(() => {
     setDisplayState('fullscreen')
-    previousDisplayState.current = 'fullscreen'
+    previousNonMobileDisplayState.current = 'fullscreen'
   }, [])
 
   const handleFullscreenExit = useCallback(() => {
     setDisplayState('docked')
-    previousDisplayState.current = 'docked'
+    previousNonMobileDisplayState.current = 'docked'
   }, [])
 
   const {
