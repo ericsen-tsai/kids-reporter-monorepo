@@ -130,12 +130,24 @@ function QAModal({
     [isMobile, displayState]
   )
 
+  const previousDisplayState = useRef<QAModalDisplayState>(displayState)
+
   const handleTitleClick = useCallback(() => {
-    if (!isMobile) return
+    if (displayState === 'docked') {
+      previousDisplayState.current = displayState
+      setDisplayState('minimized')
+    }
+    if (displayState === 'fullscreen') {
+      previousDisplayState.current = displayState
+      setDisplayState('minimized')
+    }
+    if (displayState === 'minimized') {
+      setDisplayState(previousDisplayState.current)
+    }
     if (displayState === 'mobile-collapsed') {
       setDisplayState('mobile-expanded')
     }
-  }, [isMobile, displayState])
+  }, [displayState])
 
   const handleMinimize = useCallback(() => {
     setDisplayState('minimized')
@@ -266,19 +278,27 @@ function QAModal({
 
   const renderModalTitle = useMemo(() => {
     if (isLeaving) {
-      return '再想一下'
+      return <span className="prose-h6-large">再想一下</span>
     }
     if (mode === 'update') {
-      return UPDATE_QA_MODAL_OVERRIDES.title
+      return (
+        <span className="prose-h6-large">
+          {UPDATE_QA_MODAL_OVERRIDES.title}
+        </span>
+      )
     }
     if (!currentModalStep) return null
     if (
       currentModalStep?.type === 'choice-result' ||
       currentModalStep?.type === 'essay-result'
     ) {
-      return '作答結果'
+      return <span className="prose-h6-large">作答結果</span>
     }
-    return `${currentModalStep?.questionIndex + 1}/${questions.length}`
+    return (
+      <span className="prose-h5-small">
+        {currentModalStep?.questionIndex + 1}/{questions.length}
+      </span>
+    )
   }, [currentModalStep, questions.length, isLeaving, mode])
 
   const handleLeaving = useCallback(() => {
@@ -666,7 +686,7 @@ function QAModal({
         className={cn(
           'relative z-1 flex flex-col shadow-baodaozai-card transition-all duration-300',
           displayState === 'mobile-expanded' &&
-            'h-[calc(100vh-80px)] w-full rounded-t-[30px]',
+            'h-[calc(100vh-106px)] w-full rounded-t-[30px]',
           displayState === 'mobile-collapsed' && 'h-16 w-full rounded-t-[30px]',
           displayState === 'fullscreen' && 'h-144 w-120 rounded-[30px]',
           displayState === 'docked' && 'h-144 w-120 rounded-t-[30px]',
@@ -676,21 +696,21 @@ function QAModal({
       >
         <div
           className={cn(
-            'relative flex items-center rounded-t-[30px] border-b-2 border-neutral-200 bg-red-100 px-6 py-5',
+            'relative flex cursor-pointer items-center rounded-t-[30px] border-b-2 border-neutral-200 bg-red-100 px-6 py-[15px]',
             isMobile && 'touch-none'
           )}
           onTouchStart={handleTitleTouchStart}
           onTouchEnd={handleTitleTouchEnd}
           onClick={handleTitleClick}
         >
-          <span
+          <div
             className={cn(
-              'flex-1 prose-h6-large text-neutral-900',
-              !isMobile && 'prose-h5-small'
+              'flex-1 text-neutral-900',
+              isLeaving && 'text-center'
             )}
           >
             {renderModalTitle}
-          </span>
+          </div>
           {renderTitleBarButtons}
           {renderBaodaozai}
         </div>
