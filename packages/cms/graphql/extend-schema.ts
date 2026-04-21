@@ -219,9 +219,9 @@ export const extendGraphqlSchema = graphql.extend(() => {
         type: graphql.list(
           graphql.object<{
             src: string
-            ogImgSrc: string
-            ogTitle: string
-            ogDescription: string
+            ogImgSrc: string | null
+            ogTitle: string | null
+            ogDescription: string | null
             publishedDate: string | null
             subcategory: string | null
             category: string | null
@@ -299,7 +299,14 @@ export const extendGraphqlSchema = graphql.extend(() => {
                     item?.link?.includes('/topics/'))
               )
               ?.map((item: any) => {
-                const metaTag = item?.pagemap?.metatags?.[0]
+                const metaTag = item?.pagemap?.metatags?.[0] ?? {}
+                const toNonEmptyStringOrNull = (
+                  value: unknown
+                ): string | null => {
+                  if (typeof value !== 'string') return null
+                  const trimmed = value.trim()
+                  return trimmed.length > 0 ? trimmed : null
+                }
                 const publishedDateObj = new Date(
                   item?.snippet
                     ?.split('...')?.[0]
@@ -311,15 +318,32 @@ export const extendGraphqlSchema = graphql.extend(() => {
                 const publishedDate = isNaN(publishedDateObj.getTime())
                   ? null
                   : publishedDateObj.toISOString()
+
+                const articlePublishedTimeRaw = toNonEmptyStringOrNull(
+                  metaTag['article:published_time']
+                )
+                const articlePublishedTimeObj = articlePublishedTimeRaw
+                  ? new Date(articlePublishedTimeRaw)
+                  : null
+                const articlePublishedTimeIso =
+                  articlePublishedTimeObj &&
+                  !isNaN(articlePublishedTimeObj.getTime())
+                    ? articlePublishedTimeObj.toISOString()
+                    : null
                 return {
                   src: item.link,
-                  ogImgSrc: metaTag['og:image'],
-                  ogTitle: metaTag['og:title'],
-                  ogDescription: metaTag['og:description'],
-                  publishedDate:
-                    metaTag['article:published_time'] ?? publishedDate,
-                  subcategory: metaTag['twreporter:subcategory'] ?? null,
-                  category: metaTag['twreporter:category'] ?? null,
+                  ogImgSrc: toNonEmptyStringOrNull(metaTag['og:image']),
+                  ogTitle: toNonEmptyStringOrNull(metaTag['og:title']),
+                  ogDescription: toNonEmptyStringOrNull(
+                    metaTag['og:description']
+                  ),
+                  publishedDate: articlePublishedTimeIso ?? publishedDate,
+                  subcategory: toNonEmptyStringOrNull(
+                    metaTag['twreporter:subcategory']
+                  ),
+                  category: toNonEmptyStringOrNull(
+                    metaTag['twreporter:category']
+                  ),
                 }
               })
 

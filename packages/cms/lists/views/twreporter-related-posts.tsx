@@ -20,9 +20,9 @@ import styled, { css } from 'styled-components'
 
 type TWReporterPost = {
   src: string
-  ogImgSrc: string
-  ogTitle: string
-  ogDescription: string
+  ogImgSrc: string | null
+  ogTitle: string | null
+  ogDescription: string | null
   publishedDate: string | null
   subcategory: string | null
   category: string | null
@@ -111,7 +111,7 @@ const PostComponent = (props: {
     post && (
       <AuthorContainer>
         {`${props.index}.`}
-        <img width="100px" src={post.ogImgSrc} />
+        <img width="100px" src={post.ogImgSrc ?? ''} />
         <div style={{ flex: '2' }}>{post.ogTitle}</div>
         <a href={post.src} target="_blank" rel="noreferrer">
           <CornerUpRightIcon size="small" />
@@ -318,7 +318,11 @@ export const Field = ({
         return (
           <SearchResultItem key={post.src}>
             <span>{index + 1}.</span>
-            <img width="60px" src={post.ogImgSrc} alt={post.ogTitle} />
+            <img
+              width="60px"
+              src={post.ogImgSrc ?? ''}
+              alt={post.ogTitle ?? ''}
+            />
             <div style={{ flex: '2', fontSize: '14px' }}>{post.ogTitle}</div>
             <a href={post.src} target="_blank" rel="noreferrer">
               <CornerUpRightIcon size="small" />
