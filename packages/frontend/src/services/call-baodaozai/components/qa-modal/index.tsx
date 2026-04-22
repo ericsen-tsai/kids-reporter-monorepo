@@ -132,6 +132,7 @@ function QAModal({
 
   const previousNonMobileDisplayState =
     useRef<QAModalDisplayState>(displayState)
+  const displayStateBeforeLeaving = useRef<QAModalDisplayState>(displayState)
 
   const handleTitleClick = useCallback(() => {
     switch (displayState) {
@@ -202,14 +203,14 @@ function QAModal({
   const handleShowLeaving = useCallback(() => {
     setIsLeaving(true)
     if (isMobile) return
+    displayStateBeforeLeaving.current = displayState
     setDisplayState('fullscreen')
-    previousNonMobileDisplayState.current = displayState
   }, [displayState, isMobile])
 
   const handleCancelLeaving = useCallback(() => {
     setIsLeaving(false)
     if (isMobile) return
-    setDisplayState(previousNonMobileDisplayState.current)
+    setDisplayState(displayStateBeforeLeaving.current)
   }, [isMobile])
 
   const events = useMemo(
