@@ -201,11 +201,16 @@ function QAModal({
   const shouldByPassOnLeaving = mode === 'update' && isCleanAnswers
   const handleShowLeaving = useCallback(() => {
     setIsLeaving(true)
-  }, [])
+    if (isMobile) return
+    setDisplayState('fullscreen')
+    previousNonMobileDisplayState.current = displayState
+  }, [displayState, isMobile])
 
   const handleCancelLeaving = useCallback(() => {
     setIsLeaving(false)
-  }, [])
+    if (isMobile) return
+    setDisplayState(previousNonMobileDisplayState.current)
+  }, [isMobile])
 
   const events = useMemo(
     () => ({
@@ -713,7 +718,7 @@ function QAModal({
         >
           <div
             className={cn(
-              'flex-1 text-neutral-900',
+              'flex h-full flex-1 items-center text-neutral-900',
               isLeaving && 'text-center'
             )}
           >
