@@ -146,6 +146,7 @@ function useOptimisticLikeAnswer({
               {
                 essayAnswerId: answerId,
                 hasLiked: !hasLiked,
+                essayAnswerLikeId: '',
               },
             ]
           }
@@ -154,11 +155,22 @@ function useOptimisticLikeAnswer({
 
       try {
         if (hasLiked) {
-          // Delete like
+          const hasLikedRows =
+            queryClient.getQueryData<
+              ReturnType<typeof useGetMemberEssayAnswersHasLikedQuery>['data']
+            >(hasLikedQueryKey)
+          const row = Array.isArray(hasLikedRows)
+            ? hasLikedRows.find((r) => r?.essayAnswerId === answerId)
+            : undefined
+          const likeId = (row as { essayAnswerLikeId?: string } | undefined)
+            ?.essayAnswerLikeId
+          if (!likeId) {
+            throw new Error(
+              'useOptimisticLikeAnswer: essayAnswerLikeId missing for unlike'
+            )
+          }
           await deleteMutation.mutateAsync({
-            where: {
-              compositeKey: `${answerId}:${memberId}`,
-            },
+            where: { id: likeId },
           })
         } else {
           // Create like
