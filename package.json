@@ -10,6 +10,7 @@
     "dev:cms": "cd packages/cms && dotenv -e .env.local -- yarn dev",
     "dev:frontend": "cd packages/frontend && PORT=3001 yarn dev",
     "dev:api-gateway": "cd packages/api-gateway && dotenv -e .env.local -- yarn dev",
+    "dev:content-api": "cd packages/content-api && dotenv -e .env.local -- yarn dev",
     "format:write": "yarn workspaces foreach -A run prettier --write .",
     "format:check": "yarn workspaces foreach -A run prettier --check .",
     "lint:fix": "yarn workspaces foreach -A run lint:check --fix",
