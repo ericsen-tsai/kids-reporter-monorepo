@@ -1,0 +1,32 @@
+{
+  "name": "@kids-reporter/db",
+  "version": "0.0.1",
+  "type": "module",
+  "license": "MIT",
+  "private": true,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && sh scripts/copy-schema-to-dist.sh",
+    "type-check": "tsc --noEmit -p tsconfig.json",
+    "lint:check": "eslint src --ext .ts",
+    "db:generate": "prisma generate --schema dist/schema.prisma"
+  },
+  "dependencies": {
+    "@prisma/client": "5.22.0"
+  },
+  "devDependencies": {
+    "prisma": "5.22.0",
+    "typescript": "5.9.2"
+  }
+}
