@@ -5,6 +5,7 @@ import { RestErrorBodySchema } from '../rest.js'
 import {
   registry,
   V1AccessTokenResponseSchema,
+  V1AuthorPostsCountResponseSchema,
   V1MemberPostsWithAnswersQuerySchema,
 } from './content.js'
 import {
@@ -33,8 +34,45 @@ import {
 
 extendZodWithOpenApi(z)
 
-const HealthOkSchema = z.object({})
 const HealthOkWithTimestampSchema = z.object({ timestamp: z.string() })
+
+const MemberPostEssayAnswerInListSchema = z
+  .strictObject({
+    id: z.string(),
+    content: z.string(),
+    likesCount: z.number().int(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+    question: z.strictObject({
+      id: z.string(),
+      title: z.string(),
+      hint: z.string(),
+      post: z.strictObject({ id: z.string() }),
+    }),
+  })
+  .openapi('MemberPostEssayAnswerInList')
+
+const MemberPostChoiceOptionSchema = z.strictObject({
+  content: z.string(),
+  isCorrectAnswer: z.boolean(),
+})
+
+const MemberPostChoiceAnswerInListSchema = z
+  .strictObject({
+    id: z.string(),
+    choiceIndex: z.number().int(),
+    correct: z.boolean(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+    question: z.strictObject({
+      id: z.string(),
+      title: z.string(),
+      options: z.array(MemberPostChoiceOptionSchema),
+      reason: z.unknown().nullable(),
+      post: z.strictObject({ id: z.string() }),
+    }),
+  })
+  .openapi('MemberPostChoiceAnswerInList')
 
 const V1MemberPostsWithAnswersItemSchema = z
   .object({
@@ -43,8 +81,8 @@ const V1MemberPostsWithAnswersItemSchema = z
     slug: z.string(),
     publishedDate: z.string(),
     lastAnsweredTime: z.string(),
-    essayAnswers: z.array(z.record(z.string(), z.unknown())),
-    choiceAnswers: z.array(z.record(z.string(), z.unknown())),
+    essayAnswers: z.array(MemberPostEssayAnswerInListSchema),
+    choiceAnswers: z.array(MemberPostChoiceAnswerInListSchema),
   })
   .openapi('MemberPostWithAnswersItem')
 
@@ -66,35 +104,8 @@ const V1MemberAvatarDeleteResponseSchema = z.object({
 
 registry.registerPath({
   method: 'get',
-  path: '/healthz',
-  description: 'Liveness: process is up. Does not check the database.',
-  responses: {
-    200: {
-      description: 'OK',
-      content: { 'application/json': { schema: HealthOkSchema } },
-    },
-  },
-})
-
-registry.registerPath({
-  method: 'get',
-  path: '/readyz',
-  description: 'Readiness: verifies database connectivity (SELECT 1).',
-  responses: {
-    200: {
-      description: 'OK',
-      content: { 'application/json': { schema: HealthOkSchema } },
-    },
-    503: {
-      description: 'Database unavailable',
-      content: { 'application/json': { schema: RestErrorBodySchema } },
-    },
-  },
-})
-
-registry.registerPath({
-  method: 'get',
   path: '/health',
+  tags: ['Infra'],
   description: 'Health: DB connectivity plus timestamp in success payload.',
   responses: {
     200: {
@@ -111,25 +122,9 @@ registry.registerPath({
 })
 
 registry.registerPath({
-  method: 'get',
-  path: '/openapi.json',
-  description:
-    'OpenAPI 3.0 document for this service (same as `@kids-reporter/api-types` registry). `Cache-Control: no-store`.',
-  responses: {
-    200: {
-      description: 'OpenAPI document (JSON).',
-      content: {
-        'application/json': {
-          schema: z.record(z.string(), z.unknown()).openapi('OpenApiDocument'),
-        },
-      },
-    },
-  },
-})
-
-registry.registerPath({
   method: 'options',
   path: '/auth/access-token',
+  tags: ['Auth'],
   description:
     'CORS preflight for the access token exchange (browser + cookies).',
   responses: { 204: { description: 'No content' } },
@@ -138,6 +133,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'post',
   path: '/auth/access-token',
+  tags: ['Auth'],
   description:
     'Exchanges the `id_token` **cookie** (forwarded to Go API) for a **Bearer** JWT. Requires `Origin` or `Referer` from an allowlisted origin. Used by the frontend; not for unauthenticated server-to-server calls.',
   responses: {
@@ -172,6 +168,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'get',
   path: '/v1/categories/by-slug/{slug}/posts',
+  tags: ['Taxonomy'],
   description:
     'Posts for a top-level **category** slug. Aggregates all sub-subcategories under that category. Empty list if slug is unknown (no 404).',
   request: {
@@ -197,6 +194,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'get',
   path: '/v1/categories/by-slug/{slug}/metadata',
+  tags: ['Taxonomy'],
   description:
     'OG metadata for a category, optionally filtered to one subcategory by `subcategorySlug`.',
   request: {
@@ -226,6 +224,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'get',
   path: '/v1/categories/by-slug/{slug}/subcategories-theme',
+  tags: ['Taxonomy'],
   description:
     'Display name, theme color, and subcategory list for a category tab UI.',
   request: { params: V1FeedSlugPathParamsSchema },
@@ -248,6 +247,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'get',
   path: '/v1/subcategories/by-slug/{slug}/posts',
+  tags: ['Taxonomy'],
   description:
     'Feed posts for a **subcategory** slug (published/archived, sub-subcategory membership).',
   request: {
@@ -275,6 +275,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'get',
   path: '/v1/sub-subcategories/by-slug/{slug}/posts',
+  tags: ['Taxonomy'],
   description: 'Public posts for a **sub-subcategory** slug, latest-first.',
   request: {
     params: V1FeedSlugPathParamsSchema,
@@ -303,6 +304,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'get',
   path: '/v1/tags/by-slug/{slug}/meta',
+  tags: ['Taxonomy'],
   description: 'OG metadata for a tag page.',
   request: { params: V1FeedSlugPathParamsSchema },
   responses: {
@@ -322,6 +324,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'get',
   path: '/v1/tags/by-slug/{slug}/posts',
+  tags: ['Taxonomy'],
   description: 'Public posts for a tag (with count).',
   request: {
     params: V1FeedSlugPathParamsSchema,
@@ -348,6 +351,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'get',
   path: '/v1/authors/by-slug/{slug}/meta',
+  tags: ['Taxonomy'],
   description: 'Author bio, name, and small image for a profile/SEO surface.',
   request: { params: V1FeedSlugPathParamsSchema },
   responses: {
@@ -367,6 +371,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'get',
   path: '/v1/authors/by-slug/{slug}/posts',
+  tags: ['Taxonomy'],
   description: 'Author posts and profile fields for the list view.',
   request: {
     params: V1FeedSlugPathParamsSchema,
@@ -390,11 +395,33 @@ registry.registerPath({
   },
 })
 
+registry.registerPath({
+  method: 'get',
+  path: '/v1/authors/by-slug/{slug}/posts-count',
+  tags: ['Taxonomy'],
+  description:
+    'Public post count for an author (matches GraphQL `GetAuthorPostsCount`).',
+  request: { params: V1FeedSlugPathParamsSchema },
+  responses: {
+    200: {
+      description: 'Success',
+      content: {
+        'application/json': { schema: V1AuthorPostsCountResponseSchema },
+      },
+    },
+    404: {
+      description: 'Author not found',
+      content: { 'application/json': { schema: RestErrorBodySchema } },
+    },
+  },
+})
+
 /* --- Authenticated: member (Bearer JWT) */
 
 registry.registerPath({
   method: 'get',
   path: '/v1/members/me/posts-with-answers',
+  tags: ['Members'],
   description: 'Cursor-paginated; role must be `member` or `admin`.',
   request: { query: V1MemberPostsWithAnswersQuerySchema },
   responses: {
@@ -422,6 +449,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'get',
   path: '/v1/members/me/essay-answers/has-liked',
+  tags: ['Members'],
   description: 'Batch check liked state per ID.',
   request: { query: V1EssayAnswersHasLikedQuerySchema },
   responses: {
@@ -453,6 +481,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'post',
   path: '/v1/members/me/avatar',
+  tags: ['Members'],
   description:
     'Upload: `multipart/form-data` field `file` (jpeg/png/gif/webp, max 5MB). `IMAGES_STORAGE_PATH` must be configured. Role `member` or `admin`.',
   request: {
@@ -502,6 +531,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'delete',
   path: '/v1/members/me/avatar',
+  tags: ['Members'],
   description: 'Removes current avatar and deletes the stored file.',
   responses: {
     200: {

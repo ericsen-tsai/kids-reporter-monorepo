@@ -8,14 +8,17 @@ import {
   GetPostsEssayAnswersWithLikesQueryVariables,
 } from '__generated__/operations/content.generated'
 import {
-  V1PostDetailEnvelopeSchema,
-  V1PostEssayQuestionsEnvelopeSchema,
-  V1PostMetaEnvelopeSchema,
-  V1PostsEssayAnswersWithLikesEnvelopeSchema,
+  V1PostDetailBodySchema,
+  V1PostEssayQuestionsBodySchema,
+  V1PostMetaBodySchema,
+  V1PostsEssayAnswersWithLikesResponseSchema,
   V1PostsResponseSchema,
 } from '@kids-reporter/api-types'
 
-import { sendContentApiRequest } from '@/utils/send-content-api'
+import {
+  ContentApiRequestError,
+  sendContentApiRequest,
+} from '@/utils/send-content-api'
 
 async function fetchPostsV1({
   take,
@@ -98,20 +101,28 @@ export async function getPostContentApi({
   traceHeaders?: Record<string, string>
 }) {
   const slug = postSlugFromWhere(variables.where)
-  const { where: _w, ...rest } = variables
-  const variablesJson =
-    Object.keys(rest).length > 0 ? JSON.stringify(rest) : undefined
-  const response = await sendContentApiRequest({
-    path: `/v1/posts/by-slug/${encodeURIComponent(slug)}`,
-    method: 'GET',
-    query: variablesJson ? { variables: variablesJson } : undefined,
-    traceHeaders,
-  })
-  const parsed = V1PostDetailEnvelopeSchema.safeParse(response)
-  if (!parsed.success) {
-    throw new Error('content-api response schema mismatch for post by slug')
+  try {
+    const response = await sendContentApiRequest({
+      path: `/v1/posts/by-slug/${encodeURIComponent(slug)}`,
+      method: 'GET',
+      query: {
+        take: variables.take ?? undefined,
+        postEssayQuestionsTake: variables.postEssayQuestionsTake ?? undefined,
+        postChoiceQuestionsTake: variables.postChoiceQuestionsTake ?? undefined,
+      },
+      traceHeaders,
+    })
+    const parsed = V1PostDetailBodySchema.safeParse(response)
+    if (!parsed.success) {
+      throw new Error('content-api response schema mismatch for post by slug')
+    }
+    return parsed.data as GetPostQuery['post']
+  } catch (e) {
+    if (e instanceof ContentApiRequestError && e.status === 404) {
+      return undefined
+    }
+    throw e
   }
-  return parsed.data.post as GetPostQuery['post']
 }
 
 export async function getPostMetaContentApi({
@@ -122,16 +133,38 @@ export async function getPostMetaContentApi({
   traceHeaders?: Record<string, string>
 }) {
   const slug = postSlugFromMetaWhere(variables.where)
-  const response = await sendContentApiRequest({
-    path: `/v1/posts/by-slug/${encodeURIComponent(slug)}/meta`,
-    method: 'GET',
-    traceHeaders,
-  })
-  const parsed = V1PostMetaEnvelopeSchema.safeParse(response)
-  if (!parsed.success) {
-    throw new Error('content-api response schema mismatch for post meta')
+  try {
+    const response = await sendContentApiRequest({
+      path: `/v1/posts/by-slug/${encodeURIComponent(slug)}/meta`,
+      method: 'GET',
+      traceHeaders,
+    })
+    const parsed = V1PostMetaBodySchema.safeParse(response)
+    if (!parsed.success) {
+      throw new Error('content-api response schema mismatch for post meta')
+    }
+    return parsed.data as GetPostMetaQuery['post']
+  } catch (e) {
+    if (e instanceof ContentApiRequestError && e.status === 404) {
+      return undefined
+    }
+    throw e
   }
-  return parsed.data.post as GetPostMetaQuery['post']
+}
+
+function essayAnswerOrderByToFlat(
+  orderBy: GetPostsEssayAnswersWithLikesQueryVariables['answerOrderBy']
+): 'likesCount:desc' | 'createdAt:desc' {
+  const first = Array.isArray(orderBy) ? orderBy[0] : orderBy
+  if (
+    first &&
+    typeof first === 'object' &&
+    'likesCount' in first &&
+    first.likesCount === 'desc'
+  ) {
+    return 'likesCount:desc'
+  }
+  return 'createdAt:desc'
 }
 
 export async function getPostsEssayAnswersWithLikesContentApi({
@@ -144,16 +177,22 @@ export async function getPostsEssayAnswersWithLikesContentApi({
   const response = await sendContentApiRequest({
     path: '/v1/posts/essay-answers-with-likes',
     method: 'GET',
-    query: { variables: JSON.stringify(variables) },
+    query: {
+      take: variables.take ?? undefined,
+      skip: variables.skip ?? undefined,
+      orderBy: 'publishedDate:desc',
+      answerTake: variables.answerTake ?? undefined,
+      answerOrderBy: essayAnswerOrderByToFlat(variables.answerOrderBy),
+    },
     traceHeaders,
   })
-  const parsed = V1PostsEssayAnswersWithLikesEnvelopeSchema.safeParse(response)
+  const parsed = V1PostsEssayAnswersWithLikesResponseSchema.safeParse(response)
   if (!parsed.success) {
     throw new Error(
       'content-api response schema mismatch for essay-answers-with-likes'
     )
   }
-  return parsed.data.posts as GetPostsEssayAnswersWithLikesQuery['posts']
+  return parsed.data as GetPostsEssayAnswersWithLikesQuery['posts']
 }
 
 export async function getPostEssayQuestionsByPostSlugContentApi({
@@ -163,16 +202,23 @@ export async function getPostEssayQuestionsByPostSlugContentApi({
   slug: string
   traceHeaders?: Record<string, string>
 }) {
-  const response = await sendContentApiRequest({
-    path: `/v1/posts/by-slug/${encodeURIComponent(slug)}/essay-questions`,
-    method: 'GET',
-    traceHeaders,
-  })
-  const parsed = V1PostEssayQuestionsEnvelopeSchema.safeParse(response)
-  if (!parsed.success) {
-    throw new Error(
-      'content-api response schema mismatch for post essay-questions'
-    )
+  try {
+    const response = await sendContentApiRequest({
+      path: `/v1/posts/by-slug/${encodeURIComponent(slug)}/essay-questions`,
+      method: 'GET',
+      traceHeaders,
+    })
+    const parsed = V1PostEssayQuestionsBodySchema.safeParse(response)
+    if (!parsed.success) {
+      throw new Error(
+        'content-api response schema mismatch for post essay-questions'
+      )
+    }
+    return parsed.data as GetPostEssayQuestionsQuery['post']
+  } catch (e) {
+    if (e instanceof ContentApiRequestError && e.status === 404) {
+      return undefined
+    }
+    throw e
   }
-  return parsed.data.post as GetPostEssayQuestionsQuery['post']
 }

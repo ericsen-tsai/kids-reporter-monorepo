@@ -42,7 +42,7 @@ const EssayAnswerPublicItemSchema = z
 
 export const V1AllPostEssayAnswersQuerySchema = z.object({
   take: z.coerce.number().int().min(1).max(100).optional(),
-  orderBy: z.string().optional(),
+  orderBy: z.enum(['createdAt:desc']).optional().default('createdAt:desc'),
 })
 
 export const V1AllPostEssayAnswersResponseSchema = z.array(
@@ -52,7 +52,8 @@ export const V1AllPostEssayAnswersResponseSchema = z.array(
 registry.registerPath({
   method: 'get',
   path: '/v1/post-essay-answers',
-  description: '`orderBy` is JSON array, e.g. [{"createdAt":"desc"}].',
+  tags: ['Public Q&A'],
+  description: 'Flat `orderBy`: `createdAt:desc` only.',
   request: {
     query: V1AllPostEssayAnswersQuerySchema,
   },
@@ -77,7 +78,10 @@ export const V1PostEssayQuestionAnswersParamsSchema = z.object({
 export const V1PostEssayQuestionAnswersQuerySchema = z.object({
   answerTake: z.coerce.number().int().min(1).max(100),
   answerSkip: z.coerce.number().int().min(0).max(5000).optional(),
-  answerOrderBy: z.string().optional(),
+  answerOrderBy: z
+    .enum(['createdAt:desc', 'likesCount:desc'])
+    .optional()
+    .default('createdAt:desc'),
 })
 
 const EssayAnswerThreadItemSchema = z
@@ -89,22 +93,19 @@ const EssayAnswerThreadItemSchema = z
   })
   .openapi('EssayAnswerThreadItem')
 
-const V1PostEssayQuestionWithAnswersBodySchema = z.object({
+export const V1PostEssayQuestionWithAnswersResponseSchema = z.object({
   id: z.string(),
   title: z.string(),
   hint: z.string(),
   answers: z.array(EssayAnswerThreadItemSchema),
 })
 
-export const V1PostEssayQuestionAnswersResponseSchema = z.union([
-  V1PostEssayQuestionWithAnswersBodySchema,
-  z.null(),
-])
-
 registry.registerPath({
   method: 'get',
-  path: '/v1/post-essay-questions/{questionId}/answers',
-  description: 'Question + answers, or JSON `null` if not found.',
+  path: '/v1/post-essay-questions/{questionId}',
+  tags: ['Public Q&A'],
+  description:
+    'Question detail with answers thread. Flat `answerOrderBy`: `createdAt:desc` or `likesCount:desc`.',
   request: {
     params: V1PostEssayQuestionAnswersParamsSchema,
     query: V1PostEssayQuestionAnswersQuerySchema,
@@ -114,12 +115,16 @@ registry.registerPath({
       description: 'Success',
       content: {
         'application/json': {
-          schema: V1PostEssayQuestionAnswersResponseSchema,
+          schema: V1PostEssayQuestionWithAnswersResponseSchema,
         },
       },
     },
     400: {
       description: 'Bad request',
+      content: { 'application/json': { schema: RestErrorBodySchema } },
+    },
+    404: {
+      description: 'Question not found',
       content: { 'application/json': { schema: RestErrorBodySchema } },
     },
   },
@@ -145,6 +150,7 @@ export const V1MemberPostChoiceAnswersResponseSchema = z.array(
 registry.registerPath({
   method: 'get',
   path: '/v1/members/me/post-choice-answers',
+  tags: ['Member Q&A'],
   description: 'Choice answers for the authenticated member.',
   request: {
     query: V1MemberPostChoiceAnswersQuerySchema,
@@ -190,6 +196,7 @@ export const V1MemberPostEssayAnswersResponseSchema = z.array(
 registry.registerPath({
   method: 'get',
   path: '/v1/members/me/post-essay-answers',
+  tags: ['Member Q&A'],
   description: 'Essay answers for the authenticated member.',
   request: {
     query: V1MemberPostEssayAnswersQuerySchema,
@@ -294,6 +301,7 @@ export const V1PostEssayAnswerLikePathIdSchema = z.object({
 registry.registerPath({
   method: 'post',
   path: '/v1/members/me/post-choice-answers',
+  tags: ['Member Q&A'],
   description: 'Create a choice answer for the authenticated member.',
   request: {
     body: {
@@ -331,6 +339,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'patch',
   path: '/v1/members/me/post-choice-answers/{id}',
+  tags: ['Member Q&A'],
   description: 'Update a choice answer for the authenticated member.',
   request: {
     params: V1PostChoiceAnswerPathIdSchema,
@@ -365,6 +374,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'post',
   path: '/v1/members/me/post-essay-answers',
+  tags: ['Member Q&A'],
   description: 'Create an essay answer for the authenticated member.',
   request: {
     body: {
@@ -402,6 +412,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'patch',
   path: '/v1/members/me/post-essay-answers/{id}',
+  tags: ['Member Q&A'],
   description: 'Update an essay answer for the authenticated member.',
   request: {
     params: V1PostEssayAnswerPathIdSchema,
@@ -436,6 +447,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'post',
   path: '/v1/members/me/post-essay-answer-likes',
+  tags: ['Member Q&A'],
   description:
     'Like an essay answer (increments `likesCount`). Duplicate like returns 409.',
   request: {
@@ -478,6 +490,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'delete',
   path: '/v1/members/me/post-essay-answer-likes/{id}',
+  tags: ['Member Q&A'],
   description:
     'Unlike an essay answer by like row `id`. Decrements `likesCount` on the answer.',
   request: {

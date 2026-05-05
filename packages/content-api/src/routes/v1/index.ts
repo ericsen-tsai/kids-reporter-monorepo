@@ -10,11 +10,11 @@ import {
   V1PostBySlugQuerySchema,
   V1PostEssayQuestionAnswersParamsSchema,
   V1PostEssayQuestionAnswersQuerySchema,
-  V1PostsEssayAnswersWithLikesQueryStringSchema,
+  V1PostsEssayAnswersWithLikesQuerySchema,
   V1PostsQuerySchema,
-  V1ProjectsListQuerySchema,
+  V1ProjectsQuerySchema,
+  V1SitemapsQuerySchema,
   V1SubSubcategoryBySlugPostsQuerySchema,
-  V1TopicProjectsQuerySchema,
 } from '@kids-reporter/api-types'
 import { prisma } from '@kids-reporter/db'
 import express from 'express'
@@ -27,13 +27,12 @@ import {
   fetchPostEssayQuestionsBySlug,
   fetchPostMetaBySlug,
   fetchPostsEssayAnswersWithLikes,
-  parsePostDetailVariablesFromQuery,
-  parsePostsEssayAnswersVariablesJson,
+  fetchPublishedProjectDetailBySlug,
+  fetchPublishedProjectMetaBySlug,
 } from '../../post-detail-queries.js'
 import {
   buildMemberAvatarFileUrl,
-  essayAnswerPrismaOrderBy,
-  parseOrderByJson,
+  essayAnswerOrderByFromFlat,
 } from '../../qna-utils.js'
 import { sendJsonError } from '../../send-json-error.js'
 import {
@@ -51,6 +50,23 @@ import { createV1MembersRouter } from './v1-members.js'
 import { createV1QnaMembersRouter } from './v1-qna-members.js'
 
 const publishedProjectWhere = { status: 'published' as const }
+
+/** Matches idea-hub `GetPostsEssayAnswersWithLikes` filter (inlined; no client `where` blob). */
+const POSTS_ESSAY_ANSWERS_WITH_LIKES_WHERE = {
+  postEssayQuestions: {
+    some: {
+      answers: {
+        some: {},
+      },
+    },
+  },
+} as const
+
+function sitemapPublishedSinceUtc(sinceDays: number): Date {
+  const d = new Date()
+  d.setHours(0, 0, 0, 0)
+  return new Date(d.getTime() - sinceDays * 24 * 60 * 60 * 1000)
+}
 
 function firstQueryString(v: unknown): string | undefined {
   if (typeof v === 'string') return v
@@ -121,25 +137,19 @@ export function createV1Router() {
   router.get(
     '/posts/essay-answers-with-likes',
     asyncRoute(async (req, res) => {
-      const { variables: variablesRaw } =
-        V1PostsEssayAnswersWithLikesQueryStringSchema.parse({
-          variables: firstQueryString(req.query.variables),
-        })
-      const parsed = parsePostsEssayAnswersVariablesJson(variablesRaw)
-      if (!parsed) {
-        sendJsonError(
-          res,
-          400,
-          'invalid_request',
-          'Invalid or missing variables',
-          {
-            reason: 'invalid_variables',
-          }
-        )
-        return
-      }
-      const posts = await fetchPostsEssayAnswersWithLikes(parsed, new Date())
-      res.json({ posts })
+      const q = V1PostsEssayAnswersWithLikesQuerySchema.parse(req.query)
+      const posts = await fetchPostsEssayAnswersWithLikes(
+        {
+          take: q.take,
+          skip: q.skip,
+          orderBy: [{ publishedDate: 'desc' }],
+          answerTake: q.answerTake,
+          answerOrderBy: q.answerOrderBy,
+          where: POSTS_ESSAY_ANSWERS_WITH_LIKES_WHERE,
+        },
+        new Date()
+      )
+      res.json(posts)
     })
   )
 
@@ -147,19 +157,17 @@ export function createV1Router() {
     '/posts/by-slug/:slug',
     asyncRoute(async (req, res) => {
       const { slug } = V1PostBySlugPathParamsSchema.parse(req.params)
-      const query = V1PostBySlugQuerySchema.parse({
-        ...req.query,
-        variables: firstQueryString(req.query.variables),
+      const q = V1PostBySlugQuerySchema.parse(req.query)
+      const post = await fetchPostDetailBySlug(slug, new Date(), {
+        take: q.take,
+        postEssayQuestionsTake: q.postEssayQuestionsTake,
+        postChoiceQuestionsTake: q.postChoiceQuestionsTake,
       })
-      const parsed = parsePostDetailVariablesFromQuery(slug, query.variables)
-      if (!parsed.ok) {
-        sendJsonError(res, 400, 'invalid_request', 'Invalid variables JSON', {
-          reason: 'invalid_variables',
-        })
+      if (!post) {
+        sendJsonError(res, 404, 'not_found', 'Not found')
         return
       }
-      const post = await fetchPostDetailBySlug(slug, new Date(), parsed.value)
-      res.json({ post })
+      res.json(post)
     })
   )
 
@@ -168,7 +176,11 @@ export function createV1Router() {
     asyncRoute(async (req, res) => {
       const { slug } = V1PostBySlugPathParamsSchema.parse(req.params)
       const post = await fetchPostMetaBySlug(slug, new Date())
-      res.json({ post })
+      if (!post) {
+        sendJsonError(res, 404, 'not_found', 'Not found')
+        return
+      }
+      res.json(post)
     })
   )
 
@@ -177,7 +189,104 @@ export function createV1Router() {
     asyncRoute(async (req, res) => {
       const { slug } = V1PostBySlugPathParamsSchema.parse(req.params)
       const post = await fetchPostEssayQuestionsBySlug(slug, new Date())
-      res.json({ post })
+      if (!post) {
+        sendJsonError(res, 404, 'not_found', 'Not found')
+        return
+      }
+      res.json(post)
+    })
+  )
+
+  router.get(
+    '/sitemaps/posts',
+    asyncRoute(async (req, res) => {
+      const q = V1SitemapsQuerySchema.parse(req.query)
+      const now = new Date()
+      const gte = sitemapPublishedSinceUtc(q.sinceDays)
+      const posts = await prisma.post.findMany({
+        where: {
+          AND: [buildPublicPostWhere(now), { publishedDate: { gte } }],
+        },
+        select: { slug: true, publishedDate: true },
+      })
+      res.json(
+        posts.map((p) => ({
+          slug: p.slug,
+          publishedDate: p.publishedDate ? p.publishedDate.toISOString() : null,
+        }))
+      )
+    })
+  )
+
+  router.get(
+    '/sitemaps/projects',
+    asyncRoute(async (req, res) => {
+      const q = V1SitemapsQuerySchema.parse(req.query)
+      const gte = sitemapPublishedSinceUtc(q.sinceDays)
+      const projects = await prisma.project.findMany({
+        where: {
+          ...publishedProjectWhere,
+          publishedDate: { gte },
+        },
+        select: { slug: true, publishedDate: true },
+      })
+      res.json(
+        projects.map((p) => ({
+          slug: p.slug,
+          publishedDate: p.publishedDate ? p.publishedDate.toISOString() : null,
+        }))
+      )
+    })
+  )
+
+  router.get(
+    '/projects/by-slug/:slug',
+    asyncRoute(async (req, res) => {
+      const { slug } = V1PostBySlugPathParamsSchema.parse(req.params)
+      const project = await fetchPublishedProjectDetailBySlug(slug, new Date())
+      if (!project) {
+        sendJsonError(res, 404, 'not_found', 'Not found')
+        return
+      }
+      res.json(project)
+    })
+  )
+
+  router.get(
+    '/projects/by-slug/:slug/meta',
+    asyncRoute(async (req, res) => {
+      const { slug } = V1PostBySlugPathParamsSchema.parse(req.params)
+      const meta = await fetchPublishedProjectMetaBySlug(slug)
+      if (!meta) {
+        sendJsonError(res, 404, 'not_found', 'Not found')
+        return
+      }
+      res.json(meta)
+    })
+  )
+
+  router.get(
+    '/projects/by-slug/:slug/related-posts-count',
+    asyncRoute(async (req, res) => {
+      const { slug } = V1PostBySlugPathParamsSchema.parse(req.params)
+      const now = new Date()
+      const project = await prisma.project.findFirst({
+        where: { slug, ...publishedProjectWhere },
+        select: { id: true },
+      })
+      if (!project) {
+        sendJsonError(res, 404, 'not_found', 'Not found')
+        return
+      }
+      const relatedPostsCount = await prisma.post.count({
+        where: {
+          AND: [
+            buildPublicPostWhere(now),
+            { projects: { some: { id: project.id } } },
+          ],
+        },
+      })
+      res.json({ relatedPostsCount })
     })
   )
 
@@ -262,45 +371,9 @@ export function createV1Router() {
   )
 
   router.get(
-    '/projects/topics',
-    asyncRoute(async (req, res) => {
-      const q = V1TopicProjectsQuerySchema.parse(req.query)
-      const take = q.take
-
-      const projects = await prisma.project.findMany({
-        take,
-        where: publishedProjectWhere,
-        orderBy: postOrderByFromQuery(q.orderBy ?? 'publishedDate:desc'),
-        select: {
-          title: true,
-          subtitle: true,
-          slug: true,
-          publishedDate: true,
-          heroImage: {
-            select: { imageFile_id: true, imageFile_extension: true },
-          },
-        },
-      })
-
-      res.json({
-        projects: projects.map((p) => ({
-          title: p.title,
-          subtitle: p.subtitle,
-          slug: p.slug,
-          publishedDate: p.publishedDate ? p.publishedDate.toISOString() : null,
-          heroImage: p.heroImage
-            ? { resized: { small: buildResizedSmall(p.heroImage) } }
-            : null,
-        })),
-        page: { take },
-      })
-    })
-  )
-
-  router.get(
     '/projects',
     asyncRoute(async (req, res) => {
-      const q = V1ProjectsListQuerySchema.parse(req.query)
+      const q = V1ProjectsQuerySchema.parse(req.query)
       const take = q.take ?? 12
       const skip = q.skip ?? 0
       const includeRelatedPosts = q.includeRelatedPosts ?? false
@@ -312,6 +385,7 @@ export function createV1Router() {
 
       const baseSelect = {
         title: true,
+        subtitle: true,
         slug: true,
         ogDescription: true,
         publishedDate: true,
@@ -331,6 +405,7 @@ export function createV1Router() {
               ...baseSelect,
               relatedPosts: {
                 where: buildPublicPostWhere(now),
+                orderBy: [{ publishedDate: 'desc' }],
                 select: postCardSelect,
               },
             }
@@ -349,15 +424,22 @@ export function createV1Router() {
                   asOrderJson(row.relatedPostsOrderJson)
                 ).map(mapPostCard)
               : undefined
+          const hero = p.heroImage
           return {
             title: p.title,
+            subtitle: p.subtitle,
             slug: p.slug,
             ogDescription: p.ogDescription,
             publishedDate: p.publishedDate
               ? p.publishedDate.toISOString()
               : null,
-            heroImage: p.heroImage
-              ? { resized: { medium: buildResizedMedium(p.heroImage) } }
+            heroImage: hero
+              ? {
+                  resized: {
+                    small: buildResizedSmall(hero),
+                    medium: buildResizedMedium(hero),
+                  },
+                }
               : null,
             ...(relatedPostsOrdered !== undefined
               ? { relatedPostsOrdered }
@@ -776,14 +858,36 @@ export function createV1Router() {
   )
 
   router.get(
+    '/authors/by-slug/:slug/posts-count',
+    asyncRoute(async (req, res) => {
+      const { slug } = V1FeedSlugPathParamsSchema.parse(req.params)
+      const now = new Date()
+      const author = await prisma.author.findUnique({
+        where: { slug },
+        select: { id: true },
+      })
+      if (!author) {
+        sendJsonError(res, 404, 'not_found', 'Not found')
+        return
+      }
+      const postsCount = await prisma.post.count({
+        where: {
+          AND: [
+            buildPublicPostWhere(now),
+            { authors: { some: { id: author.id } } },
+          ],
+        },
+      })
+      res.json({ postsCount })
+    })
+  )
+
+  router.get(
     '/post-essay-answers',
     asyncRoute(async (req, res) => {
       const q = V1AllPostEssayAnswersQuerySchema.parse(req.query)
       const take = q.take ?? 10
-      const orderByRaw = parseOrderByJson(q.orderBy)
-      const orderBy = essayAnswerPrismaOrderBy(
-        orderByRaw.length ? orderByRaw : [{ createdAt: 'desc' }]
-      )
+      const orderBy = essayAnswerOrderByFromFlat(q.orderBy)
       const rows = await prisma.postEssayAnswer.findMany({
         take,
         orderBy,
@@ -851,16 +955,13 @@ export function createV1Router() {
   )
 
   router.get(
-    '/post-essay-questions/:questionId/answers',
+    '/post-essay-questions/:questionId',
     asyncRoute(async (req, res) => {
       const { questionId } = V1PostEssayQuestionAnswersParamsSchema.parse(
         req.params
       )
       const q = V1PostEssayQuestionAnswersQuerySchema.parse(req.query)
-      const orderRaw = parseOrderByJson(q.answerOrderBy)
-      const answerOrderBy = essayAnswerPrismaOrderBy(
-        orderRaw.length ? orderRaw : [{ createdAt: 'desc' }]
-      )
+      const answerOrderBy = essayAnswerOrderByFromFlat(q.answerOrderBy)
       const question = await prisma.postEssayQuestion.findUnique({
         where: { id: questionId },
         select: {
@@ -895,7 +996,7 @@ export function createV1Router() {
         },
       })
       if (!question) {
-        res.json(null)
+        sendJsonError(res, 404, 'not_found', 'Not found')
         return
       }
       res.json({

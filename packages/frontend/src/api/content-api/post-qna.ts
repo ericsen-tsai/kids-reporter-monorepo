@@ -19,7 +19,10 @@ import type {
 } from '__generated__/operations/answers.generated'
 import type { PostEssayAnswerOrderByInput } from '__generated__/types'
 
-import { sendContentApiRequest } from '@/utils/send-content-api'
+import {
+  ContentApiRequestError,
+  sendContentApiRequest,
+} from '@/utils/send-content-api'
 
 function questionIdFromGqlCreateData(data: Record<string, unknown>): unknown {
   const q = data.question as { connect?: { id?: unknown } } | undefined
@@ -119,19 +122,13 @@ export async function getPostEssayAnswersByMemberIdContentApi({
 export async function getAllPostEssayAnswersContentApi(
   variables: GetAllPostEssayAnswersQueryVariables
 ) {
-  const rawOrder = variables.orderBy
-  const orderBy = Array.isArray(rawOrder)
-    ? rawOrder
-    : rawOrder
-      ? [rawOrder]
-      : []
   const body = await sendContentApiRequest<
     NonNullable<GetAllPostEssayAnswersQuery['postEssayAnswers']>
   >({
     path: '/v1/post-essay-answers',
     query: {
       take: variables.take ?? undefined,
-      orderBy: orderBy.length > 0 ? JSON.stringify(orderBy) : undefined,
+      orderBy: 'createdAt:desc',
     },
   })
   if (!Array.isArray(body)) {
@@ -182,6 +179,21 @@ export async function updatePostEssayAnswerContentApi(
   return body
 }
 
+function questionAnswerOrderByToFlat(
+  answerOrderBy: PostEssayAnswerOrderByInput[]
+): 'createdAt:desc' | 'likesCount:desc' {
+  const first = answerOrderBy[0]
+  if (
+    first &&
+    typeof first === 'object' &&
+    'likesCount' in first &&
+    first.likesCount === 'desc'
+  ) {
+    return 'likesCount:desc'
+  }
+  return 'createdAt:desc'
+}
+
 export async function getPostEssayQuestionEssayAnswersContentApi({
   where,
   answerOrderBy,
@@ -197,21 +209,24 @@ export async function getPostEssayQuestionEssayAnswersContentApi({
   if (!Number.isFinite(questionId)) {
     throw new Error('invalid question id')
   }
-  const body = await sendContentApiRequest<NonNullable<
-    GetEssayQuestionEssayAnswersQuery['postEssayQuestion']
-  > | null>({
-    path: `/v1/post-essay-questions/${questionId}/answers`,
-    query: {
-      answerTake,
-      answerSkip: answerSkip ?? undefined,
-      answerOrderBy:
-        answerOrderBy.length > 0 ? JSON.stringify(answerOrderBy) : undefined,
-    },
-  })
-  if (body == null) {
-    return []
+  try {
+    const body = await sendContentApiRequest<
+      NonNullable<GetEssayQuestionEssayAnswersQuery['postEssayQuestion']>
+    >({
+      path: `/v1/post-essay-questions/${questionId}`,
+      query: {
+        answerTake,
+        answerSkip: answerSkip ?? undefined,
+        answerOrderBy: questionAnswerOrderByToFlat(answerOrderBy),
+      },
+    })
+    return body.answers ?? []
+  } catch (e) {
+    if (e instanceof ContentApiRequestError && e.status === 404) {
+      return []
+    }
+    throw e
   }
-  return body.answers ?? []
 }
 
 export async function createPostEssayAnswerLikeContentApi(

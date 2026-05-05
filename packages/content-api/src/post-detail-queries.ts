@@ -2,7 +2,7 @@ import { type Prisma, prisma } from '@kids-reporter/db'
 
 import {
   buildMemberAvatarFileUrl,
-  essayAnswerPrismaOrderBy,
+  essayAnswerOrderByFromFlat,
 } from './qna-utils.js'
 import {
   asOrderJson,
@@ -153,6 +153,90 @@ const mapRelatedPostOrdered = (p: RelatedPostRow) => {
   }
 }
 
+export async function fetchPublishedProjectMetaBySlug(slug: string) {
+  const project = await prisma.project.findFirst({
+    where: { slug, status: 'published' },
+    select: {
+      publishedDate: true,
+      ogDescription: true,
+      ogTitle: true,
+      ogImage: {
+        select: { imageFile_id: true, imageFile_extension: true },
+      },
+    },
+  })
+  if (!project) return null
+  return {
+    publishedDate: project.publishedDate?.toISOString(),
+    ogDescription: project.ogDescription,
+    ogTitle: project.ogTitle,
+    ogImage: project.ogImage
+      ? { resized: { small: buildResizedSmall(project.ogImage) } }
+      : null,
+  }
+}
+
+export async function fetchPublishedProjectDetailBySlug(
+  slug: string,
+  now: Date
+) {
+  const project = await prisma.project.findFirst({
+    where: { slug, status: 'published' },
+    select: {
+      title: true,
+      titlePosition: true,
+      subtitle: true,
+      content: true,
+      credits: true,
+      publishedDate: true,
+      heroImage: {
+        select: { imageFile_id: true, imageFile_extension: true },
+      },
+      mobileHeroImage: {
+        select: { imageFile_id: true, imageFile_extension: true },
+      },
+      relatedPostsOrderJson: true,
+      relatedPosts: {
+        where: buildPublicPostWhere(now),
+        orderBy: [{ publishedDate: 'desc' }],
+        select: relatedPostCardSelect,
+      },
+    },
+  })
+  if (!project) return null
+  const relatedPostsOrdered = orderTargetsByOrderJson(
+    project.relatedPosts as RelatedPostRow[],
+    asOrderJson(project.relatedPostsOrderJson)
+  ).map(mapRelatedPostOrdered)
+  return {
+    title: project.title,
+    titlePosition: project.titlePosition,
+    subtitle: project.subtitle,
+    content: project.content,
+    credits: project.credits,
+    publishedDate: project.publishedDate?.toISOString(),
+    heroImage: project.heroImage
+      ? {
+          resized: {
+            small: buildResizedSmall(project.heroImage),
+            medium: buildResizedMedium(project.heroImage),
+            large: buildResizedLarge(project.heroImage),
+          },
+        }
+      : undefined,
+    mobileHeroImage: project.mobileHeroImage
+      ? {
+          resized: {
+            small: buildResizedSmall(project.mobileHeroImage),
+            medium: buildResizedMedium(project.mobileHeroImage),
+            large: buildResizedLarge(project.mobileHeroImage),
+          },
+        }
+      : undefined,
+    relatedPostsOrdered,
+  }
+}
+
 function newsReadingItemsOrderBy(
   raw: unknown
 ): Prisma.NewsReadingGroupItemOrderByWithRelationInput[] {
@@ -194,46 +278,10 @@ function postOrderByFromGraphQL(
 }
 
 export type PostDetailQueryOpts = {
-  orderBy: unknown
   take: number
-  relatedPostsWhere: Prisma.PostWhereInput
   postEssayQuestionsTake: number
   postChoiceQuestionsTake: number
 }
-
-const isInteger = (v: unknown): v is number =>
-  typeof v === 'number' && Number.isInteger(v) && Number.isFinite(v)
-
-type JsonValue =
-  | null
-  | boolean
-  | number
-  | string
-  | JsonValue[]
-  | { [key: string]: JsonValue }
-
-const isJsonValue = (v: unknown, depth = 0): v is JsonValue => {
-  if (depth > 20) return false
-  if (v === null) return true
-  if (typeof v === 'string' || typeof v === 'boolean') return true
-  if (typeof v === 'number') return Number.isFinite(v)
-  if (Array.isArray(v)) {
-    if (v.length > 200) return false
-    return v.every((item) => isJsonValue(item, depth + 1))
-  }
-  if (typeof v === 'object') {
-    const rec = v as Record<string, unknown>
-    const keys = Object.keys(rec)
-    if (keys.length > 200) return false
-    return keys.every(
-      (k) => typeof k === 'string' && isJsonValue(rec[k], depth + 1)
-    )
-  }
-  return false
-}
-
-const isJsonObject = (v: unknown): v is Record<string, JsonValue> =>
-  !!v && typeof v === 'object' && !Array.isArray(v) && isJsonValue(v)
 
 export async function fetchPostDetailBySlug(
   slug: string,
@@ -241,6 +289,8 @@ export async function fetchPostDetailBySlug(
   opts: PostDetailQueryOpts
 ) {
   const publicWhere = buildPublicPostWhere(now)
+  const newsReadingOrder = newsReadingItemsOrderBy([{ order: 'asc' }])
+  const relatedPostsWhere: Prisma.PostWhereInput = { slug: { notIn: [slug] } }
   const post = await prisma.post.findFirst({
     where: { AND: [{ slug }, publicWhere] },
     select: {
@@ -280,7 +330,7 @@ export async function fetchPostDetailBySlug(
       newsReadingGroup: {
         select: {
           items: {
-            orderBy: newsReadingItemsOrderBy(opts.orderBy),
+            orderBy: newsReadingOrder,
             select: { name: true, embedCode: true },
           },
         },
@@ -292,8 +342,9 @@ export async function fetchPostDetailBySlug(
           slug: true,
           relatedPostsOrderJson: true,
           relatedPosts: {
-            where: { AND: [buildPublicPostWhere(now), opts.relatedPostsWhere] },
+            where: { AND: [buildPublicPostWhere(now), relatedPostsWhere] },
             take: opts.take,
+            orderBy: [{ publishedDate: 'desc' }],
             select: projectNestedPostSelect,
           },
         },
@@ -508,18 +559,27 @@ export async function fetchPostEssayQuestionsBySlug(slug: string, now: Date) {
   }
 }
 
+export type EssayAnswersWithLikesQueryOpts = {
+  take: number
+  skip: number
+  orderBy: Prisma.PostOrderByWithRelationInput[]
+  answerTake: number
+  answerOrderBy: 'createdAt:desc' | 'likesCount:desc'
+  where: Prisma.PostWhereInput
+}
+
 export async function fetchPostsEssayAnswersWithLikes(
-  variables: GetPostsEssayAnswersWithLikesVariablesParsed,
+  opts: EssayAnswersWithLikesQueryOpts,
   now: Date
 ) {
   const where: Prisma.PostWhereInput = {
-    AND: [buildPublicPostWhere(now), variables.where],
+    AND: [buildPublicPostWhere(now), opts.where],
   }
   const posts = await prisma.post.findMany({
     where,
-    orderBy: postOrderByFromGraphQL(variables.orderBy),
-    take: variables.take,
-    skip: variables.skip,
+    orderBy: postOrderByFromGraphQL(opts.orderBy),
+    take: opts.take,
+    skip: opts.skip,
     select: {
       id: true,
       title: true,
@@ -535,8 +595,8 @@ export async function fetchPostsEssayAnswersWithLikes(
           title: true,
           hint: true,
           answers: {
-            orderBy: essayAnswerPrismaOrderBy(variables.answerOrderBy),
-            take: variables.answerTake,
+            orderBy: essayAnswerOrderByFromFlat(opts.answerOrderBy),
+            take: opts.answerTake,
             select: {
               id: true,
               content: true,
@@ -603,113 +663,4 @@ export async function fetchPostsEssayAnswersWithLikes(
       })),
     })),
   }))
-}
-
-export type GetPostsEssayAnswersWithLikesVariablesParsed = {
-  orderBy: unknown
-  take: number
-  skip: number
-  answerOrderBy: unknown
-  answerTake: number
-  where: Prisma.PostWhereInput
-}
-
-export function parsePostDetailVariablesFromQuery(
-  slug: string,
-  raw: string | undefined
-): { ok: true; value: PostDetailQueryOpts } | { ok: false } {
-  const defaults: PostDetailQueryOpts = {
-    orderBy: [{ order: 'asc' }],
-    take: 5,
-    relatedPostsWhere: { slug: { notIn: [slug] } },
-    postEssayQuestionsTake: 3,
-    postChoiceQuestionsTake: 3,
-  }
-  if (!raw?.trim()) return { ok: true, value: defaults }
-  try {
-    const o = JSON.parse(raw) as Record<string, unknown>
-    if (o.take !== undefined && !isInteger(o.take)) return { ok: false }
-    if (
-      o.postEssayQuestionsTake !== undefined &&
-      !isInteger(o.postEssayQuestionsTake)
-    ) {
-      return { ok: false }
-    }
-    if (
-      o.postChoiceQuestionsTake !== undefined &&
-      !isInteger(o.postChoiceQuestionsTake)
-    ) {
-      return { ok: false }
-    }
-    if (
-      o.relatedPostsWhere !== undefined &&
-      (typeof o.relatedPostsWhere !== 'object' ||
-        o.relatedPostsWhere === null ||
-        Array.isArray(o.relatedPostsWhere))
-    ) {
-      return { ok: false }
-    }
-    if (
-      o.relatedPostsWhere !== undefined &&
-      !isJsonObject(o.relatedPostsWhere)
-    ) {
-      return { ok: false }
-    }
-    const take = isInteger(o.take)
-      ? Math.min(50, Math.max(1, o.take))
-      : defaults.take
-    const postEssayQuestionsTake = isInteger(o.postEssayQuestionsTake)
-      ? Math.min(50, Math.max(1, o.postEssayQuestionsTake))
-      : defaults.postEssayQuestionsTake
-    const postChoiceQuestionsTake = isInteger(o.postChoiceQuestionsTake)
-      ? Math.min(50, Math.max(1, o.postChoiceQuestionsTake))
-      : defaults.postChoiceQuestionsTake
-    const relatedPostsWhere =
-      o.relatedPostsWhere &&
-      typeof o.relatedPostsWhere === 'object' &&
-      !Array.isArray(o.relatedPostsWhere)
-        ? (o.relatedPostsWhere as Prisma.PostWhereInput)
-        : defaults.relatedPostsWhere
-    return {
-      ok: true,
-      value: {
-        orderBy: o.orderBy ?? defaults.orderBy,
-        take,
-        relatedPostsWhere,
-        postEssayQuestionsTake,
-        postChoiceQuestionsTake,
-      },
-    }
-  } catch {
-    return { ok: false }
-  }
-}
-
-export function parsePostsEssayAnswersVariablesJson(
-  raw: string | undefined
-): GetPostsEssayAnswersWithLikesVariablesParsed | null {
-  if (!raw?.trim()) return null
-  let parsed: unknown
-  try {
-    parsed = JSON.parse(raw) as unknown
-  } catch {
-    return null
-  }
-  if (!parsed || typeof parsed !== 'object') return null
-  const o = parsed as Record<string, unknown>
-  if (o.take !== undefined && !isInteger(o.take)) return null
-  if (o.skip !== undefined && !isInteger(o.skip)) return null
-  if (o.answerTake !== undefined && !isInteger(o.answerTake)) return null
-  const take = isInteger(o.take) ? o.take : 12
-  const skip = isInteger(o.skip) ? o.skip : 0
-  const answerTake = isInteger(o.answerTake) ? o.answerTake : 10
-  if (!isJsonObject(o.where)) return null
-  return {
-    orderBy: o.orderBy ?? [{ publishedDate: 'desc' }],
-    take: Math.min(50, Math.max(1, take)),
-    skip: Math.min(5000, Math.max(0, skip)),
-    answerOrderBy: o.answerOrderBy ?? [{ createdAt: 'desc' }],
-    answerTake: Math.min(50, Math.max(1, answerTake)),
-    where: o.where as Prisma.PostWhereInput,
-  }
 }
