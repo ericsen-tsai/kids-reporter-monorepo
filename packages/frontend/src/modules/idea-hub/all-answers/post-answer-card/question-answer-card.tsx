@@ -63,7 +63,7 @@ function QuestionAnswerCard({
                     <div className="flex min-w-0 flex-col">
                       <div className="flex min-w-0 items-center gap-1 prose-p2-bold text-neutral-900">
                         <span className="truncate">{memberDisplayName}</span>
-                        {answer.member?.id === memberId && (
+                        {!!memberId && answer.member?.id === memberId && (
                           <span className="shrink-0">(你)</span>
                         )}
                       </div>
