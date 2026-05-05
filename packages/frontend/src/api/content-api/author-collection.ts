@@ -1,9 +1,14 @@
+import type { GetAuthorPostsCountQuery } from '__generated__/operations/content.generated'
 import {
   V1AuthorBySlugMetaResponseSchema,
   V1AuthorBySlugPostsResponseSchema,
+  V1AuthorPostsCountResponseSchema,
 } from '@kids-reporter/api-types'
 
-import { sendContentApiRequest } from '@/utils/send-content-api'
+import {
+  ContentApiRequestError,
+  sendContentApiRequest,
+} from '@/utils/send-content-api'
 
 import { normalizePostCardsForGql } from './normalize-post-for-gql'
 
@@ -21,6 +26,34 @@ export async function getAuthorMetaContentApi({ slug }: { slug: string }) {
     ...a,
     bio: a.bio ?? undefined,
     image: a.image ?? undefined,
+  }
+}
+
+export async function getAuthorPostsCountContentApi({
+  slug,
+  traceHeaders,
+}: {
+  slug: string
+  traceHeaders?: Headers | Record<string, string | undefined>
+}): Promise<GetAuthorPostsCountQuery['author'] | undefined> {
+  try {
+    const enc = encodeURIComponent(slug)
+    const response = await sendContentApiRequest({
+      path: `/v1/authors/by-slug/${enc}/posts-count`,
+      traceHeaders,
+    })
+    const parsed = V1AuthorPostsCountResponseSchema.safeParse(response)
+    if (!parsed.success) {
+      throw new Error('content-api schema mismatch author posts-count')
+    }
+    return {
+      postsCount: parsed.data.postsCount,
+    } as GetAuthorPostsCountQuery['author']
+  } catch (e) {
+    if (e instanceof ContentApiRequestError && e.status === 404) {
+      return undefined
+    }
+    throw e
   }
 }
 

@@ -24,6 +24,14 @@ export function parseOrderByJson(raw: string | undefined): unknown[] {
   return []
 }
 
+/** Flat query param for essay-answer lists (replaces JSON `answerOrderBy` arrays). */
+export function essayAnswerOrderByFromFlat(
+  key: 'createdAt:desc' | 'likesCount:desc'
+): Prisma.PostEssayAnswerOrderByWithRelationInput[] {
+  if (key === 'likesCount:desc') return [{ likesCount: 'desc' }]
+  return [{ createdAt: 'desc' }]
+}
+
 export function essayAnswerPrismaOrderBy(
   raw: unknown
 ): Prisma.PostEssayAnswerOrderByWithRelationInput[] {

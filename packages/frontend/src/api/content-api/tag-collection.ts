@@ -36,7 +36,7 @@ export async function getTagPostsContentApi({
   take?: number
   skip?: number
   orderBy?: string
-  traceHeaders?: Record<string, string>
+  traceHeaders?: Headers | Record<string, string | undefined>
 }) {
   const enc = encodeURIComponent(slug)
   const response = await sendContentApiRequest({

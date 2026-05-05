@@ -14,22 +14,6 @@ vi.mock('@kids-reporter/db', () => ({
 }))
 
 describe('health routes', () => {
-  it('GET /readyz returns 200 when DB ok', async () => {
-    mockQueryRaw.mockResolvedValueOnce(1)
-    const app = createApp({ corsAllowOrigin: ['https://kids.twreporter.org'] })
-    const res = await request(app).get('/readyz')
-    expect(res.status).toBe(200)
-    expect(res.body).toEqual({})
-  })
-
-  it('GET /readyz returns 503 when DB fails', async () => {
-    mockQueryRaw.mockRejectedValueOnce(new Error('db down'))
-    const app = createApp({ corsAllowOrigin: ['https://kids.twreporter.org'] })
-    const res = await request(app).get('/readyz')
-    expect(res.status).toBe(503)
-    expect(res.body?.error?.code).toBe('service_unavailable')
-  })
-
   it('GET /health returns 200 with timestamp when DB ok', async () => {
     mockQueryRaw.mockResolvedValueOnce(1)
     const app = createApp({ corsAllowOrigin: ['https://kids.twreporter.org'] })

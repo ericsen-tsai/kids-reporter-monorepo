@@ -1,4 +1,4 @@
-import { V1TopicProjectsResponseSchema } from '@kids-reporter/api-types'
+import { V1ProjectsResponseSchema } from '@kids-reporter/api-types'
 
 import { sendContentApiRequest } from '@/utils/send-content-api'
 
@@ -10,7 +10,7 @@ export async function getTopicProjectsContentApi({
   traceHeaders?: Record<string, string>
 }) {
   const response = await sendContentApiRequest({
-    path: '/v1/projects/topics',
+    path: '/v1/projects',
     method: 'GET',
     query: {
       take,
@@ -19,10 +19,10 @@ export async function getTopicProjectsContentApi({
     traceHeaders,
   })
 
-  const parsed = V1TopicProjectsResponseSchema.safeParse(response)
+  const parsed = V1ProjectsResponseSchema.safeParse(response)
   if (!parsed.success) {
     throw new Error(
-      'content-api response schema mismatch for /v1/projects/topics'
+      'content-api response schema mismatch for /v1/projects (topic list)'
     )
   }
   return parsed.data.projects

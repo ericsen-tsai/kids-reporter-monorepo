@@ -17,6 +17,7 @@ export const RestErrorBodySchema = z.object({
   error: z.object({
     code: RestErrorCodeSchema,
     message: z.string(),
+    /** `z.json()` is recursive and breaks zod-to-openapi (stack overflow on /openapi.json). */
     details: z.unknown().optional(),
   }),
 })

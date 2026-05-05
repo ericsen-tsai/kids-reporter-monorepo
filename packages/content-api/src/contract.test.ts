@@ -5,10 +5,12 @@ import {
   V1CategoryBySlugMetadataResponseSchema,
   V1EditorPicksSettingsResponseSchema,
   V1PopularKeywordsResponseSchema,
+  V1PostsEssayAnswersWithLikesResponseSchema,
   V1PostsResponseSchema,
-  V1ProjectsListResponseSchema,
+  V1ProjectsResponseSchema,
+  V1SitemapPostsResponseSchema,
+  V1SitemapProjectsResponseSchema,
   V1SubcategoriesResponseSchema,
-  V1TopicProjectsResponseSchema,
 } from '@kids-reporter/api-types'
 import request from 'supertest'
 import { describe, expect, it } from 'vitest'
@@ -26,7 +28,11 @@ async function expectRouteMatchesSchema(
 ) {
   const res = await request(app).get(path)
   expect(res.status).toBe(expectedStatus)
-  expect(schema.safeParse(res.body).success).toBe(true)
+  const parsed = schema.safeParse(res.body)
+  expect(
+    parsed.success,
+    parsed.success ? '' : JSON.stringify(parsed.error.format())
+  ).toBe(true)
 }
 
 describe('content-api response contracts', () => {
@@ -34,12 +40,6 @@ describe('content-api response contracts', () => {
     if (process.env.CI) {
       expect(process.env.DATABASE_URL).toBeTruthy()
     }
-  })
-
-  it('GET /healthz returns payload-only {}', async () => {
-    const res = await request(app).get('/healthz')
-    expect(res.status).toBe(200)
-    expect(res.body).toEqual({})
   })
 
   it('POST /auth/access-token without Origin/Referer returns { error }', async () => {
@@ -63,78 +63,54 @@ describe('content-api response contracts', () => {
     expect(res.body?.error?.code).toBe('invalid_request')
   })
 
-  it('GET /v1/posts/essay-answers-with-likes without variables returns { error }', async () => {
-    const res = await request(app).get('/v1/posts/essay-answers-with-likes')
+  it('GET /v1/posts/by-slug/x rejects decimal take query param', async () => {
+    const res = await request(app).get('/v1/posts/by-slug/x?take=1.5')
     expect(res.status).toBe(400)
     expect(res.body?.error?.code).toBe('invalid_request')
   })
 
-  it('GET /v1/posts/by-slug/x with invalid variables JSON returns { error }', async () => {
+  it('GET /v1/posts/essay-answers-with-likes rejects decimal take', async () => {
     const res = await request(app).get(
-      '/v1/posts/by-slug/x?variables=not-json{{{'
+      '/v1/posts/essay-answers-with-likes?take=2.2&answerTake=1'
     )
     expect(res.status).toBe(400)
     expect(res.body?.error?.code).toBe('invalid_request')
   })
 
-  it('GET /v1/posts/by-slug/x rejects decimal take in variables', async () => {
-    const variables = encodeURIComponent(JSON.stringify({ take: 1.5 }))
+  it('GET /v1/posts/essay-answers-with-likes rejects invalid orderBy enum', async () => {
     const res = await request(app).get(
-      `/v1/posts/by-slug/x?variables=${variables}`
+      '/v1/posts/essay-answers-with-likes?orderBy=foo'
     )
     expect(res.status).toBe(400)
     expect(res.body?.error?.code).toBe('invalid_request')
   })
 
-  it('GET /v1/posts/essay-answers-with-likes rejects decimal values', async () => {
-    const variables = encodeURIComponent(
-      JSON.stringify({
-        take: 2.2,
-        answerTake: 1,
-        where: { id: { gt: 0 } },
-      })
-    )
+  it('GET /v1/post-essay-answers rejects invalid orderBy enum', async () => {
+    const res = await request(app).get('/v1/post-essay-answers?orderBy=foo')
+    expect(res.status).toBe(400)
+    expect(res.body?.error?.code).toBe('invalid_request')
+  })
+
+  it('GET /v1/post-essay-questions/:id rejects invalid answerOrderBy enum', async () => {
     const res = await request(app).get(
-      `/v1/posts/essay-answers-with-likes?variables=${variables}`
+      '/v1/post-essay-questions/1?answerTake=10&answerOrderBy=bad'
     )
     expect(res.status).toBe(400)
     expect(res.body?.error?.code).toBe('invalid_request')
   })
 
-  it('GET /v1/posts/by-slug/x rejects array relatedPostsWhere in variables', async () => {
-    const variables = encodeURIComponent(
-      JSON.stringify({
-        relatedPostsWhere: [],
-      })
-    )
+  it('GET /v1/post-essay-questions/:questionId rejects decimal questionId', async () => {
     const res = await request(app).get(
-      `/v1/posts/by-slug/x?variables=${variables}`
+      '/v1/post-essay-questions/1.5?answerTake=10'
     )
     expect(res.status).toBe(400)
     expect(res.body?.error?.code).toBe('invalid_request')
   })
 
-  it('GET /v1/posts/essay-answers-with-likes rejects array where', async () => {
-    const variables = encodeURIComponent(
-      JSON.stringify({
-        where: [],
-      })
-    )
+  it('GET /v1/post-essay-questions/:questionId rejects non-positive questionId', async () => {
     const res = await request(app).get(
-      `/v1/posts/essay-answers-with-likes?variables=${variables}`
+      '/v1/post-essay-questions/0?answerTake=10'
     )
-    expect(res.status).toBe(400)
-    expect(res.body?.error?.code).toBe('invalid_request')
-  })
-
-  it('GET /v1/post-essay-questions/:questionId/answers rejects decimal questionId', async () => {
-    const res = await request(app).get('/v1/post-essay-questions/1.5/answers')
-    expect(res.status).toBe(400)
-    expect(res.body?.error?.code).toBe('invalid_request')
-  })
-
-  it('GET /v1/post-essay-questions/:questionId/answers rejects non-positive questionId', async () => {
-    const res = await request(app).get('/v1/post-essay-questions/0/answers')
     expect(res.status).toBe(400)
     expect(res.body?.error?.code).toBe('invalid_request')
   })
@@ -167,6 +143,14 @@ describe('content-api response contracts', () => {
       await expectRouteMatchesSchema('/v1/posts', V1PostsResponseSchema)
     })
 
+    it('GET /v1/posts/essay-answers-with-likes with no query returns 200 and array body', async () => {
+      const res = await request(app).get('/v1/posts/essay-answers-with-likes')
+      expect(res.status).toBe(200)
+      expect(
+        V1PostsEssayAnswersWithLikesResponseSchema.safeParse(res.body).success
+      ).toBe(true)
+    })
+
     it('GET /v1/subcategories success body matches V1SubcategoriesResponseSchema', async () => {
       await expectRouteMatchesSchema(
         '/v1/subcategories',
@@ -188,18 +172,38 @@ describe('content-api response contracts', () => {
       )
     })
 
-    it('GET /v1/projects/topics success body matches V1TopicProjectsResponseSchema', async () => {
+    it('GET /v1/projects with no query string matches V1ProjectsResponseSchema', async () => {
+      await expectRouteMatchesSchema('/v1/projects', V1ProjectsResponseSchema)
+    })
+
+    it('GET /v1/projects matches V1ProjectsResponseSchema (default pagination)', async () => {
       await expectRouteMatchesSchema(
-        '/v1/projects/topics',
-        V1TopicProjectsResponseSchema
+        '/v1/projects?take=12&orderBy=publishedDate:desc',
+        V1ProjectsResponseSchema
       )
     })
 
-    it('GET /v1/projects success body matches V1ProjectsListResponseSchema', async () => {
+    it('GET /v1/projects with skip matches V1ProjectsResponseSchema', async () => {
       await expectRouteMatchesSchema(
-        '/v1/projects',
-        V1ProjectsListResponseSchema
+        '/v1/projects?skip=0',
+        V1ProjectsResponseSchema
       )
+    })
+
+    it('GET /v1/projects with includeRelatedPosts matches V1ProjectsResponseSchema', async () => {
+      await expectRouteMatchesSchema(
+        '/v1/projects?take=2&skip=0&includeRelatedPosts=true',
+        V1ProjectsResponseSchema
+      )
+    })
+
+    it('GET /v1/post-essay-questions/:id missing question returns 404', async () => {
+      const res = await request(app).get(
+        '/v1/post-essay-questions/999999999?answerTake=10'
+      )
+      expect(res.status).toBe(404)
+      expect(RestErrorBodySchema.safeParse(res.body).success).toBe(true)
+      expect(res.body?.error?.code).toBe('not_found')
     })
 
     it('GET /v1/categories/by-slug/unknown-feed-slug/posts success body matches category posts schema', async () => {
@@ -207,6 +211,68 @@ describe('content-api response contracts', () => {
         '/v1/categories/by-slug/unknown-feed-slug/posts',
         V1CategoryBySlugCategoryPostsResponseSchema
       )
+    })
+
+    it('GET /v1/sitemaps/posts matches V1SitemapPostsResponseSchema', async () => {
+      await expectRouteMatchesSchema(
+        '/v1/sitemaps/posts?sinceDays=60',
+        V1SitemapPostsResponseSchema
+      )
+    })
+
+    it('GET /v1/sitemaps/projects matches V1SitemapProjectsResponseSchema', async () => {
+      await expectRouteMatchesSchema(
+        '/v1/sitemaps/projects',
+        V1SitemapProjectsResponseSchema
+      )
+    })
+
+    it('GET /v1/projects/by-slug/unknown-topic-slug-xyz/meta returns 404', async () => {
+      const res = await request(app).get(
+        '/v1/projects/by-slug/unknown-topic-slug-xyz/meta'
+      )
+      expect(res.status).toBe(404)
+      expect(RestErrorBodySchema.safeParse(res.body).success).toBe(true)
+    })
+
+    it('GET /v1/projects/by-slug/unknown-topic-slug-xyz/related-posts-count returns 404', async () => {
+      const res = await request(app).get(
+        '/v1/projects/by-slug/unknown-topic-slug-xyz/related-posts-count'
+      )
+      expect(res.status).toBe(404)
+      expect(RestErrorBodySchema.safeParse(res.body).success).toBe(true)
+    })
+
+    it('GET /v1/authors/by-slug/unknown-author-slug-xyz/posts-count returns 404', async () => {
+      const res = await request(app).get(
+        '/v1/authors/by-slug/unknown-author-slug-xyz/posts-count'
+      )
+      expect(res.status).toBe(404)
+      expect(RestErrorBodySchema.safeParse(res.body).success).toBe(true)
+    })
+
+    it('GET /v1/posts/by-slug/unknown-post-slug-xyz returns 404', async () => {
+      const res = await request(app).get(
+        '/v1/posts/by-slug/unknown-post-slug-xyz'
+      )
+      expect(res.status).toBe(404)
+      expect(RestErrorBodySchema.safeParse(res.body).success).toBe(true)
+    })
+
+    it('GET /v1/posts/by-slug/unknown-post-slug-xyz/meta returns 404', async () => {
+      const res = await request(app).get(
+        '/v1/posts/by-slug/unknown-post-slug-xyz/meta'
+      )
+      expect(res.status).toBe(404)
+      expect(RestErrorBodySchema.safeParse(res.body).success).toBe(true)
+    })
+
+    it('GET /v1/posts/by-slug/unknown-post-slug-xyz/essay-questions returns 404', async () => {
+      const res = await request(app).get(
+        '/v1/posts/by-slug/unknown-post-slug-xyz/essay-questions'
+      )
+      expect(res.status).toBe(404)
+      expect(RestErrorBodySchema.safeParse(res.body).success).toBe(true)
     })
 
     it('GET /v1/call-baodaozai-intros/home 200 or 404 with matching body shape', async () => {

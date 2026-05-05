@@ -5,6 +5,13 @@ import {
 import { z } from 'zod'
 
 import { RestErrorBodySchema } from '../rest.js'
+import {
+  V1PostDetailBodySchema,
+  V1PostEssayQuestionsBodySchema,
+  V1PostMetaBodySchema,
+  V1PostsEssayAnswersWithLikesResponseSchema,
+  V1ProjectDetailRelatedPostOrderedItemSchema,
+} from './content-post-detail.js'
 
 extendZodWithOpenApi(z)
 
@@ -57,23 +64,6 @@ export const PostContentSchema = z
 
 export type PostContent = z.infer<typeof PostContentSchema>
 
-export const ProjectCardSchema = z
-  .object({
-    title: z.string().nullable().optional(),
-    subtitle: z.string().nullable().optional(),
-    slug: z.string(),
-    publishedDate: z.iso.datetime().nullable().optional(),
-    heroImage: z
-      .object({
-        resized: z.object({
-          small: z.string().default(''),
-        }),
-      })
-      .nullable()
-      .optional(),
-  })
-  .openapi('ProjectCard')
-
 export const SubcategoryItemSchema = z
   .object({
     id: z.union([z.string(), z.number().int()]),
@@ -119,6 +109,7 @@ export const V1PostsResponseSchema = z.object({
 registry.registerPath({
   method: 'get',
   path: '/v1/posts',
+  tags: ['Posts'],
   description: 'List latest published posts.',
   request: {
     query: V1PostsQuerySchema,
@@ -148,6 +139,7 @@ export const V1SubcategoriesResponseSchema = z.array(SubcategoryItemSchema)
 registry.registerPath({
   method: 'get',
   path: '/v1/subcategories',
+  tags: ['Taxonomy'],
   description: 'All subcategories with parent category slug.',
   responses: {
     200: {
@@ -174,6 +166,7 @@ export const V1AuthorAvatarResponseSchema = z
 registry.registerPath({
   method: 'get',
   path: '/v1/authors/by-slug/{slug}/avatar',
+  tags: ['Taxonomy'],
   description:
     'Author avatar tiny image URL by slug. `tiny` is empty when the author or avatar is missing.',
   request: {
@@ -198,6 +191,7 @@ export const V1PopularKeywordsResponseSchema = z.array(
 registry.registerPath({
   method: 'get',
   path: '/v1/popular-keywords',
+  tags: ['Editor'],
   description: 'Popular keywords from editor picks ordering.',
   responses: {
     200: {
@@ -229,6 +223,7 @@ export const V1CallBaodaozaiIntroResponseSchema = CallBaodaozaiIntroItemSchema
 registry.registerPath({
   method: 'get',
   path: '/v1/call-baodaozai-intros/{page}',
+  tags: ['Editor'],
   description: 'Get Call Baodaozai intro content by page.',
   request: {
     params: V1CallBaodaozaiIntroPathParamsSchema,
@@ -261,19 +256,8 @@ registry.registerPath({
   },
 })
 
-export const V1TopicProjectsQuerySchema = z.object({
-  take: z.coerce.number().int().min(1).max(50).optional().default(12),
-  orderBy: z.enum(['publishedDate:desc']).optional(),
-})
-
-export const V1TopicProjectsResponseSchema = z.object({
-  projects: z.array(ProjectCardSchema),
-  page: z.object({
-    take: z.number().int().min(1).max(50),
-  }),
-})
-
-export const V1ProjectsListQuerySchema = z.object({
+/** Query for `GET /v1/projects`. */
+export const V1ProjectsQuerySchema = z.object({
   take: z.coerce.number().int().min(1).max(50).optional(),
   skip: z.coerce.number().int().min(0).max(5000).optional(),
   orderBy: z.enum(['publishedDate:desc']).optional(),
@@ -283,73 +267,46 @@ export const V1ProjectsListQuerySchema = z.object({
     .transform((v) => v === 'true'),
 })
 
-export const ProjectHeroMediumSchema = z
-  .object({
-    resized: z.object({
-      medium: z.string().default('').openapi({
-        example: 'https://kids.twreporter.org/resized/abc-1200.webp',
-      }),
-    }),
-  })
-  .openapi('ProjectHeroMedium')
-
-export const V1ProjectListItemSchema = z
+export const V1ProjectsItemSchema = z
   .object({
     title: z.string(),
+    subtitle: z.string().nullable().optional(),
     slug: z.string(),
     ogDescription: z.string().nullable().optional(),
     publishedDate: z.iso.datetime().nullable().optional(),
-    heroImage: ProjectHeroMediumSchema.nullable().optional(),
+    heroImage: z
+      .object({
+        resized: z.object({
+          small: z.string(),
+          medium: z.string(),
+        }),
+      })
+      .nullable()
+      .optional(),
     relatedPostsOrdered: z.array(PostContentSchema).optional(),
   })
-  .openapi('ProjectListItem')
+  .openapi('ProjectsItem')
 
-export const V1ProjectsListResponseSchema = z.object({
-  projects: z.array(V1ProjectListItemSchema),
+export const V1ProjectsResponseSchema = z.object({
+  projects: z.array(V1ProjectsItemSchema),
   projectsCount: z.number().int().min(0),
 })
 
 registry.registerPath({
   method: 'get',
   path: '/v1/projects',
+  tags: ['Projects'],
   description:
-    'List published projects with optional related post cards (matches GetProjects).',
+    'List published projects. Response always includes `projects` and total `projectsCount`. Optional `relatedPostsOrdered` on each item appears only when `includeRelatedPosts=true`.',
   request: {
-    query: V1ProjectsListQuerySchema,
+    query: V1ProjectsQuerySchema,
   },
   responses: {
     200: {
       description: 'Success',
       content: {
         'application/json': {
-          schema: V1ProjectsListResponseSchema,
-        },
-      },
-    },
-    400: {
-      description: 'Bad request',
-      content: {
-        'application/json': {
-          schema: RestErrorBodySchema,
-        },
-      },
-    },
-  },
-})
-
-registry.registerPath({
-  method: 'get',
-  path: '/v1/projects/topics',
-  description: 'List topic projects.',
-  request: {
-    query: V1TopicProjectsQuerySchema,
-  },
-  responses: {
-    200: {
-      description: 'Success',
-      content: {
-        'application/json': {
-          schema: V1TopicProjectsResponseSchema,
+          schema: V1ProjectsResponseSchema,
         },
       },
     },
@@ -375,6 +332,7 @@ export const V1EditorPicksSettingsResponseSchema = z.array(
 registry.registerPath({
   method: 'get',
   path: '/v1/editor-picks-settings',
+  tags: ['Editor'],
   description: 'Editor picks configuration rows.',
   request: {
     query: V1EditorPicksSettingsQuerySchema,
@@ -424,14 +382,13 @@ export const V1MemberProfileSchema = z
 export const V1MemberProfileResponseSchema = V1MemberProfileSchema
 
 export const V1MemberProfilePatchBodySchema = z
-  .object({
+  .strictObject({
     name: z.string().optional(),
     nickname: z.string().optional(),
     contactEmail: z.string().optional(),
     showBaodaozai: z.boolean().optional(),
     essayQuestionCount: z.number().int().min(0).max(3).optional(),
   })
-  .strict()
   .openapi('MemberProfilePatch')
 
 /** Successful `POST /auth/access-token` response JSON. */
@@ -450,6 +407,7 @@ export const V1MemberPostsWithAnswersQuerySchema = z.object({
 registry.registerPath({
   method: 'get',
   path: '/v1/members/me',
+  tags: ['Members'],
   description: 'Authenticated member profile (Bearer JWT).',
   responses: {
     200: {
@@ -482,6 +440,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'patch',
   path: '/v1/members/me',
+  tags: ['Members'],
   description: 'Update authenticated member profile (Bearer JWT).',
   request: {
     body: {
@@ -532,45 +491,225 @@ export const V1PostBySlugPathParamsSchema = z.object({
   slug: z.string().min(1),
 })
 
+/** Flat query for `GET /v1/posts/by-slug/{slug}` (news-reading order + related-posts filter are fixed server-side). */
 export const V1PostBySlugQuerySchema = z.object({
-  /** JSON string matching `GetPostQueryVariables` (excluding `where`, taken from path slug). */
-  variables: z.string().optional(),
+  take: z.coerce.number().int().min(1).max(50).optional().default(5),
+  postEssayQuestionsTake: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(50)
+    .optional()
+    .default(3),
+  postChoiceQuestionsTake: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(50)
+    .optional()
+    .default(3),
 })
 
-export const V1PostDetailEnvelopeSchema = z
-  .object({
-    post: z.unknown().nullable(),
-  })
-  .openapi('V1PostDetailEnvelope')
-
-export const V1PostMetaEnvelopeSchema = z
-  .object({
-    post: z.unknown().nullable(),
-  })
-  .openapi('V1PostMetaEnvelope')
-
-export const V1PostEssayQuestionsEnvelopeSchema = z
-  .object({
-    post: z.unknown().nullable(),
-  })
-  .openapi('V1PostEssayQuestionsEnvelope')
-
-export const V1PostsEssayAnswersWithLikesQueryStringSchema = z.object({
-  /** JSON string matching `GetPostsEssayAnswersWithLikesQueryVariables`. */
-  variables: z.string().min(1),
+export const V1SitemapsQuerySchema = z.object({
+  sinceDays: z.coerce.number().int().min(1).max(365).optional().default(60),
 })
 
-export const V1PostsEssayAnswersWithLikesEnvelopeSchema = z
-  .object({
-    posts: z.array(z.unknown()),
-  })
-  .openapi('V1PostsEssayAnswersWithLikesEnvelope')
+export const V1SitemapEntrySchema = z.object({
+  slug: z.string(),
+  publishedDate: z.iso.datetime().nullable(),
+})
+
+export const V1SitemapPostsResponseSchema = z.array(V1SitemapEntrySchema)
+export const V1SitemapProjectsResponseSchema = z.array(V1SitemapEntrySchema)
+
+export const V1ProjectBySlugMetaResponseSchema = z.object({
+  publishedDate: z.string().optional(),
+  ogTitle: z.string(),
+  ogDescription: z.string().nullable(),
+  ogImage: z
+    .object({
+      resized: z.object({ small: z.string() }),
+    })
+    .nullable(),
+})
+
+/** Hero image payloads returned by `/v1/projects/by-slug/{slug}` match Prisma-mapper targets. */
+export const V1ProjectDetailPhotoResizedSchema = z.object({
+  resized: z.object({
+    small: z.string(),
+    medium: z.string(),
+    large: z.string(),
+  }),
+})
+
+export const V1ProjectBySlugDetailResponseSchema = z.object({
+  title: z.string(),
+  titlePosition: z.string().nullable().optional(),
+  subtitle: z.string(),
+  /** Draft.js JSON etc.; `z.json()` overflows zod-to-openapi union expansion. */
+  content: z.unknown().nullable().optional(),
+  credits: z.unknown().nullable().optional(),
+  publishedDate: z.string().optional(),
+  heroImage: V1ProjectDetailPhotoResizedSchema.optional(),
+  mobileHeroImage: V1ProjectDetailPhotoResizedSchema.optional(),
+  relatedPostsOrdered: z.array(V1ProjectDetailRelatedPostOrderedItemSchema),
+})
+
+export const V1ProjectRelatedPostsCountResponseSchema = z.object({
+  relatedPostsCount: z.number().int().min(0),
+})
+
+export const V1AuthorPostsCountResponseSchema = z.object({
+  postsCount: z.number().int().min(0),
+})
+
+registry.registerPath({
+  method: 'get',
+  path: '/v1/sitemaps/posts',
+  tags: ['Sitemaps'],
+  description:
+    'Post slugs + published dates for sitemap (public posts only). Query `sinceDays` (1–365, default 60): include posts with `publishedDate` on/after start of day `now - sinceDays`.',
+  request: {
+    query: V1SitemapsQuerySchema,
+  },
+  responses: {
+    200: {
+      description: 'Success',
+      content: {
+        'application/json': { schema: V1SitemapPostsResponseSchema },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': { schema: RestErrorBodySchema },
+      },
+    },
+  },
+})
+
+registry.registerPath({
+  method: 'get',
+  path: '/v1/sitemaps/projects',
+  tags: ['Sitemaps'],
+  description:
+    'Published project slugs + dates for sitemap. Query `sinceDays` (1–365, default 60): include projects with `publishedDate` on/after start of day `now - sinceDays`.',
+  request: {
+    query: V1SitemapsQuerySchema,
+  },
+  responses: {
+    200: {
+      description: 'Success',
+      content: {
+        'application/json': { schema: V1SitemapProjectsResponseSchema },
+      },
+    },
+    400: {
+      description: 'Bad request',
+      content: {
+        'application/json': { schema: RestErrorBodySchema },
+      },
+    },
+  },
+})
+
+registry.registerPath({
+  method: 'get',
+  path: '/v1/projects/by-slug/{slug}',
+  tags: ['Projects'],
+  description:
+    'Published project detail for topic page (matches GraphQL `GetProject`).',
+  request: {
+    params: V1PostBySlugPathParamsSchema,
+  },
+  responses: {
+    200: {
+      description: 'Success',
+      content: {
+        'application/json': { schema: V1ProjectBySlugDetailResponseSchema },
+      },
+    },
+    404: {
+      description: 'Not found',
+      content: {
+        'application/json': { schema: RestErrorBodySchema },
+      },
+    },
+  },
+})
+
+registry.registerPath({
+  method: 'get',
+  path: '/v1/projects/by-slug/{slug}/meta',
+  tags: ['Projects'],
+  description:
+    'Published project OG metadata (matches GraphQL `GetProjectMeta`).',
+  request: {
+    params: V1PostBySlugPathParamsSchema,
+  },
+  responses: {
+    200: {
+      description: 'Success',
+      content: {
+        'application/json': { schema: V1ProjectBySlugMetaResponseSchema },
+      },
+    },
+    404: {
+      description: 'Not found',
+      content: {
+        'application/json': { schema: RestErrorBodySchema },
+      },
+    },
+  },
+})
+
+registry.registerPath({
+  method: 'get',
+  path: '/v1/projects/by-slug/{slug}/related-posts-count',
+  tags: ['Projects'],
+  description:
+    'Count of public posts linked to a published project (matches GraphQL `relatedPostsCount` on project).',
+  request: {
+    params: V1PostBySlugPathParamsSchema,
+  },
+  responses: {
+    200: {
+      description: 'Success',
+      content: {
+        'application/json': {
+          schema: V1ProjectRelatedPostsCountResponseSchema,
+        },
+      },
+    },
+    404: {
+      description: 'Not found',
+      content: {
+        'application/json': { schema: RestErrorBodySchema },
+      },
+    },
+  },
+})
+
+export const V1PostsEssayAnswersWithLikesQuerySchema = z.object({
+  take: z.coerce.number().int().min(1).max(50).optional().default(12),
+  skip: z.coerce.number().int().min(0).max(5000).optional().default(0),
+  orderBy: z
+    .enum(['publishedDate:desc'])
+    .optional()
+    .default('publishedDate:desc'),
+  answerTake: z.coerce.number().int().min(1).max(50).optional().default(10),
+  answerOrderBy: z
+    .enum(['likesCount:desc', 'createdAt:desc'])
+    .optional()
+    .default('likesCount:desc'),
+})
 
 registry.registerPath({
   method: 'get',
   path: '/v1/posts/by-slug/{slug}',
+  tags: ['Posts'],
   description:
-    'Single post article payload (matches GraphQL `GetPost`). Optional `variables` query holds JSON for orderBy, take, relatedPostsWhere, postEssayQuestionsTake, postChoiceQuestionsTake.',
+    'Single post article payload (matches GraphQL `GetPost`). Flat query: `take`, `postEssayQuestionsTake`, `postChoiceQuestionsTake` (1–50 each, defaults 5/3/3). News-reading item order and nested related-posts filter are fixed server-side.',
   request: {
     params: V1PostBySlugPathParamsSchema,
     query: V1PostBySlugQuerySchema,
@@ -580,7 +719,7 @@ registry.registerPath({
       description: 'Success',
       content: {
         'application/json': {
-          schema: V1PostDetailEnvelopeSchema,
+          schema: V1PostDetailBodySchema,
         },
       },
     },
@@ -592,12 +731,19 @@ registry.registerPath({
         },
       },
     },
+    404: {
+      description: 'Not found',
+      content: {
+        'application/json': { schema: RestErrorBodySchema },
+      },
+    },
   },
 })
 
 registry.registerPath({
   method: 'get',
   path: '/v1/posts/by-slug/{slug}/meta',
+  tags: ['Posts'],
   description:
     'Post SEO / Open Graph metadata (matches GraphQL `GetPostMeta`).',
   request: {
@@ -608,7 +754,15 @@ registry.registerPath({
       description: 'Success',
       content: {
         'application/json': {
-          schema: V1PostMetaEnvelopeSchema,
+          schema: V1PostMetaBodySchema,
+        },
+      },
+    },
+    404: {
+      description: 'Not found',
+      content: {
+        'application/json': {
+          schema: RestErrorBodySchema,
         },
       },
     },
@@ -618,6 +772,7 @@ registry.registerPath({
 registry.registerPath({
   method: 'get',
   path: '/v1/posts/by-slug/{slug}/essay-questions',
+  tags: ['Posts'],
   description:
     'Post card plus essay questions (matches GraphQL `GetPostEssayQuestions`).',
   request: {
@@ -628,7 +783,15 @@ registry.registerPath({
       description: 'Success',
       content: {
         'application/json': {
-          schema: V1PostEssayQuestionsEnvelopeSchema,
+          schema: V1PostEssayQuestionsBodySchema,
+        },
+      },
+    },
+    404: {
+      description: 'Not found',
+      content: {
+        'application/json': {
+          schema: RestErrorBodySchema,
         },
       },
     },
@@ -638,17 +801,18 @@ registry.registerPath({
 registry.registerPath({
   method: 'get',
   path: '/v1/posts/essay-answers-with-likes',
+  tags: ['Posts'],
   description:
-    'Paged posts with nested essay answers and member avatars (matches GraphQL `GetPostsEssayAnswersWithLikes`).',
+    'Paged posts with nested essay answers and member avatars (matches GraphQL `GetPostsEssayAnswersWithLikes`). Flat query: `take`, `skip`, `orderBy` (`publishedDate:desc` only), `answerTake`, `answerOrderBy` (`likesCount:desc` | `createdAt:desc`). Post filter (posts with answered essay questions) is fixed server-side.',
   request: {
-    query: V1PostsEssayAnswersWithLikesQueryStringSchema,
+    query: V1PostsEssayAnswersWithLikesQuerySchema,
   },
   responses: {
     200: {
       description: 'Success',
       content: {
         'application/json': {
-          schema: V1PostsEssayAnswersWithLikesEnvelopeSchema,
+          schema: V1PostsEssayAnswersWithLikesResponseSchema,
         },
       },
     },
@@ -662,3 +826,5 @@ registry.registerPath({
     },
   },
 })
+
+export * from './content-post-detail.js'
