@@ -119,7 +119,7 @@ export async function updateMemberPostChoiceAnswer(
 ): Promise<MutationResult<UpdateChoiceAnswerDto>> {
   const existing = await prisma.postChoiceAnswer.findUnique({
     where: { id },
-    select: { memberId: true, questionId: true },
+    select: { memberId: true, questionId: true, choiceIndex: true },
   })
   if (!existing || existing.memberId !== memberId) {
     return { kind: 'forbidden' }
@@ -128,11 +128,7 @@ export async function updateMemberPostChoiceAnswer(
   let choiceIndex: number | undefined =
     typeof data.choiceIndex === 'number' ? data.choiceIndex : undefined
   if (choiceIndex === undefined && existing.questionId != null) {
-    const cur = await prisma.postChoiceAnswer.findUnique({
-      where: { id },
-      select: { choiceIndex: true },
-    })
-    choiceIndex = cur?.choiceIndex
+    choiceIndex = existing.choiceIndex
   }
 
   let correct: boolean | undefined

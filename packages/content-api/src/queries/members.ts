@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto'
-import { mkdir, unlink, writeFile } from 'node:fs/promises'
+import { mkdir, rename, unlink, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
 import {
@@ -133,21 +133,35 @@ export const extForMemberAvatarMime = (m: string) => {
   return 'bin'
 }
 
-const avatarStorageDir = () =>
-  path.join(envVar.images.storagePath || '', 'images')
+const buildAvatarRelName = (avatar: {
+  imageFile_id: string | null
+  imageFile_extension: string | null
+}) => {
+  if (!avatar.imageFile_id) return null
+  return `${avatar.imageFile_id}${
+    avatar.imageFile_extension ? `.${avatar.imageFile_extension}` : ''
+  }`
+}
+
+const resolveAvatarPaths = (avatar: {
+  imageFile_id: string | null
+  imageFile_extension: string | null
+}) => {
+  const base = envVar.images.storagePath
+  const rel = buildAvatarRelName(avatar)
+  if (!base || !rel) return null
+  const imagesDir = path.join(base, 'images')
+  return { imagesDir, rel, fullPath: path.join(imagesDir, rel) }
+}
 
 const tryUnlinkAvatarFile = async (avatar: {
   imageFile_id: string | null
   imageFile_extension: string | null
 }) => {
-  const base = envVar.images.storagePath
-  if (!base || !avatar.imageFile_id) return
-  const rel = `${avatar.imageFile_id}${
-    avatar.imageFile_extension ? `.${avatar.imageFile_extension}` : ''
-  }`
-  const full = path.join(base, 'images', rel)
+  const resolved = resolveAvatarPaths(avatar)
+  if (!resolved) return
   try {
-    await unlink(full)
+    await unlink(resolved.fullPath)
   } catch {
     /* ignore missing file */
   }
@@ -186,51 +200,102 @@ export type ReplaceMemberAvatarInput = {
 }
 
 /**
- * Replace a member's avatar atomically. Writes the new file to disk,
- * then within a Prisma transaction: deletes the old `MemberAvatar` row
- * (and unlinks its disk file inside the transaction, matching prior semantics)
- * and creates the new row, finally pointing the member at it.
+ * Replace a member's avatar without making DB+FS inconsistent:
+ * - Write to a temp file
+ * - Create the new DB row
+ * - Move the file into its final location
+ * - Transactionally point the member at it and delete the old row
+ * - Unlink the old file after the transaction commits
  */
 export async function replaceMemberAvatar(
   input: ReplaceMemberAvatarInput
 ): Promise<{ id: string; name: string }> {
   const ext = extForMemberAvatarMime(input.mime)
   const imageFile_id = randomUUID().replace(/-/g, '')
-  const dir = avatarStorageDir()
-  await mkdir(dir, { recursive: true })
-  const diskName = `${imageFile_id}.${ext}`
-  await writeFile(path.join(dir, diskName), input.fileBuffer)
+  const base = envVar.images.storagePath
+  const resolved = resolveAvatarPaths({
+    imageFile_id,
+    imageFile_extension: ext,
+  })
+  if (!base || !resolved) {
+    throw new Error('Images storage is not configured')
+  }
 
-  const created = await prisma.$transaction(async (tx) => {
-    if (input.prevAvatarId) {
-      const old = await tx.memberAvatar.findUnique({
-        where: { id: input.prevAvatarId },
-      })
-      if (old) {
-        await tryUnlinkAvatarFile(old)
-        await tx.memberAvatar.delete({ where: { id: old.id } })
-      }
-      await tx.member.update({
-        where: { id: input.memberId },
-        data: { avatarId: null },
-      })
-    }
-    const row = await tx.memberAvatar.create({
+  await mkdir(resolved.imagesDir, { recursive: true })
+
+  // Write to a temp file first; only move into place after DB commits.
+  const tmpName = `.tmp-${randomUUID().replace(/-/g, '')}-${imageFile_id}.${ext}`
+  const tmpPath = path.join(resolved.imagesDir, tmpName)
+
+  await writeFile(tmpPath, input.fileBuffer)
+
+  let createdRow: { id: number; name: string } | null = null
+  try {
+    // Phase 1: create the new avatar row only (no member update, no old deletion).
+    createdRow = await prisma.memberAvatar.create({
       data: {
         name: input.uploadName,
         imageFile_id,
         imageFile_extension: ext,
         imageFile_filesize: input.fileSize,
       },
+      select: { id: true, name: true },
     })
-    await tx.member.update({
-      where: { id: input.memberId },
-      data: { avatarId: row.id },
-    })
-    return row
-  })
 
-  return { id: String(created.id), name: created.name }
+    // Phase 2: move file into its final location.
+    await rename(tmpPath, resolved.fullPath)
+
+    // Phase 3: transactionally point member at the new avatar and delete old row.
+    let oldForUnlink: {
+      imageFile_id: string | null
+      imageFile_extension: string | null
+    } | null = null
+
+    await prisma.$transaction(async (tx) => {
+      if (input.prevAvatarId) {
+        oldForUnlink = await tx.memberAvatar.findUnique({
+          where: { id: input.prevAvatarId },
+          select: { imageFile_id: true, imageFile_extension: true },
+        })
+      }
+
+      await tx.member.update({
+        where: { id: input.memberId },
+        data: { avatarId: createdRow!.id },
+      })
+
+      if (input.prevAvatarId) {
+        await tx.memberAvatar.delete({ where: { id: input.prevAvatarId } })
+      }
+    })
+
+    // Only unlink the old file after the DB transaction succeeds.
+    if (oldForUnlink) {
+      await tryUnlinkAvatarFile(oldForUnlink)
+    }
+
+    return { id: String(createdRow.id), name: createdRow.name }
+  } catch (err) {
+    // Best-effort cleanup to avoid storage leaks and dangling DB rows.
+    try {
+      await unlink(tmpPath)
+    } catch {
+      /* ignore */
+    }
+    try {
+      await unlink(resolved.fullPath)
+    } catch {
+      /* ignore */
+    }
+    if (createdRow) {
+      try {
+        await prisma.memberAvatar.delete({ where: { id: createdRow.id } })
+      } catch {
+        /* ignore */
+      }
+    }
+    throw err
+  }
 }
 
 export type RemoveMemberAvatarResult =
@@ -252,7 +317,6 @@ export async function removeMemberAvatar(
   })
   if (!old) return { kind: 'not_found' }
 
-  await tryUnlinkAvatarFile(old)
   await prisma.$transaction([
     prisma.member.update({
       where: { id: member.id },
@@ -260,6 +324,9 @@ export async function removeMemberAvatar(
     }),
     prisma.memberAvatar.delete({ where: { id: old.id } }),
   ])
+
+  // Only unlink the file after the DB transaction succeeds.
+  await tryUnlinkAvatarFile(old)
 
   return { kind: 'ok', data: { id: String(old.id) } }
 }
