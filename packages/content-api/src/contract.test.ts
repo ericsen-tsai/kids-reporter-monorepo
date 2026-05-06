@@ -143,6 +143,13 @@ describe('content-api response contracts', () => {
       await expectRouteMatchesSchema('/v1/posts', V1PostsResponseSchema)
     })
 
+    it('GET /v1/post-essay-answers sets Cache-Control when 200', async () => {
+      const res = await request(app).get('/v1/post-essay-answers')
+      if (res.status === 200) {
+        expect(res.headers['cache-control']).toBe('public, max-age=60')
+      }
+    })
+
     it('GET /v1/posts/essay-answers-with-likes with no query returns 200 and array body', async () => {
       const res = await request(app).get('/v1/posts/essay-answers-with-likes')
       expect(res.status).toBe(200)
