@@ -22,6 +22,7 @@ import { z } from 'zod'
 
 import { asyncRoute } from '../../async-route.js'
 import envVar from '../../environment-variables.js'
+import { maskEmail } from '../../mask-email.js'
 import {
   fetchPostDetailBySlug,
   fetchPostEssayQuestionsBySlug,
@@ -920,6 +921,7 @@ export function createV1Router() {
           },
         },
       })
+      res.set('Cache-Control', 'public, max-age=60')
       res.json(
         rows.map((r) => ({
           id: String(r.id),
@@ -938,7 +940,7 @@ export function createV1Router() {
                 id: r.member.id,
                 name: r.member.name,
                 nickname: r.member.nickname,
-                email: r.member.email,
+                email: maskEmail(r.member.email),
                 avatar: r.member.avatar
                   ? {
                       id: String(r.member.avatar.id),
@@ -1012,7 +1014,7 @@ export function createV1Router() {
                 id: a.member.id,
                 name: a.member.name,
                 nickname: a.member.nickname,
-                email: a.member.email,
+                email: maskEmail(a.member.email),
                 avatar: a.member.avatar
                   ? {
                       id: String(a.member.avatar.id),

@@ -1,5 +1,6 @@
 import { type Prisma, prisma } from '@kids-reporter/db'
 
+import { maskEmail } from './mask-email.js'
 import {
   buildMemberAvatarFileUrl,
   essayAnswerOrderByFromFlat,
@@ -601,6 +602,7 @@ export async function fetchPostsEssayAnswersWithLikes(
               id: true,
               content: true,
               likesCount: true,
+              createdAt: true,
               member: {
                 select: {
                   id: true,
@@ -651,7 +653,7 @@ export async function fetchPostsEssayAnswersWithLikes(
               id: String(a.member.id),
               name: a.member.name,
               nickname: a.member.nickname,
-              email: a.member.email,
+              email: maskEmail(a.member.email),
               avatar: a.member.avatar
                 ? {
                     id: String(a.member.avatar.id),

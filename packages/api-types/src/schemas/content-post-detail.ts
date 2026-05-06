@@ -214,6 +214,7 @@ const PostEssayAnswerInFeedSchema = z
     id: z.string(),
     content: z.string(),
     likesCount: z.number().int(),
+    createdAt: z.iso.datetime().optional(),
     member: PostEssayAnswerMemberInFeedSchema.optional(),
   })
   .openapi('PostEssayAnswerInFeed')
