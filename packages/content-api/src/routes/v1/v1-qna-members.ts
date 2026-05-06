@@ -7,22 +7,32 @@ import {
   V1PatchPostChoiceAnswerBodySchema,
   V1PatchPostEssayAnswerBodySchema,
 } from '@kids-reporter/api-types'
-import { Prisma, prisma } from '@kids-reporter/db'
 import express from 'express'
 import { z } from 'zod'
 
 import { asyncRoute } from '../../async-route.js'
 import consts from '../../constants.js'
 import { verifyGoApiJwt } from '../../middlewares/verify-go-api-jwt.js'
-import { computeChoiceCorrect } from '../../qna-utils.js'
+import { findMemberIdRole } from '../../queries/members.js'
+import {
+  createMemberEssayAnswerLike,
+  createMemberPostChoiceAnswer,
+  createMemberPostEssayAnswer,
+  deleteMemberEssayAnswerLike,
+  listMemberPostChoiceAnswers,
+  listMemberPostEssayAnswers,
+  type MutationResult,
+  updateMemberPostChoiceAnswer,
+  updateMemberPostEssayAnswer,
+} from '../../queries/qna-members.js'
 import { sendJsonError } from '../../send-json-error.js'
+
+const statusCodes = consts.statusCodes
 
 function questionIdFromBody(raw: string | number): number | null {
   const n = Number(raw)
   return Number.isFinite(n) ? n : null
 }
-
-const statusCodes = consts.statusCodes
 
 /** Q&A mutations and member-scoped lists; parity with CMS list hooks in packages/cms/lists/post-*-answer*.ts */
 
@@ -35,10 +45,7 @@ async function requireMember(
     sendJsonError(res, statusCodes.unauthorized, 'unauthorized', 'Unauthorized')
     return null
   }
-  const m = await prisma.member.findUnique({
-    where: { twreporter_user_id: userId },
-    select: { id: true, role: true },
-  })
+  const m = await findMemberIdRole(userId)
   if (!m) {
     sendJsonError(res, 404, 'not_found', 'Not found')
     return null
@@ -50,126 +57,35 @@ async function requireMember(
   return { id: m.id }
 }
 
-async function updatePostChoiceAnswerForMember(
-  member: { id: string },
+/** Map a `MutationResult` short-circuit (`forbidden` / `not_found`) to a JSON error.
+ *  Returns true when an error response was sent. */
+function sendMutationError(
   res: express.Response,
-  id: number,
-  data: Record<string, unknown>
-): Promise<void> {
-  const existing = await prisma.postChoiceAnswer.findUnique({
-    where: { id },
-    select: { memberId: true, questionId: true },
-  })
-  if (!existing || existing.memberId !== member.id) {
+  result: MutationResult<unknown>
+): boolean {
+  if (result.kind === 'forbidden') {
     sendJsonError(res, 403, 'forbidden', 'Forbidden')
-    return
+    return true
   }
-
-  let choiceIndex: number | undefined =
-    typeof data.choiceIndex === 'number' ? data.choiceIndex : undefined
-  if (choiceIndex === undefined && existing.questionId != null) {
-    const cur = await prisma.postChoiceAnswer.findUnique({
-      where: { id },
-      select: { choiceIndex: true },
-    })
-    choiceIndex = cur?.choiceIndex
-  }
-
-  let correct: boolean | undefined
-  if (choiceIndex !== undefined && existing.questionId != null) {
-    correct = await computeChoiceCorrect(
-      prisma,
-      existing.questionId,
-      choiceIndex
-    )
-  }
-
-  const updated = await prisma.postChoiceAnswer.update({
-    where: { id },
-    data: {
-      ...(choiceIndex !== undefined ? { choiceIndex } : {}),
-      ...(correct !== undefined ? { correct } : {}),
-    },
-    select: {
-      id: true,
-      choiceIndex: true,
-      correct: true,
-    },
-  })
-
-  res.json({
-    id: String(updated.id),
-    choiceIndex: updated.choiceIndex,
-    correct: updated.correct,
-  })
-}
-
-async function updatePostEssayAnswerForMember(
-  member: { id: string },
-  res: express.Response,
-  id: number,
-  data: Record<string, unknown>
-): Promise<void> {
-  const existing = await prisma.postEssayAnswer.findUnique({
-    where: { id },
-    select: { memberId: true },
-  })
-  if (!existing || existing.memberId !== member.id) {
-    sendJsonError(res, 403, 'forbidden', 'Forbidden')
-    return
-  }
-
-  const content = data.content
-  if (typeof content !== 'string') {
-    sendJsonError(res, 400, 'invalid_request', 'Invalid body', {
-      reason: 'invalid_body',
-    })
-    return
-  }
-
-  const updated = await prisma.postEssayAnswer.update({
-    where: { id },
-    data: { content },
-    select: { id: true, content: true },
-  })
-
-  res.json({
-    id: String(updated.id),
-    content: updated.content,
-  })
-}
-
-async function deletePostEssayAnswerLikeForMember(
-  member: { id: string },
-  res: express.Response,
-  likeId: number
-): Promise<void> {
-  const existing = await prisma.postEssayAnswerLike.findUnique({
-    where: { id: likeId },
-    select: { id: true, memberId: true, answerId: true },
-  })
-  if (!existing) {
+  if (result.kind === 'not_found') {
     sendJsonError(res, 404, 'not_found', 'Not found')
-    return
+    return true
   }
-  if (existing.memberId !== member.id) {
-    sendJsonError(res, 403, 'forbidden', 'Forbidden')
-    return
-  }
+  return false
+}
 
-  await prisma.$transaction(async (tx) => {
-    await tx.postEssayAnswerLike.delete({
-      where: { id: likeId },
+function parseNumericIdParam(
+  req: express.Request,
+  res: express.Response
+): number | null {
+  const id = Number(req.params.id)
+  if (!Number.isFinite(id)) {
+    sendJsonError(res, 400, 'invalid_request', 'Invalid id', {
+      reason: 'invalid_id',
     })
-    if (existing.answerId != null) {
-      await tx.$executeRaw`
-        UPDATE "PostEssayAnswer" SET "likesCount" = "likesCount" - 1
-        WHERE "id" = ${existing.answerId} AND "likesCount" > 0
-      `
-    }
-  })
-
-  res.json({ id: String(existing.id) })
+    return null
+  }
+  return id
 }
 
 export function createV1QnaMembersRouter() {
@@ -183,26 +99,8 @@ export function createV1QnaMembersRouter() {
       if (!member) return
 
       const q = V1MemberPostChoiceAnswersQuerySchema.parse(req.query)
-      const rows = await prisma.postChoiceAnswer.findMany({
-        where: {
-          memberId: member.id,
-          ...(q.postSlug ? { question: { post: { slug: q.postSlug } } } : {}),
-        },
-        select: {
-          id: true,
-          choiceIndex: true,
-          correct: true,
-          question: { select: { id: true } },
-        },
-      })
-      res.json(
-        rows.map((r) => ({
-          id: String(r.id),
-          choiceIndex: r.choiceIndex,
-          correct: r.correct,
-          question: r.question ? { id: String(r.question.id) } : undefined,
-        }))
-      )
+      const rows = await listMemberPostChoiceAnswers(member.id, q.postSlug)
+      res.json(rows)
     })
   )
 
@@ -213,24 +111,8 @@ export function createV1QnaMembersRouter() {
       if (!member) return
 
       const q = V1MemberPostEssayAnswersQuerySchema.parse(req.query)
-      const rows = await prisma.postEssayAnswer.findMany({
-        where: {
-          memberId: member.id,
-          ...(q.postSlug ? { question: { post: { slug: q.postSlug } } } : {}),
-        },
-        select: {
-          id: true,
-          content: true,
-          question: { select: { id: true } },
-        },
-      })
-      res.json(
-        rows.map((r) => ({
-          id: String(r.id),
-          content: r.content,
-          question: r.question ? { id: String(r.question.id) } : undefined,
-        }))
-      )
+      const rows = await listMemberPostEssayAnswers(member.id, q.postSlug)
+      res.json(rows)
     })
   )
 
@@ -254,37 +136,11 @@ export function createV1QnaMembersRouter() {
         return
       }
 
-      const correct = await computeChoiceCorrect(
-        prisma,
+      const created = await createMemberPostChoiceAnswer(member.id, {
         questionId,
-        choiceIndex
-      )
-      const compositeKey = `${questionId}:${member.id}`
-
-      const created = await prisma.postChoiceAnswer.create({
-        data: {
-          questionId,
-          memberId: member.id,
-          choiceIndex,
-          correct,
-          compositeKey,
-        },
-        select: {
-          id: true,
-          choiceIndex: true,
-          correct: true,
-          question: { select: { id: true } },
-        },
+        choiceIndex,
       })
-
-      res.json({
-        id: String(created.id),
-        choiceIndex: created.choiceIndex,
-        correct: created.correct,
-        question: created.question
-          ? { id: String(created.question.id) }
-          : undefined,
-      })
+      res.json(created)
     })
   )
 
@@ -294,23 +150,19 @@ export function createV1QnaMembersRouter() {
       const member = await requireMember(req, res)
       if (!member) return
 
-      const id = Number(req.params.id)
-      if (!Number.isFinite(id)) {
-        sendJsonError(res, 400, 'invalid_request', 'Invalid id', {
-          reason: 'invalid_id',
-        })
-        return
-      }
+      const id = parseNumericIdParam(req, res)
+      if (id == null) return
 
       const parsed = V1PatchPostChoiceAnswerBodySchema.safeParse(req.body ?? {})
       if (!parsed.success) throw new z.ZodError(parsed.error.issues)
 
-      await updatePostChoiceAnswerForMember(
-        member,
-        res,
+      const result = await updateMemberPostChoiceAnswer(
+        member.id,
         id,
-        parsed.data as Record<string, unknown>
+        parsed.data as { choiceIndex?: number }
       )
+      if (sendMutationError(res, result)) return
+      res.json(result.kind === 'ok' ? result.data : undefined)
     })
   )
 
@@ -332,28 +184,11 @@ export function createV1QnaMembersRouter() {
         return
       }
 
-      const compositeKey = `${questionId}:${member.id}`
-      const created = await prisma.postEssayAnswer.create({
-        data: {
-          questionId,
-          memberId: member.id,
-          content,
-          compositeKey,
-        },
-        select: {
-          id: true,
-          content: true,
-          question: { select: { id: true } },
-        },
+      const created = await createMemberPostEssayAnswer(member.id, {
+        questionId,
+        content,
       })
-
-      res.json({
-        id: String(created.id),
-        content: created.content,
-        question: created.question
-          ? { id: String(created.question.id) }
-          : undefined,
-      })
+      res.json(created)
     })
   )
 
@@ -363,23 +198,23 @@ export function createV1QnaMembersRouter() {
       const member = await requireMember(req, res)
       if (!member) return
 
-      const id = Number(req.params.id)
-      if (!Number.isFinite(id)) {
-        sendJsonError(res, 400, 'invalid_request', 'Invalid id', {
-          reason: 'invalid_id',
-        })
-        return
-      }
+      const id = parseNumericIdParam(req, res)
+      if (id == null) return
 
       const parsed = V1PatchPostEssayAnswerBodySchema.safeParse(req.body ?? {})
       if (!parsed.success) throw new z.ZodError(parsed.error.issues)
 
-      await updatePostEssayAnswerForMember(
-        member,
-        res,
-        id,
-        parsed.data as Record<string, unknown>
-      )
+      const content = (parsed.data as { content?: unknown }).content
+      if (typeof content !== 'string') {
+        sendJsonError(res, 400, 'invalid_request', 'Invalid body', {
+          reason: 'invalid_body',
+        })
+        return
+      }
+
+      const result = await updateMemberPostEssayAnswer(member.id, id, content)
+      if (sendMutationError(res, result)) return
+      res.json(result.kind === 'ok' ? result.data : undefined)
     })
   )
 
@@ -402,45 +237,15 @@ export function createV1QnaMembersRouter() {
         return
       }
 
-      const compositeKey = `${answerId}:${member.id}`
-
-      try {
-        const like = await prisma.$transaction(async (tx) => {
-          const row = await tx.postEssayAnswerLike.create({
-            data: {
-              answerId,
-              memberId: member.id,
-              compositeKey,
-            },
-            select: {
-              id: true,
-              answerId: true,
-              memberId: true,
-            },
-          })
-          await tx.$executeRaw`
-            UPDATE "PostEssayAnswer" SET "likesCount" = "likesCount" + 1 WHERE "id" = ${answerId}
-          `
-          return row
+      const result = await createMemberEssayAnswerLike(member.id, answerId)
+      if (result.kind === 'duplicate') {
+        sendJsonError(res, 409, 'conflict', 'Conflict', {
+          reason: 'duplicate_like',
         })
-
-        res.json({
-          id: String(like.id),
-          answer: { id: String(like.answerId) },
-          member: { id: like.memberId },
-        })
-      } catch (e) {
-        if (
-          e instanceof Prisma.PrismaClientKnownRequestError &&
-          e.code === 'P2002'
-        ) {
-          sendJsonError(res, 409, 'conflict', 'Conflict', {
-            reason: 'duplicate_like',
-          })
-          return
-        }
-        throw e
+        return
       }
+      if (sendMutationError(res, result)) return
+      res.json(result.kind === 'ok' ? result.data : undefined)
     })
   )
 
@@ -450,15 +255,12 @@ export function createV1QnaMembersRouter() {
       const member = await requireMember(req, res)
       if (!member) return
 
-      const likeId = Number(req.params.id)
-      if (!Number.isFinite(likeId)) {
-        sendJsonError(res, 400, 'invalid_request', 'Invalid id', {
-          reason: 'invalid_id',
-        })
-        return
-      }
+      const likeId = parseNumericIdParam(req, res)
+      if (likeId == null) return
 
-      await deletePostEssayAnswerLikeForMember(member, res, likeId)
+      const result = await deleteMemberEssayAnswerLike(member.id, likeId)
+      if (sendMutationError(res, result)) return
+      res.json(result.kind === 'ok' ? result.data : undefined)
     })
   )
 
