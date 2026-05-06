@@ -7,6 +7,7 @@ import {
   V1PatchPostChoiceAnswerBodySchema,
   V1PatchPostEssayAnswerBodySchema,
 } from '@kids-reporter/api-types'
+import { Prisma } from '@kids-reporter/db'
 import express from 'express'
 import { z } from 'zod'
 
@@ -136,11 +137,24 @@ export function createV1QnaMembersRouter() {
         return
       }
 
-      const created = await createMemberPostChoiceAnswer(member.id, {
-        questionId,
-        choiceIndex,
-      })
-      res.json(created)
+      try {
+        const created = await createMemberPostChoiceAnswer(member.id, {
+          questionId,
+          choiceIndex,
+        })
+        res.json(created)
+      } catch (e) {
+        if (
+          e instanceof Prisma.PrismaClientKnownRequestError &&
+          e.code === 'P2002'
+        ) {
+          sendJsonError(res, 409, 'conflict', 'Conflict', {
+            reason: 'duplicate_choice_answer',
+          })
+          return
+        }
+        throw e
+      }
     })
   )
 
@@ -184,11 +198,24 @@ export function createV1QnaMembersRouter() {
         return
       }
 
-      const created = await createMemberPostEssayAnswer(member.id, {
-        questionId,
-        content,
-      })
-      res.json(created)
+      try {
+        const created = await createMemberPostEssayAnswer(member.id, {
+          questionId,
+          content,
+        })
+        res.json(created)
+      } catch (e) {
+        if (
+          e instanceof Prisma.PrismaClientKnownRequestError &&
+          e.code === 'P2002'
+        ) {
+          sendJsonError(res, 409, 'conflict', 'Conflict', {
+            reason: 'duplicate_essay_answer',
+          })
+          return
+        }
+        throw e
+      }
     })
   )
 

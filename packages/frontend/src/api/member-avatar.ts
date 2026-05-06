@@ -40,10 +40,10 @@ export const uploadMemberAvatar = async (
         {
           headers: {
             ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-            'apollo-require-preflight': 'true',
             ...buildTraceHeaders(),
           },
-          withCredentials: true,
+          // content-api /v1/* routes are bearer-token auth, not cookie auth
+          withCredentials: false,
           timeout: envVars.requestTimeoutMs,
         }
       )
