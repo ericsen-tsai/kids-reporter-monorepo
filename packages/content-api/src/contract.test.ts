@@ -19,7 +19,7 @@ import type { z } from 'zod'
 import { createApp } from './app.js'
 
 const describeWithDb = process.env.DATABASE_URL ? describe : describe.skip
-const app = createApp({ corsAllowOrigin: '*' })
+const app = createApp({ corsAllowOrigin: ['https://kids.twreporter.org'] })
 
 async function expectRouteMatchesSchema(
   path: string,
