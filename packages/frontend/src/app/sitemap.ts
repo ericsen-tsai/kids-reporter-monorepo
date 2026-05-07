@@ -16,13 +16,6 @@ import type {
 } from '__generated__/operations/content.generated'
 import { MetadataRoute } from 'next'
 
-type SitemapPostRow = NonNullable<
-  NonNullable<GetPostsForSitemapQuery['posts']>[number]
->
-type SitemapProjectRow = NonNullable<
-  NonNullable<GetProjectsForSitemapQuery['projects']>[number]
->
-
 import {
   getSitemapPostsContentApi,
   getSitemapProjectsContentApi,
@@ -35,6 +28,13 @@ import {
   buildSitemapPostsWhereInput,
   buildSitemapProjectsWhereInput,
 } from '@/utils/sitemap-graphql-where'
+
+type SitemapPostRow = NonNullable<
+  NonNullable<GetPostsForSitemapQuery['posts']>[number]
+>
+type SitemapProjectRow = NonNullable<
+  NonNullable<GetProjectsForSitemapQuery['projects']>[number]
+>
 
 export const revalidate = envVars.isProduction ? 86400 : 0 // 1 day
 

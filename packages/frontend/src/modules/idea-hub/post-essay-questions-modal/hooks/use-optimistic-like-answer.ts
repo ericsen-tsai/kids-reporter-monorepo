@@ -174,7 +174,7 @@ function useOptimisticLikeAnswer({
           })
         } else {
           // Create like
-          await createMutation.mutateAsync({
+          const createdLike = await createMutation.mutateAsync({
             data: {
               answer: {
                 connect: {
@@ -183,6 +183,28 @@ function useOptimisticLikeAnswer({
               },
             },
           })
+
+          const createdLikeId = (createdLike as { id?: string } | undefined)?.id
+          if (createdLikeId) {
+            queryClient.setQueryData(
+              hasLikedQueryKey,
+              (
+                old: ReturnType<
+                  typeof useGetMemberEssayAnswersHasLikedQuery
+                >['data']
+              ) => {
+                if (!Array.isArray(old)) return old
+
+                return old.map((item) => {
+                  if (item?.essayAnswerId !== answerId) return item
+                  return {
+                    ...item,
+                    essayAnswerLikeId: createdLikeId,
+                  }
+                })
+              }
+            )
+          }
         }
       } catch (error) {
         // Rollback on error
