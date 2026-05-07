@@ -5,7 +5,7 @@ import {
   buildResizedSmall,
   mapPostCard,
   postCardSelect,
-} from '../v1-helpers.js'
+} from '../utils/v1-helpers.js'
 
 const PUBLISHED_FEED_ORDER = { publishedDate: 'desc' } as const
 

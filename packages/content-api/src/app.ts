@@ -12,7 +12,7 @@ import { createAuthRouter } from './routes/auth.js'
 import { createHealthRouter } from './routes/health.js'
 import { createOpenApiRouter } from './routes/openapi.js'
 import { createV1Router } from './routes/v1/index.js'
-import { sendJsonError } from './send-json-error.js'
+import { sendJsonError } from './utils/send-json-error.js'
 
 const errors = _errors.default
 const statusCodes = consts.statusCodes

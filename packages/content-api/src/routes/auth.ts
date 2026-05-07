@@ -9,7 +9,7 @@ import {
   type GoApiAccessTokenPayload,
   verifyGoApiAccessToken,
 } from '../go-api-jwt.js'
-import { sendJsonError } from '../send-json-error.js'
+import { sendJsonError } from '../utils/send-json-error.js'
 
 const statusCodes = consts.statusCodes
 

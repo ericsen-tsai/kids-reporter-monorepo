@@ -1,10 +1,10 @@
 import { prisma } from '@kids-reporter/db'
 
-import { maskEmail } from '../mask-email.js'
+import { maskEmail } from '../utils/mask-email.js'
 import {
   buildMemberAvatarFileUrl,
   essayAnswerOrderByFromFlat,
-} from '../qna-utils.js'
+} from '../utils/qna-utils.js'
 
 const memberWithAvatarSelect = {
   id: true,

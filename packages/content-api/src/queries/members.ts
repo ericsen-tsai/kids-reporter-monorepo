@@ -10,7 +10,7 @@ import { prisma } from '@kids-reporter/db'
 import type { z } from 'zod'
 
 import envVar from '../environment-variables.js'
-import { buildMemberAvatarFileUrl } from '../qna-utils.js'
+import { buildMemberAvatarFileUrl } from '../utils/qna-utils.js'
 
 export type MemberProfileDto = z.infer<typeof V1MemberProfileSchema>
 export type MemberProfilePatchInput = z.infer<

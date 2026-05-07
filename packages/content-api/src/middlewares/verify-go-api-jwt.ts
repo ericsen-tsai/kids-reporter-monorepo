@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from 'express'
 
 import consts from '../constants.js'
 import { verifyGoApiAccessToken } from '../go-api-jwt.js'
-import { sendJsonError } from '../send-json-error.js'
+import { sendJsonError } from '../utils/send-json-error.js'
 
 const statusCodes = consts.statusCodes
 

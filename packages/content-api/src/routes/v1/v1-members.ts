@@ -9,7 +9,6 @@ import express from 'express'
 import multer from 'multer'
 import { z } from 'zod'
 
-import { asyncRoute } from '../../async-route.js'
 import consts from '../../constants.js'
 import envVar from '../../environment-variables.js'
 import { verifyGoApiJwt } from '../../middlewares/verify-go-api-jwt.js'
@@ -26,7 +25,8 @@ import {
   replaceMemberAvatar,
   updateMemberProfile,
 } from '../../queries/members.js'
-import { sendJsonError } from '../../send-json-error.js'
+import { asyncRoute } from '../../utils/async-route.js'
+import { sendJsonError } from '../../utils/send-json-error.js'
 
 const statusCodes = consts.statusCodes
 

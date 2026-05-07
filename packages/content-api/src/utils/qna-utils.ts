@@ -1,6 +1,6 @@
 import type { Prisma } from '@kids-reporter/db'
 
-import envVar from './environment-variables.js'
+import envVar from '../environment-variables.js'
 
 export const buildMemberAvatarFileUrl = (avatar: {
   imageFile_id: string | null

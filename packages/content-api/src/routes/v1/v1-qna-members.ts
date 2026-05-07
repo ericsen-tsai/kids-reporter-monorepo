@@ -11,7 +11,6 @@ import { Prisma } from '@kids-reporter/db'
 import express from 'express'
 import { z } from 'zod'
 
-import { asyncRoute } from '../../async-route.js'
 import consts from '../../constants.js'
 import { verifyGoApiJwt } from '../../middlewares/verify-go-api-jwt.js'
 import { findMemberIdRole } from '../../queries/members.js'
@@ -26,7 +25,8 @@ import {
   updateMemberPostChoiceAnswer,
   updateMemberPostEssayAnswer,
 } from '../../queries/qna-members.js'
-import { sendJsonError } from '../../send-json-error.js'
+import { asyncRoute } from '../../utils/async-route.js'
+import { sendJsonError } from '../../utils/send-json-error.js'
 
 const statusCodes = consts.statusCodes
 
