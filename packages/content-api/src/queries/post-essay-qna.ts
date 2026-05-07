@@ -120,6 +120,7 @@ export async function fetchPostEssayQuestionWithAnswers(
           content: true,
           likesCount: true,
           member: { select: memberWithAvatarSelect },
+          createdAt: true,
         },
       },
     },
@@ -135,6 +136,7 @@ export async function fetchPostEssayQuestionWithAnswers(
       content: a.content,
       likesCount: a.likesCount,
       member: mapMemberWithAvatar(a.member as MemberWithAvatarRow | null),
+      createdAt: a.createdAt?.toISOString(),
     })),
   }
 }

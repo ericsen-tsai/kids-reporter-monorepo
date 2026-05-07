@@ -90,6 +90,7 @@ const EssayAnswerThreadItemSchema = z
     content: z.string(),
     member: QnaMemberPublicSchema.optional(),
     likesCount: z.number().int(),
+    createdAt: z.string().optional(),
   })
   .openapi('EssayAnswerThreadItem')
 
