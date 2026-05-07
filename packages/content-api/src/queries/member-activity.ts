@@ -1,4 +1,9 @@
+import {
+  V1EssayAnswersHasLikedResponseSchema,
+  V1MemberPostsWithAnswersResponseSchema,
+} from '@kids-reporter/api-types'
 import { Prisma, prisma } from '@kids-reporter/db'
+import type { z } from 'zod'
 
 type RawPostRow = {
   id: number
@@ -7,6 +12,13 @@ type RawPostRow = {
   published_date: Date | null
   last_answered_time: Date
 }
+
+type V1MemberPostsWithAnswersResponse = z.infer<
+  typeof V1MemberPostsWithAnswersResponseSchema
+>
+type V1EssayAnswersHasLikedResponse = z.infer<
+  typeof V1EssayAnswersHasLikedResponseSchema
+>
 
 type ChoiceOptionRaw = { content?: unknown; isCorrectAnswer?: unknown }
 
@@ -28,7 +40,7 @@ export type FetchMemberPostsWithAnswersOpts = {
 export async function fetchMemberPostsWithAnswers(
   memberId: string,
   opts: FetchMemberPostsWithAnswersOpts
-) {
+): Promise<V1MemberPostsWithAnswersResponse> {
   const whereClause = opts.cursor
     ? Prisma.sql`WHERE pla.last_answered_time < ${opts.cursor}::timestamp`
     : Prisma.empty
@@ -184,7 +196,7 @@ export async function fetchMemberPostsWithAnswers(
 export async function fetchMemberEssayAnswerLikes(
   memberId: string,
   essayAnswerIds: string[]
-) {
+): Promise<V1EssayAnswersHasLikedResponse> {
   if (!essayAnswerIds.length) return []
 
   const ids = essayAnswerIds

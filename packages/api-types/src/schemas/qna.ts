@@ -252,37 +252,37 @@ export const V1CreatePostEssayAnswerLikeBodySchema = z.object({
   answerId: connectIdSchema,
 })
 
-const CreatePostChoiceAnswerResponseSchema = z.object({
+export const V1CreatePostChoiceAnswerResponseSchema = z.object({
   id: z.string(),
   choiceIndex: z.number().int(),
   correct: z.boolean(),
   question: z.object({ id: z.string() }).optional(),
 })
 
-const UpdatePostChoiceAnswerResponseSchema = z.object({
+export const V1UpdatePostChoiceAnswerResponseSchema = z.object({
   id: z.string(),
   choiceIndex: z.number().int(),
   correct: z.boolean(),
 })
 
-const CreatePostEssayAnswerResponseSchema = z.object({
+export const V1CreatePostEssayAnswerResponseSchema = z.object({
   id: z.string(),
   content: z.string(),
   question: z.object({ id: z.string() }).optional(),
 })
 
-const UpdatePostEssayAnswerResponseSchema = z.object({
+export const V1UpdatePostEssayAnswerResponseSchema = z.object({
   id: z.string(),
   content: z.string(),
 })
 
-const CreatePostEssayAnswerLikeResponseSchema = z.object({
+export const V1CreatePostEssayAnswerLikeResponseSchema = z.object({
   id: z.string(),
   answer: z.object({ id: z.string() }),
   member: z.object({ id: z.string() }),
 })
 
-const DeletePostEssayAnswerLikeResponseSchema = z.object({
+export const V1DeletePostEssayAnswerLikeResponseSchema = z.object({
   id: z.string(),
 })
 
@@ -315,7 +315,7 @@ registry.registerPath({
     200: {
       description: 'Created',
       content: {
-        'application/json': { schema: CreatePostChoiceAnswerResponseSchema },
+        'application/json': { schema: V1CreatePostChoiceAnswerResponseSchema },
       },
     },
     400: {
@@ -354,7 +354,7 @@ registry.registerPath({
     200: {
       description: 'Updated',
       content: {
-        'application/json': { schema: UpdatePostChoiceAnswerResponseSchema },
+        'application/json': { schema: V1UpdatePostChoiceAnswerResponseSchema },
       },
     },
     400: {
@@ -388,7 +388,7 @@ registry.registerPath({
     200: {
       description: 'Created',
       content: {
-        'application/json': { schema: CreatePostEssayAnswerResponseSchema },
+        'application/json': { schema: V1CreatePostEssayAnswerResponseSchema },
       },
     },
     400: {
@@ -427,7 +427,7 @@ registry.registerPath({
     200: {
       description: 'Updated',
       content: {
-        'application/json': { schema: UpdatePostEssayAnswerResponseSchema },
+        'application/json': { schema: V1UpdatePostEssayAnswerResponseSchema },
       },
     },
     400: {
@@ -462,7 +462,9 @@ registry.registerPath({
     200: {
       description: 'Created',
       content: {
-        'application/json': { schema: CreatePostEssayAnswerLikeResponseSchema },
+        'application/json': {
+          schema: V1CreatePostEssayAnswerLikeResponseSchema,
+        },
       },
     },
     400: {
@@ -501,7 +503,9 @@ registry.registerPath({
     200: {
       description: 'Deleted',
       content: {
-        'application/json': { schema: DeletePostEssayAnswerLikeResponseSchema },
+        'application/json': {
+          schema: V1DeletePostEssayAnswerLikeResponseSchema,
+        },
       },
     },
     400: {

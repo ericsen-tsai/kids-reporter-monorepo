@@ -1,4 +1,13 @@
+import {
+  V1CategoryBySlugCategoryPostsResponseSchema,
+  V1CategoryBySlugMetadataResponseSchema,
+  V1CategoryBySlugSubcategoriesThemeResponseSchema,
+  V1SubcategoriesResponseSchema,
+  V1SubcategoryBySlugPostsResponseSchema,
+  V1SubSubcategoryBySlugPostsResponseSchema,
+} from '@kids-reporter/api-types'
 import { prisma } from '@kids-reporter/db'
+import type { z } from 'zod'
 
 import {
   buildCategoryFeedPostWhere,
@@ -29,14 +38,31 @@ const mapOgImageMedium = (
       }
     : null
 
+type V1SubcategoriesResponse = z.infer<typeof V1SubcategoriesResponseSchema>
+type V1CategoryBySlugMetadataResponse = z.infer<
+  typeof V1CategoryBySlugMetadataResponseSchema
+>
+type V1CategoryBySlugSubcategoriesThemeResponse = z.infer<
+  typeof V1CategoryBySlugSubcategoriesThemeResponseSchema
+>
+type V1CategoryBySlugCategoryPostsResponse = z.infer<
+  typeof V1CategoryBySlugCategoryPostsResponseSchema
+>
+type V1SubcategoryBySlugPostsResponse = z.infer<
+  typeof V1SubcategoryBySlugPostsResponseSchema
+>
+type V1SubSubcategoryBySlugPostsResponse = z.infer<
+  typeof V1SubSubcategoryBySlugPostsResponseSchema
+>
+
 export type FeedPagination = {
   take: number
   skip: number
 }
 
 /** `GET /v1/subcategories` */
-export async function fetchSubcategoriesList() {
-  return prisma.subcategory.findMany({
+export async function fetchSubcategoriesList(): Promise<V1SubcategoriesResponse> {
+  const result = await prisma.subcategory.findMany({
     select: {
       id: true,
       name: true,
@@ -48,13 +74,14 @@ export async function fetchSubcategoriesList() {
       },
     },
   })
+  return result
 }
 
 /** `GET /v1/categories/by-slug/:slug/metadata` */
 export async function fetchCategoryMetadata(
   slug: string,
   subcategorySlug: string | undefined
-) {
+): Promise<V1CategoryBySlugMetadataResponse | null> {
   const category = await prisma.category.findUnique({
     where: { slug },
     select: {
@@ -72,7 +99,7 @@ export async function fetchCategoryMetadata(
     },
   })
   if (!category) return null
-  return {
+  const result = {
     ogTitle: category.ogTitle,
     ogDescription: category.ogDescription,
     ogImage: mapOgImageMedium(category.ogImage),
@@ -82,10 +109,13 @@ export async function fetchCategoryMetadata(
       ogImage: mapOgImageMedium(s.ogImage),
     })),
   }
+  return result
 }
 
 /** `GET /v1/categories/by-slug/:slug/subcategories-theme` */
-export async function fetchCategorySubcategoriesTheme(slug: string) {
+export async function fetchCategorySubcategoriesTheme(
+  slug: string
+): Promise<V1CategoryBySlugSubcategoriesThemeResponse | null> {
   const category = await prisma.category.findUnique({
     where: { slug },
     select: {
@@ -98,11 +128,12 @@ export async function fetchCategorySubcategoriesTheme(slug: string) {
     },
   })
   if (!category) return null
-  return {
+  const result = {
     name: category.name,
     themeColor: category.themeColor,
     subcategories: category.subcategories,
   }
+  return result
 }
 
 /** Walk down to all sub-subcategory ids under a category slug. Empty array if category missing. */
@@ -133,7 +164,7 @@ async function collectSubSubcategoryIdsForCategorySlug(
 export async function fetchCategoryFeedPosts(
   slug: string,
   opts: FeedPagination
-) {
+): Promise<V1CategoryBySlugCategoryPostsResponse> {
   const subIds = await collectSubSubcategoryIdsForCategorySlug(slug)
   if (subIds.length === 0) {
     return { relatedPosts: [], relatedPostsCount: 0 }
@@ -149,17 +180,18 @@ export async function fetchCategoryFeedPosts(
     }),
     prisma.post.count({ where }),
   ])
-  return {
+  const result = {
     relatedPosts: posts.map(mapPostCard),
     relatedPostsCount,
   }
+  return result
 }
 
 /** `GET /v1/subcategories/by-slug/:slug/posts` (404 when subcategory missing). */
 export async function fetchSubcategoryFeedPosts(
   slug: string,
   opts: FeedPagination
-) {
+): Promise<V1SubcategoryBySlugPostsResponse | null> {
   const sub = await prisma.subcategory.findUnique({
     where: { slug },
     select: {
@@ -190,11 +222,12 @@ export async function fetchSubcategoryFeedPosts(
     }),
     prisma.post.count({ where }),
   ])
-  return {
+  const result = {
     relatedPosts: posts.map(mapPostCard),
     relatedPostsCount,
     category: { slug: categorySlug },
   }
+  return result
 }
 
 /** `GET /v1/sub-subcategories/by-slug/:slug/posts` (404 when sub-subcategory missing). */
@@ -202,7 +235,7 @@ export async function fetchSubSubcategoryFeedPosts(
   slug: string,
   opts: FeedPagination,
   now: Date
-) {
+): Promise<V1SubSubcategoryBySlugPostsResponse | null> {
   const ss = await prisma.subSubcategory.findUnique({
     where: { slug },
     select: {
@@ -233,7 +266,7 @@ export async function fetchSubSubcategoryFeedPosts(
     }),
     prisma.post.count({ where }),
   ])
-  return {
+  const result = {
     relatedPosts: posts.map(mapPostCard),
     relatedPostsCount,
     subcategory: {
@@ -241,4 +274,5 @@ export async function fetchSubSubcategoryFeedPosts(
       category: { slug: ss.subcategory?.category?.slug ?? '' },
     },
   }
+  return result
 }

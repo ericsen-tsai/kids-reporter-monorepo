@@ -1,4 +1,13 @@
+import {
+  V1PostDetailBodySchema,
+  V1PostEssayQuestionsBodySchema,
+  V1PostMetaBodySchema,
+  V1PostsEssayAnswersWithLikesResponseSchema,
+  V1ProjectBySlugDetailResponseSchema,
+  V1ProjectBySlugMetaResponseSchema,
+} from '@kids-reporter/api-types'
 import { type Prisma, prisma } from '@kids-reporter/db'
+import type { z } from 'zod'
 
 import { maskEmail } from '../utils/mask-email.js'
 import {
@@ -16,6 +25,19 @@ import {
   type PostCardRow,
   postCardSelect,
 } from '../utils/v1-helpers.js'
+
+type V1ProjectBySlugMetaResponse = z.infer<
+  typeof V1ProjectBySlugMetaResponseSchema
+>
+type V1ProjectBySlugDetailResponse = z.infer<
+  typeof V1ProjectBySlugDetailResponseSchema
+>
+type V1PostDetailBody = z.infer<typeof V1PostDetailBodySchema>
+type V1PostMetaBody = z.infer<typeof V1PostMetaBodySchema>
+type V1PostEssayQuestionsBody = z.infer<typeof V1PostEssayQuestionsBodySchema>
+type V1PostsEssayAnswersWithLikesResponse = z.infer<
+  typeof V1PostsEssayAnswersWithLikesResponseSchema
+>
 
 const subSubFullSelect = {
   id: true,
@@ -154,7 +176,9 @@ const mapRelatedPostOrdered = (p: RelatedPostRow) => {
   }
 }
 
-export async function fetchPublishedProjectMetaBySlug(slug: string) {
+export async function fetchPublishedProjectMetaBySlug(
+  slug: string
+): Promise<V1ProjectBySlugMetaResponse | null> {
   const project = await prisma.project.findFirst({
     where: { slug, status: 'published' },
     select: {
@@ -167,7 +191,7 @@ export async function fetchPublishedProjectMetaBySlug(slug: string) {
     },
   })
   if (!project) return null
-  return {
+  const result = {
     publishedDate: project.publishedDate?.toISOString(),
     ogDescription: project.ogDescription,
     ogTitle: project.ogTitle,
@@ -175,12 +199,13 @@ export async function fetchPublishedProjectMetaBySlug(slug: string) {
       ? { resized: { small: buildResizedSmall(project.ogImage) } }
       : null,
   }
+  return result
 }
 
 export async function fetchPublishedProjectDetailBySlug(
   slug: string,
   now: Date
-) {
+): Promise<V1ProjectBySlugDetailResponse | null> {
   const project = await prisma.project.findFirst({
     where: { slug, status: 'published' },
     select: {
@@ -209,7 +234,7 @@ export async function fetchPublishedProjectDetailBySlug(
     project.relatedPosts as RelatedPostRow[],
     asOrderJson(project.relatedPostsOrderJson)
   ).map(mapRelatedPostOrdered)
-  return {
+  const result = {
     title: project.title,
     titlePosition: project.titlePosition,
     subtitle: project.subtitle,
@@ -236,6 +261,7 @@ export async function fetchPublishedProjectDetailBySlug(
       : undefined,
     relatedPostsOrdered,
   }
+  return result
 }
 
 function newsReadingItemsOrderBy(
@@ -288,7 +314,7 @@ export async function fetchPostDetailBySlug(
   slug: string,
   now: Date,
   opts: PostDetailQueryOpts
-) {
+): Promise<V1PostDetailBody | null> {
   const publicWhere = buildPublicPostWhere(now)
   const newsReadingOrder = newsReadingItemsOrderBy([{ order: 'asc' }])
   const relatedPostsWhere: Prisma.PostWhereInput = { slug: { notIn: [slug] } }
@@ -383,7 +409,13 @@ export async function fetchPostDetailBySlug(
   ).map(mapRelatedPostOrdered)
 
   const hero = post.heroImage
-  return {
+  const brief =
+    post.brief == null
+      ? post.brief
+      : typeof post.brief === 'string'
+        ? post.brief
+        : JSON.stringify(post.brief)
+  const result = {
     opening: post.opening,
     title: post.title,
     showBaodaozai: post.showBaodaozai,
@@ -395,7 +427,7 @@ export async function fetchPostDetailBySlug(
           })),
         }
       : undefined,
-    brief: post.brief,
+    brief,
     content: post.content,
     publishedDate: post.publishedDate
       ? post.publishedDate.toISOString()
@@ -477,9 +509,13 @@ export async function fetchPostDetailBySlug(
       reason: q.reason,
     })),
   }
+  return result
 }
 
-export async function fetchPostMetaBySlug(slug: string, now: Date) {
+export async function fetchPostMetaBySlug(
+  slug: string,
+  now: Date
+): Promise<V1PostMetaBody | null> {
   const publicWhere = buildPublicPostWhere(now)
   const post = await prisma.post.findFirst({
     where: { AND: [{ slug }, publicWhere] },
@@ -499,7 +535,7 @@ export async function fetchPostMetaBySlug(slug: string, now: Date) {
     post.subSubcategories,
     asOrderJson(post.subSubcategoriesOrderJson)
   ).map(mapSubSubFull)
-  return {
+  const result = {
     publishedDate: post.publishedDate
       ? post.publishedDate.toISOString()
       : undefined,
@@ -511,12 +547,16 @@ export async function fetchPostMetaBySlug(slug: string, now: Date) {
             small: buildResizedSmall(post.ogImage),
           },
         }
-      : undefined,
+      : null,
     subSubcategoriesOrdered,
   }
+  return result
 }
 
-export async function fetchPostEssayQuestionsBySlug(slug: string, now: Date) {
+export async function fetchPostEssayQuestionsBySlug(
+  slug: string,
+  now: Date
+): Promise<V1PostEssayQuestionsBody | null> {
   const publicWhere = buildPublicPostWhere(now)
   const post = await prisma.post.findFirst({
     where: { AND: [{ slug }, publicWhere] },
@@ -540,7 +580,7 @@ export async function fetchPostEssayQuestionsBySlug(slug: string, now: Date) {
     post.subSubcategories,
     asOrderJson(post.subSubcategoriesOrderJson)
   ).map((s) => ({ name: s.name }))
-  return {
+  const result = {
     id: String(post.id),
     slug: post.slug,
     title: post.title,
@@ -558,6 +598,7 @@ export async function fetchPostEssayQuestionsBySlug(slug: string, now: Date) {
     })),
     subSubcategoriesOrdered,
   }
+  return result
 }
 
 export type EssayAnswersWithLikesQueryOpts = {
@@ -572,7 +613,7 @@ export type EssayAnswersWithLikesQueryOpts = {
 export async function fetchPostsEssayAnswersWithLikes(
   opts: EssayAnswersWithLikesQueryOpts,
   now: Date
-) {
+): Promise<V1PostsEssayAnswersWithLikesResponse> {
   const where: Prisma.PostWhereInput = {
     AND: [buildPublicPostWhere(now), opts.where],
   }
@@ -625,7 +666,7 @@ export async function fetchPostsEssayAnswersWithLikes(
     },
   })
 
-  return posts.map((p) => ({
+  const result = posts.map((p) => ({
     id: String(p.id),
     title: p.title,
     slug: p.slug,
@@ -665,4 +706,5 @@ export async function fetchPostsEssayAnswersWithLikes(
       })),
     })),
   }))
+  return result
 }

@@ -1,10 +1,22 @@
+import {
+  V1AllPostEssayAnswersResponseSchema,
+  V1PostEssayQuestionWithAnswersResponseSchema,
+} from '@kids-reporter/api-types'
 import { prisma } from '@kids-reporter/db'
+import type { z } from 'zod'
 
 import { maskEmail } from '../utils/mask-email.js'
 import {
   buildMemberAvatarFileUrl,
   essayAnswerOrderByFromFlat,
 } from '../utils/qna-utils.js'
+
+type V1AllPostEssayAnswersResponse = z.infer<
+  typeof V1AllPostEssayAnswersResponseSchema
+>
+type V1PostEssayQuestionWithAnswersResponse = z.infer<
+  typeof V1PostEssayQuestionWithAnswersResponseSchema
+>
 
 const memberWithAvatarSelect = {
   id: true,
@@ -56,7 +68,7 @@ export type FetchPostEssayAnswersListOpts = {
 /** `GET /v1/post-essay-answers` */
 export async function fetchPostEssayAnswersList(
   opts: FetchPostEssayAnswersListOpts
-) {
+): Promise<V1AllPostEssayAnswersResponse> {
   const rows = await prisma.postEssayAnswer.findMany({
     take: opts.take,
     orderBy: essayAnswerOrderByFromFlat(opts.orderBy),
@@ -78,7 +90,7 @@ export async function fetchPostEssayAnswersList(
     },
   })
 
-  return rows.map((r) => ({
+  const result = rows.map((r) => ({
     id: String(r.id),
     createdAt: r.createdAt?.toISOString(),
     question: r.question
@@ -92,6 +104,7 @@ export async function fetchPostEssayAnswersList(
     content: r.content,
     likesCount: r.likesCount,
   }))
+  return result
 }
 
 export type FetchPostEssayQuestionWithAnswersOpts = {
@@ -104,7 +117,7 @@ export type FetchPostEssayQuestionWithAnswersOpts = {
 export async function fetchPostEssayQuestionWithAnswers(
   questionId: number,
   opts: FetchPostEssayQuestionWithAnswersOpts
-) {
+): Promise<V1PostEssayQuestionWithAnswersResponse | null> {
   const question = await prisma.postEssayQuestion.findUnique({
     where: { id: questionId },
     select: {
@@ -127,7 +140,7 @@ export async function fetchPostEssayQuestionWithAnswers(
   })
   if (!question) return null
 
-  return {
+  const result = {
     id: String(question.id),
     title: question.title,
     hint: question.hint,
@@ -139,4 +152,5 @@ export async function fetchPostEssayQuestionWithAnswers(
       createdAt: a.createdAt?.toISOString(),
     })),
   }
+  return result
 }
