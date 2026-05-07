@@ -50,7 +50,11 @@ export function createApp({
   app.use(express.json({ limit: '1mb' }))
 
   // Auth route requires cookies; use credentialed CORS only on /auth/*
-  app.use('/auth', cors(corsOptsCredentialed), createAuthRouter())
+  app.use(
+    '/auth',
+    cors(corsOptsCredentialed),
+    createAuthRouter({ corsAllowOrigin })
+  )
 
   // Public routes: non-credentialed CORS
   app.use(cors(corsOptsPublic))

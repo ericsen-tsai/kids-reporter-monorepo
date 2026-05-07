@@ -36,61 +36,73 @@ const ensureIdTokenCookie: express.RequestHandler = (req, res, next) => {
   next()
 }
 
-const ensureSameOrigin: express.RequestHandler = (req, res, next) => {
-  const allowOrigins = envVar.cors.allowOrigins
-  const origin = req.get('Origin') || ''
-  const referer = req.get('Referer') || ''
+function createEnsureSameOrigin({
+  corsAllowOrigin,
+}: {
+  corsAllowOrigin: string[] | string
+}): express.RequestHandler {
+  return (req, res, next) => {
+    const origin = req.get('Origin') || ''
+    const referer = req.get('Referer') || ''
 
-  // Credentialed /auth/* must never be configured as "any origin".
-  if (allowOrigins === '*') {
-    sendJsonError(
-      res,
-      500,
-      'internal_server_error',
-      'CORS_ALLOW_ORIGINS cannot be * for /auth/*'
-    )
-    return
-  }
-
-  // For credentialed cookie-based routes, require browser-supplied origin signals.
-  const source = origin || referer
-  if (!source) {
-    sendJsonError(res, 403, 'forbidden', 'Origin is required')
-    return
-  }
-
-  const parsedSourceOrigin = (() => {
-    try {
-      if (origin) return new URL(origin).origin
-      return new URL(referer).origin
-    } catch {
-      return ''
+    // Credentialed /auth/* must never be configured as "any origin".
+    if (corsAllowOrigin === '*') {
+      sendJsonError(
+        res,
+        500,
+        'internal_server_error',
+        'CORS_ALLOW_ORIGINS cannot be * for /auth/*'
+      )
+      return
     }
-  })()
 
-  if (!parsedSourceOrigin) {
-    sendJsonError(res, 403, 'forbidden', 'Origin is invalid')
-    return
+    // For credentialed cookie-based routes, require browser-supplied origin signals.
+    const source = origin || referer
+    if (!source) {
+      sendJsonError(res, 403, 'forbidden', 'Origin is required')
+      return
+    }
+
+    const parsedSourceOrigin = (() => {
+      try {
+        if (origin) return new URL(origin).origin
+        return new URL(referer).origin
+      } catch {
+        return ''
+      }
+    })()
+
+    if (!parsedSourceOrigin) {
+      sendJsonError(res, 403, 'forbidden', 'Origin is invalid')
+      return
+    }
+
+    const allowlist = Array.isArray(corsAllowOrigin)
+      ? corsAllowOrigin
+      : [corsAllowOrigin]
+
+    const allowed = allowlist.includes(parsedSourceOrigin)
+
+    if (!allowed) {
+      sendJsonError(res, 403, 'forbidden', 'Origin is not allowed')
+      return
+    }
+
+    next()
   }
-
-  const allowlist = Array.isArray(allowOrigins) ? allowOrigins : [allowOrigins]
-
-  const allowed = allowlist.includes(parsedSourceOrigin)
-
-  if (!allowed) {
-    sendJsonError(res, 403, 'forbidden', 'Origin is not allowed')
-    return
-  }
-
-  next()
 }
 
 function emailFromJwtPayload(decoded: GoApiAccessTokenPayload): string {
   return typeof decoded.email === 'string' ? decoded.email : ''
 }
 
-export function createAuthRouter() {
+export function createAuthRouter({
+  corsAllowOrigin,
+}: {
+  corsAllowOrigin: string[] | string
+}) {
   const router = express.Router()
+  const ensureSameOrigin = createEnsureSameOrigin({ corsAllowOrigin })
 
   router.options('/access-token', (_req, res) => {
     res.sendStatus(204)
