@@ -44,9 +44,7 @@ const envVar = {
       origin:
         GO_API_ENV === 'prod'
           ? 'https://go-api.twreporter.org'
-          : GO_API_ENV === 'staging'
-            ? 'https://staging-go-api.twreporter.org'
-            : 'http://localhost:8081',
+          : 'https://staging-go-api.twreporter.org',
     },
     requestTimeoutMs,
   },
