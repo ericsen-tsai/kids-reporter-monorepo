@@ -86,17 +86,17 @@ const V1MemberPostsWithAnswersItemSchema = z
   })
   .openapi('MemberPostWithAnswersItem')
 
-const V1MemberPostsWithAnswersResponseSchema = z.object({
+export const V1MemberPostsWithAnswersResponseSchema = z.object({
   posts: z.array(V1MemberPostsWithAnswersItemSchema),
   nextCursor: z.string().nullable(),
 })
 
-const V1MemberAvatarUploadResponseSchema = z.object({
+export const V1MemberAvatarUploadResponseSchema = z.object({
   id: z.string(),
   name: z.string(),
 })
 
-const V1MemberAvatarDeleteResponseSchema = z.object({
+export const V1MemberAvatarDeleteResponseSchema = z.object({
   id: z.string(),
 })
 

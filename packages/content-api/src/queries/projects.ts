@@ -1,4 +1,9 @@
+import {
+  V1ProjectRelatedPostsCountResponseSchema,
+  V1ProjectsResponseSchema,
+} from '@kids-reporter/api-types'
 import { prisma } from '@kids-reporter/db'
+import type { z } from 'zod'
 
 import {
   asOrderJson,
@@ -10,6 +15,11 @@ import {
   type PostCardRow,
   postCardSelect,
 } from '../utils/v1-helpers.js'
+
+type V1ProjectsResponse = z.infer<typeof V1ProjectsResponseSchema>
+type V1ProjectRelatedPostsCountResponse = z.infer<
+  typeof V1ProjectRelatedPostsCountResponseSchema
+>
 
 const PUBLISHED_PROJECT_WHERE = { status: 'published' as const }
 
@@ -38,7 +48,7 @@ export type FetchPublishedProjectsOpts = {
 export async function fetchPublishedProjects(
   opts: FetchPublishedProjectsOpts,
   now: Date
-) {
+): Promise<V1ProjectsResponse> {
   const projectsCount = await prisma.project.count({
     where: PUBLISHED_PROJECT_WHERE,
   })
@@ -60,7 +70,7 @@ export async function fetchPublishedProjects(
       : projectListBaseSelect,
   })
 
-  return {
+  const result = {
     projects: projects.map((p) => {
       const row = p as typeof p & {
         relatedPosts?: PostCardRow[]
@@ -92,13 +102,14 @@ export async function fetchPublishedProjects(
     }),
     projectsCount,
   }
+  return result
 }
 
 /** `GET /v1/projects/by-slug/:slug/related-posts-count` returns null when the project is not found. */
 export async function fetchPublishedProjectRelatedPostsCount(
   slug: string,
   now: Date
-): Promise<{ relatedPostsCount: number } | null> {
+): Promise<V1ProjectRelatedPostsCountResponse | null> {
   const project = await prisma.project.findFirst({
     where: { slug, ...PUBLISHED_PROJECT_WHERE },
     select: { id: true },

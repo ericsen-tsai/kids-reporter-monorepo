@@ -1,4 +1,9 @@
+import {
+  V1EditorPicksSettingsResponseSchema,
+  V1PopularKeywordsResponseSchema,
+} from '@kids-reporter/api-types'
 import { prisma } from '@kids-reporter/db'
+import type { z } from 'zod'
 
 import {
   asOrderJson,
@@ -8,8 +13,16 @@ import {
   postCardSelect,
 } from '../utils/v1-helpers.js'
 
+type V1EditorPicksSettingsResponse = z.infer<
+  typeof V1EditorPicksSettingsResponseSchema
+>
+type V1PopularKeywordsResponse = z.infer<typeof V1PopularKeywordsResponseSchema>
+
 /** `GET /v1/editor-picks-settings` */
-export async function fetchEditorPicksSettings(take: number, now: Date) {
+export async function fetchEditorPicksSettings(
+  take: number,
+  now: Date
+): Promise<V1EditorPicksSettingsResponse> {
   const postWhere = buildPublicPostWhere(now)
 
   const settings = await prisma.editorPicksSetting.findMany({
@@ -32,7 +45,7 @@ export async function fetchEditorPicksSettings(take: number, now: Date) {
     },
   })
 
-  return settings.map((s) => {
+  const result = settings.map((s) => {
     const editorPicksOfPostsOrdered = orderTargetsByOrderJson(
       s.editorPicksOfPosts,
       asOrderJson(s.editorPicksOfPostsOrderJson)
@@ -50,10 +63,11 @@ export async function fetchEditorPicksSettings(take: number, now: Date) {
       popularKeywordsOrdered,
     }
   })
+  return result
 }
 
 /** `GET /v1/popular-keywords` */
-export async function fetchPopularKeywords() {
+export async function fetchPopularKeywords(): Promise<V1PopularKeywordsResponse> {
   const setting = await prisma.editorPicksSetting.findFirst({
     orderBy: { id: 'asc' },
     select: {

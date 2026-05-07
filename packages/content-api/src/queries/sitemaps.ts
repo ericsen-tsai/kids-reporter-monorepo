@@ -1,6 +1,14 @@
+import {
+  V1SitemapPostsResponseSchema,
+  V1SitemapProjectsResponseSchema,
+} from '@kids-reporter/api-types'
 import { prisma } from '@kids-reporter/db'
+import type { z } from 'zod'
 
 import { buildPublicPostWhere } from '../utils/v1-helpers.js'
+
+type V1SitemapPostsResponse = z.infer<typeof V1SitemapPostsResponseSchema>
+type V1SitemapProjectsResponse = z.infer<typeof V1SitemapProjectsResponseSchema>
 
 /** Start-of-day in server local time, `sinceDays` days before `now`. Matches sitemap window semantics. */
 function sitemapPublishedSinceUtc(now: Date, sinceDays: number): Date {
@@ -20,7 +28,10 @@ const toSitemapEntries = (
   }))
 
 /** `GET /v1/sitemaps/posts` */
-export async function fetchPostsForSitemap(sinceDays: number, now: Date) {
+export async function fetchPostsForSitemap(
+  sinceDays: number,
+  now: Date
+): Promise<V1SitemapPostsResponse> {
   const gte = sitemapPublishedSinceUtc(now, sinceDays)
   const posts = await prisma.post.findMany({
     where: {
@@ -32,7 +43,10 @@ export async function fetchPostsForSitemap(sinceDays: number, now: Date) {
 }
 
 /** `GET /v1/sitemaps/projects` */
-export async function fetchProjectsForSitemap(sinceDays: number, now: Date) {
+export async function fetchProjectsForSitemap(
+  sinceDays: number,
+  now: Date
+): Promise<V1SitemapProjectsResponse> {
   const gte = sitemapPublishedSinceUtc(now, sinceDays)
   const projects = await prisma.project.findMany({
     where: {

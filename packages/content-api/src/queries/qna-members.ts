@@ -1,6 +1,42 @@
+import {
+  V1CreatePostChoiceAnswerResponseSchema,
+  V1CreatePostEssayAnswerLikeResponseSchema,
+  V1CreatePostEssayAnswerResponseSchema,
+  V1DeletePostEssayAnswerLikeResponseSchema,
+  V1MemberPostChoiceAnswersResponseSchema,
+  V1MemberPostEssayAnswersResponseSchema,
+  V1UpdatePostChoiceAnswerResponseSchema,
+  V1UpdatePostEssayAnswerResponseSchema,
+} from '@kids-reporter/api-types'
 import { Prisma, prisma } from '@kids-reporter/db'
+import type { z } from 'zod'
 
 import { computeChoiceCorrect } from '../utils/qna-utils.js'
+
+type V1MemberPostChoiceAnswersResponse = z.infer<
+  typeof V1MemberPostChoiceAnswersResponseSchema
+>
+type V1MemberPostEssayAnswersResponse = z.infer<
+  typeof V1MemberPostEssayAnswersResponseSchema
+>
+type V1CreatePostChoiceAnswerResponse = z.infer<
+  typeof V1CreatePostChoiceAnswerResponseSchema
+>
+type V1UpdatePostChoiceAnswerResponse = z.infer<
+  typeof V1UpdatePostChoiceAnswerResponseSchema
+>
+type V1CreatePostEssayAnswerResponse = z.infer<
+  typeof V1CreatePostEssayAnswerResponseSchema
+>
+type V1UpdatePostEssayAnswerResponse = z.infer<
+  typeof V1UpdatePostEssayAnswerResponseSchema
+>
+type V1CreatePostEssayAnswerLikeResponse = z.infer<
+  typeof V1CreatePostEssayAnswerLikeResponseSchema
+>
+type V1DeletePostEssayAnswerLikeResponse = z.infer<
+  typeof V1DeletePostEssayAnswerLikeResponseSchema
+>
 
 export type MutationResult<T> =
   | { kind: 'ok'; data: T }
@@ -17,7 +53,7 @@ const questionRefDto = (id: number | undefined | null) =>
 export async function listMemberPostChoiceAnswers(
   memberId: string,
   postSlug: string | undefined
-) {
+): Promise<V1MemberPostChoiceAnswersResponse> {
   const rows = await prisma.postChoiceAnswer.findMany({
     where: {
       memberId,
@@ -42,7 +78,7 @@ export async function listMemberPostChoiceAnswers(
 export async function listMemberPostEssayAnswers(
   memberId: string,
   postSlug: string | undefined
-) {
+): Promise<V1MemberPostEssayAnswersResponse> {
   const rows = await prisma.postEssayAnswer.findMany({
     where: {
       memberId,
@@ -74,7 +110,7 @@ export type CreateChoiceAnswerDto = {
 export async function createMemberPostChoiceAnswer(
   memberId: string,
   input: { questionId: number; choiceIndex: number }
-): Promise<CreateChoiceAnswerDto> {
+): Promise<V1CreatePostChoiceAnswerResponse> {
   const correct = await computeChoiceCorrect(
     prisma,
     input.questionId,
@@ -116,7 +152,7 @@ export async function updateMemberPostChoiceAnswer(
   memberId: string,
   id: number,
   data: { choiceIndex?: number }
-): Promise<MutationResult<UpdateChoiceAnswerDto>> {
+): Promise<MutationResult<V1UpdatePostChoiceAnswerResponse>> {
   const existing = await prisma.postChoiceAnswer.findUnique({
     where: { id },
     select: { memberId: true, questionId: true, choiceIndex: true },
@@ -175,7 +211,7 @@ export type CreateEssayAnswerDto = {
 export async function createMemberPostEssayAnswer(
   memberId: string,
   input: { questionId: number; content: string }
-): Promise<CreateEssayAnswerDto> {
+): Promise<V1CreatePostEssayAnswerResponse> {
   const compositeKey = `${input.questionId}:${memberId}`
   const created = await prisma.postEssayAnswer.create({
     data: {
@@ -207,7 +243,7 @@ export async function updateMemberPostEssayAnswer(
   memberId: string,
   id: number,
   content: string
-): Promise<MutationResult<UpdateEssayAnswerDto>> {
+): Promise<MutationResult<V1UpdatePostEssayAnswerResponse>> {
   const existing = await prisma.postEssayAnswer.findUnique({
     where: { id },
     select: { memberId: true },
@@ -240,7 +276,7 @@ export type CreateEssayAnswerLikeDto = {
 export async function createMemberEssayAnswerLike(
   memberId: string,
   answerId: number
-): Promise<MutationResult<CreateEssayAnswerLikeDto>> {
+): Promise<MutationResult<V1CreatePostEssayAnswerLikeResponse>> {
   const compositeKey = `${answerId}:${memberId}`
   try {
     const like = await prisma.$transaction(async (tx) => {
@@ -285,7 +321,7 @@ export async function createMemberEssayAnswerLike(
 export async function deleteMemberEssayAnswerLike(
   memberId: string,
   likeId: number
-): Promise<MutationResult<{ id: string }>> {
+): Promise<MutationResult<V1DeletePostEssayAnswerLikeResponse>> {
   const existing = await prisma.postEssayAnswerLike.findUnique({
     where: { id: likeId },
     select: { id: true, memberId: true, answerId: true },
