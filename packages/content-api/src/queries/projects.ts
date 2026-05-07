@@ -9,7 +9,7 @@ import {
   orderTargetsByOrderJson,
   type PostCardRow,
   postCardSelect,
-} from '../v1-helpers.js'
+} from '../utils/v1-helpers.js'
 
 const PUBLISHED_PROJECT_WHERE = { status: 'published' as const }
 

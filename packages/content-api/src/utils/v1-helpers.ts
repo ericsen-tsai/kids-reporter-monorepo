@@ -1,4 +1,4 @@
-import envVar from './environment-variables.js'
+import envVar from '../environment-variables.js'
 
 /** Match Keystone manual-order virtual: only IDs listed in JSON appear, in order (no trailing extras). */
 export const orderTargetsByOrderJson = <T extends { id: unknown }>(

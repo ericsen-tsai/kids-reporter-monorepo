@@ -1,10 +1,10 @@
 import { type Prisma, prisma } from '@kids-reporter/db'
 
-import { maskEmail } from './mask-email.js'
+import { maskEmail } from '../utils/mask-email.js'
 import {
   buildMemberAvatarFileUrl,
   essayAnswerOrderByFromFlat,
-} from './qna-utils.js'
+} from '../utils/qna-utils.js'
 import {
   asOrderJson,
   buildPublicPostWhere,
@@ -15,7 +15,7 @@ import {
   orderTargetsByOrderJson,
   type PostCardRow,
   postCardSelect,
-} from './v1-helpers.js'
+} from '../utils/v1-helpers.js'
 
 const subSubFullSelect = {
   id: true,

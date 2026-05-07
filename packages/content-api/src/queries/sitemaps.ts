@@ -1,6 +1,6 @@
 import { prisma } from '@kids-reporter/db'
 
-import { buildPublicPostWhere } from '../v1-helpers.js'
+import { buildPublicPostWhere } from '../utils/v1-helpers.js'
 
 /** Start-of-day in server local time, `sinceDays` days before `now`. Matches sitemap window semantics. */
 function sitemapPublishedSinceUtc(now: Date, sinceDays: number): Date {

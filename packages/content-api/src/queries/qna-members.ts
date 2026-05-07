@@ -1,6 +1,6 @@
 import { Prisma, prisma } from '@kids-reporter/db'
 
-import { computeChoiceCorrect } from '../qna-utils.js'
+import { computeChoiceCorrect } from '../utils/qna-utils.js'
 
 export type MutationResult<T> =
   | { kind: 'ok'; data: T }

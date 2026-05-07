@@ -4,7 +4,7 @@ import {
   buildPublicPostWhere,
   mapPostCard,
   postCardSelect,
-} from '../v1-helpers.js'
+} from '../utils/v1-helpers.js'
 
 /** Server-side default ordering; `orderBy` query param is currently fixed to `publishedDate:desc`. */
 const POSTS_LIST_ORDER = { publishedDate: 'desc' } as const
