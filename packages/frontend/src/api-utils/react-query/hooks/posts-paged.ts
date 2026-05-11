@@ -1,4 +1,3 @@
-import { PostOrderByInput } from '__generated__/types'
 import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query'
 
 import { getPostsPaged } from '@/api/post'
@@ -8,21 +7,19 @@ import { getPostSummaries } from '@/utils'
 const POSTS_PAGED_INFINITY_QUERY_KEY = 'posts-paged-infinity'
 
 export function usePostsPagedInfiniteQuery({
-  orderBy,
   take,
   initialPosts,
 }: {
-  orderBy: PostOrderByInput[]
   take: number
   initialPosts?: PostSummary[]
 }) {
   return useInfiniteQuery({
-    queryKey: usePostsPagedInfiniteQuery.getQueryKey({ orderBy, take }),
+    queryKey: usePostsPagedInfiniteQuery.getQueryKey({ take }),
     queryFn: async ({ pageParam }) => {
       const posts = await getPostsPaged({
-        orderBy,
         take,
         skip: pageParam,
+        orderBy: 'publishedDate:desc',
       })
       return getPostSummaries(posts ?? [])
     },
@@ -42,10 +39,7 @@ export function usePostsPagedInfiniteQuery({
   })
 }
 
-usePostsPagedInfiniteQuery.getQueryKey = ({
-  orderBy,
+usePostsPagedInfiniteQuery.getQueryKey = ({ take }: { take: number }) => [
+  POSTS_PAGED_INFINITY_QUERY_KEY,
   take,
-}: {
-  orderBy: PostOrderByInput[]
-  take: number
-}) => [POSTS_PAGED_INFINITY_QUERY_KEY, orderBy, take]
+]

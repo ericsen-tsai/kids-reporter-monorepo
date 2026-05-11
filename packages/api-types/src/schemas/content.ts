@@ -404,6 +404,70 @@ export const V1MemberPostsWithAnswersQuerySchema = z.object({
   cursor: z.string().optional(),
 })
 
+const V1MemberPostEssayAnswerInListSchema = z
+  .strictObject({
+    id: z.string(),
+    content: z.string(),
+    likesCount: z.number().int(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+    question: z.strictObject({
+      id: z.string(),
+      title: z.string(),
+      hint: z.string(),
+      post: z.strictObject({ id: z.string() }),
+    }),
+  })
+  .openapi('MemberPostEssayAnswerInList')
+
+const V1MemberPostChoiceOptionSchema = z.strictObject({
+  content: z.string(),
+  isCorrectAnswer: z.boolean(),
+})
+
+const V1MemberPostChoiceAnswerInListSchema = z
+  .strictObject({
+    id: z.string(),
+    choiceIndex: z.number().int(),
+    correct: z.boolean(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+    question: z.strictObject({
+      id: z.string(),
+      title: z.string(),
+      options: z.array(V1MemberPostChoiceOptionSchema),
+      reason: z.unknown().nullable(),
+      post: z.strictObject({ id: z.string() }),
+    }),
+  })
+  .openapi('MemberPostChoiceAnswerInList')
+
+export const V1MemberPostsWithAnswersItemSchema = z
+  .object({
+    id: z.string(),
+    title: z.string(),
+    slug: z.string(),
+    publishedDate: z.string(),
+    lastAnsweredTime: z.string(),
+    essayAnswers: z.array(V1MemberPostEssayAnswerInListSchema),
+    choiceAnswers: z.array(V1MemberPostChoiceAnswerInListSchema),
+  })
+  .openapi('MemberPostWithAnswersItem')
+
+export const V1MemberPostsWithAnswersResponseSchema = z.object({
+  posts: z.array(V1MemberPostsWithAnswersItemSchema),
+  nextCursor: z.string().nullable(),
+})
+
+export const V1MemberAvatarUploadResponseSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+})
+
+export const V1MemberAvatarDeleteResponseSchema = z.object({
+  id: z.string(),
+})
+
 registry.registerPath({
   method: 'get',
   path: '/v1/members/me',

@@ -1,5 +1,6 @@
-import { PostEssayAnswerOrderByInput } from '__generated__/types'
+import type { EssayAnswerOrderByFlatSchema } from '@kids-reporter/api-types'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import type { z } from 'zod'
 
 import { getPostEssayQuestionEssayAnswers } from '@/api/post-essay-question'
 
@@ -12,9 +13,10 @@ export function usePostEssayQuestionEssayAnswersInfinityQuery({
   answerTake,
 }: {
   questionId: string
-  answerOrderBy: PostEssayAnswerOrderByInput[]
+  answerOrderBy: z.infer<typeof EssayAnswerOrderByFlatSchema>
   answerTake: number
 }) {
+  const numericQuestionId = Number(questionId)
   return useInfiniteQuery({
     queryKey: usePostEssayQuestionEssayAnswersInfinityQuery.getQueryKey({
       questionId,
@@ -23,7 +25,7 @@ export function usePostEssayQuestionEssayAnswersInfinityQuery({
     }),
     queryFn: ({ pageParam }) =>
       getPostEssayQuestionEssayAnswers({
-        where: { id: questionId },
+        questionId: numericQuestionId,
         answerOrderBy,
         answerTake,
         answerSkip: pageParam,
@@ -42,7 +44,7 @@ usePostEssayQuestionEssayAnswersInfinityQuery.getQueryKey = ({
   answerTake,
 }: {
   questionId: string
-  answerOrderBy: PostEssayAnswerOrderByInput[]
+  answerOrderBy: z.infer<typeof EssayAnswerOrderByFlatSchema>
   answerTake: number
 }) => [
   POST_ESSAY_QUESTION_ESSAY_ANSWERS_INFINITY_QUERY_KEY,

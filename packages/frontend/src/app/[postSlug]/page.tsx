@@ -10,7 +10,7 @@ async function PostPage({ params }: { params: { postSlug: string } }) {
   const traceHeaders = getServerTraceHeaders(headers())
   const post = await getPostMeta(
     {
-      where: { slug: postSlug },
+      slug: postSlug,
     },
     traceHeaders
   )

@@ -1,4 +1,4 @@
-import { Maybe } from '__generated__/types'
+type Maybe<T> = T | null | undefined
 
 export type DeepPartial<T> = T extends any[]
   ? DeepPartial<T[number]>[]

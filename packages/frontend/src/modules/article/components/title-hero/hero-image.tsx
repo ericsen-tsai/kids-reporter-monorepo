@@ -1,9 +1,10 @@
-import { GetPostQuery } from '__generated__/operations/content.generated'
 import { cn, useMediaQuery } from '@kids-reporter/routing-ui'
 import dynamic from 'next/dynamic'
 import { useState } from 'react'
 
 import { FALLBACK_IMG, FontSizeLevel } from '@/constants'
+
+import type { ArticlePost } from '../../types'
 
 const ImageWithFallback = dynamic(
   () => import('@/components/image-with-fallback'),
@@ -11,7 +12,7 @@ const ImageWithFallback = dynamic(
 )
 
 type HeroImageProp = {
-  image: NonNullable<GetPostQuery['post']>['heroImage']
+  image: ArticlePost['heroImage']
   caption: string
   onImageModalOpen: (
     imgProps: React.ImgHTMLAttributes<HTMLImageElement>

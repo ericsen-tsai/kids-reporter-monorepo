@@ -1,8 +1,9 @@
-import {
-  CreatePostEssayAnswerLikeMutationVariables,
-  DeletePostEssayAnswerLikeMutationVariables,
-} from '__generated__/operations/answers.generated'
+import type {
+  V1CreatePostEssayAnswerLikeBodySchema,
+  V1PostEssayAnswerLikePathIdSchema,
+} from '@kids-reporter/api-types'
 import { useMutation } from '@tanstack/react-query'
+import type { z } from 'zod'
 
 import {
   createPostEssayAnswerLike,
@@ -15,8 +16,8 @@ export function useCreatePostEssayAnswerLikeMutation({
   accessToken: string
 }) {
   return useMutation({
-    mutationFn: (variables: CreatePostEssayAnswerLikeMutationVariables) =>
-      createPostEssayAnswerLike(variables, accessToken),
+    mutationFn: (body: z.infer<typeof V1CreatePostEssayAnswerLikeBodySchema>) =>
+      createPostEssayAnswerLike(body, accessToken),
   })
 }
 
@@ -26,7 +27,7 @@ export function useDeletePostEssayAnswerLikeMutation({
   accessToken: string
 }) {
   return useMutation({
-    mutationFn: (variables: DeletePostEssayAnswerLikeMutationVariables) =>
-      deletePostEssayAnswerLike(variables, accessToken),
+    mutationFn: (params: z.infer<typeof V1PostEssayAnswerLikePathIdSchema>) =>
+      deletePostEssayAnswerLike(params, accessToken),
   })
 }

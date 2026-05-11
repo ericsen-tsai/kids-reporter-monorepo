@@ -3,7 +3,7 @@ type EntityMap = Record<
   {
     data: Record<string, unknown>
     type: string
-    mutability: 'IMMUTABLE' | 'MUTABLE'
+    mutability: string
   }
 >
 

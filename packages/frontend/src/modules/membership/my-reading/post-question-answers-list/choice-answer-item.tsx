@@ -1,9 +1,14 @@
-import { PostChoiceAnswer } from '__generated__/types'
+import { V1MemberPostsWithAnswersResponseSchema } from '@kids-reporter/api-types'
 import { cn } from '@kids-reporter/routing-ui'
+import type { z } from 'zod'
 
 import { CorrectIcon, IncorrectIcon } from '@/icons/miscellaneous'
 
-function ChoiceAnswerItem({ answer }: { answer: PostChoiceAnswer }) {
+type ChoiceAnswer = z.infer<
+  typeof V1MemberPostsWithAnswersResponseSchema
+>['posts'][number]['choiceAnswers'][number]
+
+function ChoiceAnswerItem({ answer }: { answer: ChoiceAnswer }) {
   const options =
     answer.question?.options && Array.isArray(answer.question.options)
       ? (answer.question.options as Array<{
@@ -46,7 +51,9 @@ function ChoiceAnswerItem({ answer }: { answer: PostChoiceAnswer }) {
             {correctOptionIndex + 1}. {options[correctOptionIndex]?.content}
           </p>
           <p className="prose-p2 text-neutral-800">
-            {answer.question.reason ?? ''}
+            {typeof answer.question.reason === 'string'
+              ? answer.question.reason
+              : ''}
           </p>
         </div>
       )}

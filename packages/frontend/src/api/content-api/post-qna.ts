@@ -1,38 +1,33 @@
 import type {
-  CreatePostChoiceAnswerMutation,
-  CreatePostChoiceAnswerMutationVariables,
-  CreatePostEssayAnswerLikeMutation,
-  CreatePostEssayAnswerLikeMutationVariables,
-  CreatePostEssayAnswerMutation,
-  CreatePostEssayAnswerMutationVariables,
-  DeletePostEssayAnswerLikeMutation,
-  DeletePostEssayAnswerLikeMutationVariables,
-  GetAllPostEssayAnswersQuery,
-  GetAllPostEssayAnswersQueryVariables,
-  GetEssayQuestionEssayAnswersQuery,
-  GetPostChoiceAnswersQuery,
-  GetPostEssayAnswersQuery,
-  UpdatePostChoiceAnswerMutation,
-  UpdatePostChoiceAnswerMutationVariables,
-  UpdatePostEssayAnswerMutation,
-  UpdatePostEssayAnswerMutationVariables,
-} from '__generated__/operations/answers.generated'
-import type { PostEssayAnswerOrderByInput } from '__generated__/types'
+  EssayAnswerOrderByFlatSchema,
+  V1AllPostEssayAnswersQuerySchema,
+  V1AllPostEssayAnswersResponseSchema,
+  V1CreatePostChoiceAnswerBodySchema,
+  V1CreatePostChoiceAnswerResponseSchema,
+  V1CreatePostEssayAnswerBodySchema,
+  V1CreatePostEssayAnswerLikeBodySchema,
+  V1CreatePostEssayAnswerLikeResponseSchema,
+  V1CreatePostEssayAnswerResponseSchema,
+  V1DeletePostEssayAnswerLikeResponseSchema,
+  V1MemberPostChoiceAnswersResponseSchema,
+  V1MemberPostEssayAnswersResponseSchema,
+  V1PatchPostChoiceAnswerBodySchema,
+  V1PatchPostEssayAnswerBodySchema,
+  V1PostEssayAnswerLikePathIdSchema,
+  V1PostEssayQuestionWithAnswersResponseSchema,
+  V1UpdatePostChoiceAnswerResponseSchema,
+  V1UpdatePostEssayAnswerResponseSchema,
+} from '@kids-reporter/api-types'
+import type { z } from 'zod'
 
 import {
   ContentApiRequestError,
   sendContentApiRequest,
 } from '@/utils/send-content-api'
 
-function questionIdFromGqlCreateData(data: Record<string, unknown>): unknown {
-  const q = data.question as { connect?: { id?: unknown } } | undefined
-  return q?.connect?.id
-}
-
-function answerIdFromGqlCreateData(data: Record<string, unknown>): unknown {
-  const a = data.answer as { connect?: { id?: unknown } } | undefined
-  return a?.connect?.id
-}
+export type EssayAnswerOrderByFlat = z.infer<
+  typeof EssayAnswerOrderByFlatSchema
+>
 
 export async function getPostChoiceAnswersByMemberIdContentApi({
   accessToken,
@@ -42,7 +37,7 @@ export async function getPostChoiceAnswersByMemberIdContentApi({
   postSlug?: string
 }) {
   const body = await sendContentApiRequest<
-    NonNullable<GetPostChoiceAnswersQuery['postChoiceAnswers']>
+    z.infer<typeof V1MemberPostChoiceAnswersResponseSchema>
   >({
     path: '/v1/members/me/post-choice-answers',
     authToken: accessToken,
@@ -55,48 +50,39 @@ export async function getPostChoiceAnswersByMemberIdContentApi({
 }
 
 export async function createPostChoiceAnswerContentApi(
-  variables: CreatePostChoiceAnswerMutationVariables,
+  body: z.infer<typeof V1CreatePostChoiceAnswerBodySchema>,
   accessToken: string
 ) {
-  const data = variables.data as Record<string, unknown>
-  const questionId = questionIdFromGqlCreateData(data)
-  const choiceIndex = data.choiceIndex
-  if (
-    questionId == null ||
-    (typeof questionId !== 'string' && typeof questionId !== 'number') ||
-    typeof choiceIndex !== 'number'
-  ) {
-    throw new Error('createPostChoiceAnswerContentApi: invalid variables')
-  }
-  const body = await sendContentApiRequest<
-    CreatePostChoiceAnswerMutation['createPostChoiceAnswer']
+  const out = await sendContentApiRequest<
+    z.infer<typeof V1CreatePostChoiceAnswerResponseSchema>
   >({
     path: '/v1/members/me/post-choice-answers',
     method: 'POST',
     authToken: accessToken,
-    body: { questionId, choiceIndex },
+    body,
   })
-  return body
+  return out
 }
 
 export async function updatePostChoiceAnswerContentApi(
-  variables: UpdatePostChoiceAnswerMutationVariables,
+  {
+    id,
+    patch,
+  }: {
+    id: number | string
+    patch: z.infer<typeof V1PatchPostChoiceAnswerBodySchema>
+  },
   accessToken: string
 ) {
-  const id = variables.id
-  const patch = variables.data as { choiceIndex?: number }
-  const body = await sendContentApiRequest<
-    UpdatePostChoiceAnswerMutation['updatePostChoiceAnswer']
+  const out = await sendContentApiRequest<
+    z.infer<typeof V1UpdatePostChoiceAnswerResponseSchema>
   >({
     path: `/v1/members/me/post-choice-answers/${encodeURIComponent(String(id))}`,
     method: 'PATCH',
     authToken: accessToken,
-    body:
-      typeof patch.choiceIndex === 'number'
-        ? { choiceIndex: patch.choiceIndex }
-        : {},
+    body: patch,
   })
-  return body
+  return out
 }
 
 export async function getPostEssayAnswersByMemberIdContentApi({
@@ -107,7 +93,7 @@ export async function getPostEssayAnswersByMemberIdContentApi({
   postSlug?: string
 }) {
   const body = await sendContentApiRequest<
-    NonNullable<GetPostEssayAnswersQuery['postEssayAnswers']>
+    z.infer<typeof V1MemberPostEssayAnswersResponseSchema>
   >({
     path: '/v1/members/me/post-essay-answers',
     authToken: accessToken,
@@ -120,14 +106,14 @@ export async function getPostEssayAnswersByMemberIdContentApi({
 }
 
 export async function getAllPostEssayAnswersContentApi(
-  variables: GetAllPostEssayAnswersQueryVariables
+  query: z.infer<typeof V1AllPostEssayAnswersQuerySchema>
 ) {
   const body = await sendContentApiRequest<
-    NonNullable<GetAllPostEssayAnswersQuery['postEssayAnswers']>
+    z.infer<typeof V1AllPostEssayAnswersResponseSchema>
   >({
     path: '/v1/post-essay-answers',
     query: {
-      take: variables.take ?? undefined,
+      take: query.take ?? undefined,
       orderBy: 'createdAt:desc',
     },
   })
@@ -138,86 +124,61 @@ export async function getAllPostEssayAnswersContentApi(
 }
 
 export async function createPostEssayAnswerContentApi(
-  variables: CreatePostEssayAnswerMutationVariables,
+  body: z.infer<typeof V1CreatePostEssayAnswerBodySchema>,
   accessToken: string
 ) {
-  const data = variables.data as Record<string, unknown>
-  const questionId = questionIdFromGqlCreateData(data)
-  const content = data.content
-  if (
-    questionId == null ||
-    (typeof questionId !== 'string' && typeof questionId !== 'number') ||
-    typeof content !== 'string'
-  ) {
-    throw new Error('createPostEssayAnswerContentApi: invalid variables')
-  }
-  const body = await sendContentApiRequest<
-    CreatePostEssayAnswerMutation['createPostEssayAnswer']
+  const out = await sendContentApiRequest<
+    z.infer<typeof V1CreatePostEssayAnswerResponseSchema>
   >({
     path: '/v1/members/me/post-essay-answers',
     method: 'POST',
     authToken: accessToken,
-    body: { questionId, content },
+    body,
   })
-  return body
+  return out
 }
 
 export async function updatePostEssayAnswerContentApi(
-  variables: UpdatePostEssayAnswerMutationVariables,
+  {
+    id,
+    patch,
+  }: {
+    id: number | string
+    patch: z.infer<typeof V1PatchPostEssayAnswerBodySchema>
+  },
   accessToken: string
 ) {
-  const id = variables.id
-  const patch = variables.data as { content: string }
-  const body = await sendContentApiRequest<
-    UpdatePostEssayAnswerMutation['updatePostEssayAnswer']
+  const out = await sendContentApiRequest<
+    z.infer<typeof V1UpdatePostEssayAnswerResponseSchema>
   >({
     path: `/v1/members/me/post-essay-answers/${encodeURIComponent(String(id))}`,
     method: 'PATCH',
     authToken: accessToken,
-    body: { content: patch.content },
+    body: patch,
   })
-  return body
-}
-
-function questionAnswerOrderByToFlat(
-  answerOrderBy: PostEssayAnswerOrderByInput[]
-): 'createdAt:desc' | 'likesCount:desc' {
-  const first = answerOrderBy[0]
-  if (
-    first &&
-    typeof first === 'object' &&
-    'likesCount' in first &&
-    first.likesCount === 'desc'
-  ) {
-    return 'likesCount:desc'
-  }
-  return 'createdAt:desc'
+  return out
 }
 
 export async function getPostEssayQuestionEssayAnswersContentApi({
-  where,
+  questionId,
   answerOrderBy,
   answerTake,
   answerSkip,
 }: {
-  where: { id: string }
-  answerOrderBy: PostEssayAnswerOrderByInput[]
+  questionId: number
+  answerOrderBy: EssayAnswerOrderByFlat
   answerTake: number
   answerSkip?: number
 }) {
-  const questionId = Number(where.id)
-  if (!Number.isFinite(questionId)) {
-    throw new Error('invalid question id')
-  }
   try {
     const body = await sendContentApiRequest<
-      NonNullable<GetEssayQuestionEssayAnswersQuery['postEssayQuestion']>
+      z.infer<typeof V1PostEssayQuestionWithAnswersResponseSchema>
     >({
       path: `/v1/post-essay-questions/${questionId}`,
       query: {
         answerTake,
         answerSkip: answerSkip ?? undefined,
-        answerOrderBy: questionAnswerOrderByToFlat(answerOrderBy),
+        answerOrderBy,
       },
     })
     return body.answers ?? []
@@ -230,42 +191,32 @@ export async function getPostEssayQuestionEssayAnswersContentApi({
 }
 
 export async function createPostEssayAnswerLikeContentApi(
-  variables: CreatePostEssayAnswerLikeMutationVariables,
+  body: z.infer<typeof V1CreatePostEssayAnswerLikeBodySchema>,
   accessToken: string
 ) {
-  const data = variables.data as Record<string, unknown>
-  const answerId = answerIdFromGqlCreateData(data)
-  if (
-    answerId == null ||
-    (typeof answerId !== 'string' && typeof answerId !== 'number')
-  ) {
-    throw new Error('createPostEssayAnswerLikeContentApi: invalid variables')
-  }
-  const body = await sendContentApiRequest<
-    CreatePostEssayAnswerLikeMutation['createPostEssayAnswerLike']
+  const out = await sendContentApiRequest<
+    z.infer<typeof V1CreatePostEssayAnswerLikeResponseSchema>
   >({
     path: '/v1/members/me/post-essay-answer-likes',
     method: 'POST',
     authToken: accessToken,
-    body: { answerId },
+    body,
   })
-  return body
+  return out
 }
 
 export async function deletePostEssayAnswerLikeContentApi(
-  variables: DeletePostEssayAnswerLikeMutationVariables,
+  params: z.infer<typeof V1PostEssayAnswerLikePathIdSchema>,
   accessToken: string
 ) {
-  const likeId = variables.where?.id
-  if (likeId == null || likeId === '') {
-    throw new Error('deletePostEssayAnswerLikeContentApi: where.id is required')
-  }
-  const body = await sendContentApiRequest<
-    DeletePostEssayAnswerLikeMutation['deletePostEssayAnswerLike']
+  const out = await sendContentApiRequest<
+    z.infer<typeof V1DeletePostEssayAnswerLikeResponseSchema>
   >({
-    path: `/v1/members/me/post-essay-answer-likes/${encodeURIComponent(String(likeId))}`,
+    path: `/v1/members/me/post-essay-answer-likes/${encodeURIComponent(
+      String(params.id)
+    )}`,
     method: 'DELETE',
     authToken: accessToken,
   })
-  return body
+  return out
 }

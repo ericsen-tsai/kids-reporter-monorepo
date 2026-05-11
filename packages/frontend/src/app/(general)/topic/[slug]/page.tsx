@@ -1,8 +1,5 @@
-import type {
-  GetProjectMetaQuery,
-  GetProjectQuery,
-} from '__generated__/operations/content.generated'
 import { emitStructured } from '@kids-reporter/logger'
+import type { RawDraftContentState } from 'draft-js'
 import { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
@@ -17,14 +14,19 @@ import {
   KIDS_URL_ORIGIN,
   OG_SUFFIX,
 } from '@/constants'
-import envVars from '@/environment-variables'
 import TopicSlugModule from '@/modules/topic/slug'
 import { TitlePosition } from '@/modules/topic/types'
 import { normalizePhoto } from '@/modules/topic/utils'
 import { getFormattedDate, getPostSummaries } from '@/utils'
-import { logContentApiFallback } from '@/utils/log-content-api-fallback'
-import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 import { getServerTraceHeaders } from '@/utils/trace-context'
+
+function isRawDraftContentState(value: unknown): value is RawDraftContentState {
+  if (!value || typeof value !== 'object') return false
+  const v = value as { blocks?: unknown; entityMap?: unknown }
+  return (
+    Array.isArray(v.blocks) && !!v.entityMap && typeof v.entityMap === 'object'
+  )
+}
 
 export async function generateMetadata({
   params,
@@ -34,27 +36,7 @@ export async function generateMetadata({
   const slug = params.slug
   const traceHeaders = getServerTraceHeaders(headers())
 
-  let topicMeta: GetProjectMetaQuery['project'] | undefined
-  if (envVars.useContentApi) {
-    try {
-      topicMeta = await getProjectMetaContentApi({ slug, traceHeaders })
-    } catch (err) {
-      logContentApiFallback('topic-project-meta', err)
-    }
-  }
-  if (!topicMeta) {
-    const topicOGRes = await sendRestGqlRequest<GetProjectMetaQuery>({
-      operation: 'project-meta',
-      method: 'GET',
-      variables: {
-        where: {
-          slug: slug,
-        },
-      },
-      traceHeaders,
-    })
-    topicMeta = topicOGRes?.data?.data?.project
-  }
+  const topicMeta = await getProjectMetaContentApi({ slug, traceHeaders })
   if (!topicMeta) {
     emitStructured({
       severity: 'WARNING',
@@ -93,31 +75,11 @@ export default async function TopicPage({
     emitStructured({ severity: 'WARNING', message: 'Incorrect topic slug!' })
     notFound()
   }
-  let project: GetProjectQuery['project'] | undefined
   const traceHeaders = getServerTraceHeaders(headers())
-  if (envVars.useContentApi) {
-    try {
-      project = await getProjectDetailContentApi({
-        slug: params.slug,
-        traceHeaders,
-      })
-    } catch (err) {
-      logContentApiFallback('topic-project-detail', err)
-    }
-  }
-  if (!project) {
-    const axiosRes = await sendRestGqlRequest<GetProjectQuery>({
-      operation: 'project-detail',
-      method: 'GET',
-      variables: {
-        where: {
-          slug: params.slug,
-        },
-      },
-      traceHeaders,
-    })
-    project = axiosRes?.data?.data?.project
-  }
+  const project = await getProjectDetailContentApi({
+    slug: params.slug,
+    traceHeaders,
+  })
   if (!project) {
     emitStructured({ severity: 'WARNING', message: 'Empty topic!' })
     notFound()
@@ -137,8 +99,12 @@ export default async function TopicPage({
       backgroundImage={heroImage}
       mobileBgImage={mobileHeroImage}
       publishedDate={getFormattedDate(project.publishedDate ?? '')}
-      content={project.content}
-      credits={project.credits}
+      content={
+        isRawDraftContentState(project.content) ? project.content : undefined
+      }
+      credits={
+        isRawDraftContentState(project.credits) ? project.credits : undefined
+      }
       relatedPosts={relatedPosts}
     />
   )

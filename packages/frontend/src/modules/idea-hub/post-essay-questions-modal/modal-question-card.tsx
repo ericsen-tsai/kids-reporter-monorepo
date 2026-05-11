@@ -1,6 +1,5 @@
 'use client'
 
-import { PostEssayAnswerOrderByInput } from '__generated__/types'
 import { cn, useMediaQuery } from '@kids-reporter/routing-ui'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
@@ -39,7 +38,7 @@ function ModalQuestionCard({
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     usePostEssayQuestionEssayAnswersInfinityQuery({
       questionId,
-      answerOrderBy: [{ createdAt: 'desc' }],
+      answerOrderBy: 'createdAt:desc',
       answerTake: QUESTION_ANSWER_ITEM_TAKE,
     })
 
@@ -70,7 +69,7 @@ function ModalQuestionCard({
     return map
   }, [hasLikedData])
 
-  const answerOrderBy: PostEssayAnswerOrderByInput[] = [{ createdAt: 'desc' }]
+  const answerOrderBy = 'createdAt:desc' as const
 
   const isTablet = useMediaQuery('(min-width: 768px)')
   const loadMoreRef = useRef<HTMLDivElement>(null)
@@ -104,7 +103,7 @@ function ModalQuestionCard({
   const renderTitle = useCallback(() => {
     return (
       <div className="flex flex-1 items-start gap-2" ref={titleNodeRef}>
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           <LightbulbIcon />
         </div>
         <div
@@ -171,7 +170,7 @@ function ModalQuestionCard({
   return (
     <div
       ref={scrollContainerRef}
-      className="flex flex-col overflow-hidden rounded-2xl border-2 border-neutral-200 bg-white tablet:max-h-full tablet:min-h-0 tablet:scrollbar-thin tablet:w-75 tablet:flex-shrink-0 tablet:self-start tablet:overflow-y-auto desktop:w-92 hd:w-[374px]"
+      className="flex flex-col overflow-hidden rounded-2xl border-2 border-neutral-200 bg-white tablet:max-h-full tablet:min-h-0 tablet:scrollbar-thin tablet:w-75 tablet:shrink-0 tablet:self-start tablet:overflow-y-auto desktop:w-92 hd:w-[374px]"
     >
       <AccordionItem value={questionId} className="relative border-0">
         {isTablet ? (
@@ -179,7 +178,7 @@ function ModalQuestionCard({
             {renderTitle()}
           </div>
         ) : (
-          <AccordionTrigger className="overflow-hidden rounded-t-2xl bg-blue-100 px-4 py-4 hover:no-underline [&[data-state=open]]:rounded-b-none">
+          <AccordionTrigger className="overflow-hidden rounded-t-2xl bg-blue-100 px-4 py-4 hover:no-underline data-[state=open]:rounded-b-none">
             {renderTitle()}
           </AccordionTrigger>
         )}

@@ -1,13 +1,9 @@
-import type {
-  GetProjectMetaQuery,
-  GetProjectQuery,
-  GetProjectRelatedPostsCountQuery,
-} from '__generated__/operations/content.generated'
 import {
   V1ProjectBySlugDetailResponseSchema,
   V1ProjectBySlugMetaResponseSchema,
   V1ProjectRelatedPostsCountResponseSchema,
 } from '@kids-reporter/api-types'
+import type { z } from 'zod'
 
 import {
   ContentApiRequestError,
@@ -20,7 +16,7 @@ export async function getProjectMetaContentApi({
 }: {
   slug: string
   traceHeaders?: Headers | Record<string, string | undefined>
-}): Promise<GetProjectMetaQuery['project'] | undefined> {
+}): Promise<z.infer<typeof V1ProjectBySlugMetaResponseSchema> | undefined> {
   try {
     const response = await sendContentApiRequest({
       path: `/v1/projects/by-slug/${encodeURIComponent(slug)}/meta`,
@@ -31,13 +27,7 @@ export async function getProjectMetaContentApi({
     if (!parsed.success) {
       throw new Error('content-api schema mismatch project meta')
     }
-    const m = parsed.data
-    return {
-      publishedDate: m.publishedDate,
-      ogDescription: m.ogDescription ?? undefined,
-      ogTitle: m.ogTitle,
-      ogImage: m.ogImage ?? undefined,
-    } as GetProjectMetaQuery['project']
+    return parsed.data
   } catch (e) {
     if (e instanceof ContentApiRequestError && e.status === 404) {
       return undefined
@@ -52,7 +42,7 @@ export async function getProjectDetailContentApi({
 }: {
   slug: string
   traceHeaders?: Headers | Record<string, string | undefined>
-}): Promise<GetProjectQuery['project'] | undefined> {
+}): Promise<z.infer<typeof V1ProjectBySlugDetailResponseSchema> | undefined> {
   try {
     const response = await sendContentApiRequest({
       path: `/v1/projects/by-slug/${encodeURIComponent(slug)}`,
@@ -63,7 +53,7 @@ export async function getProjectDetailContentApi({
     if (!parsed.success) {
       throw new Error('content-api schema mismatch project detail')
     }
-    return parsed.data as GetProjectQuery['project']
+    return parsed.data
   } catch (e) {
     if (e instanceof ContentApiRequestError && e.status === 404) {
       return undefined
@@ -78,7 +68,9 @@ export async function getProjectRelatedPostsCountContentApi({
 }: {
   slug: string
   traceHeaders?: Headers | Record<string, string | undefined>
-}): Promise<GetProjectRelatedPostsCountQuery['project'] | undefined> {
+}): Promise<
+  z.infer<typeof V1ProjectRelatedPostsCountResponseSchema> | undefined
+> {
   try {
     const response = await sendContentApiRequest({
       path: `/v1/projects/by-slug/${encodeURIComponent(slug)}/related-posts-count`,
@@ -89,9 +81,7 @@ export async function getProjectRelatedPostsCountContentApi({
     if (!parsed.success) {
       throw new Error('content-api schema mismatch project related-posts-count')
     }
-    return {
-      relatedPostsCount: parsed.data.relatedPostsCount,
-    } as GetProjectRelatedPostsCountQuery['project']
+    return parsed.data
   } catch (e) {
     if (e instanceof ContentApiRequestError && e.status === 404) {
       return undefined

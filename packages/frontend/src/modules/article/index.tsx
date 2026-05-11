@@ -1,6 +1,5 @@
 'use client'
 
-import { GetPostQuery } from '__generated__/operations/content.generated'
 import {
   HeaderPostTitleSetter,
   ScrollLevel,
@@ -8,6 +7,7 @@ import {
   useMediaQuery,
   useScrollLevel,
 } from '@kids-reporter/routing-ui'
+import type { RawDraftContentState } from 'draft-js'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -47,18 +47,22 @@ import TitleHero from './components/title-hero'
 import Toolbar from './components/toolbar'
 import { ArticleContext } from './context'
 import useBatchSubmitAnswers from './hooks/use-batch-submit-answers'
-import { Keyword } from './types'
+import type { ArticlePost, Keyword } from './types'
 import parsePostToContent from './utils/parse-post-to-content'
 import parseTocIndexesFromEntityMap from './utils/parse-toc-indexes-from-entity-map'
 import trimEmptyBlocks from './utils/trim-empty-blocks'
 
-const ArticleModule = ({
-  post,
-  slug,
-}: {
-  post: NonNullable<GetPostQuery['post']>
-  slug: string
-}) => {
+const EMPTY_DRAFT: RawDraftContentState = { blocks: [], entityMap: {} }
+
+function isRawDraftContentState(value: unknown): value is RawDraftContentState {
+  if (!value || typeof value !== 'object') return false
+  const v = value as { blocks?: unknown; entityMap?: unknown }
+  return (
+    Array.isArray(v.blocks) && !!v.entityMap && typeof v.entityMap === 'object'
+  )
+}
+
+const ArticleModule = ({ post, slug }: { post: ArticlePost; slug: string }) => {
   const {
     topicURL,
     mainTopic,
@@ -155,7 +159,7 @@ const ArticleModule = ({
         id: question.id,
         title: question.title ?? '',
         options: question.options as BaodaozaiChoiceQuestion['options'],
-        reason: question.reason ?? '',
+        reason: typeof question.reason === 'string' ? question.reason : '',
         type: 'choice',
       })
     )
@@ -222,10 +226,14 @@ const ArticleModule = ({
 
   const isScrollingDown = scrollingLevel === ScrollLevel.DOWN_HIDDEN
 
-  const tocIndexes = useMemo(
-    () => parseTocIndexesFromEntityMap(post.content?.entityMap),
-    [post.content?.entityMap]
+  const postContent = useMemo(
+    () => (isRawDraftContentState(post.content) ? post.content : EMPTY_DRAFT),
+    [post.content]
   )
+
+  const tocIndexes = useMemo(() => {
+    return parseTocIndexesFromEntityMap(postContent.entityMap)
+  }, [postContent.entityMap])
 
   const keywords = useMemo(() => {
     if (!post?.tagsOrdered) return []
@@ -242,7 +250,8 @@ const ArticleModule = ({
   }, [])
 
   const trimmedBrief = useMemo(() => {
-    return trimEmptyBlocks(post?.brief ?? { blocks: [], entityMap: {} })
+    const brief = isRawDraftContentState(post?.brief) ? post.brief : EMPTY_DRAFT
+    return trimEmptyBlocks(brief)
   }, [post?.brief])
 
   return (
@@ -265,7 +274,7 @@ const ArticleModule = ({
           }}
         >
           <Toolbar topicURL={topicURL} postSlug={slug} />
-          <div className="relative flex w-full max-w-256 flex-col items-center desktop:mx-auto desktop:px-12 hd:max-w-354.5">
+          <div className="relative flex w-full max-w-5xl flex-col items-center desktop:mx-auto desktop:px-12 hd:max-w-354.5">
             {isDesktop && (
               <ImageModal
                 isOpen={isImgModalOpen}
@@ -292,7 +301,7 @@ const ArticleModule = ({
                 fontSizeLevel: fontSize,
               }}
               title={post?.title ?? ''}
-              subtitle={post?.subtitle}
+              subtitle={post?.subtitle ?? undefined}
               fontSizeLevel={fontSize}
             />
             {post?.newsReadingGroup && (
@@ -331,10 +340,7 @@ const ArticleModule = ({
             )}
 
             <div className="relative w-full">
-              <PostRenderer
-                content={post?.content ?? { blocks: [], entityMap: {} }}
-                shouldMount={isMounted}
-              />
+              <PostRenderer content={postContent} shouldMount={isMounted} />
               <div className="absolute top-[calc(25%+50vh)]">
                 <ArticleBaodaozaiEventTrigger
                   id="change-encourage-reading"

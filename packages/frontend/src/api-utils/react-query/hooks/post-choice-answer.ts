@@ -1,8 +1,9 @@
-import {
-  CreatePostChoiceAnswerMutationVariables,
-  UpdatePostChoiceAnswerMutationVariables,
-} from '__generated__/operations/answers.generated'
+import type {
+  V1CreatePostChoiceAnswerBodySchema,
+  V1PatchPostChoiceAnswerBodySchema,
+} from '@kids-reporter/api-types'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import type { z } from 'zod'
 
 import {
   createPostChoiceAnswer,
@@ -44,8 +45,8 @@ export function useCreatePostChoiceAnswerMutation({
   accessToken: string
 }) {
   return useMutation({
-    mutationFn: (variables: CreatePostChoiceAnswerMutationVariables) =>
-      createPostChoiceAnswer(variables, accessToken),
+    mutationFn: (body: z.infer<typeof V1CreatePostChoiceAnswerBodySchema>) =>
+      createPostChoiceAnswer(body, accessToken),
   })
 }
 
@@ -55,7 +56,12 @@ export function useUpdatePostChoiceAnswerMutation({
   accessToken: string
 }) {
   return useMutation({
-    mutationFn: (variables: UpdatePostChoiceAnswerMutationVariables) =>
-      updatePostChoiceAnswer(variables, accessToken),
+    mutationFn: ({
+      id,
+      patch,
+    }: {
+      id: number | string
+      patch: z.infer<typeof V1PatchPostChoiceAnswerBodySchema>
+    }) => updatePostChoiceAnswer({ id, patch }, accessToken),
   })
 }

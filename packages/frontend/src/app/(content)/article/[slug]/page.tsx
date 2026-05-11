@@ -26,9 +26,7 @@ export async function generateMetadata({
   const traceHeaders = getServerTraceHeaders(headers())
   const postMeta = await getPostMeta(
     {
-      where: {
-        slug: slug,
-      },
+      slug,
     },
     traceHeaders
   )
@@ -75,25 +73,21 @@ export default async function PostPage({
   params: { slug: string }
 }) {
   const slug = params.slug
+  const traceHeaders = getServerTraceHeaders(headers())
   if (!slug) {
     emitStructured({ severity: 'WARNING', message: 'Invalid post slug!' })
     notFound()
   }
 
-  const post = await getPost({
-    where: {
-      slug: slug,
+  const post = await getPost(
+    {
+      slug,
+      take: topicRelatedPostsNum,
+      postEssayQuestionsTake,
+      postChoiceQuestionsTake,
     },
-    relatedPostsWhere: {
-      slug: {
-        notIn: [slug],
-      },
-    },
-    orderBy: [{ order: 'asc' }],
-    take: topicRelatedPostsNum,
-    postEssayQuestionsTake,
-    postChoiceQuestionsTake,
-  })
+    traceHeaders
+  )
   if (!post) {
     emitStructured({ severity: 'WARNING', message: `Post not found! ${slug}` })
     notFound()

@@ -1,16 +1,13 @@
-import {
-  GetLatestPostsQuery,
-  GetLatestPostsQueryVariables,
-  GetPostEssayQuestionsQuery,
-  GetPostMetaQuery,
-  GetPostMetaQueryVariables,
-  GetPostQuery,
-  GetPostQueryVariables,
-  GetPostsEssayAnswersWithLikesQuery,
-  GetPostsEssayAnswersWithLikesQueryVariables,
-  GetPostsQuery,
-  GetPostsQueryVariables,
-} from '__generated__/operations/content.generated'
+import type {
+  PostContent,
+  V1PostDetailBodySchema,
+  V1PostEssayQuestionsBodySchema,
+  V1PostMetaBodySchema,
+  V1PostsEssayAnswersWithLikesQuerySchema,
+  V1PostsEssayAnswersWithLikesResponseSchema,
+  V1PostsQuerySchema,
+} from '@kids-reporter/api-types'
+import type { z } from 'zod'
 
 import {
   getLatestPostsContentApi,
@@ -20,98 +17,52 @@ import {
   getPostsEssayAnswersWithLikesContentApi,
   getPostsPagedContentApi,
 } from '@/api/content-api/post'
-import envVars from '@/environment-variables'
-import { firstOrderByEntry } from '@/utils/first-order-by'
-import { logContentApiFallback } from '@/utils/log-content-api-fallback'
-import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export const getLatestPosts = async (
-  variables: GetLatestPostsQueryVariables,
+  query: z.infer<typeof V1PostsQuerySchema>,
   traceHeaders?: Record<string, string>
-) => {
-  if (envVars.useContentApi) {
-    try {
-      const posts = await getLatestPostsContentApi({
-        take: variables.take ?? undefined,
-        traceHeaders,
-      })
-      return posts as unknown as GetLatestPostsQuery['posts']
-    } catch (err) {
-      logContentApiFallback('getLatestPosts', err)
-    }
-  }
-  const response = await sendRestGqlRequest<GetLatestPostsQuery>({
-    operation: 'latest-posts',
-    method: 'GET',
-    variables,
+): Promise<PostContent[]> => {
+  return await getLatestPostsContentApi({
+    take: query.take ?? undefined,
     traceHeaders,
   })
-  return response?.data?.data?.posts
 }
 
 export const getPost = async (
-  variables: GetPostQueryVariables,
+  {
+    slug,
+    take,
+    postEssayQuestionsTake,
+    postChoiceQuestionsTake,
+  }: {
+    slug: string
+    take?: number
+    postEssayQuestionsTake?: number
+    postChoiceQuestionsTake?: number
+  },
   traceHeaders?: Record<string, string>
-) => {
-  if (envVars.useContentApi) {
-    try {
-      return await getPostContentApi({ variables, traceHeaders })
-    } catch (err) {
-      logContentApiFallback('getPost', err)
-    }
-  }
-  const response = await sendRestGqlRequest<GetPostQuery>({
-    operation: 'post-detail',
-    method: 'GET',
-    variables,
+): Promise<z.infer<typeof V1PostDetailBodySchema> | undefined> => {
+  return await getPostContentApi({
+    slug,
+    take,
+    postEssayQuestionsTake,
+    postChoiceQuestionsTake,
     traceHeaders,
   })
-  return response?.data?.data?.post
 }
 
 export const getPostMeta = async (
-  variables: GetPostMetaQueryVariables,
+  { slug }: { slug: string },
   traceHeaders?: Record<string, string>
-): Promise<GetPostMetaQuery['post']> => {
-  if (envVars.useContentApi) {
-    try {
-      return await getPostMetaContentApi({ variables, traceHeaders })
-    } catch (err) {
-      logContentApiFallback('getPostMeta', err)
-    }
-  }
-  const response = await sendRestGqlRequest<GetPostMetaQuery>({
-    operation: 'post-meta',
-    method: 'GET',
-    variables,
-    traceHeaders,
-  })
-  return response?.data?.data?.post
+): Promise<z.infer<typeof V1PostMetaBodySchema> | undefined> => {
+  return await getPostMetaContentApi({ slug, traceHeaders })
 }
 
 export const getPostsEssayAnswersWithLikes = async (
-  variables: GetPostsEssayAnswersWithLikesQueryVariables,
+  query: z.infer<typeof V1PostsEssayAnswersWithLikesQuerySchema>,
   traceHeaders?: Record<string, string>
-) => {
-  if (envVars.useContentApi) {
-    try {
-      return await getPostsEssayAnswersWithLikesContentApi({
-        variables,
-        traceHeaders,
-      })
-    } catch (err) {
-      logContentApiFallback('getPostsEssayAnswersWithLikes', err)
-    }
-  }
-  const response = await sendRestGqlRequest<GetPostsEssayAnswersWithLikesQuery>(
-    {
-      operation: 'posts-essay-answers-with-likes',
-      method: 'GET',
-      variables,
-      traceHeaders,
-    }
-  )
-  return response?.data?.data?.posts
+): Promise<z.infer<typeof V1PostsEssayAnswersWithLikesResponseSchema>> => {
+  return await getPostsEssayAnswersWithLikesContentApi({ query, traceHeaders })
 }
 
 export const getPostEssayQuestionsByPostSlug = async ({
@@ -120,58 +71,17 @@ export const getPostEssayQuestionsByPostSlug = async ({
 }: {
   slug: string
   traceHeaders?: Record<string, string>
-}) => {
-  if (envVars.useContentApi) {
-    try {
-      return await getPostEssayQuestionsByPostSlugContentApi({
-        slug,
-        traceHeaders,
-      })
-    } catch (err) {
-      logContentApiFallback('getPostEssayQuestionsByPostSlug', err)
-    }
-  }
-  const response = await sendRestGqlRequest<GetPostEssayQuestionsQuery>({
-    operation: 'post-essay-questions',
-    method: 'GET',
-    variables: { where: { slug } },
-    traceHeaders,
-  })
-  return response?.data?.data?.post
+}): Promise<z.infer<typeof V1PostEssayQuestionsBodySchema> | undefined> => {
+  return await getPostEssayQuestionsByPostSlugContentApi({ slug, traceHeaders })
 }
 
 export const getPostsPaged = async (
-  variables: GetPostsQueryVariables,
+  query: z.infer<typeof V1PostsQuerySchema>,
   traceHeaders?: Record<string, string>
-) => {
-  if (envVars.useContentApi) {
-    try {
-      const order = firstOrderByEntry(variables.orderBy ?? undefined)
-      const orderSupported =
-        !order ||
-        (order.publishedDate === 'desc' &&
-          !order.id &&
-          !order.title &&
-          !order.slug)
-
-      if (orderSupported) {
-        const posts = await getPostsPagedContentApi({
-          take: variables.take ?? undefined,
-          skip: variables.skip ?? undefined,
-          traceHeaders,
-        })
-        return posts as unknown as GetPostsQuery['posts']
-      }
-    } catch (err) {
-      logContentApiFallback('getPostsPaged', err)
-    }
-  }
-
-  const postsRes = await sendRestGqlRequest<GetPostsQuery>({
-    operation: 'posts-paged',
-    method: 'GET',
-    variables,
+): Promise<PostContent[]> => {
+  return await getPostsPagedContentApi({
+    take: query.take ?? undefined,
+    skip: query.skip ?? undefined,
     traceHeaders,
   })
-  return postsRes?.data?.data?.posts
 }

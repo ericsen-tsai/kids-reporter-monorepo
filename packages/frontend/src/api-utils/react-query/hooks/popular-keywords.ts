@@ -6,7 +6,7 @@ const POPULAR_KEYWORDS_QUERY_KEY = 'popular-keywords'
 export const usePopularKeywords = (traceHeaders?: Record<string, string>) => {
   return useQuery({
     queryKey: usePopularKeywords.getQueryKey(),
-    queryFn: () => getPopularKeywords(undefined, traceHeaders),
+    queryFn: () => getPopularKeywords(traceHeaders),
     staleTime: Infinity,
     refetchOnWindowFocus: false,
   })

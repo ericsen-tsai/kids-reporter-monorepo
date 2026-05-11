@@ -1,9 +1,10 @@
-import {
-  CreatePostEssayAnswerMutationVariables,
-  UpdatePostEssayAnswerMutationVariables,
-} from '__generated__/operations/answers.generated'
-import { PostEssayAnswerOrderByInput } from '__generated__/types'
+import type {
+  V1AllPostEssayAnswersQuerySchema,
+  V1CreatePostEssayAnswerBodySchema,
+  V1PatchPostEssayAnswerBodySchema,
+} from '@kids-reporter/api-types'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import type { z } from 'zod'
 
 import {
   createPostEssayAnswer,
@@ -39,31 +40,22 @@ usePostEssayAnswersQuery.getQueryKey = ({
   postSlug?: string
 }) => [POST_ESSAY_ANSWERS_QUERY_KEY, memberId, postSlug ?? 'all-posts']
 
-export function useAllPostEssayAnswersQuery({
-  orderBy,
-  take,
-}: {
-  orderBy?: PostEssayAnswerOrderByInput[]
-  take?: number
-}) {
+export function useAllPostEssayAnswersQuery({ take }: { take?: number }) {
   return useQuery({
-    queryKey: useAllPostEssayAnswersQuery.getQueryKey({ orderBy, take }),
-    queryFn: () => getAllPostEssayAnswers(orderBy, take),
+    queryKey: useAllPostEssayAnswersQuery.getQueryKey({ take }),
+    queryFn: () =>
+      getAllPostEssayAnswers({
+        take: take ?? 10,
+        orderBy: 'createdAt:desc',
+      } as z.infer<typeof V1AllPostEssayAnswersQuerySchema>),
     staleTime: Infinity,
   })
 }
 
-useAllPostEssayAnswersQuery.getQueryKey = ({
-  orderBy,
-  take,
-}: {
-  orderBy?: PostEssayAnswerOrderByInput[]
-  take?: number
-}) => [
+useAllPostEssayAnswersQuery.getQueryKey = ({ take }: { take?: number }) => [
   POST_ESSAY_ANSWERS_QUERY_KEY,
   'all-members',
   'all-posts',
-  ...(orderBy ? [orderBy] : []),
   ...(take ? [take] : []),
 ]
 
@@ -73,8 +65,8 @@ export function useCreatePostEssayAnswerMutation({
   accessToken: string
 }) {
   return useMutation({
-    mutationFn: (variables: CreatePostEssayAnswerMutationVariables) =>
-      createPostEssayAnswer(variables, accessToken),
+    mutationFn: (body: z.infer<typeof V1CreatePostEssayAnswerBodySchema>) =>
+      createPostEssayAnswer(body, accessToken),
   })
 }
 
@@ -84,7 +76,12 @@ export function useUpdatePostEssayAnswerMutation({
   accessToken: string
 }) {
   return useMutation({
-    mutationFn: (variables: UpdatePostEssayAnswerMutationVariables) =>
-      updatePostEssayAnswer(variables, accessToken),
+    mutationFn: ({
+      id,
+      patch,
+    }: {
+      id: number | string
+      patch: z.infer<typeof V1PatchPostEssayAnswerBodySchema>
+    }) => updatePostEssayAnswer({ id, patch }, accessToken),
   })
 }

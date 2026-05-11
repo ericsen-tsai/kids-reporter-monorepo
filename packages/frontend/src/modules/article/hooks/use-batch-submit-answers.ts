@@ -96,21 +96,15 @@ function useBatchSubmitAnswers({
                   essayAnswers?.[existingEssayQuestionIndex]?.id ?? ''
                 await updatePostEssayAnswer({
                   id: answerId,
-                  data: {
+                  patch: {
                     content: answers[index],
                   },
                 })
                 return
               }
               await createPostEssayAnswer({
-                data: {
-                  question: {
-                    connect: {
-                      id: question.id,
-                    },
-                  },
-                  content: answers[index],
-                },
+                questionId: question.id,
+                content: answers[index],
               })
             }
             if (question.type === 'choice') {
@@ -121,21 +115,15 @@ function useBatchSubmitAnswers({
                   choiceAnswers?.[existingChoiceQuestionIndex]?.id ?? ''
                 await updatePostChoiceAnswer({
                   id: answerId,
-                  data: {
+                  patch: {
                     choiceIndex: parseInt(answers[index]),
                   },
                 })
                 return
               }
               await createPostChoiceAnswer({
-                data: {
-                  question: {
-                    connect: {
-                      id: question.id,
-                    },
-                  },
-                  choiceIndex: parseInt(answers[index]),
-                },
+                questionId: question.id,
+                choiceIndex: parseInt(answers[index]),
               })
             }
           } catch (_err) {

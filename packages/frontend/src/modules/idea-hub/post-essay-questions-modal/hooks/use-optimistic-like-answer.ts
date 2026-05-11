@@ -1,6 +1,7 @@
-import { PostEssayAnswerOrderByInput } from '__generated__/types'
+import { EssayAnswerOrderByFlatSchema } from '@kids-reporter/api-types'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback } from 'react'
+import type { z } from 'zod'
 
 import { useGetMemberEssayAnswersHasLikedQuery } from '@/api-utils/react-query/hooks/extended'
 import { useAllPostEssayAnswersQuery } from '@/api-utils/react-query/hooks/post-essay-answer'
@@ -23,7 +24,7 @@ function useOptimisticLikeAnswer({
   memberId: string
   accessToken: string
   questionId: string
-  answerOrderBy: PostEssayAnswerOrderByInput[]
+  answerOrderBy: z.infer<typeof EssayAnswerOrderByFlatSchema>
   answerTake: number
   essayAnswerIds: string[]
 }) {
@@ -43,7 +44,6 @@ function useOptimisticLikeAnswer({
 
       const allPostEssayAnswersQueryKey =
         useAllPostEssayAnswersQuery.getQueryKey({
-          orderBy: answerOrderBy,
           take: answerTake,
         })
 
@@ -170,18 +170,12 @@ function useOptimisticLikeAnswer({
             )
           }
           await deleteMutation.mutateAsync({
-            where: { id: likeId },
+            id: Number(likeId),
           })
         } else {
           // Create like
           const createdLike = await createMutation.mutateAsync({
-            data: {
-              answer: {
-                connect: {
-                  id: answerId,
-                },
-              },
-            },
+            answerId,
           })
 
           const createdLikeId = (createdLike as { id?: string } | undefined)?.id

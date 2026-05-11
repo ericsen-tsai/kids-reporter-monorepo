@@ -1,10 +1,12 @@
-import { Post } from '__generated__/types'
+import type { PostContent } from '@kids-reporter/api-types'
 
 import { PostSummary } from '@/components/types'
 import { FALLBACK_IMG } from '@/constants'
 import { DeepPartial } from '@/types/utils'
 
-export const getPostSummaries = (posts: DeepPartial<Post>[]): PostSummary[] => {
+export const getPostSummaries = (
+  posts: DeepPartial<PostContent>[]
+): PostSummary[] => {
   return posts.map((post) => {
     const subSubcategory = post?.subSubcategoriesOrdered?.[0]
 

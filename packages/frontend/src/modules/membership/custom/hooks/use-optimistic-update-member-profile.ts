@@ -1,8 +1,8 @@
-import { MemberUpdateInput } from '__generated__/types'
 import { emitStructured } from '@kids-reporter/logger'
 import errors from '@twreporter/errors'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+import type { MemberProfilePatchBody } from '@/api/content-api/member-profile'
 import { useUpdateMemberProfileMutation } from '@/api-utils/react-query/hooks/member'
 import { BAODAOZAI_DEFAULT_ESSAY_QUESTION_COUNT } from '@/constants/baodaozai-question-count'
 import useDebounceValue from '@/hooks/use-debounce-value'
@@ -97,7 +97,7 @@ function useOptimisticUpdateMemberReadingSettings() {
     // Store previous original values for rollback on error
 
     const updateData: Pick<
-      MemberUpdateInput,
+      MemberProfilePatchBody,
       'showBaodaozai' | 'essayQuestionCount'
     > = {
       ...(hasShowBaodaozaiChanged
@@ -148,7 +148,9 @@ function useOptimisticUpdateMemberReadingSettings() {
   ])
 
   const optimisticUpdateMemberReadingSettings = useCallback(
-    (data: Pick<MemberUpdateInput, 'showBaodaozai' | 'essayQuestionCount'>) => {
+    (
+      data: Pick<MemberProfilePatchBody, 'showBaodaozai' | 'essayQuestionCount'>
+    ) => {
       if (data.showBaodaozai !== undefined) {
         setLocalShowBaodaozai(data.showBaodaozai)
       }

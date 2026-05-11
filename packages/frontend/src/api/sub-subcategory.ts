@@ -1,42 +1,18 @@
-import {
-  GetSubSubcategoryPostsQuery,
-  GetSubSubcategoryPostsQueryVariables,
-} from '__generated__/operations/content.generated'
-
 import { getSubSubcategoryPostsContentApi } from '@/api/content-api/sub-subcategory-posts'
-import envVars from '@/environment-variables'
-import { firstOrderByEntry } from '@/utils/first-order-by'
-import { logContentApiFallback } from '@/utils/log-content-api-fallback'
-import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
-export const getSubSubcategoryPosts = async (
-  variables: GetSubSubcategoryPostsQueryVariables,
-  traceHeaders?: Record<string, string>
-) => {
-  const slug = variables.where?.slug
-  const order = firstOrderByEntry(variables.orderBy ?? undefined)
-  const orderOk =
-    !order ||
-    (order.publishedDate === 'desc' && !order.id && !order.title && !order.slug)
-
-  if (envVars.useContentApi && slug && orderOk) {
-    try {
-      return await getSubSubcategoryPostsContentApi({
-        slug,
-        take: variables.take ?? undefined,
-        skip: variables.skip ?? undefined,
-        orderBy: 'publishedDate:desc',
-      })
-    } catch (err) {
-      logContentApiFallback('getSubSubcategoryPosts', err)
-    }
-  }
-
-  const response = await sendRestGqlRequest<GetSubSubcategoryPostsQuery>({
-    operation: 'sub-subcategory-posts',
-    method: 'GET',
-    variables,
-    traceHeaders,
+export const getSubSubcategoryPosts = async ({
+  slug,
+  take,
+  skip,
+}: {
+  slug: string
+  take?: number
+  skip?: number
+}) => {
+  return await getSubSubcategoryPostsContentApi({
+    slug,
+    take,
+    skip,
+    orderBy: 'publishedDate:desc',
   })
-  return response?.data?.data?.subSubcategory
 }

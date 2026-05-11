@@ -1,11 +1,18 @@
-import { PostChoiceAnswer, PostEssayAnswer } from '__generated__/types'
+import { V1MemberPostsWithAnswersResponseSchema } from '@kids-reporter/api-types'
 import { z } from 'zod'
+
+type MemberPost = z.infer<
+  typeof V1MemberPostsWithAnswersResponseSchema
+>['posts'][number]
+type MemberPostAnswer =
+  | MemberPost['choiceAnswers'][number]
+  | MemberPost['essayAnswers'][number]
 
 export type PostQuestionAnswers = {
   title: string
   slug: string
   href: string
-  answers: (PostChoiceAnswer | PostEssayAnswer)[]
+  answers: MemberPostAnswer[]
   lastAnsweredTime: string
 }[]
 

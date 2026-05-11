@@ -1,5 +1,3 @@
-import { CallBaodaozaiIntroPageType } from '__generated__/types'
-
 import { CategorySlug } from '@/types'
 
 const isValidPageNumber = (pageNumber: string): boolean => {
@@ -98,7 +96,7 @@ export const parseCategoryInfoFromPath = (
 
 export const mapCategorySlugToIntroPageType = (
   category?: CategorySlug
-): CallBaodaozaiIntroPageType | undefined => {
+): string | undefined => {
   /**
    * news -> category/news
    * storytelling -> category/storytelling

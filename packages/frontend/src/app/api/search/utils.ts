@@ -1,8 +1,3 @@
-import type {
-  GetAuthorPostsCountQuery,
-  GetProjectRelatedPostsCountQuery,
-  GetTagPostsQuery,
-} from '__generated__/operations/content.generated'
 import { customsearch } from '@googleapis/customsearch'
 import { customsearch_v1 } from '@googleapis/customsearch/v1'
 import { emitStructured } from '@kids-reporter/logger'
@@ -12,10 +7,7 @@ import { getAuthorPostsCountContentApi } from '@/api/content-api/author-collecti
 import { getProjectRelatedPostsCountContentApi } from '@/api/content-api/project-by-slug'
 import { getTagPostsContentApi } from '@/api/content-api/tag-collection'
 import { ContentType } from '@/constants'
-import envVars from '@/environment-variables'
 import type { SearchCardContent, SearchCardItem } from '@/modules/search/types'
-import { logContentApiFallback } from '@/utils/log-content-api-fallback'
-import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 const client = customsearch('v1')
 export const defaultCount = 10
@@ -67,101 +59,28 @@ export async function transferItemsToCards(
       const slug = url?.match(/(author|topic|tag)\/([^/]*)\/?/)?.[2]
       if (contentType === ContentType.TOPIC && slug) {
         contentSummary.category = '專題'
-        let relatedPostsCount: number | undefined
-        if (envVars.useContentApi) {
-          try {
-            const proj = await getProjectRelatedPostsCountContentApi({
-              slug,
-              traceHeaders,
-            })
-            relatedPostsCount = proj?.relatedPostsCount
-          } catch (err) {
-            logContentApiFallback('search-card-topic-post-count', err)
-          }
-        }
-        if (relatedPostsCount === undefined) {
-          const topicRes =
-            await sendRestGqlRequest<GetProjectRelatedPostsCountQuery>({
-              operation: 'project-related-posts-count',
-              method: 'GET',
-              variables: {
-                where: {
-                  slug: slug,
-                },
-              },
-              traceHeaders,
-            })
-          relatedPostsCount =
-            topicRes?.data?.data?.project?.relatedPostsCount ?? 0
-        }
-        contentSummary.postCount = relatedPostsCount
+        const proj = await getProjectRelatedPostsCountContentApi({
+          slug,
+          traceHeaders,
+        })
+        contentSummary.postCount = proj?.relatedPostsCount ?? 0
       } else if (contentType === ContentType.AUTHOR && slug) {
         contentSummary.category = '作者'
-        let postsCount: number | undefined
-        if (envVars.useContentApi) {
-          try {
-            const author = await getAuthorPostsCountContentApi({
-              slug,
-              traceHeaders,
-            })
-            postsCount = author?.postsCount
-          } catch (err) {
-            logContentApiFallback('search-card-author-post-count', err)
-          }
-        }
-        if (postsCount === undefined) {
-          const authorRes = await sendRestGqlRequest<GetAuthorPostsCountQuery>({
-            operation: 'author-posts-count',
-            method: 'GET',
-            variables: {
-              where: {
-                slug: slug,
-              },
-            },
-            traceHeaders,
-          })
-          postsCount = authorRes?.data?.data?.author?.postsCount ?? 0
-        }
-        contentSummary.postCount = postsCount
+        const author = await getAuthorPostsCountContentApi({
+          slug,
+          traceHeaders,
+        })
+        contentSummary.postCount = author?.postsCount ?? 0
       } else if (contentType === ContentType.TAG && slug) {
         contentSummary.category = '標籤'
-        let tagPostsCount: number | undefined
-        let tagHeroSmall: string | undefined
-        if (envVars.useContentApi) {
-          try {
-            const tag = await getTagPostsContentApi({
-              slug,
-              take: 1,
-              orderBy: 'publishedDate:desc',
-              traceHeaders,
-            })
-            tagPostsCount = tag.postsCount
-            tagHeroSmall = tag.posts?.[0]?.heroImage?.resized?.small
-          } catch (err) {
-            logContentApiFallback('search-card-tag-posts', err)
-          }
-        }
-        if (tagPostsCount === undefined) {
-          const tagRes = await sendRestGqlRequest<GetTagPostsQuery>({
-            operation: 'tag-posts',
-            method: 'GET',
-            variables: {
-              where: {
-                slug: slug,
-              },
-              take: 1,
-              orderBy: {
-                publishedDate: 'desc',
-              },
-            },
-            traceHeaders,
-          })
-          tagPostsCount = tagRes?.data?.data?.tag?.postsCount ?? 0
-          tagHeroSmall =
-            tagRes?.data?.data?.tag?.posts?.[0]?.heroImage?.resized?.small
-        }
-        contentSummary.postCount = tagPostsCount
-        contentSummary.image = tagHeroSmall
+        const tag = await getTagPostsContentApi({
+          slug,
+          take: 1,
+          orderBy: 'publishedDate:desc',
+          traceHeaders,
+        })
+        contentSummary.postCount = tag.postsCount ?? 0
+        contentSummary.image = tag.posts?.[0]?.heroImage?.resized?.small
       }
 
       return { content: contentSummary }

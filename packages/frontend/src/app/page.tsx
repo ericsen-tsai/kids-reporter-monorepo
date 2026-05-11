@@ -39,14 +39,13 @@ export default async function Home() {
   ] = await Promise.allSettled([
     getTopicProjects(
       {
-        orderBy: [{ publishedDate: 'desc' }],
         take: 9,
       },
       traceHeaders
     ),
     getLatestPosts(
       {
-        orderBy: [{ publishedDate: 'desc' }],
+        orderBy: 'publishedDate:desc',
         take: 6,
       },
       traceHeaders
@@ -57,7 +56,7 @@ export default async function Home() {
       },
       traceHeaders
     ),
-    getCallBaodaozaiIntroContent({ where: { page: 'home' } }, traceHeaders),
+    getCallBaodaozaiIntroContent({ page: 'home' }, traceHeaders),
   ])
 
   const topicProjects =

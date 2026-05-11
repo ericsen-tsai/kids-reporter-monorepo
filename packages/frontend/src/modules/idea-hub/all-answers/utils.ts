@@ -1,10 +1,11 @@
-import { GetPostsEssayAnswersWithLikesQuery } from '__generated__/operations/content.generated'
+import { V1PostsEssayAnswersWithLikesResponseSchema } from '@kids-reporter/api-types'
 import { InfiniteData } from '@tanstack/react-query'
+import type { z } from 'zod'
 
 import { PostWithTwoTopLikesAnswersPerQuestion } from '../types'
 
 export function transformInfinitePostsEssayAnswersWithLikesDataToPosts(
-  data: InfiniteData<GetPostsEssayAnswersWithLikesQuery['posts']>
+  data: InfiniteData<z.infer<typeof V1PostsEssayAnswersWithLikesResponseSchema>>
 ): PostWithTwoTopLikesAnswersPerQuestion['posts'] {
   if (!data?.pages) return []
   const allPosts: PostWithTwoTopLikesAnswersPerQuestion['posts'] = []

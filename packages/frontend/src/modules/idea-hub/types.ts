@@ -1,6 +1,12 @@
-import { GetPostsEssayAnswersWithLikesQuery } from '__generated__/operations/content.generated'
+import { V1PostsEssayAnswersWithLikesResponseSchema } from '@kids-reporter/api-types'
+import type { z } from 'zod'
 
 import { RecursiveNonNullable } from '@/types/utils'
 
-export type PostWithTwoTopLikesAnswersPerQuestion =
-  RecursiveNonNullable<GetPostsEssayAnswersWithLikesQuery>
+type PostsEssayAnswersWithLikes = z.infer<
+  typeof V1PostsEssayAnswersWithLikesResponseSchema
+>
+
+export type PostWithTwoTopLikesAnswersPerQuestion = RecursiveNonNullable<{
+  posts: PostsEssayAnswersWithLikes
+}>

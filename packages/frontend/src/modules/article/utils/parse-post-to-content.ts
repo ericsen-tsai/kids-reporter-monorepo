@@ -1,12 +1,10 @@
-import { GetPostQuery } from '__generated__/operations/content.generated'
-
 import { PostSummary } from '@/components/types'
 import { AUTHOR_ROLES_IN_ORDER, AuthorRole, DEFAULT_AVATAR } from '@/constants'
 import { getPostSummaries } from '@/utils'
 
-import { Author, AuthorGroup } from '../types'
+import type { ArticlePost, Author, AuthorGroup } from '../types'
 
-function parsePostToContent(post: NonNullable<GetPostQuery['post']>) {
+function parsePostToContent(post: ArticlePost) {
   // Assemble authors for brief
   const authorsJSON = post?.authorsJSON as {
     id: string
@@ -100,26 +98,34 @@ function parsePostToContent(post: NonNullable<GetPostQuery['post']>) {
       ? `/category/${category.slug}/${subcategory.slug}/${subSubcategory.slug}`
       : ''
 
-  const twReporterRelatedPosts: PostSummary[] =
-    post?.TWReporterRelatedPostsJSON?.map(
-      (twReporterPost: {
+  const twReporterRelatedPostsRaw = Array.isArray(
+    post?.TWReporterRelatedPostsJSON
+  )
+    ? (post?.TWReporterRelatedPostsJSON as unknown[])
+    : []
+
+  const twReporterRelatedPosts: PostSummary[] = twReporterRelatedPostsRaw
+    .map((twReporterPost) => {
+      const p = twReporterPost as {
         ogTitle?: string
-        src: string
+        src?: string
         ogImgSrc?: string
         ogDescription?: string
         publishedDate?: string
         subcategory?: string
         category?: string
-      }) => ({
-        title: twReporterPost.ogTitle ?? '',
-        url: twReporterPost.src,
-        image: twReporterPost.ogImgSrc ?? '',
-        desc: twReporterPost.ogDescription ?? '',
-        category: twReporterPost.category ?? '',
-        subSubcategory: twReporterPost.subcategory ?? '',
-        publishedDate: twReporterPost.publishedDate ?? '',
-      })
-    ) ?? []
+      }
+      return {
+        title: p.ogTitle ?? '',
+        url: p.src ?? '',
+        image: p.ogImgSrc ?? '',
+        desc: p.ogDescription ?? '',
+        category: p.category ?? '',
+        subSubcategory: p.subcategory ?? '',
+        publishedDate: p.publishedDate ?? '',
+      }
+    })
+    .filter((p) => Boolean(p.url))
 
   return {
     topicURL,

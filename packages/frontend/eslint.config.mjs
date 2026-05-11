@@ -47,7 +47,6 @@ const config = [
       'dist/**',
       'build/**',
       'out/**',
-      '__generated__/**',
     ],
   },
 ]

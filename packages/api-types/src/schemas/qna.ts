@@ -101,6 +101,15 @@ export const V1PostEssayQuestionWithAnswersResponseSchema = z.object({
   answers: z.array(EssayAnswerThreadItemSchema),
 })
 
+export const EssayAnswerOrderByFlatSchema = z.enum([
+  'createdAt:desc',
+  'likesCount:desc',
+])
+
+export type EssayAnswerOrderByFlat = z.infer<
+  typeof EssayAnswerOrderByFlatSchema
+>
+
 registry.registerPath({
   method: 'get',
   path: '/v1/post-essay-questions/{questionId}',

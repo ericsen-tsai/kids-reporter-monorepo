@@ -1,91 +1,42 @@
-import {
-  CreatePostChoiceAnswerMutation,
-  CreatePostChoiceAnswerMutationVariables,
-  GetPostChoiceAnswersQuery,
-  GetPostChoiceAnswersQueryVariables,
-  UpdatePostChoiceAnswerMutation,
-  UpdatePostChoiceAnswerMutationVariables,
-} from '__generated__/operations/answers.generated'
+import type {
+  V1CreatePostChoiceAnswerBodySchema,
+  V1PatchPostChoiceAnswerBodySchema,
+} from '@kids-reporter/api-types'
+import type { z } from 'zod'
 
 import {
   createPostChoiceAnswerContentApi,
   getPostChoiceAnswersByMemberIdContentApi,
   updatePostChoiceAnswerContentApi,
 } from '@/api/content-api/post-qna'
-import envVars from '@/environment-variables'
-import { logContentApiFallback } from '@/utils/log-content-api-fallback'
-import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export const getPostChoiceAnswersByMemberId = async (
   memberId: string,
   accessToken: string,
   postSlug?: string
 ) => {
-  if (envVars.useContentApi) {
-    void memberId
-    try {
-      return await getPostChoiceAnswersByMemberIdContentApi({
-        accessToken,
-        postSlug,
-      })
-    } catch (err) {
-      logContentApiFallback('getPostChoiceAnswersByMemberId', err)
-    }
-  }
-
-  const variables: GetPostChoiceAnswersQueryVariables = {
-    where: {
-      member: { id: { equals: memberId } },
-      ...(postSlug && { question: { post: { slug: { equals: postSlug } } } }),
-    },
-  }
-
-  const response = await sendRestGqlRequest<GetPostChoiceAnswersQuery>({
-    operation: 'post-choice-answers',
-    method: 'GET',
-    variables,
-    authToken: accessToken,
+  void memberId
+  return await getPostChoiceAnswersByMemberIdContentApi({
+    accessToken,
+    postSlug,
   })
-  return response?.data?.data?.postChoiceAnswers ?? []
 }
 export const createPostChoiceAnswer = async (
-  variables: CreatePostChoiceAnswerMutationVariables,
+  body: z.infer<typeof V1CreatePostChoiceAnswerBodySchema>,
   accessToken: string
 ) => {
-  if (envVars.useContentApi) {
-    try {
-      return await createPostChoiceAnswerContentApi(variables, accessToken)
-    } catch (err) {
-      logContentApiFallback('createPostChoiceAnswer', err)
-    }
-  }
-
-  const response = await sendRestGqlRequest<CreatePostChoiceAnswerMutation>({
-    operation: 'create-post-choice-answer',
-    method: 'POST',
-    variables,
-    authToken: accessToken,
-  })
-  return response?.data?.data?.createPostChoiceAnswer
+  return await createPostChoiceAnswerContentApi(body, accessToken)
 }
 
 export const updatePostChoiceAnswer = async (
-  variables: UpdatePostChoiceAnswerMutationVariables,
+  {
+    id,
+    patch,
+  }: {
+    id: number | string
+    patch: z.infer<typeof V1PatchPostChoiceAnswerBodySchema>
+  },
   accessToken: string
 ) => {
-  if (envVars.useContentApi) {
-    try {
-      return await updatePostChoiceAnswerContentApi(variables, accessToken)
-    } catch (err) {
-      logContentApiFallback('updatePostChoiceAnswer', err)
-    }
-  }
-
-  const response = await sendRestGqlRequest<UpdatePostChoiceAnswerMutation>({
-    operation: 'update-post-choice-answer',
-    method: 'POST',
-    variables,
-    authToken: accessToken,
-  })
-  return response?.data?.data?.updatePostChoiceAnswer
+  return await updatePostChoiceAnswerContentApi({ id, patch }, accessToken)
 }

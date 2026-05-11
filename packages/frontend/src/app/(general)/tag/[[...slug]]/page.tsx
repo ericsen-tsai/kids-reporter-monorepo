@@ -64,14 +64,7 @@ export default async function Tag({ params }: { params: { slug: any } }) {
 
   const tag = await getTagPostsBySlugPaged(
     {
-      where: {
-        slug: slug,
-      },
-      orderBy: [
-        {
-          publishedDate: 'desc',
-        },
-      ],
+      slug,
       take: POST_PER_PAGE,
       skip: (currentPage - 1) * POST_PER_PAGE,
     },

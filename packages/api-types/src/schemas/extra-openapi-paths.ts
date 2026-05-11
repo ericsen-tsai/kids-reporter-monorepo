@@ -6,7 +6,10 @@ import {
   registry,
   V1AccessTokenResponseSchema,
   V1AuthorPostsCountResponseSchema,
+  V1MemberAvatarDeleteResponseSchema,
+  V1MemberAvatarUploadResponseSchema,
   V1MemberPostsWithAnswersQuerySchema,
+  V1MemberPostsWithAnswersResponseSchema,
 } from './content.js'
 import {
   V1AuthorBySlugPostsQuerySchema,
@@ -35,70 +38,6 @@ import {
 extendZodWithOpenApi(z)
 
 const HealthOkWithTimestampSchema = z.object({ timestamp: z.string() })
-
-const MemberPostEssayAnswerInListSchema = z
-  .strictObject({
-    id: z.string(),
-    content: z.string(),
-    likesCount: z.number().int(),
-    createdAt: z.string(),
-    updatedAt: z.string(),
-    question: z.strictObject({
-      id: z.string(),
-      title: z.string(),
-      hint: z.string(),
-      post: z.strictObject({ id: z.string() }),
-    }),
-  })
-  .openapi('MemberPostEssayAnswerInList')
-
-const MemberPostChoiceOptionSchema = z.strictObject({
-  content: z.string(),
-  isCorrectAnswer: z.boolean(),
-})
-
-const MemberPostChoiceAnswerInListSchema = z
-  .strictObject({
-    id: z.string(),
-    choiceIndex: z.number().int(),
-    correct: z.boolean(),
-    createdAt: z.string(),
-    updatedAt: z.string(),
-    question: z.strictObject({
-      id: z.string(),
-      title: z.string(),
-      options: z.array(MemberPostChoiceOptionSchema),
-      reason: z.unknown().nullable(),
-      post: z.strictObject({ id: z.string() }),
-    }),
-  })
-  .openapi('MemberPostChoiceAnswerInList')
-
-const V1MemberPostsWithAnswersItemSchema = z
-  .object({
-    id: z.string(),
-    title: z.string(),
-    slug: z.string(),
-    publishedDate: z.string(),
-    lastAnsweredTime: z.string(),
-    essayAnswers: z.array(MemberPostEssayAnswerInListSchema),
-    choiceAnswers: z.array(MemberPostChoiceAnswerInListSchema),
-  })
-  .openapi('MemberPostWithAnswersItem')
-
-export const V1MemberPostsWithAnswersResponseSchema = z.object({
-  posts: z.array(V1MemberPostsWithAnswersItemSchema),
-  nextCursor: z.string().nullable(),
-})
-
-export const V1MemberAvatarUploadResponseSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-})
-
-export const V1MemberAvatarDeleteResponseSchema = z.object({
-  id: z.string(),
-})
 
 /* --- Infra: health, OpenAPI, auth */
 

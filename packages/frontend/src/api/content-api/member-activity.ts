@@ -1,4 +1,8 @@
-import type { MemberPostsWithAnswersPayload } from '@/api/member-posts-with-answers-schema'
+import {
+  V1EssayAnswersHasLikedResponseSchema,
+  V1MemberPostsWithAnswersResponseSchema,
+} from '@kids-reporter/api-types'
+
 import { sendContentApiRequest } from '@/utils/send-content-api'
 
 export async function getMemberPostsWithAnswersContentApi({
@@ -14,11 +18,12 @@ export async function getMemberPostsWithAnswersContentApi({
     path: '/v1/members/me/posts-with-answers',
     authToken: accessToken,
     query: { take, cursor },
-  })) as MemberPostsWithAnswersPayload | null
-  if (!response || !Array.isArray(response.posts)) {
+  })) as unknown
+  const parsed = V1MemberPostsWithAnswersResponseSchema.safeParse(response)
+  if (!parsed.success) {
     throw new Error('content-api invalid posts-with-answers response')
   }
-  return response
+  return parsed.data
 }
 
 export async function getMemberEssayAnswersHasLikedContentApi({
@@ -35,13 +40,10 @@ export async function getMemberEssayAnswersHasLikedContentApi({
     query: {
       essayAnswerIds: essayAnswerIds.length ? essayAnswerIds.join(',') : '',
     },
-  })) as Array<{
-    essayAnswerId: string
-    hasLiked: boolean
-    essayAnswerLikeId: string
-  }>
-  if (!Array.isArray(response)) {
+  })) as unknown
+  const parsed = V1EssayAnswersHasLikedResponseSchema.safeParse(response)
+  if (!parsed.success) {
     throw new Error('content-api invalid has-liked response')
   }
-  return response
+  return parsed.data
 }

@@ -1,4 +1,3 @@
-import { GetMemberPostsWithAnswersQueryVariables } from '__generated__/operations/members.generated'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 
 import {
@@ -12,9 +11,10 @@ export function useMemberPostsWithAnswersInfinityQuery({
   accessToken,
   memberId,
   take = 5,
-}: Omit<GetMemberPostsWithAnswersQueryVariables, 'nextCursor'> & {
+}: {
   accessToken: string
   memberId: string
+  take?: number
 }) {
   return useInfiniteQuery({
     queryKey: useMemberPostsWithAnswersInfinityQuery.getQueryKey({

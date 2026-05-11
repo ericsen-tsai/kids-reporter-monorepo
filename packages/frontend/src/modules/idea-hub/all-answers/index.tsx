@@ -1,9 +1,5 @@
 'use client'
 
-import {
-  PostEssayAnswerOrderByInput,
-  PostOrderByInput,
-} from '__generated__/types'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -38,19 +34,9 @@ function AllAnswers({ onOpenModal }: AllAnswersProps) {
     hasNextPage,
     fetchNextPage,
   } = usePostsEssayAnswersWithLikesInfinityQuery({
-    orderBy: [{ publishedDate: 'desc' }] as PostOrderByInput[],
     take: DEFAULT_PAGE_ITEM_COUNT,
-    answerOrderBy: [{ likesCount: 'desc' }] as PostEssayAnswerOrderByInput[],
+    answerOrderBy: 'likesCount:desc',
     answerTake: ANSWER_TAKE,
-    where: {
-      postEssayQuestions: {
-        some: {
-          answers: {
-            some: {},
-          },
-        },
-      },
-    },
     select: transformInfinitePostsEssayAnswersWithLikesDataToPosts,
   })
 

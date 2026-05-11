@@ -1,9 +1,9 @@
-import type { GetAuthorPostsCountQuery } from '__generated__/operations/content.generated'
 import {
   V1AuthorBySlugMetaResponseSchema,
   V1AuthorBySlugPostsResponseSchema,
   V1AuthorPostsCountResponseSchema,
 } from '@kids-reporter/api-types'
+import type { z } from 'zod'
 
 import {
   ContentApiRequestError,
@@ -35,7 +35,7 @@ export async function getAuthorPostsCountContentApi({
 }: {
   slug: string
   traceHeaders?: Headers | Record<string, string | undefined>
-}): Promise<GetAuthorPostsCountQuery['author'] | undefined> {
+}): Promise<z.infer<typeof V1AuthorPostsCountResponseSchema> | undefined> {
   try {
     const enc = encodeURIComponent(slug)
     const response = await sendContentApiRequest({
@@ -46,9 +46,7 @@ export async function getAuthorPostsCountContentApi({
     if (!parsed.success) {
       throw new Error('content-api schema mismatch author posts-count')
     }
-    return {
-      postsCount: parsed.data.postsCount,
-    } as GetAuthorPostsCountQuery['author']
+    return parsed.data
   } catch (e) {
     if (e instanceof ContentApiRequestError && e.status === 404) {
       return undefined

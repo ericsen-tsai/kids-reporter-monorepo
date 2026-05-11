@@ -1,56 +1,24 @@
-import {
-  CreatePostEssayAnswerLikeMutation,
-  CreatePostEssayAnswerLikeMutationVariables,
-  DeletePostEssayAnswerLikeMutation,
-  DeletePostEssayAnswerLikeMutationVariables,
-} from '__generated__/operations/answers.generated'
+import type {
+  V1CreatePostEssayAnswerLikeBodySchema,
+  V1PostEssayAnswerLikePathIdSchema,
+} from '@kids-reporter/api-types'
+import type { z } from 'zod'
 
 import {
   createPostEssayAnswerLikeContentApi,
   deletePostEssayAnswerLikeContentApi,
 } from '@/api/content-api/post-qna'
-import envVars from '@/environment-variables'
-import { logContentApiFallback } from '@/utils/log-content-api-fallback'
-import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export const createPostEssayAnswerLike = async (
-  variables: CreatePostEssayAnswerLikeMutationVariables,
+  body: z.infer<typeof V1CreatePostEssayAnswerLikeBodySchema>,
   accessToken: string
 ) => {
-  if (envVars.useContentApi) {
-    try {
-      return await createPostEssayAnswerLikeContentApi(variables, accessToken)
-    } catch (err) {
-      logContentApiFallback('createPostEssayAnswerLike', err)
-    }
-  }
-
-  const response = await sendRestGqlRequest<CreatePostEssayAnswerLikeMutation>({
-    operation: 'create-post-essay-answer-like',
-    method: 'POST',
-    variables,
-    authToken: accessToken,
-  })
-  return response?.data?.data?.createPostEssayAnswerLike
+  return await createPostEssayAnswerLikeContentApi(body, accessToken)
 }
 
 export const deletePostEssayAnswerLike = async (
-  variables: DeletePostEssayAnswerLikeMutationVariables,
+  params: z.infer<typeof V1PostEssayAnswerLikePathIdSchema>,
   accessToken: string
 ) => {
-  if (envVars.useContentApi) {
-    try {
-      return await deletePostEssayAnswerLikeContentApi(variables, accessToken)
-    } catch (err) {
-      logContentApiFallback('deletePostEssayAnswerLike', err)
-    }
-  }
-
-  const response = await sendRestGqlRequest<DeletePostEssayAnswerLikeMutation>({
-    operation: 'delete-post-essay-answer-like',
-    method: 'POST',
-    variables,
-    authToken: accessToken,
-  })
-  return response?.data?.data?.deletePostEssayAnswerLike
+  return await deletePostEssayAnswerLikeContentApi(params, accessToken)
 }

@@ -1,72 +1,29 @@
 import {
-  GetTagMetaQuery,
-  GetTagPostsQuery,
-  GetTagPostsQueryVariables,
-} from '__generated__/operations/content.generated'
-
-import {
   getTagMetaContentApi,
   getTagPostsContentApi,
 } from '@/api/content-api/tag-collection'
-import envVars from '@/environment-variables'
-import { firstOrderByEntry } from '@/utils/first-order-by'
-import { logContentApiFallback } from '@/utils/log-content-api-fallback'
-import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
-export async function getTagMetaBySlug({
-  slug,
-}: {
-  slug: string
-}): Promise<GetTagMetaQuery['tag']> {
-  if (envVars.useContentApi) {
-    try {
-      return await getTagMetaContentApi({ slug })
-    } catch (err) {
-      logContentApiFallback('getTagMetaBySlug', err)
-    }
-  }
-  const res = await sendRestGqlRequest<GetTagMetaQuery>({
-    operation: 'tag-meta',
-    method: 'GET',
-    variables: {
-      where: {
-        slug,
-      },
-    },
-  })
-
-  return res?.data?.data?.tag
+export async function getTagMetaBySlug({ slug }: { slug: string }) {
+  return await getTagMetaContentApi({ slug })
 }
 
 export async function getTagPostsBySlugPaged(
-  variables: GetTagPostsQueryVariables,
+  {
+    slug,
+    take,
+    skip,
+  }: {
+    slug: string
+    take?: number
+    skip?: number
+  },
   traceHeaders?: Headers | Record<string, string | undefined>
-): Promise<GetTagPostsQuery['tag']> {
-  const slug = variables.where?.slug
-  const order = firstOrderByEntry(variables.orderBy ?? undefined)
-  const orderOk =
-    !order ||
-    (order.publishedDate === 'desc' && !order.id && !order.title && !order.slug)
-
-  if (envVars.useContentApi && slug && orderOk) {
-    try {
-      return await getTagPostsContentApi({
-        slug,
-        take: variables.take ?? undefined,
-        skip: variables.skip ?? undefined,
-        orderBy: 'publishedDate:desc',
-      })
-    } catch (err) {
-      logContentApiFallback('getTagPostsBySlugPaged', err)
-    }
-  }
-
-  const res = await sendRestGqlRequest<GetTagPostsQuery>({
-    operation: 'tag-posts',
-    method: 'GET',
-    variables,
+) {
+  return await getTagPostsContentApi({
+    slug,
+    take,
+    skip,
+    orderBy: 'publishedDate:desc',
     traceHeaders,
   })
-
-  return res?.data?.data?.tag
 }

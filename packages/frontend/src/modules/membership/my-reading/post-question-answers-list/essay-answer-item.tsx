@@ -1,11 +1,12 @@
 'use client'
 
-import { PostEssayAnswer } from '__generated__/types'
+import { V1MemberPostsWithAnswersResponseSchema } from '@kids-reporter/api-types'
 import { emitStructured } from '@kids-reporter/logger'
 import { useQueryClient } from '@tanstack/react-query'
 import errors from '@twreporter/errors'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import type { z } from 'zod'
 
 import { DEFAULT_PAGE_ITEM_COUNT } from '@/api-utils/react-query/constants'
 import { useMemberPostsWithAnswersInfinityQuery } from '@/api-utils/react-query/hooks/extended'
@@ -28,7 +29,9 @@ function EssayAnswerItem({
   postSlug,
   onBackToFirstPage,
 }: {
-  answer: PostEssayAnswer
+  answer: z.infer<
+    typeof V1MemberPostsWithAnswersResponseSchema
+  >['posts'][number]['essayAnswers'][number]
   postSlug: string
   onBackToFirstPage: (slug: string) => void
 }) {
@@ -46,7 +49,7 @@ function EssayAnswerItem({
     try {
       await updatePostEssayAnswer({
         id: answer.id,
-        data: {
+        patch: {
           content: answers[0],
         },
       })

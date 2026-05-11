@@ -1,8 +1,9 @@
 'use client'
 
-import { Member, PostEssayAnswerOrderByInput } from '__generated__/types'
+import type { EssayAnswerOrderByFlatSchema } from '@kids-reporter/api-types'
 import Image from 'next/image'
 import { useCallback } from 'react'
+import type { z } from 'zod'
 
 import { usePostEssayQuestionEssayAnswersInfinityQuery } from '@/api-utils/react-query/hooks/post-essay-question'
 import Divider from '@/components/divider'
@@ -27,7 +28,7 @@ type ModalAnswerItemProps = {
   memberId: string
   accessToken: string
   questionId: string
-  answerOrderBy: PostEssayAnswerOrderByInput[]
+  answerOrderBy: z.infer<typeof EssayAnswerOrderByFlatSchema>
   essayAnswerIds: string[]
   isLast: boolean
 }
@@ -69,13 +70,11 @@ function ModalAnswerItem({
         <div className="flex min-w-0 flex-col gap-2 rounded-[12px]">
           <div className="flex min-w-0 items-center justify-between gap-2">
             <div className="flex max-w-full min-w-0 flex-1 items-center gap-2 overflow-hidden">
-              <div className="relative size-10 flex-shrink-0 overflow-hidden rounded-full border-2 border-neutral-200">
+              <div className="relative size-10 shrink-0 overflow-hidden rounded-full border-2 border-neutral-200">
                 <Image
                   src={answer.member?.avatar?.fileUrl || DEFAULT_AVATAR}
                   alt={
-                    answer.member
-                      ? getMemberDisplayName(answer.member as Member)
-                      : 'User'
+                    answer.member ? getMemberDisplayName(answer.member) : 'User'
                   }
                   className="size-full bg-white object-cover"
                   fill
@@ -86,7 +85,7 @@ function ModalAnswerItem({
                 <div className="flex min-w-0 items-center gap-1 prose-p2-bold text-neutral-900">
                   <span className="truncate">
                     {answer.member
-                      ? getMemberDisplayName(answer.member as Member)
+                      ? getMemberDisplayName(answer.member)
                       : DEFAULT_TEXT_HOLDER}
                   </span>
                   {!!memberId && answer.member?.id === memberId && (

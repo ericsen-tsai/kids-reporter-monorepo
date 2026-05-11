@@ -1,4 +1,4 @@
-import { Post } from '__generated__/types'
+import type { PostContent } from '@kids-reporter/api-types'
 import { emitStructured } from '@kids-reporter/logger'
 import { Metadata } from 'next'
 import { headers } from 'next/headers'
@@ -19,19 +19,12 @@ import {
   POST_PER_PAGE,
 } from '@/constants'
 import CategoryCollectionModule from '@/modules/category-collection'
-import { DeepPartial } from '@/types/utils'
 import { getPostSummaries } from '@/utils'
 import {
   mapCategorySlugToIntroPageType,
   parseCategoryInfoFromPath,
 } from '@/utils/category'
 import { getServerTraceHeaders } from '@/utils/trace-context'
-
-function isPost(
-  post: DeepPartial<Post> | null | undefined
-): post is DeepPartial<Post> {
-  return post !== null && post !== undefined
-}
 
 export async function generateMetadata({
   params,
@@ -40,10 +33,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const path = params.path
   const { category, subcategory } = parseCategoryInfoFromPath(path)
+  if (!category) {
+    return {}
+  }
 
   const categoryData = await getCategoryMetadata({
-    categoryWhere: { slug: category },
-    subcategoryWhere: { slug: { equals: subcategory } },
+    slug: category,
+    subcategorySlug: subcategory ?? undefined,
   })
 
   if (!categoryData) {
@@ -97,35 +93,27 @@ function getPosts(
     subSubcategory?: string
     currentPage: number
   },
-  traceHeaders?: Record<string, string>
-) {
+  _traceHeaders?: Record<string, string>
+): Promise<any> {
   const commonVariables = {
     take: POST_PER_PAGE,
     skip: (currentPage - 1) * POST_PER_PAGE,
   }
   if (subSubcategory) {
-    return getSubSubcategoryPosts(
-      {
-        where: { slug: subSubcategory },
-        ...commonVariables,
-        orderBy: [
-          {
-            publishedDate: 'desc',
-          },
-        ],
-      },
-      traceHeaders
-    )
+    return getSubSubcategoryPosts({
+      slug: subSubcategory,
+      ...commonVariables,
+    })
   }
   if (subcategory) {
     return getSubcategoryPosts({
-      where: { slug: subcategory },
+      slug: subcategory,
       ...commonVariables,
     })
   }
 
   return getCategoryPosts({
-    where: { slug: category },
+    slug: category,
     ...commonVariables,
   })
 }
@@ -163,15 +151,12 @@ export default async function Category({
   const pageEnum = mapCategorySlugToIntroPageType(category)
 
   const introContent = pageEnum
-    ? await getCallBaodaozaiIntroContent(
-        { where: { page: pageEnum } },
-        traceHeaders
-      )
+    ? await getCallBaodaozaiIntroContent({ page: pageEnum }, traceHeaders)
     : undefined
 
   const categoryData = await getCategorySubcategoriesAndThemeColor(
     {
-      where: { slug: category },
+      slug: category,
     },
     traceHeaders
   )
@@ -244,8 +229,8 @@ export default async function Category({
     }
   }
 
-  const relatedPostsRaw = postsRes.relatedPosts ?? []
-  const relatedPosts = relatedPostsRaw.filter(isPost)
+  const relatedPostsRaw: unknown[] = postsRes.relatedPosts ?? []
+  const relatedPosts = relatedPostsRaw.filter(Boolean) as PostContent[]
 
   const posts = getPostSummaries(relatedPosts)
   const postsCount = postsRes.relatedPostsCount ?? 0
