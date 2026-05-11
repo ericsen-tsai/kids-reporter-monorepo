@@ -1718,7 +1718,6 @@ type Member {
   contactEmail: String
   twreporter_user_id: String
   role: String
-  twoFactorAuth: JSON
   showBaodaozai: Boolean
   essayQuestionCount: Int
   avatar: MemberAvatar
@@ -1925,6 +1924,7 @@ input PostChoiceAnswerOrderByInput {
 
 input PostChoiceAnswerUpdateInput {
   question: PostChoiceQuestionRelateToOneForUpdateInput
+  member: MemberRelateToOneForUpdateInput
   choiceIndex: Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -1943,6 +1943,7 @@ input PostChoiceAnswerUpdateArgs {
 
 input PostChoiceAnswerCreateInput {
   question: PostChoiceQuestionRelateToOneForCreateInput
+  member: MemberRelateToOneForCreateInput
   choiceIndex: Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -2536,8 +2537,6 @@ type Query {
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   searchTWReporterPosts(keywords: String!): [searchTWReporterPostsResult]
-  getMemberPostsWithAnswers(take: Int = 5, cursor: String): JSON
-  getMemberEssayAnswersHasLiked(essayAnswerIds: [ID]): [getMemberEssayAnswersHasLikedResult]
 }
 
 type searchTWReporterPostsResult {
@@ -2548,12 +2547,6 @@ type searchTWReporterPostsResult {
   publishedDate: String
   subcategory: String
   category: String
-}
-
-type getMemberEssayAnswersHasLikedResult {
-  essayAnswerId: ID
-  hasLiked: Boolean
-  essayAnswerLikeId: ID
 }
 
 union AuthenticatedItem = User

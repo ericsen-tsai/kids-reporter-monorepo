@@ -9,15 +9,16 @@ import {
 
 import type { ListType } from '../types/keystone-list-types'
 import { allowRoles, RoleEnum } from './utils/access-control-list'
-import {
-  makeMemberOwnedFilter,
-  memberOwnedOperationAccess,
-} from './utils/member-owned-access'
+
+const staffWriteRoles = [
+  RoleEnum.Owner,
+  RoleEnum.Admin,
+  RoleEnum.Developer,
+  RoleEnum.Editor,
+  RoleEnum.Contributor,
+]
 
 const memberFieldName = 'member'
-
-const operationAccessControl = memberOwnedOperationAccess
-const filterAccessControl = makeMemberOwnedFilter(memberFieldName)
 
 export default list<ListType<'PostChoiceAnswer'>>({
   fields: {
@@ -35,12 +36,6 @@ export default list<ListType<'PostChoiceAnswer'>>({
       many: false,
       ui: {
         hideCreate: true,
-      },
-      graphql: {
-        omit: {
-          create: true,
-          update: true,
-        },
       },
     }),
     choiceIndex: integer({
@@ -123,62 +118,15 @@ export default list<ListType<'PostChoiceAnswer'>>({
   db: { idField: { kind: 'autoincrement' } },
   access: {
     operation: {
-      query: operationAccessControl,
-      create: allowRoles([RoleEnum.Member]),
-      update: allowRoles([RoleEnum.Member]),
-      delete: operationAccessControl,
+      query: allowRoles(staffWriteRoles),
+      create: allowRoles([RoleEnum.Owner, RoleEnum.Admin]),
+      update: allowRoles([RoleEnum.Owner, RoleEnum.Admin]),
+      delete: allowRoles([RoleEnum.Owner, RoleEnum.Admin]),
     },
     filter: {
-      query: filterAccessControl,
-      update: filterAccessControl,
-      delete: filterAccessControl,
-    },
-  },
-  hooks: {
-    resolveInput: async ({ resolvedData, item, context, operation }) => {
-      const questionId = resolvedData.question?.connect?.id ?? item?.questionId
-      const memberId = item?.memberId?.toString()
-
-      const sessionMemberId = context.session?.data?.memberId?.toString()
-
-      if (!sessionMemberId) {
-        throw new Error(
-          'You must be signed in as a member to submit an answer.'
-        )
-      }
-
-      if (operation === 'create') {
-        // connect the answer to the member
-        resolvedData.member = {
-          connect: {
-            id: sessionMemberId,
-          },
-        }
-      } else if (operation === 'update') {
-        if (sessionMemberId !== memberId) {
-          throw new Error('You cannot edit the answer for another member.')
-        }
-      }
-
-      if (questionId) {
-        // Use relational question id + member id as uniqueness
-        resolvedData.compositeKey = `${questionId}:${sessionMemberId}`
-      }
-
-      const choiceIndex = resolvedData.choiceIndex
-      if (typeof choiceIndex === 'number' && choiceIndex >= 0) {
-        // find out the choice is correct or not
-        const q = await context.sudo().query.PostChoiceQuestion.findOne({
-          where: { id: questionId?.toString() },
-          query: 'id options',
-        })
-        const correctIndex = q?.options?.findIndex(
-          (o: { isCorrectAnswer: boolean }) => o.isCorrectAnswer === true
-        )
-        resolvedData.correct = choiceIndex === correctIndex
-      }
-
-      return resolvedData
+      query: undefined,
+      update: undefined,
+      delete: undefined,
     },
   },
 })

@@ -1,18 +1,36 @@
 import { list } from '@keystone-6/core'
 import { relationship, text, timestamp } from '@keystone-6/core/fields'
-import { GraphQLError } from 'graphql'
 
+import type { Context } from '../types/keystone-context'
 import type { ListType } from '../types/keystone-list-types'
 import { allowRoles, RoleEnum } from './utils/access-control-list'
-import {
-  makeMemberOwnedFilter,
-  memberOwnedOperationAccess,
-} from './utils/member-owned-access'
 
-const memberFieldName = 'member'
+function resolveAnswerIdFromItem(item: {
+  answerId?: unknown
+  answer?: { id?: unknown }
+}): number | undefined {
+  const answerIdRaw = item.answerId
+  const fromRelation = item.answer?.id
+  const n =
+    typeof answerIdRaw === 'number'
+      ? answerIdRaw
+      : typeof answerIdRaw === 'string'
+        ? Number(answerIdRaw)
+        : typeof fromRelation === 'number'
+          ? fromRelation
+          : typeof fromRelation === 'string'
+            ? Number(fromRelation)
+            : undefined
+  return n === undefined || Number.isNaN(n) ? undefined : n
+}
 
-const operationAccessControl = memberOwnedOperationAccess
-const filterAccessControl = makeMemberOwnedFilter(memberFieldName)
+const staffWriteRoles = [
+  RoleEnum.Owner,
+  RoleEnum.Admin,
+  RoleEnum.Developer,
+  RoleEnum.Editor,
+  RoleEnum.Contributor,
+]
 
 export default list<ListType<'PostEssayAnswerLike'>>({
   fields: {
@@ -30,6 +48,7 @@ export default list<ListType<'PostEssayAnswerLike'>>({
       graphql: {
         omit: {
           create: true,
+          update: true,
         },
       },
     }),
@@ -87,14 +106,14 @@ export default list<ListType<'PostEssayAnswerLike'>>({
   db: { idField: { kind: 'autoincrement' } },
   access: {
     operation: {
-      query: operationAccessControl,
-      create: allowRoles([RoleEnum.Member]),
-      update: () => false,
-      delete: operationAccessControl,
+      query: allowRoles(staffWriteRoles),
+      create: allowRoles([RoleEnum.Owner, RoleEnum.Admin]),
+      update: allowRoles([RoleEnum.Owner, RoleEnum.Admin]),
+      delete: allowRoles([RoleEnum.Owner, RoleEnum.Admin]),
     },
     filter: {
-      query: filterAccessControl,
-      delete: filterAccessControl,
+      query: undefined,
+      delete: undefined,
     },
   },
   graphql: {
@@ -103,76 +122,27 @@ export default list<ListType<'PostEssayAnswerLike'>>({
     },
   },
   hooks: {
-    resolveInput: async ({ resolvedData, item, context, operation }) => {
-      const answerId = resolvedData.answer?.connect?.id ?? item?.answerId
-
-      const sessionMemberId = context.session?.data?.memberId?.toString()
-
-      if (!sessionMemberId) {
-        throw new Error('You must be signed in as a member to submit a like.')
-      }
-
-      if (operation === 'create') {
-        // connect the answer to the member
-        resolvedData.member = {
-          connect: {
-            id: sessionMemberId,
-          },
-        }
-      }
-
-      if (answerId) {
-        resolvedData.compositeKey = `${answerId}:${sessionMemberId}`
-      }
-
-      return resolvedData
-    },
-    afterOperation: async ({ operation, item, originalItem, context }) => {
-      const assertExecuteSucceeded = (result: unknown) => {
-        // NOTE: Keystone v6 wraps Prisma calls and can return a GraphQLError
-        // instead of throwing (see keystonejs/keystone#9250). Until v6 pulls in
-        // PR #9476, explicitly detect GraphQLError so the afterOperation surfaces
-        // an actionable exception.
-        if (result instanceof GraphQLError) {
-          const debugInfo = result.extensions?.debug as
-            | { message?: string }
-            | undefined
-          const errorMsg =
-            debugInfo?.message?.trim() ??
-            `Unknown error during likesCount update (op=${operation}, answerId=${item?.answerId ?? originalItem?.answerId ?? 'n/a'})`
-
-          // TODO: throw and also enqueue a PubSub message to retry computing likesCount.
-          throw new Error(
-            `Update PostEssayAnswer failed with the following errors: ${errorMsg}`
-          )
-        }
-      }
-
-      const incrementLikesCount = async (answerId?: number | string | null) => {
-        if (!answerId) return
-        // Atomic row update in Postgres to avoid race conditions on concurrent likes
-        const result = await context.prisma
-          .$executeRaw`UPDATE "PostEssayAnswer" SET "likesCount" = "likesCount" + 1 WHERE "id" = ${Number(answerId)}`
-        assertExecuteSucceeded(result)
-      }
-
-      const decrementLikesCount = async (answerId?: number | string | null) => {
-        if (!answerId) return
-        // Atomic row update in Postgres to avoid race conditions on concurrent unlikes
-        const result = await context.prisma
-          .$executeRaw`UPDATE "PostEssayAnswer" SET "likesCount" = "likesCount" - 1 WHERE "id" = ${Number(answerId)} AND "likesCount" > 0`
-        assertExecuteSucceeded(result)
-      }
-
-      if (operation === 'create') {
-        await incrementLikesCount(item?.answerId)
-        return
-      }
-
-      if (operation === 'delete') {
-        await decrementLikesCount(originalItem?.answerId)
-        return
-      }
+    afterOperation: {
+      create: async ({ item, context }) => {
+        if (!item) return
+        const answerId = resolveAnswerIdFromItem(item)
+        if (answerId === undefined) return
+        const ctx = context as Context
+        await ctx.prisma.postEssayAnswer.update({
+          where: { id: answerId },
+          data: { likesCount: { increment: 1 } },
+        })
+      },
+      delete: async ({ originalItem, context }) => {
+        if (!originalItem) return
+        const answerId = resolveAnswerIdFromItem(originalItem)
+        if (answerId === undefined) return
+        const ctx = context as Context
+        await ctx.prisma.postEssayAnswer.updateMany({
+          where: { id: answerId, likesCount: { gt: 0 } },
+          data: { likesCount: { decrement: 1 } },
+        })
+      },
     },
   },
 })
