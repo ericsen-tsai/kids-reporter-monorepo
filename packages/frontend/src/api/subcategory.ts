@@ -5,15 +5,18 @@ export const getSubcategoryPosts = async ({
   slug,
   take,
   skip,
+  traceHeaders,
 }: {
   slug: string
   take?: number
   skip?: number
+  traceHeaders?: Record<string, string>
 }) => {
   return await getSubcategoryPostsContentApi({
     slug,
     take,
     skip,
+    traceHeaders,
   })
 }
 

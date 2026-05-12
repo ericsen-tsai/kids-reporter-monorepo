@@ -7,15 +7,23 @@ import { DEFAULT_AVATAR } from '@/constants'
 
 export async function getAuthorAvatarBySlug({
   slug,
+  traceHeaders,
 }: {
   slug: string
+  traceHeaders?: Record<string, string>
 }): Promise<string> {
-  const tiny = await getAuthorAvatarBySlugContentApi({ slug })
+  const tiny = await getAuthorAvatarBySlugContentApi({ slug, traceHeaders })
   return tiny || DEFAULT_AVATAR
 }
 
-export async function getAuthorMetaBySlug({ slug }: { slug: string }) {
-  return await getAuthorMetaContentApi({ slug })
+export async function getAuthorMetaBySlug({
+  slug,
+  traceHeaders,
+}: {
+  slug: string
+  traceHeaders?: Record<string, string>
+}) {
+  return await getAuthorMetaContentApi({ slug, traceHeaders })
 }
 
 export async function getAuthorPostsBySlugPaged(

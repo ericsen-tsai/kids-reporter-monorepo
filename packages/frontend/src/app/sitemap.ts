@@ -11,6 +11,7 @@ Therefore, so far we can't upgrade to v13.5.4 due to #56018 & #54057 remains.
 */
 
 import { MetadataRoute } from 'next'
+import { headers } from 'next/headers'
 
 import {
   getSitemapPostsContentApi,
@@ -18,15 +19,20 @@ import {
 } from '@/api/content-api/sitemaps'
 import { KIDS_URL_ORIGIN } from '@/constants'
 import envVars from '@/environment-variables'
+import { getServerTraceHeaders } from '@/utils/trace-context'
 
 export const revalidate = envVars.isProduction ? 86400 : 0 // 1 day
 
 const fetchSitemaps = async (): Promise<
   { url: string; lastModified: Date }[]
 > => {
+  const traceHeaders = getServerTraceHeaders(headers())
   let sitemaps: { url: string; lastModified: Date }[] = []
 
-  const postsRows = await getSitemapPostsContentApi({ sinceDays: 60 })
+  const postsRows = await getSitemapPostsContentApi({
+    sinceDays: 60,
+    traceHeaders,
+  })
   const posts = postsRows.map((post) => ({
     url: `${KIDS_URL_ORIGIN}/article/${post.slug}`,
     lastModified: post.publishedDate
@@ -37,7 +43,10 @@ const fetchSitemaps = async (): Promise<
     sitemaps = [...posts]
   }
 
-  const topicsRows = await getSitemapProjectsContentApi({ sinceDays: 60 })
+  const topicsRows = await getSitemapProjectsContentApi({
+    sinceDays: 60,
+    traceHeaders,
+  })
   const topics = topicsRows.map((topic) => ({
     url: `${KIDS_URL_ORIGIN}/topic/${topic.slug}`,
     lastModified: topic.publishedDate

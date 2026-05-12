@@ -11,14 +11,24 @@ import {
 
 export const createPostEssayAnswerLike = async (
   body: z.infer<typeof V1CreatePostEssayAnswerLikeBodySchema>,
-  accessToken: string
+  accessToken: string,
+  traceHeaders?: Record<string, string>
 ) => {
-  return await createPostEssayAnswerLikeContentApi(body, accessToken)
+  return await createPostEssayAnswerLikeContentApi(
+    body,
+    accessToken,
+    traceHeaders
+  )
 }
 
 export const deletePostEssayAnswerLike = async (
   params: z.infer<typeof V1PostEssayAnswerLikePathIdSchema>,
-  accessToken: string
+  accessToken: string,
+  traceHeaders?: Record<string, string>
 ) => {
-  return await deletePostEssayAnswerLikeContentApi(params, accessToken)
+  return await deletePostEssayAnswerLikeContentApi(
+    params,
+    accessToken,
+    traceHeaders
+  )
 }

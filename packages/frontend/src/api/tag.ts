@@ -3,8 +3,14 @@ import {
   getTagPostsContentApi,
 } from '@/api/content-api/tag-collection'
 
-export async function getTagMetaBySlug({ slug }: { slug: string }) {
-  return await getTagMetaContentApi({ slug })
+export async function getTagMetaBySlug({
+  slug,
+  traceHeaders,
+}: {
+  slug: string
+  traceHeaders?: Record<string, string>
+}) {
+  return await getTagMetaContentApi({ slug, traceHeaders })
 }
 
 export async function getTagPostsBySlugPaged(

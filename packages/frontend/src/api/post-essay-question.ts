@@ -8,16 +8,19 @@ export const getPostEssayQuestionEssayAnswers = async ({
   answerOrderBy,
   answerTake,
   answerSkip,
+  traceHeaders,
 }: {
   questionId: number
   answerOrderBy: z.infer<typeof EssayAnswerOrderByFlatSchema>
   answerTake: number
   answerSkip: number
+  traceHeaders?: Record<string, string>
 }) => {
   return await getPostEssayQuestionEssayAnswersContentApi({
     questionId,
     answerOrderBy,
     answerTake,
     answerSkip,
+    traceHeaders,
   })
 }

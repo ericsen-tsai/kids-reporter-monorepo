@@ -26,8 +26,7 @@ export function usePostEssayAnswersQuery({
 }) {
   return useQuery({
     queryKey: usePostEssayAnswersQuery.getQueryKey({ memberId, postSlug }),
-    queryFn: () =>
-      getPostEssayAnswersByMemberId(memberId, accessToken, postSlug),
+    queryFn: () => getPostEssayAnswersByMemberId(accessToken, postSlug),
     enabled: !!memberId && !!accessToken,
     staleTime: Infinity,
   })

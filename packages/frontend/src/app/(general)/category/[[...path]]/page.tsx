@@ -37,9 +37,11 @@ export async function generateMetadata({
     return {}
   }
 
+  const traceHeaders = getServerTraceHeaders(headers())
   const categoryData = await getCategoryMetadata({
     slug: category,
     subcategorySlug: subcategory ?? undefined,
+    traceHeaders,
   })
 
   if (!categoryData) {
@@ -62,14 +64,6 @@ export async function generateMetadata({
     categoryData?.subcategories?.[0]?.ogImage?.resized?.medium ??
     categoryData?.ogImage?.resized?.medium
 
-  if (!category) {
-    emitStructured({
-      severity: 'INFO',
-      message: `Category metadata not found. URL path is: /${params.path?.join('/') ?? ''}`,
-    })
-    return {}
-  }
-
   return {
     title,
     description,
@@ -81,23 +75,28 @@ export async function generateMetadata({
   }
 }
 
-function getPosts(
-  {
-    category,
-    subcategory,
-    subSubcategory,
-    currentPage,
-  }: {
-    category: string
-    subcategory?: string
-    subSubcategory?: string
-    currentPage: number
-  },
-  _traceHeaders?: Record<string, string>
-): Promise<any> {
+type PostsResult =
+  | Awaited<ReturnType<typeof getCategoryPosts>>
+  | Awaited<ReturnType<typeof getSubcategoryPosts>>
+  | Awaited<ReturnType<typeof getSubSubcategoryPosts>>
+
+function getPosts({
+  category,
+  subcategory,
+  subSubcategory,
+  currentPage,
+  traceHeaders,
+}: {
+  category: string
+  subcategory?: string
+  subSubcategory?: string
+  currentPage: number
+  traceHeaders?: Record<string, string>
+}): Promise<PostsResult> {
   const commonVariables = {
     take: POST_PER_PAGE,
     skip: (currentPage - 1) * POST_PER_PAGE,
+    traceHeaders,
   }
   if (subSubcategory) {
     return getSubSubcategoryPosts({
@@ -188,15 +187,13 @@ export default async function Category({
   }))
 
   // Fetch related posts of subSubcategory/subcategory/category
-  const postsRes = await getPosts(
-    {
-      category,
-      subcategory,
-      subSubcategory,
-      currentPage,
-    },
-    traceHeaders
-  )
+  const postsRes = await getPosts({
+    category,
+    subcategory,
+    subSubcategory,
+    currentPage,
+    traceHeaders,
+  })
 
   if (!postsRes) {
     emitStructured({ severity: 'WARNING', message: 'Empty related posts!' })

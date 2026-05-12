@@ -41,14 +41,14 @@ export const uploadMemberAvatar = async (
 }
 
 export const deleteMemberAvatar = async (
-  _avatarId: string,
-  accessToken: string
+  accessToken: string,
+  traceHeaders?: Record<string, string>
 ) => {
-  void _avatarId
   const body = await sendContentApiRequest({
     path: '/v1/members/me/avatar',
     method: 'DELETE',
     authToken: accessToken,
+    traceHeaders,
   })
   const parsed = V1MemberAvatarDeleteResponseSchema.safeParse(body)
   if (!parsed.success) {

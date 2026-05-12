@@ -13,31 +13,36 @@ import {
 } from '@/api/content-api/post-qna'
 
 export const getPostEssayAnswersByMemberId = async (
-  memberId: string,
   accessToken: string,
-  postSlug?: string
+  postSlug?: string,
+  traceHeaders?: Record<string, string>
 ) => {
-  void memberId
   return await getPostEssayAnswersByMemberIdContentApi({
     accessToken,
     postSlug,
+    traceHeaders,
   })
 }
 
 export const getAllPostEssayAnswers = async (
-  query?: z.infer<typeof V1AllPostEssayAnswersQuerySchema>
+  query?: z.infer<typeof V1AllPostEssayAnswersQuerySchema>,
+  traceHeaders?: Record<string, string>
 ) => {
-  return await getAllPostEssayAnswersContentApi({
-    take: query?.take ?? 10,
-    orderBy: 'createdAt:desc',
-  })
+  return await getAllPostEssayAnswersContentApi(
+    {
+      take: query?.take ?? 10,
+      orderBy: 'createdAt:desc',
+    },
+    traceHeaders
+  )
 }
 
 export const createPostEssayAnswer = async (
   body: z.infer<typeof V1CreatePostEssayAnswerBodySchema>,
-  accessToken: string
+  accessToken: string,
+  traceHeaders?: Record<string, string>
 ) => {
-  return await createPostEssayAnswerContentApi(body, accessToken)
+  return await createPostEssayAnswerContentApi(body, accessToken, traceHeaders)
 }
 
 export const updatePostEssayAnswer = async (
@@ -48,7 +53,12 @@ export const updatePostEssayAnswer = async (
     id: number | string
     patch: z.infer<typeof V1PatchPostEssayAnswerBodySchema>
   },
-  accessToken: string
+  accessToken: string,
+  traceHeaders?: Record<string, string>
 ) => {
-  return await updatePostEssayAnswerContentApi({ id, patch }, accessToken)
+  return await updatePostEssayAnswerContentApi(
+    { id, patch },
+    accessToken,
+    traceHeaders
+  )
 }

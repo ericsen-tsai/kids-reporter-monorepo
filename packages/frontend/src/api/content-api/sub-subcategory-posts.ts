@@ -9,16 +9,19 @@ export async function getSubSubcategoryPostsContentApi({
   take,
   skip,
   orderBy,
+  traceHeaders,
 }: {
   slug: string
   take?: number
   skip?: number
   orderBy?: string
+  traceHeaders?: Record<string, string>
 }) {
   const enc = encodeURIComponent(slug)
   const response = await sendContentApiRequest({
     path: `/v1/sub-subcategories/by-slug/${enc}/posts`,
     query: { take, skip, orderBy: orderBy ?? 'publishedDate:desc' },
+    traceHeaders,
   })
   const parsed = V1SubSubcategoryBySlugPostsResponseSchema.safeParse(response)
   if (!parsed.success) {

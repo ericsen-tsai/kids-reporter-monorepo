@@ -331,6 +331,7 @@ export const useAuthStore = create<AuthState>()(
             await axios.post(LOGOUT_ENDPOINT, null, {
               timeout: envVars.requestTimeoutMs,
               withCredentials: true,
+              headers: buildTraceHeaders(),
             })
             get().clearAuth({ nextStatus: 'logged_out' })
           } catch (_err) {

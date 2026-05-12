@@ -9,15 +9,18 @@ export async function getMemberPostsWithAnswersContentApi({
   accessToken,
   take,
   cursor,
+  traceHeaders,
 }: {
   accessToken: string
   take?: number
   cursor?: string
+  traceHeaders?: Record<string, string>
 }) {
   const response = (await sendContentApiRequest({
     path: '/v1/members/me/posts-with-answers',
     authToken: accessToken,
     query: { take, cursor },
+    traceHeaders,
   })) as unknown
   const parsed = V1MemberPostsWithAnswersResponseSchema.safeParse(response)
   if (!parsed.success) {
@@ -29,9 +32,11 @@ export async function getMemberPostsWithAnswersContentApi({
 export async function getMemberEssayAnswersHasLikedContentApi({
   accessToken,
   essayAnswerIds,
+  traceHeaders,
 }: {
   accessToken: string
   essayAnswerIds: string[]
+  traceHeaders?: Record<string, string>
 }) {
   const response = (await sendContentApiRequest({
     path: '/v1/members/me/essay-answers/has-liked',
@@ -40,6 +45,7 @@ export async function getMemberEssayAnswersHasLikedContentApi({
     query: {
       essayAnswerIds: essayAnswerIds.length ? essayAnswerIds.join(',') : '',
     },
+    traceHeaders,
   })) as unknown
   const parsed = V1EssayAnswersHasLikedResponseSchema.safeParse(response)
   if (!parsed.success) {

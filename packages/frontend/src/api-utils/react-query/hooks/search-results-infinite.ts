@@ -7,6 +7,7 @@ import {
   type SearchCardItem,
   type SearchNextQuery,
 } from '@/modules/search/types'
+import { buildTraceHeaders } from '@/utils/trace-context'
 
 const SEARCH_RESULTS_INFINITE_KEY = 'search-results-infinite'
 
@@ -28,6 +29,7 @@ async function fetchSearchPage(
   const axiosRes = await axios.get('/api/search', {
     params: { q, start, count },
     timeout: envVars.requestTimeoutMs,
+    headers: buildTraceHeaders(),
   })
   if (axiosRes.data?.status === 'error') {
     throw new Error(axiosRes.data?.message ?? 'Search request failed')

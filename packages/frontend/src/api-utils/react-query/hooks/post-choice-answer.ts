@@ -24,8 +24,7 @@ export function usePostChoiceAnswersQuery({
 }) {
   return useQuery({
     queryKey: usePostChoiceAnswersQuery.getQueryKey({ memberId, postSlug }),
-    queryFn: () =>
-      getPostChoiceAnswersByMemberId(memberId, accessToken, postSlug),
+    queryFn: () => getPostChoiceAnswersByMemberId(accessToken, postSlug),
     enabled: !!memberId && !!accessToken,
     staleTime: Infinity,
   })

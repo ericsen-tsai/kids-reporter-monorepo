@@ -18,6 +18,6 @@ export const useDeleteMemberAvatarMutation = ({
   accessToken: string
 }) => {
   return useMutation({
-    mutationFn: (avatarId: string) => deleteMemberAvatar(avatarId, accessToken),
+    mutationFn: () => deleteMemberAvatar(accessToken),
   })
 }

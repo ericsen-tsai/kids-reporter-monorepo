@@ -129,12 +129,12 @@ function useOptimisticLikeAnswer({
           )
 
           if (existingIndex >= 0) {
-            // Update existing entry
             return old.map((item) => {
               if (item?.essayAnswerId === answerId) {
                 return {
                   ...item,
                   hasLiked: !hasLiked,
+                  ...(!hasLiked ? {} : { essayAnswerLikeId: '' }),
                 }
               }
               return item

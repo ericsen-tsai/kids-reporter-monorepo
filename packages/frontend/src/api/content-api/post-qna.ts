@@ -32,9 +32,11 @@ export type EssayAnswerOrderByFlat = z.infer<
 export async function getPostChoiceAnswersByMemberIdContentApi({
   accessToken,
   postSlug,
+  traceHeaders,
 }: {
   accessToken: string
   postSlug?: string
+  traceHeaders?: Record<string, string>
 }) {
   const body = await sendContentApiRequest<
     z.infer<typeof V1MemberPostChoiceAnswersResponseSchema>
@@ -42,6 +44,7 @@ export async function getPostChoiceAnswersByMemberIdContentApi({
     path: '/v1/members/me/post-choice-answers',
     authToken: accessToken,
     query: { postSlug: postSlug ?? undefined },
+    traceHeaders,
   })
   if (!Array.isArray(body)) {
     throw new Error('content-api: expected array for post-choice-answers')
@@ -51,7 +54,8 @@ export async function getPostChoiceAnswersByMemberIdContentApi({
 
 export async function createPostChoiceAnswerContentApi(
   body: z.infer<typeof V1CreatePostChoiceAnswerBodySchema>,
-  accessToken: string
+  accessToken: string,
+  traceHeaders?: Record<string, string>
 ) {
   const out = await sendContentApiRequest<
     z.infer<typeof V1CreatePostChoiceAnswerResponseSchema>
@@ -60,6 +64,7 @@ export async function createPostChoiceAnswerContentApi(
     method: 'POST',
     authToken: accessToken,
     body,
+    traceHeaders,
   })
   return out
 }
@@ -72,7 +77,8 @@ export async function updatePostChoiceAnswerContentApi(
     id: number | string
     patch: z.infer<typeof V1PatchPostChoiceAnswerBodySchema>
   },
-  accessToken: string
+  accessToken: string,
+  traceHeaders?: Record<string, string>
 ) {
   const out = await sendContentApiRequest<
     z.infer<typeof V1UpdatePostChoiceAnswerResponseSchema>
@@ -81,6 +87,7 @@ export async function updatePostChoiceAnswerContentApi(
     method: 'PATCH',
     authToken: accessToken,
     body: patch,
+    traceHeaders,
   })
   return out
 }
@@ -88,9 +95,11 @@ export async function updatePostChoiceAnswerContentApi(
 export async function getPostEssayAnswersByMemberIdContentApi({
   accessToken,
   postSlug,
+  traceHeaders,
 }: {
   accessToken: string
   postSlug?: string
+  traceHeaders?: Record<string, string>
 }) {
   const body = await sendContentApiRequest<
     z.infer<typeof V1MemberPostEssayAnswersResponseSchema>
@@ -98,6 +107,7 @@ export async function getPostEssayAnswersByMemberIdContentApi({
     path: '/v1/members/me/post-essay-answers',
     authToken: accessToken,
     query: { postSlug: postSlug ?? undefined },
+    traceHeaders,
   })
   if (!Array.isArray(body)) {
     throw new Error('content-api: expected array for post-essay-answers')
@@ -106,7 +116,8 @@ export async function getPostEssayAnswersByMemberIdContentApi({
 }
 
 export async function getAllPostEssayAnswersContentApi(
-  query: z.infer<typeof V1AllPostEssayAnswersQuerySchema>
+  query: z.infer<typeof V1AllPostEssayAnswersQuerySchema>,
+  traceHeaders?: Record<string, string>
 ) {
   const body = await sendContentApiRequest<
     z.infer<typeof V1AllPostEssayAnswersResponseSchema>
@@ -116,6 +127,7 @@ export async function getAllPostEssayAnswersContentApi(
       take: query.take ?? undefined,
       orderBy: 'createdAt:desc',
     },
+    traceHeaders,
   })
   if (!Array.isArray(body)) {
     throw new Error('content-api: expected array for all post-essay-answers')
@@ -125,7 +137,8 @@ export async function getAllPostEssayAnswersContentApi(
 
 export async function createPostEssayAnswerContentApi(
   body: z.infer<typeof V1CreatePostEssayAnswerBodySchema>,
-  accessToken: string
+  accessToken: string,
+  traceHeaders?: Record<string, string>
 ) {
   const out = await sendContentApiRequest<
     z.infer<typeof V1CreatePostEssayAnswerResponseSchema>
@@ -134,6 +147,7 @@ export async function createPostEssayAnswerContentApi(
     method: 'POST',
     authToken: accessToken,
     body,
+    traceHeaders,
   })
   return out
 }
@@ -146,7 +160,8 @@ export async function updatePostEssayAnswerContentApi(
     id: number | string
     patch: z.infer<typeof V1PatchPostEssayAnswerBodySchema>
   },
-  accessToken: string
+  accessToken: string,
+  traceHeaders?: Record<string, string>
 ) {
   const out = await sendContentApiRequest<
     z.infer<typeof V1UpdatePostEssayAnswerResponseSchema>
@@ -155,6 +170,7 @@ export async function updatePostEssayAnswerContentApi(
     method: 'PATCH',
     authToken: accessToken,
     body: patch,
+    traceHeaders,
   })
   return out
 }
@@ -164,11 +180,13 @@ export async function getPostEssayQuestionEssayAnswersContentApi({
   answerOrderBy,
   answerTake,
   answerSkip,
+  traceHeaders,
 }: {
   questionId: number
   answerOrderBy: EssayAnswerOrderByFlat
   answerTake: number
   answerSkip?: number
+  traceHeaders?: Record<string, string>
 }) {
   try {
     const body = await sendContentApiRequest<
@@ -180,6 +198,7 @@ export async function getPostEssayQuestionEssayAnswersContentApi({
         answerSkip: answerSkip ?? undefined,
         answerOrderBy,
       },
+      traceHeaders,
     })
     return body.answers ?? []
   } catch (e) {
@@ -192,7 +211,8 @@ export async function getPostEssayQuestionEssayAnswersContentApi({
 
 export async function createPostEssayAnswerLikeContentApi(
   body: z.infer<typeof V1CreatePostEssayAnswerLikeBodySchema>,
-  accessToken: string
+  accessToken: string,
+  traceHeaders?: Record<string, string>
 ) {
   const out = await sendContentApiRequest<
     z.infer<typeof V1CreatePostEssayAnswerLikeResponseSchema>
@@ -201,13 +221,15 @@ export async function createPostEssayAnswerLikeContentApi(
     method: 'POST',
     authToken: accessToken,
     body,
+    traceHeaders,
   })
   return out
 }
 
 export async function deletePostEssayAnswerLikeContentApi(
   params: z.infer<typeof V1PostEssayAnswerLikePathIdSchema>,
-  accessToken: string
+  accessToken: string,
+  traceHeaders?: Record<string, string>
 ) {
   const out = await sendContentApiRequest<
     z.infer<typeof V1DeletePostEssayAnswerLikeResponseSchema>
@@ -217,6 +239,7 @@ export async function deletePostEssayAnswerLikeContentApi(
     )}`,
     method: 'DELETE',
     authToken: accessToken,
+    traceHeaders,
   })
   return out
 }

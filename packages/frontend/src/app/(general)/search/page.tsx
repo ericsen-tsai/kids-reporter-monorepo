@@ -1,6 +1,7 @@
 import { emitStructured } from '@kids-reporter/logger'
 import errors from '@twreporter/errors'
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 
 import {
   defaultCount,
@@ -18,6 +19,7 @@ import {
 } from '@/constants'
 import envVars from '@/environment-variables'
 import SearchModule from '@/modules/search'
+import { getServerTraceHeaders } from '@/utils/trace-context'
 
 // Filtering search output: https://developers.google.com/custom-search/docs/structured_search
 const filterParams = Object.values(ContentType)
@@ -106,8 +108,9 @@ export default async function SearchPage({
     )
   }
 
+  const traceHeaders = getServerTraceHeaders(headers())
   const cardItems = Array.isArray(data?.items)
-    ? await transferItemsToCards(data.items)
+    ? await transferItemsToCards(data.items, traceHeaders)
     : []
 
   const apiQuery = `${searchParams.q} (${filterParams})`
