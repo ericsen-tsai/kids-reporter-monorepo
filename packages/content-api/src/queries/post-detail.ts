@@ -409,12 +409,7 @@ export async function fetchPostDetailBySlug(
   ).map(mapRelatedPostOrdered)
 
   const hero = post.heroImage
-  const brief =
-    post.brief == null
-      ? post.brief
-      : typeof post.brief === 'string'
-        ? post.brief
-        : JSON.stringify(post.brief)
+  const brief = post.brief
   const result = {
     opening: post.opening,
     title: post.title,
