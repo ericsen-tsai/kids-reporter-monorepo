@@ -138,7 +138,7 @@ export const V1PostDetailBodySchema = z
     title: z.string(),
     showBaodaozai: z.boolean(),
     newsReadingGroup: PostDetailNewsReadingSchema.optional(),
-    brief: z.string().nullable().optional(),
+    brief: z.unknown().nullable().optional(),
     content: z.unknown().nullable().optional(),
     publishedDate: z.iso.datetime().optional(),
     heroImage: PostDetailHeroImageSchema.optional(),
