@@ -1,11 +1,11 @@
 import { EditorState, Modifier } from 'draft-js'
 
-/** Draft has no zero-length entity; ZWSP gives a neutral tail after a new link. */
+/** Draft has no zero-length entity; ZWSP gives a neutral tail after a new mutable inline span. */
 const LINK_TRAILING_BUFFER = '\u200b'
 
 /**
- * After toggleLink, collapse to range end and insert a zero-width buffer
- * without link entity so IME / typing can continue outside the link span.
+ * After toggleLink (link, annotation, etc.), collapse to range end and insert
+ * a zero-width buffer without inline entity so IME / typing can continue outside the span.
  */
 export function appendLinkCreateTrailingBuffer(
   editorState: EditorState
