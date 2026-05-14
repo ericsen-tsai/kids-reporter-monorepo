@@ -7,6 +7,7 @@ import {
 
 import {
   ContentApiRequestError,
+  contentApiResponseParseError,
   sendContentApiRequest,
 } from '@/utils/send-content-api'
 
@@ -19,7 +20,10 @@ export async function getAuthorMetaContentApi({ slug }: { slug: string }) {
   })
   const parsed = V1AuthorBySlugMetaResponseSchema.safeParse(response)
   if (!parsed.success) {
-    throw new Error('content-api schema mismatch author meta')
+    throw contentApiResponseParseError(
+      'content-api schema mismatch author meta',
+      parsed.error
+    )
   }
   const a = parsed.data
   return {
@@ -44,7 +48,10 @@ export async function getAuthorPostsCountContentApi({
     })
     const parsed = V1AuthorPostsCountResponseSchema.safeParse(response)
     if (!parsed.success) {
-      throw new Error('content-api schema mismatch author posts-count')
+      throw contentApiResponseParseError(
+        'content-api schema mismatch author posts-count',
+        parsed.error
+      )
     }
     return {
       postsCount: parsed.data.postsCount,
@@ -68,7 +75,7 @@ export async function getAuthorPostsContentApi({
   take?: number
   skip?: number
   orderBy?: string
-  traceHeaders?: Record<string, string>
+  traceHeaders?: Headers | Record<string, string | undefined>
 }) {
   const enc = encodeURIComponent(slug)
   const response = await sendContentApiRequest({
@@ -78,7 +85,10 @@ export async function getAuthorPostsContentApi({
   })
   const parsed = V1AuthorBySlugPostsResponseSchema.safeParse(response)
   if (!parsed.success) {
-    throw new Error('content-api schema mismatch author posts')
+    throw contentApiResponseParseError(
+      'content-api schema mismatch author posts',
+      parsed.error
+    )
   }
   const a = parsed.data
   return {

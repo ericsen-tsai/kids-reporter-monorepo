@@ -3,7 +3,10 @@ import {
   V1SitemapProjectsResponseSchema,
 } from '@kids-reporter/api-types'
 
-import { sendContentApiRequest } from '@/utils/send-content-api'
+import {
+  contentApiResponseParseError,
+  sendContentApiRequest,
+} from '@/utils/send-content-api'
 
 export async function getSitemapPostsContentApi({
   sinceDays,
@@ -17,8 +20,9 @@ export async function getSitemapPostsContentApi({
   })
   const parsed = V1SitemapPostsResponseSchema.safeParse(response)
   if (!parsed.success) {
-    throw new Error(
-      'content-api response schema mismatch for /v1/sitemaps/posts'
+    throw contentApiResponseParseError(
+      'content-api response schema mismatch for /v1/sitemaps/posts',
+      parsed.error
     )
   }
   return parsed.data
@@ -36,8 +40,9 @@ export async function getSitemapProjectsContentApi({
   })
   const parsed = V1SitemapProjectsResponseSchema.safeParse(response)
   if (!parsed.success) {
-    throw new Error(
-      'content-api response schema mismatch for /v1/sitemaps/projects'
+    throw contentApiResponseParseError(
+      'content-api response schema mismatch for /v1/sitemaps/projects',
+      parsed.error
     )
   }
   return parsed.data

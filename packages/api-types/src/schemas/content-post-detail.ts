@@ -3,7 +3,12 @@ import { z } from 'zod'
 
 extendZodWithOpenApi(z)
 
-/** `mapSubSubFull` / related-post cards on topic pages (full sub-subcategory tree). */
+/**
+ * Full sub-subcategory tree for **detail-shaped payloads** (`mapSubSubFull`, article detail,
+ * related-post rows with routing slugs). This is intentionally richer than
+ * `PostSubSubcategorySchema` in `content.ts` (feed/list post cards), which omits nested
+ * slugs to keep list responses smaller and aligned with card UI needs.
+ */
 export const SubSubcategoryFullItemSchema = z
   .strictObject({
     name: z.string(),

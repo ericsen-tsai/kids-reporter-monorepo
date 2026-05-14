@@ -11,6 +11,7 @@ import {
 
 import {
   ContentApiRequestError,
+  contentApiResponseParseError,
   sendContentApiRequest,
 } from '@/utils/send-content-api'
 
@@ -29,7 +30,10 @@ export async function getProjectMetaContentApi({
     })
     const parsed = V1ProjectBySlugMetaResponseSchema.safeParse(response)
     if (!parsed.success) {
-      throw new Error('content-api schema mismatch project meta')
+      throw contentApiResponseParseError(
+        'content-api schema mismatch project meta',
+        parsed.error
+      )
     }
     const m = parsed.data
     return {
@@ -61,7 +65,10 @@ export async function getProjectDetailContentApi({
     })
     const parsed = V1ProjectBySlugDetailResponseSchema.safeParse(response)
     if (!parsed.success) {
-      throw new Error('content-api schema mismatch project detail')
+      throw contentApiResponseParseError(
+        'content-api schema mismatch project detail',
+        parsed.error
+      )
     }
     return parsed.data as GetProjectQuery['project']
   } catch (e) {
@@ -87,7 +94,10 @@ export async function getProjectRelatedPostsCountContentApi({
     })
     const parsed = V1ProjectRelatedPostsCountResponseSchema.safeParse(response)
     if (!parsed.success) {
-      throw new Error('content-api schema mismatch project related-posts-count')
+      throw contentApiResponseParseError(
+        'content-api schema mismatch project related-posts-count',
+        parsed.error
+      )
     }
     return {
       relatedPostsCount: parsed.data.relatedPostsCount,

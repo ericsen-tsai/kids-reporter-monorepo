@@ -4,7 +4,10 @@ import {
 } from '@kids-reporter/api-types'
 import type { z } from 'zod'
 
-import { sendContentApiRequest } from '@/utils/send-content-api'
+import {
+  contentApiResponseParseError,
+  sendContentApiRequest,
+} from '@/utils/send-content-api'
 
 export type MemberProfilePatchBody = z.infer<
   typeof V1MemberProfilePatchBodySchema
@@ -28,8 +31,9 @@ export async function getMemberProfileMeContentApi({
   })
   const parsed = V1MemberProfileResponseSchema.safeParse(response)
   if (!parsed.success) {
-    throw new Error(
-      'content-api response schema mismatch for GET /v1/members/me'
+    throw contentApiResponseParseError(
+      'content-api response schema mismatch for GET /v1/members/me',
+      parsed.error
     )
   }
   return parsed.data
@@ -54,8 +58,9 @@ export async function updateMemberProfileMeContentApi({
   })
   const parsed = V1MemberProfileResponseSchema.safeParse(response)
   if (!parsed.success) {
-    throw new Error(
-      'content-api response schema mismatch for PATCH /v1/members/me'
+    throw contentApiResponseParseError(
+      'content-api response schema mismatch for PATCH /v1/members/me',
+      parsed.error
     )
   }
   return parsed.data

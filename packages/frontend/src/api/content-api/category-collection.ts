@@ -4,7 +4,10 @@ import {
   V1CategoryBySlugSubcategoriesThemeResponseSchema,
 } from '@kids-reporter/api-types'
 
-import { sendContentApiRequest } from '@/utils/send-content-api'
+import {
+  contentApiResponseParseError,
+  sendContentApiRequest,
+} from '@/utils/send-content-api'
 
 import { normalizePostCardsForGql } from './normalize-post-for-gql'
 
@@ -24,7 +27,10 @@ export async function getCategoryPostsContentApi({
   })
   const parsed = V1CategoryBySlugCategoryPostsResponseSchema.safeParse(response)
   if (!parsed.success) {
-    throw new Error('content-api schema mismatch category posts')
+    throw contentApiResponseParseError(
+      'content-api schema mismatch category posts',
+      parsed.error
+    )
   }
   const b = parsed.data
   return {
@@ -47,7 +53,10 @@ export async function getCategoryMetadataContentApi({
   })
   const parsed = V1CategoryBySlugMetadataResponseSchema.safeParse(response)
   if (!parsed.success) {
-    throw new Error('content-api schema mismatch category metadata')
+    throw contentApiResponseParseError(
+      'content-api schema mismatch category metadata',
+      parsed.error
+    )
   }
   const c = parsed.data
   return {
@@ -75,7 +84,10 @@ export async function getCategorySubcategoriesThemeContentApi({
   const parsed =
     V1CategoryBySlugSubcategoriesThemeResponseSchema.safeParse(response)
   if (!parsed.success) {
-    throw new Error('content-api schema mismatch category theme')
+    throw contentApiResponseParseError(
+      'content-api schema mismatch category theme',
+      parsed.error
+    )
   }
   return parsed.data
 }

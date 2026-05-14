@@ -32,6 +32,13 @@ export const PostHeroImageSchema = z
   })
   .openapi('PostHeroImage')
 
+/**
+ * Lightweight sub-subcategory shape for **feeds and list payloads** (`PostContentSchema`,
+ * e.g. `/v1/posts`, editor picks). Omits sub-subcategory / subcategory slugs on purpose —
+ * callers only need labels + category slug for cards. For the **full tree with slugs**
+ * (article detail, related-post cards), see `SubSubcategoryFullItemSchema` in
+ * `content-post-detail.ts`.
+ */
 export const PostSubSubcategorySchema = z
   .object({
     name: z.string(),
@@ -270,7 +277,7 @@ export const V1ProjectsQuerySchema = z.object({
 export const V1ProjectsItemSchema = z
   .object({
     title: z.string(),
-    subtitle: z.string().nullable().optional(),
+    subtitle: z.string(),
     slug: z.string(),
     ogDescription: z.string().nullable().optional(),
     publishedDate: z.iso.datetime().nullable().optional(),
@@ -523,7 +530,7 @@ export const V1SitemapPostsResponseSchema = z.array(V1SitemapEntrySchema)
 export const V1SitemapProjectsResponseSchema = z.array(V1SitemapEntrySchema)
 
 export const V1ProjectBySlugMetaResponseSchema = z.object({
-  publishedDate: z.string().optional(),
+  publishedDate: z.iso.datetime().optional(),
   ogTitle: z.string(),
   ogDescription: z.string().nullable(),
   ogImage: z
@@ -549,7 +556,7 @@ export const V1ProjectBySlugDetailResponseSchema = z.object({
   /** Draft.js JSON etc.; `z.json()` overflows zod-to-openapi union expansion. */
   content: z.unknown().nullable().optional(),
   credits: z.unknown().nullable().optional(),
-  publishedDate: z.string().optional(),
+  publishedDate: z.iso.datetime().optional(),
   heroImage: V1ProjectDetailPhotoResizedSchema.optional(),
   mobileHeroImage: V1ProjectDetailPhotoResizedSchema.optional(),
   relatedPostsOrdered: z.array(V1ProjectDetailRelatedPostOrderedItemSchema),

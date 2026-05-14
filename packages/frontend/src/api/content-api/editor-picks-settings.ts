@@ -1,6 +1,9 @@
 import { V1EditorPicksSettingsResponseSchema } from '@kids-reporter/api-types'
 
-import { sendContentApiRequest } from '@/utils/send-content-api'
+import {
+  contentApiResponseParseError,
+  sendContentApiRequest,
+} from '@/utils/send-content-api'
 
 export async function getEditorPicksSettingsContentApi({
   take,
@@ -17,8 +20,9 @@ export async function getEditorPicksSettingsContentApi({
   })
   const parsed = V1EditorPicksSettingsResponseSchema.safeParse(response)
   if (!parsed.success) {
-    throw new Error(
-      'content-api response schema mismatch for /v1/editor-picks-settings'
+    throw contentApiResponseParseError(
+      'content-api response schema mismatch for /v1/editor-picks-settings',
+      parsed.error
     )
   }
   return parsed.data

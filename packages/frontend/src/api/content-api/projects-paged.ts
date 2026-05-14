@@ -1,6 +1,9 @@
 import { V1ProjectsResponseSchema } from '@kids-reporter/api-types'
 
-import { sendContentApiRequest } from '@/utils/send-content-api'
+import {
+  contentApiResponseParseError,
+  sendContentApiRequest,
+} from '@/utils/send-content-api'
 
 export async function getProjectsListContentApi({
   take,
@@ -33,7 +36,10 @@ export async function getProjectsListContentApi({
 
   const parsed = V1ProjectsResponseSchema.safeParse(response)
   if (!parsed.success) {
-    throw new Error('content-api response schema mismatch for /v1/projects')
+    throw contentApiResponseParseError(
+      'content-api response schema mismatch for /v1/projects',
+      parsed.error
+    )
   }
   return parsed.data
 }

@@ -3,7 +3,10 @@ import {
   V1TagBySlugPostsResponseSchema,
 } from '@kids-reporter/api-types'
 
-import { sendContentApiRequest } from '@/utils/send-content-api'
+import {
+  contentApiResponseParseError,
+  sendContentApiRequest,
+} from '@/utils/send-content-api'
 
 import { normalizePostCardsForGql } from './normalize-post-for-gql'
 
@@ -14,7 +17,10 @@ export async function getTagMetaContentApi({ slug }: { slug: string }) {
   })
   const parsed = V1TagBySlugMetaResponseSchema.safeParse(response)
   if (!parsed.success) {
-    throw new Error('content-api schema mismatch tag meta')
+    throw contentApiResponseParseError(
+      'content-api schema mismatch tag meta',
+      parsed.error
+    )
   }
   const t = parsed.data
   return {
@@ -46,7 +52,10 @@ export async function getTagPostsContentApi({
   })
   const parsed = V1TagBySlugPostsResponseSchema.safeParse(response)
   if (!parsed.success) {
-    throw new Error('content-api schema mismatch tag posts')
+    throw contentApiResponseParseError(
+      'content-api schema mismatch tag posts',
+      parsed.error
+    )
   }
   const t = parsed.data
   return {

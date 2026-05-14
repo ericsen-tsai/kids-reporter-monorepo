@@ -1,6 +1,9 @@
 import { V1SubcategoriesResponseSchema } from '@kids-reporter/api-types'
 
-import { sendContentApiRequest } from '@/utils/send-content-api'
+import {
+  contentApiResponseParseError,
+  sendContentApiRequest,
+} from '@/utils/send-content-api'
 
 export async function getSubcategoriesContentApi({
   traceHeaders,
@@ -14,8 +17,9 @@ export async function getSubcategoriesContentApi({
   })
   const parsed = V1SubcategoriesResponseSchema.safeParse(response)
   if (!parsed.success) {
-    throw new Error(
-      'content-api response schema mismatch for /v1/subcategories'
+    throw contentApiResponseParseError(
+      'content-api response schema mismatch for /v1/subcategories',
+      parsed.error
     )
   }
   return parsed.data.map((s) => ({

@@ -17,6 +17,7 @@ import {
 
 import {
   ContentApiRequestError,
+  contentApiResponseParseError,
   sendContentApiRequest,
 } from '@/utils/send-content-api'
 
@@ -42,7 +43,10 @@ async function fetchPostsV1({
 
   const parsed = V1PostsResponseSchema.safeParse(response)
   if (!parsed.success) {
-    throw new Error('content-api response schema mismatch for /v1/posts')
+    throw contentApiResponseParseError(
+      'content-api response schema mismatch for /v1/posts',
+      parsed.error
+    )
   }
   return parsed.data.posts
 }
@@ -114,7 +118,10 @@ export async function getPostContentApi({
     })
     const parsed = V1PostDetailBodySchema.safeParse(response)
     if (!parsed.success) {
-      throw new Error('content-api response schema mismatch for post by slug')
+      throw contentApiResponseParseError(
+        'content-api response schema mismatch for post by slug',
+        parsed.error
+      )
     }
     return parsed.data as GetPostQuery['post']
   } catch (e) {
@@ -141,7 +148,10 @@ export async function getPostMetaContentApi({
     })
     const parsed = V1PostMetaBodySchema.safeParse(response)
     if (!parsed.success) {
-      throw new Error('content-api response schema mismatch for post meta')
+      throw contentApiResponseParseError(
+        'content-api response schema mismatch for post meta',
+        parsed.error
+      )
     }
     return parsed.data as GetPostMetaQuery['post']
   } catch (e) {
@@ -188,8 +198,9 @@ export async function getPostsEssayAnswersWithLikesContentApi({
   })
   const parsed = V1PostsEssayAnswersWithLikesResponseSchema.safeParse(response)
   if (!parsed.success) {
-    throw new Error(
-      'content-api response schema mismatch for essay-answers-with-likes'
+    throw contentApiResponseParseError(
+      'content-api response schema mismatch for essay-answers-with-likes',
+      parsed.error
     )
   }
   return parsed.data as GetPostsEssayAnswersWithLikesQuery['posts']
@@ -210,8 +221,9 @@ export async function getPostEssayQuestionsByPostSlugContentApi({
     })
     const parsed = V1PostEssayQuestionsBodySchema.safeParse(response)
     if (!parsed.success) {
-      throw new Error(
-        'content-api response schema mismatch for post essay-questions'
+      throw contentApiResponseParseError(
+        'content-api response schema mismatch for post essay-questions',
+        parsed.error
       )
     }
     return parsed.data as GetPostEssayQuestionsQuery['post']

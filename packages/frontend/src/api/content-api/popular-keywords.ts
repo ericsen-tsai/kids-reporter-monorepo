@@ -1,6 +1,9 @@
 import { V1PopularKeywordsResponseSchema } from '@kids-reporter/api-types'
 
-import { sendContentApiRequest } from '@/utils/send-content-api'
+import {
+  contentApiResponseParseError,
+  sendContentApiRequest,
+} from '@/utils/send-content-api'
 
 export async function getPopularKeywordsContentApi({
   traceHeaders,
@@ -14,8 +17,9 @@ export async function getPopularKeywordsContentApi({
   })
   const parsed = V1PopularKeywordsResponseSchema.safeParse(response)
   if (!parsed.success) {
-    throw new Error(
-      'content-api response schema mismatch for /v1/popular-keywords'
+    throw contentApiResponseParseError(
+      'content-api response schema mismatch for /v1/popular-keywords',
+      parsed.error
     )
   }
   return parsed.data

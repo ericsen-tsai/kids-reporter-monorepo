@@ -80,20 +80,12 @@ export async function getAuthorPostsBySlugPaged(
 
   if (envVars.useContentApi && slug && orderOk) {
     try {
-      const th =
-        traceHeaders && !(traceHeaders instanceof Headers)
-          ? (Object.fromEntries(
-              Object.entries(traceHeaders).filter(
-                (e): e is [string, string] => typeof e[1] === 'string'
-              )
-            ) as Record<string, string>)
-          : undefined
       return await getAuthorPostsContentApi({
         slug,
         take: variables.take ?? undefined,
         skip: variables.skip ?? undefined,
         orderBy: 'publishedDate:desc',
-        traceHeaders: th,
+        traceHeaders,
       })
     } catch (err) {
       logContentApiFallback('getAuthorPostsBySlugPaged', err)

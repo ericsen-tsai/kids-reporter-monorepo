@@ -1,6 +1,9 @@
 import { V1SubcategoryBySlugPostsResponseSchema } from '@kids-reporter/api-types'
 
-import { sendContentApiRequest } from '@/utils/send-content-api'
+import {
+  contentApiResponseParseError,
+  sendContentApiRequest,
+} from '@/utils/send-content-api'
 
 import { normalizePostCardsForGql } from './normalize-post-for-gql'
 
@@ -20,7 +23,10 @@ export async function getSubcategoryPostsContentApi({
   })
   const parsed = V1SubcategoryBySlugPostsResponseSchema.safeParse(response)
   if (!parsed.success) {
-    throw new Error('content-api schema mismatch subcategory posts')
+    throw contentApiResponseParseError(
+      'content-api schema mismatch subcategory posts',
+      parsed.error
+    )
   }
   const s = parsed.data
   return {

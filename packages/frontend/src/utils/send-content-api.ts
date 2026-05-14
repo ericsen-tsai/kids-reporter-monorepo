@@ -2,6 +2,7 @@ import { RestErrorBodySchema } from '@kids-reporter/api-types'
 import { emitStructured } from '@kids-reporter/logger'
 import errors from '@twreporter/errors'
 import axios, { AxiosRequestConfig } from 'axios'
+import { ZodError } from 'zod'
 
 import { CONTENT_API_ORIGIN, INTERNAL_CONTENT_API_ORIGIN } from '@/constants'
 import envVars from '@/environment-variables'
@@ -14,6 +15,14 @@ export type ContentApiQuery = Record<
   string,
   string | number | boolean | undefined | null
 >
+
+/** Attach Zod parse output so fallback logs and debuggers retain field-level issues. */
+export function contentApiResponseParseError(
+  message: string,
+  zodError: ZodError
+): Error {
+  return new Error(message, { cause: zodError })
+}
 
 export class ContentApiRequestError extends Error {
   path: string
@@ -57,6 +66,14 @@ const buildUrl = (path: string) => {
   return `${base}${normalizedPath}`
 }
 
+/**
+ * Sends a request to the content API (axios).
+ *
+ * **Body handling (intentional):** `body` is attached only for `POST`, `PUT`, and `PATCH`.
+ * `GET` and `DELETE` never send a JSON body here, even if `body` is passed — content-api
+ * callers today do not rely on DELETE bodies. If a future endpoint needs `DELETE` with a
+ * body, extend the `sendsBody` condition explicitly rather than assuming `body` is sent.
+ */
 export async function sendContentApiRequest<TData = unknown>({
   path,
   method = 'GET',
@@ -91,6 +108,7 @@ export async function sendContentApiRequest<TData = unknown>({
     params: pickQueryParams(query),
   }
 
+  // Deliberately no body for GET/DELETE; see function JSDoc.
   const sendsBody =
     method !== 'GET' && method !== 'DELETE' && body !== undefined
   if (sendsBody) {
