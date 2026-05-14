@@ -77,6 +77,43 @@ describe('POST /auth/access-token', () => {
     })
   })
 
+  it('forwards X-Cloud-Trace-Context to upstream token axios call', async () => {
+    const traceHeader = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;o=1'
+    const accessJwt = jwt.sign(
+      {
+        user_id: 'tw-user-trace',
+        email: 'trace@vitest.example',
+        iss: issuer,
+        aud: audience,
+      },
+      secret,
+      { algorithm: 'HS256' }
+    )
+
+    const axios = (await import('axios')).default
+    vi.mocked(axios.post).mockResolvedValue({
+      data: { data: { jwt: accessJwt } },
+      status: 200,
+    })
+
+    const app = createApp({ corsAllowOrigin: ['https://kids.twreporter.org'] })
+    await request(app)
+      .post('/auth/access-token')
+      .set('Cookie', 'id_token=fake-id-token')
+      .set('Origin', 'https://kids.twreporter.org')
+      .set('X-Cloud-Trace-Context', traceHeader)
+
+    expect(axios.post).toHaveBeenCalledWith(
+      expect.any(String),
+      undefined,
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          'X-Cloud-Trace-Context': traceHeader,
+        }),
+      })
+    )
+  })
+
   it('responds 401 when upstream JWT fails verification', async () => {
     const badJwt = jwt.sign(
       { user_id: 'x', iss: issuer, aud: audience },

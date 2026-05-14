@@ -133,6 +133,7 @@ export function createAuthRouter({
             headers: {
               cookie: `id_token=${encodeURIComponent(String(idToken))}`,
               'content-type': 'application/json',
+              ...res.locals.traceContext?.traceHeaders,
             },
             timeout: envVar.apis.requestTimeoutMs,
           }
