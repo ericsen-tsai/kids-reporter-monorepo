@@ -5326,6 +5326,7 @@ __metadata:
     "@kids-reporter/api-types": "npm:^0.0.1"
     "@kids-reporter/db": "npm:^0.0.1"
     "@kids-reporter/logger": "npm:^0.0.2"
+    "@prisma/client": "npm:5.22.0"
     "@twreporter/errors": "npm:^1.1.2"
     "@types/cookie-parser": "npm:^1.4.6"
     "@types/cors": "npm:^2.8.15"

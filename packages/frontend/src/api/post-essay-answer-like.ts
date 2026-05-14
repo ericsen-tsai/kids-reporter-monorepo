@@ -38,7 +38,11 @@ export const deletePostEssayAnswerLike = async (
   variables: DeletePostEssayAnswerLikeMutationVariables,
   accessToken: string
 ) => {
-  if (envVars.useContentApi) {
+  const whereId = variables.where?.id
+  const hasLikeIdForContentApi =
+    whereId != null && String(whereId).trim() !== ''
+
+  if (envVars.useContentApi && hasLikeIdForContentApi) {
     try {
       return await deletePostEssayAnswerLikeContentApi(variables, accessToken)
     } catch (err) {

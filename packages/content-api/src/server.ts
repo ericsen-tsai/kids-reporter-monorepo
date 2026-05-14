@@ -35,6 +35,9 @@ async function start() {
       })
       process.exit(1)
     })
+    if (!envVar.goApiJwt.secret) {
+      throw new Error('GO_API_JWT_SECRET environment variable is required')
+    }
     server.listen(port, () => {
       emitStructured({
         severity: 'INFO',

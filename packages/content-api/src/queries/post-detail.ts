@@ -352,7 +352,12 @@ export async function fetchPostDetailBySlug(
       },
       tags: { select: { name: true, slug: true, id: true } },
       tagsOrderJson: true,
-      relatedPosts: { select: relatedPostCardSelect },
+      relatedPosts: {
+        where: { AND: [buildPublicPostWhere(now), relatedPostsWhere] },
+        take: opts.take,
+        orderBy: [{ publishedDate: 'desc' }],
+        select: relatedPostCardSelect,
+      },
       relatedPostsOrderJson: true,
       newsReadingGroup: {
         select: {
