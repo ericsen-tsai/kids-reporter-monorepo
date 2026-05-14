@@ -18,12 +18,14 @@ import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export async function getAuthorAvatarBySlug({
   slug,
+  traceHeaders,
 }: {
   slug: string
+  traceHeaders?: Headers | Record<string, string | undefined>
 }): Promise<string> {
   if (envVars.useContentApi) {
     try {
-      const tiny = await getAuthorAvatarBySlugContentApi({ slug })
+      const tiny = await getAuthorAvatarBySlugContentApi({ slug, traceHeaders })
       return tiny || DEFAULT_AVATAR
     } catch (err) {
       logContentApiFallback('getAuthorAvatarBySlug', err)
@@ -38,6 +40,7 @@ export async function getAuthorAvatarBySlug({
         slug,
       },
     },
+    traceHeaders,
   })
 
   return res?.data?.data?.author?.avatar?.resized?.tiny ?? DEFAULT_AVATAR
@@ -45,12 +48,14 @@ export async function getAuthorAvatarBySlug({
 
 export async function getAuthorMetaBySlug({
   slug,
+  traceHeaders,
 }: {
   slug: string
+  traceHeaders?: Headers | Record<string, string | undefined>
 }): Promise<GetAuthorMetaQuery['author']> {
   if (envVars.useContentApi) {
     try {
-      return await getAuthorMetaContentApi({ slug })
+      return await getAuthorMetaContentApi({ slug, traceHeaders })
     } catch (err) {
       logContentApiFallback('getAuthorMetaBySlug', err)
     }
@@ -63,6 +68,7 @@ export async function getAuthorMetaBySlug({
         slug,
       },
     },
+    traceHeaders,
   })
 
   return res?.data?.data?.author

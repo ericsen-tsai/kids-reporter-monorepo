@@ -11,7 +11,7 @@ import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export const getSubSubcategoryPosts = async (
   variables: GetSubSubcategoryPostsQueryVariables,
-  traceHeaders?: Record<string, string>
+  traceHeaders?: Headers | Record<string, string | undefined>
 ) => {
   const slug = variables.where?.slug
   const order = firstOrderByEntry(variables.orderBy ?? undefined)
@@ -26,6 +26,7 @@ export const getSubSubcategoryPosts = async (
         take: variables.take ?? undefined,
         skip: variables.skip ?? undefined,
         orderBy: 'publishedDate:desc',
+        traceHeaders,
       })
     } catch (err) {
       logContentApiFallback('getSubSubcategoryPosts', err)

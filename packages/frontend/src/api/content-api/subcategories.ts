@@ -8,7 +8,7 @@ import {
 export async function getSubcategoriesContentApi({
   traceHeaders,
 }: {
-  traceHeaders?: Record<string, string>
+  traceHeaders?: Headers | Record<string, string | undefined>
 } = {}) {
   const response = await sendContentApiRequest({
     path: '/v1/subcategories',

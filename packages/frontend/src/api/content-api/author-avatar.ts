@@ -10,7 +10,7 @@ export async function getAuthorAvatarBySlugContentApi({
   traceHeaders,
 }: {
   slug: string
-  traceHeaders?: Record<string, string>
+  traceHeaders?: Headers | Record<string, string | undefined>
 }) {
   const encoded = encodeURIComponent(slug)
   const response = await sendContentApiRequest({

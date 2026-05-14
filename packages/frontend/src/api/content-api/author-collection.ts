@@ -13,10 +13,17 @@ import {
 
 import { normalizePostCardsForGql } from './normalize-post-for-gql'
 
-export async function getAuthorMetaContentApi({ slug }: { slug: string }) {
+export async function getAuthorMetaContentApi({
+  slug,
+  traceHeaders,
+}: {
+  slug: string
+  traceHeaders?: Headers | Record<string, string | undefined>
+}) {
   const enc = encodeURIComponent(slug)
   const response = await sendContentApiRequest({
     path: `/v1/authors/by-slug/${enc}/meta`,
+    traceHeaders,
   })
   const parsed = V1AuthorBySlugMetaResponseSchema.safeParse(response)
   if (!parsed.success) {

@@ -15,12 +15,14 @@ import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export async function getTagMetaBySlug({
   slug,
+  traceHeaders,
 }: {
   slug: string
+  traceHeaders?: Headers | Record<string, string | undefined>
 }): Promise<GetTagMetaQuery['tag']> {
   if (envVars.useContentApi) {
     try {
-      return await getTagMetaContentApi({ slug })
+      return await getTagMetaContentApi({ slug, traceHeaders })
     } catch (err) {
       logContentApiFallback('getTagMetaBySlug', err)
     }
@@ -33,6 +35,7 @@ export async function getTagMetaBySlug({
         slug,
       },
     },
+    traceHeaders,
   })
 
   return res?.data?.data?.tag
@@ -55,6 +58,7 @@ export async function getTagPostsBySlugPaged(
         take: variables.take ?? undefined,
         skip: variables.skip ?? undefined,
         orderBy: 'publishedDate:desc',
+        traceHeaders,
       })
     } catch (err) {
       logContentApiFallback('getTagPostsBySlugPaged', err)

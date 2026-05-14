@@ -11,7 +11,8 @@ import { logContentApiFallback } from '@/utils/log-content-api-fallback'
 import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export const getSubcategoryPosts = async (
-  variables: GetSubcategoryPostsQueryVariables
+  variables: GetSubcategoryPostsQueryVariables,
+  traceHeaders?: Headers | Record<string, string | undefined>
 ) => {
   const slug = variables.where?.slug
   if (envVars.useContentApi && slug) {
@@ -20,6 +21,7 @@ export const getSubcategoryPosts = async (
         slug,
         take: variables.take ?? undefined,
         skip: variables.skip ?? undefined,
+        traceHeaders,
       })
     } catch (err) {
       logContentApiFallback('getSubcategoryPosts', err)
@@ -29,14 +31,17 @@ export const getSubcategoryPosts = async (
     operation: 'subcategory-posts',
     method: 'GET',
     variables,
+    traceHeaders,
   })
   return response?.data?.data?.subcategory
 }
 
-export const getSubcategories = async () => {
+export const getSubcategories = async (
+  traceHeaders?: Headers | Record<string, string | undefined>
+) => {
   if (envVars.useContentApi) {
     try {
-      return await getSubcategoriesContentApi()
+      return await getSubcategoriesContentApi({ traceHeaders })
     } catch (err) {
       logContentApiFallback('getSubcategories', err)
     }
@@ -45,6 +50,7 @@ export const getSubcategories = async () => {
   const response = await sendRestGqlRequest<GetSubcategoriesQuery>({
     operation: 'subcategories',
     method: 'GET',
+    traceHeaders,
   })
   return response?.data?.data?.subcategories
 }

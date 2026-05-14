@@ -16,7 +16,8 @@ import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 export type { GetMemberPostsWithAnswersQuerySchema } from '@/api/member-posts-with-answers-schema'
 
 export const getMemberPostsWithAnswers = async (
-  variables: GetMemberPostsWithAnswersQueryVariables & { accessToken: string }
+  variables: GetMemberPostsWithAnswersQueryVariables & { accessToken: string },
+  traceHeaders?: Headers | Record<string, string | undefined>
 ) => {
   const { accessToken, ...restVariables } = variables
   if (envVars.useContentApi) {
@@ -25,6 +26,7 @@ export const getMemberPostsWithAnswers = async (
         accessToken,
         take: restVariables.take ?? undefined,
         cursor: restVariables.nextCursor ?? undefined,
+        traceHeaders,
       })
     } catch (err) {
       logContentApiFallback('getMemberPostsWithAnswers', err)
@@ -36,6 +38,7 @@ export const getMemberPostsWithAnswers = async (
       method: 'GET',
       variables: restVariables,
       authToken: accessToken,
+      traceHeaders,
     })
   return response?.data?.data?.getMemberPostsWithAnswers
 }
@@ -43,7 +46,8 @@ export const getMemberPostsWithAnswers = async (
 export const getMemberEssayAnswersHasLiked = async (
   variables: GetMemberEssayAnswersHasLikedQueryVariables & {
     accessToken: string
-  }
+  },
+  traceHeaders?: Headers | Record<string, string | undefined>
 ) => {
   const { accessToken, ...restVariables } = variables
   if (envVars.useContentApi) {
@@ -57,6 +61,7 @@ export const getMemberEssayAnswersHasLiked = async (
       return await getMemberEssayAnswersHasLikedContentApi({
         accessToken,
         essayAnswerIds,
+        traceHeaders,
       })
     } catch (err) {
       logContentApiFallback('getMemberEssayAnswersHasLiked', err)
@@ -68,6 +73,7 @@ export const getMemberEssayAnswersHasLiked = async (
       method: 'GET',
       variables: restVariables,
       authToken: accessToken,
+      traceHeaders,
     }
   )
   return response?.data?.data?.getMemberEssayAnswersHasLiked

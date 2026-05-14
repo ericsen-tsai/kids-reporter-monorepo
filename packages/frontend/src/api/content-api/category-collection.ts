@@ -15,15 +15,18 @@ export async function getCategoryPostsContentApi({
   slug,
   take,
   skip,
+  traceHeaders,
 }: {
   slug: string
   take?: number
   skip?: number
+  traceHeaders?: Headers | Record<string, string | undefined>
 }) {
   const enc = encodeURIComponent(slug)
   const response = await sendContentApiRequest({
     path: `/v1/categories/by-slug/${enc}/posts`,
     query: { take, skip },
+    traceHeaders,
   })
   const parsed = V1CategoryBySlugCategoryPostsResponseSchema.safeParse(response)
   if (!parsed.success) {
@@ -42,14 +45,17 @@ export async function getCategoryPostsContentApi({
 export async function getCategoryMetadataContentApi({
   slug,
   subcategorySlug,
+  traceHeaders,
 }: {
   slug: string
   subcategorySlug?: string
+  traceHeaders?: Headers | Record<string, string | undefined>
 }) {
   const enc = encodeURIComponent(slug)
   const response = await sendContentApiRequest({
     path: `/v1/categories/by-slug/${enc}/metadata`,
     query: subcategorySlug ? { subcategorySlug } : undefined,
+    traceHeaders,
   })
   const parsed = V1CategoryBySlugMetadataResponseSchema.safeParse(response)
   if (!parsed.success) {
@@ -74,7 +80,7 @@ export async function getCategorySubcategoriesThemeContentApi({
   traceHeaders,
 }: {
   slug: string
-  traceHeaders?: Record<string, string>
+  traceHeaders?: Headers | Record<string, string | undefined>
 }) {
   const enc = encodeURIComponent(slug)
   const response = await sendContentApiRequest({
