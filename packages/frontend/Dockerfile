@@ -8,6 +8,7 @@ RUN corepack enable
 
 WORKDIR /build
 
+# copy from root at build time (in cloudbuild.yaml)
 COPY package.json yarn.lock .yarnrc.yml /build/
 
 RUN yarn install --immutable --ignore-scripts
