@@ -6,8 +6,9 @@ RUN corepack enable
 
 WORKDIR /build
 
-# copy from root at build time (in cloudbuild.yaml)
-COPY package.json yarn.lock .yarnrc.yml /build/
+# copy from root at build time (in cloudbuild.yaml).
+# Makefile must exist before install: postinstall runs `make postinstall` (db-generate, etc.).
+COPY package.json yarn.lock .yarnrc.yml Makefile /build/
 
 RUN SKIP_BUILD_DEPS=true DB_GENERATE_LOCAL=false yarn install --immutable
 
