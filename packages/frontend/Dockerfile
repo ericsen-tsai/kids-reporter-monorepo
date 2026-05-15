@@ -3,6 +3,7 @@ ARG NODE_VERSION=20.19.5
 FROM node:${NODE_VERSION} AS build
 
 ARG DEPLOYMENT_ID
+ARG USE_CONTENT_API
 
 RUN corepack enable
 
@@ -15,7 +16,7 @@ RUN yarn install --immutable --ignore-scripts
 
 COPY . /build/
 
-RUN DEPLOYMENT_ID=${DEPLOYMENT_ID} yarn build:cloudbuild
+RUN DEPLOYMENT_ID=${DEPLOYMENT_ID} NEXT_PUBLIC_USE_CONTENT_API=${USE_CONTENT_API} yarn build:cloudbuild
 
 
 FROM node:${NODE_VERSION}
