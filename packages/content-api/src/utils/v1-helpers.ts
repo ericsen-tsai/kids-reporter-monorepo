@@ -32,7 +32,9 @@ export const buildPublicPostWhere = (now: Date) => ({
 })
 
 /** Post visibility for by-slug reads. Preview server matches CMS preview_headless (no status filter). */
-export const buildPostVisibilityWhere = (now: Date): Prisma.PostWhereInput =>
+export const buildPostBySlugVisibilityWhere = (
+  now: Date
+): Prisma.PostWhereInput =>
   envVar.isPreviewServer ? {} : buildPublicPostWhere(now)
 
 /** Category/subcategory virtual `relatedPosts` uses published OR archived only (see `packages/cms/lists/category.ts`). */
