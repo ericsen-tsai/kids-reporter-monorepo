@@ -99,7 +99,7 @@ export function createApp({
 
     const entry = Object.assign(
       {
-        severity: 'ERROR',
+        severity: 'ERROR' as const,
         message: errors.helpers.printAll(
           annotatingError,
           {

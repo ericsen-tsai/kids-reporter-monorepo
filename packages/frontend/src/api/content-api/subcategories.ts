@@ -1,5 +1,6 @@
 import { V1SubcategoriesResponseSchema } from '@kids-reporter/api-types'
 
+import type { TraceHeaders } from '@/types/trace-headers'
 import {
   contentApiResponseParseError,
   sendContentApiRequest,
@@ -8,7 +9,7 @@ import {
 export async function getSubcategoriesContentApi({
   traceHeaders,
 }: {
-  traceHeaders?: Record<string, string>
+  traceHeaders?: TraceHeaders
 } = {}) {
   const response = await sendContentApiRequest({
     path: '/v1/subcategories',

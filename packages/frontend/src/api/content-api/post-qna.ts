@@ -19,6 +19,7 @@ import type {
 } from '__generated__/operations/answers.generated'
 import type { PostEssayAnswerOrderByInput } from '__generated__/types'
 
+import type { TraceHeaders } from '@/types/trace-headers'
 import {
   ContentApiRequestError,
   sendContentApiRequest,
@@ -37,9 +38,11 @@ function answerIdFromGqlCreateData(data: Record<string, unknown>): unknown {
 export async function getPostChoiceAnswersByMemberIdContentApi({
   accessToken,
   postSlug,
+  traceHeaders,
 }: {
   accessToken: string
   postSlug?: string
+  traceHeaders?: TraceHeaders
 }) {
   const body = await sendContentApiRequest<
     NonNullable<GetPostChoiceAnswersQuery['postChoiceAnswers']>
@@ -47,6 +50,7 @@ export async function getPostChoiceAnswersByMemberIdContentApi({
     path: '/v1/members/me/post-choice-answers',
     authToken: accessToken,
     query: { postSlug: postSlug ?? undefined },
+    traceHeaders,
   })
   if (!Array.isArray(body)) {
     throw new Error('content-api: expected array for post-choice-answers')
@@ -56,7 +60,8 @@ export async function getPostChoiceAnswersByMemberIdContentApi({
 
 export async function createPostChoiceAnswerContentApi(
   variables: CreatePostChoiceAnswerMutationVariables,
-  accessToken: string
+  accessToken: string,
+  traceHeaders?: TraceHeaders
 ) {
   const data = variables.data as Record<string, unknown>
   const questionId = questionIdFromGqlCreateData(data)
@@ -75,13 +80,15 @@ export async function createPostChoiceAnswerContentApi(
     method: 'POST',
     authToken: accessToken,
     body: { questionId, choiceIndex },
+    traceHeaders,
   })
   return body
 }
 
 export async function updatePostChoiceAnswerContentApi(
   variables: UpdatePostChoiceAnswerMutationVariables,
-  accessToken: string
+  accessToken: string,
+  traceHeaders?: TraceHeaders
 ) {
   const id = variables.id
   const patch = variables.data as { choiceIndex?: number }
@@ -95,6 +102,7 @@ export async function updatePostChoiceAnswerContentApi(
       typeof patch.choiceIndex === 'number'
         ? { choiceIndex: patch.choiceIndex }
         : {},
+    traceHeaders,
   })
   return body
 }
@@ -102,9 +110,11 @@ export async function updatePostChoiceAnswerContentApi(
 export async function getPostEssayAnswersByMemberIdContentApi({
   accessToken,
   postSlug,
+  traceHeaders,
 }: {
   accessToken: string
   postSlug?: string
+  traceHeaders?: TraceHeaders
 }) {
   const body = await sendContentApiRequest<
     NonNullable<GetPostEssayAnswersQuery['postEssayAnswers']>
@@ -112,6 +122,7 @@ export async function getPostEssayAnswersByMemberIdContentApi({
     path: '/v1/members/me/post-essay-answers',
     authToken: accessToken,
     query: { postSlug: postSlug ?? undefined },
+    traceHeaders,
   })
   if (!Array.isArray(body)) {
     throw new Error('content-api: expected array for post-essay-answers')
@@ -120,7 +131,8 @@ export async function getPostEssayAnswersByMemberIdContentApi({
 }
 
 export async function getAllPostEssayAnswersContentApi(
-  variables: GetAllPostEssayAnswersQueryVariables
+  variables: GetAllPostEssayAnswersQueryVariables,
+  traceHeaders?: TraceHeaders
 ) {
   const body = await sendContentApiRequest<
     NonNullable<GetAllPostEssayAnswersQuery['postEssayAnswers']>
@@ -130,6 +142,7 @@ export async function getAllPostEssayAnswersContentApi(
       take: variables.take ?? undefined,
       orderBy: 'createdAt:desc',
     },
+    traceHeaders,
   })
   if (!Array.isArray(body)) {
     throw new Error('content-api: expected array for all post-essay-answers')
@@ -139,7 +152,8 @@ export async function getAllPostEssayAnswersContentApi(
 
 export async function createPostEssayAnswerContentApi(
   variables: CreatePostEssayAnswerMutationVariables,
-  accessToken: string
+  accessToken: string,
+  traceHeaders?: TraceHeaders
 ) {
   const data = variables.data as Record<string, unknown>
   const questionId = questionIdFromGqlCreateData(data)
@@ -158,13 +172,15 @@ export async function createPostEssayAnswerContentApi(
     method: 'POST',
     authToken: accessToken,
     body: { questionId, content },
+    traceHeaders,
   })
   return body
 }
 
 export async function updatePostEssayAnswerContentApi(
   variables: UpdatePostEssayAnswerMutationVariables,
-  accessToken: string
+  accessToken: string,
+  traceHeaders?: TraceHeaders
 ) {
   const id = variables.id
   const patch = variables.data as { content: string }
@@ -175,6 +191,7 @@ export async function updatePostEssayAnswerContentApi(
     method: 'PATCH',
     authToken: accessToken,
     body: { content: patch.content },
+    traceHeaders,
   })
   return body
 }
@@ -199,11 +216,13 @@ export async function getPostEssayQuestionEssayAnswersContentApi({
   answerOrderBy,
   answerTake,
   answerSkip,
+  traceHeaders,
 }: {
   where: { id: string }
   answerOrderBy: PostEssayAnswerOrderByInput[]
   answerTake: number
   answerSkip?: number
+  traceHeaders?: TraceHeaders
 }) {
   const questionId = Number(where.id)
   if (!Number.isFinite(questionId)) {
@@ -219,6 +238,7 @@ export async function getPostEssayQuestionEssayAnswersContentApi({
         answerSkip: answerSkip ?? undefined,
         answerOrderBy: questionAnswerOrderByToFlat(answerOrderBy),
       },
+      traceHeaders,
     })
     return body.answers ?? []
   } catch (e) {
@@ -231,7 +251,8 @@ export async function getPostEssayQuestionEssayAnswersContentApi({
 
 export async function createPostEssayAnswerLikeContentApi(
   variables: CreatePostEssayAnswerLikeMutationVariables,
-  accessToken: string
+  accessToken: string,
+  traceHeaders?: TraceHeaders
 ) {
   const data = variables.data as Record<string, unknown>
   const answerId = answerIdFromGqlCreateData(data)
@@ -248,13 +269,15 @@ export async function createPostEssayAnswerLikeContentApi(
     method: 'POST',
     authToken: accessToken,
     body: { answerId },
+    traceHeaders,
   })
   return body
 }
 
 export async function deletePostEssayAnswerLikeContentApi(
   variables: DeletePostEssayAnswerLikeMutationVariables,
-  accessToken: string
+  accessToken: string,
+  traceHeaders?: TraceHeaders
 ) {
   const likeId = variables.where?.id
   if (likeId == null || likeId === '') {
@@ -266,6 +289,7 @@ export async function deletePostEssayAnswerLikeContentApi(
     path: `/v1/members/me/post-essay-answer-likes/${encodeURIComponent(String(likeId))}`,
     method: 'DELETE',
     authToken: accessToken,
+    traceHeaders,
   })
   return body
 }

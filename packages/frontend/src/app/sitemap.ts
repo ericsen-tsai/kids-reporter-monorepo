@@ -15,6 +15,7 @@ import type {
   GetProjectsForSitemapQuery,
 } from '__generated__/operations/content.generated'
 import { MetadataRoute } from 'next'
+import { headers } from 'next/headers'
 
 import {
   getSitemapPostsContentApi,
@@ -28,6 +29,7 @@ import {
   buildSitemapPostsWhereInput,
   buildSitemapProjectsWhereInput,
 } from '@/utils/sitemap-graphql-where'
+import { getServerTraceHeaders } from '@/utils/trace-context'
 
 type SitemapPostRow = NonNullable<
   NonNullable<GetPostsForSitemapQuery['posts']>[number]
@@ -41,6 +43,7 @@ export const revalidate = envVars.isProduction ? 86400 : 0 // 1 day
 const fetchSitemaps = async (): Promise<
   { url: string; lastModified: Date }[]
 > => {
+  const traceHeaders = getServerTraceHeaders(headers())
   let sitemaps: { url: string; lastModified: Date }[] = []
   const now = new Date()
   const sixtyDaysBefore = new Date(
@@ -50,7 +53,10 @@ const fetchSitemaps = async (): Promise<
   let posts: { url: string; lastModified: Date }[] | undefined
   if (envVars.useContentApi) {
     try {
-      const rows = await getSitemapPostsContentApi({ sinceDays: 60 })
+      const rows = await getSitemapPostsContentApi({
+        sinceDays: 60,
+        traceHeaders,
+      })
       posts = rows.map((post) => ({
         url: `${KIDS_URL_ORIGIN}/article/${post.slug}`,
         lastModified: post.publishedDate
@@ -71,6 +77,7 @@ const fetchSitemaps = async (): Promise<
           now,
         }),
       },
+      traceHeaders,
     })
     posts = postsRes?.data?.data?.posts?.map((post: SitemapPostRow) => {
       return {
@@ -88,7 +95,10 @@ const fetchSitemaps = async (): Promise<
   let topics: { url: string; lastModified: Date }[] | undefined
   if (envVars.useContentApi) {
     try {
-      const rows = await getSitemapProjectsContentApi({ sinceDays: 60 })
+      const rows = await getSitemapProjectsContentApi({
+        sinceDays: 60,
+        traceHeaders,
+      })
       topics = rows.map((topic) => ({
         url: `${KIDS_URL_ORIGIN}/topic/${topic.slug}`,
         lastModified: topic.publishedDate
@@ -106,6 +116,7 @@ const fetchSitemaps = async (): Promise<
       variables: {
         where: buildSitemapProjectsWhereInput(sixtyDaysBefore),
       },
+      traceHeaders,
     })
     topics = topicsRes?.data?.data?.projects?.map(
       (topic: SitemapProjectRow) => {

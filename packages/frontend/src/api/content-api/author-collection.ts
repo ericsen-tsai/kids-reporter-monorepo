@@ -5,6 +5,7 @@ import {
   V1AuthorPostsCountResponseSchema,
 } from '@kids-reporter/api-types'
 
+import type { TraceHeaders } from '@/types/trace-headers'
 import {
   ContentApiRequestError,
   contentApiResponseParseError,
@@ -13,10 +14,17 @@ import {
 
 import { normalizePostCardsForGql } from './normalize-post-for-gql'
 
-export async function getAuthorMetaContentApi({ slug }: { slug: string }) {
+export async function getAuthorMetaContentApi({
+  slug,
+  traceHeaders,
+}: {
+  slug: string
+  traceHeaders?: TraceHeaders
+}) {
   const enc = encodeURIComponent(slug)
   const response = await sendContentApiRequest({
     path: `/v1/authors/by-slug/${enc}/meta`,
+    traceHeaders,
   })
   const parsed = V1AuthorBySlugMetaResponseSchema.safeParse(response)
   if (!parsed.success) {
@@ -38,7 +46,7 @@ export async function getAuthorPostsCountContentApi({
   traceHeaders,
 }: {
   slug: string
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 }): Promise<GetAuthorPostsCountQuery['author'] | undefined> {
   try {
     const enc = encodeURIComponent(slug)
@@ -75,7 +83,7 @@ export async function getAuthorPostsContentApi({
   take?: number
   skip?: number
   orderBy?: string
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 }) {
   const enc = encodeURIComponent(slug)
   const response = await sendContentApiRequest({

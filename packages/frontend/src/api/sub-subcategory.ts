@@ -5,13 +5,14 @@ import {
 
 import { getSubSubcategoryPostsContentApi } from '@/api/content-api/sub-subcategory-posts'
 import envVars from '@/environment-variables'
+import type { TraceHeaders } from '@/types/trace-headers'
 import { firstOrderByEntry } from '@/utils/first-order-by'
 import { logContentApiFallback } from '@/utils/log-content-api-fallback'
 import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export const getSubSubcategoryPosts = async (
   variables: GetSubSubcategoryPostsQueryVariables,
-  traceHeaders?: Record<string, string>
+  traceHeaders?: TraceHeaders
 ) => {
   const slug = variables.where?.slug
   const order = firstOrderByEntry(variables.orderBy ?? undefined)
@@ -26,6 +27,7 @@ export const getSubSubcategoryPosts = async (
         take: variables.take ?? undefined,
         skip: variables.skip ?? undefined,
         orderBy: 'publishedDate:desc',
+        traceHeaders,
       })
     } catch (err) {
       logContentApiFallback('getSubSubcategoryPosts', err)

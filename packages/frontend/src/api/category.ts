@@ -13,11 +13,13 @@ import {
   getCategorySubcategoriesThemeContentApi,
 } from '@/api/content-api/category-collection'
 import envVars from '@/environment-variables'
+import type { TraceHeaders } from '@/types/trace-headers'
 import { logContentApiFallback } from '@/utils/log-content-api-fallback'
 import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export const getCategoryPosts = async (
-  variables: GetCategoryPostsQueryVariables
+  variables: GetCategoryPostsQueryVariables,
+  traceHeaders?: TraceHeaders
 ) => {
   const slug = variables.where?.slug
   if (envVars.useContentApi && slug) {
@@ -26,6 +28,7 @@ export const getCategoryPosts = async (
         slug,
         take: variables.take ?? undefined,
         skip: variables.skip ?? undefined,
+        traceHeaders,
       })
     } catch (err) {
       logContentApiFallback('getCategoryPosts', err)
@@ -35,12 +38,14 @@ export const getCategoryPosts = async (
     operation: 'category-posts',
     method: 'GET',
     variables,
+    traceHeaders,
   })
   return response?.data?.data?.category
 }
 
 export const getCategoryMetadata = async (
-  variables: GetCategoryMetadataQueryVariables
+  variables: GetCategoryMetadataQueryVariables,
+  traceHeaders?: TraceHeaders
 ) => {
   const slug = variables.categoryWhere?.slug
   const subRaw = variables.subcategoryWhere?.slug
@@ -53,6 +58,7 @@ export const getCategoryMetadata = async (
       return await getCategoryMetadataContentApi({
         slug,
         subcategorySlug: subcategorySlug ?? undefined,
+        traceHeaders,
       })
     } catch (err) {
       logContentApiFallback('getCategoryMetadata', err)
@@ -62,13 +68,14 @@ export const getCategoryMetadata = async (
     operation: 'category-metadata',
     method: 'GET',
     variables,
+    traceHeaders,
   })
   return response?.data?.data?.category
 }
 
 export const getCategorySubcategoriesAndThemeColor = async (
   variables: GetCategorySubcategoriesAndThemeColorQueryVariables,
-  traceHeaders?: Record<string, string>
+  traceHeaders?: TraceHeaders
 ) => {
   const slug = variables.where?.slug
   if (envVars.useContentApi && slug) {

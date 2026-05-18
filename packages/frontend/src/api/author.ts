@@ -12,18 +12,21 @@ import {
 } from '@/api/content-api/author-collection'
 import { DEFAULT_AVATAR } from '@/constants'
 import envVars from '@/environment-variables'
+import type { TraceHeaders } from '@/types/trace-headers'
 import { firstOrderByEntry } from '@/utils/first-order-by'
 import { logContentApiFallback } from '@/utils/log-content-api-fallback'
 import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export async function getAuthorAvatarBySlug({
   slug,
+  traceHeaders,
 }: {
   slug: string
+  traceHeaders?: TraceHeaders
 }): Promise<string> {
   if (envVars.useContentApi) {
     try {
-      const tiny = await getAuthorAvatarBySlugContentApi({ slug })
+      const tiny = await getAuthorAvatarBySlugContentApi({ slug, traceHeaders })
       return tiny || DEFAULT_AVATAR
     } catch (err) {
       logContentApiFallback('getAuthorAvatarBySlug', err)
@@ -38,6 +41,7 @@ export async function getAuthorAvatarBySlug({
         slug,
       },
     },
+    traceHeaders,
   })
 
   return res?.data?.data?.author?.avatar?.resized?.tiny ?? DEFAULT_AVATAR
@@ -45,12 +49,14 @@ export async function getAuthorAvatarBySlug({
 
 export async function getAuthorMetaBySlug({
   slug,
+  traceHeaders,
 }: {
   slug: string
+  traceHeaders?: TraceHeaders
 }): Promise<GetAuthorMetaQuery['author']> {
   if (envVars.useContentApi) {
     try {
-      return await getAuthorMetaContentApi({ slug })
+      return await getAuthorMetaContentApi({ slug, traceHeaders })
     } catch (err) {
       logContentApiFallback('getAuthorMetaBySlug', err)
     }
@@ -63,6 +69,7 @@ export async function getAuthorMetaBySlug({
         slug,
       },
     },
+    traceHeaders,
   })
 
   return res?.data?.data?.author
@@ -70,7 +77,7 @@ export async function getAuthorMetaBySlug({
 
 export async function getAuthorPostsBySlugPaged(
   variables: GetAuthorPostsQueryVariables,
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 ): Promise<GetAuthorPostsQuery['author']> {
   const slug = variables.where?.slug
   const order = firstOrderByEntry(variables.orderBy ?? undefined)

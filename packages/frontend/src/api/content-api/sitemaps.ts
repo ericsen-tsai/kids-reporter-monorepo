@@ -3,6 +3,7 @@ import {
   V1SitemapProjectsResponseSchema,
 } from '@kids-reporter/api-types'
 
+import type { TraceHeaders } from '@/types/trace-headers'
 import {
   contentApiResponseParseError,
   sendContentApiRequest,
@@ -10,13 +11,16 @@ import {
 
 export async function getSitemapPostsContentApi({
   sinceDays,
+  traceHeaders,
 }: {
   sinceDays?: number
+  traceHeaders?: TraceHeaders
 }) {
   const response = await sendContentApiRequest({
     path: '/v1/sitemaps/posts',
     method: 'GET',
     query: { sinceDays },
+    traceHeaders,
   })
   const parsed = V1SitemapPostsResponseSchema.safeParse(response)
   if (!parsed.success) {
@@ -30,13 +34,16 @@ export async function getSitemapPostsContentApi({
 
 export async function getSitemapProjectsContentApi({
   sinceDays,
+  traceHeaders,
 }: {
   sinceDays?: number
+  traceHeaders?: TraceHeaders
 }) {
   const response = await sendContentApiRequest({
     path: '/v1/sitemaps/projects',
     method: 'GET',
     query: { sinceDays },
+    traceHeaders,
   })
   const parsed = V1SitemapProjectsResponseSchema.safeParse(response)
   if (!parsed.success) {

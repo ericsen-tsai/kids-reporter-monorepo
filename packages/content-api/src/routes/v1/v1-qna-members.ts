@@ -7,7 +7,6 @@ import {
   V1PatchPostChoiceAnswerBodySchema,
   V1PatchPostEssayAnswerBodySchema,
 } from '@kids-reporter/api-types'
-import { Prisma } from '@kids-reporter/db'
 import express from 'express'
 import { z } from 'zod'
 
@@ -58,18 +57,25 @@ async function requireMember(
   return { id: m.id }
 }
 
-/** Map a `MutationResult` short-circuit (`forbidden` / `not_found`) to a JSON error.
+/** Map a `MutationResult` short-circuit to a JSON error.
  *  Returns true when an error response was sent. */
 function sendMutationError(
   res: express.Response,
-  result: MutationResult<unknown>
+  result: MutationResult<unknown>,
+  duplicateReason?: string
 ): boolean {
+  if (result.kind === 'not_found') {
+    sendJsonError(res, 404, 'not_found', 'Not found')
+    return true
+  }
   if (result.kind === 'forbidden') {
     sendJsonError(res, 403, 'forbidden', 'Forbidden')
     return true
   }
-  if (result.kind === 'not_found') {
-    sendJsonError(res, 404, 'not_found', 'Not found')
+  if (result.kind === 'duplicate') {
+    sendJsonError(res, 409, 'conflict', 'Conflict', {
+      reason: duplicateReason ?? 'duplicate',
+    })
     return true
   }
   return false
@@ -137,24 +143,12 @@ export function createV1QnaMembersRouter() {
         return
       }
 
-      try {
-        const created = await createMemberPostChoiceAnswer(member.id, {
-          questionId,
-          choiceIndex,
-        })
-        res.json(created)
-      } catch (e) {
-        if (
-          e instanceof Prisma.PrismaClientKnownRequestError &&
-          e.code === 'P2002'
-        ) {
-          sendJsonError(res, 409, 'conflict', 'Conflict', {
-            reason: 'duplicate_choice_answer',
-          })
-          return
-        }
-        throw e
-      }
+      const result = await createMemberPostChoiceAnswer(member.id, {
+        questionId,
+        choiceIndex,
+      })
+      if (sendMutationError(res, result, 'duplicate_choice_answer')) return
+      res.json(result.kind === 'ok' ? result.data : undefined)
     })
   )
 
@@ -198,24 +192,12 @@ export function createV1QnaMembersRouter() {
         return
       }
 
-      try {
-        const created = await createMemberPostEssayAnswer(member.id, {
-          questionId,
-          content,
-        })
-        res.json(created)
-      } catch (e) {
-        if (
-          e instanceof Prisma.PrismaClientKnownRequestError &&
-          e.code === 'P2002'
-        ) {
-          sendJsonError(res, 409, 'conflict', 'Conflict', {
-            reason: 'duplicate_essay_answer',
-          })
-          return
-        }
-        throw e
-      }
+      const result = await createMemberPostEssayAnswer(member.id, {
+        questionId,
+        content,
+      })
+      if (sendMutationError(res, result, 'duplicate_essay_answer')) return
+      res.json(result.kind === 'ok' ? result.data : undefined)
     })
   )
 
@@ -265,13 +247,7 @@ export function createV1QnaMembersRouter() {
       }
 
       const result = await createMemberEssayAnswerLike(member.id, answerId)
-      if (result.kind === 'duplicate') {
-        sendJsonError(res, 409, 'conflict', 'Conflict', {
-          reason: 'duplicate_like',
-        })
-        return
-      }
-      if (sendMutationError(res, result)) return
+      if (sendMutationError(res, result, 'duplicate_like')) return
       res.json(result.kind === 'ok' ? result.data : undefined)
     })
   )

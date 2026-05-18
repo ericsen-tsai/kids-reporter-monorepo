@@ -1,5 +1,6 @@
 import { V1AuthorAvatarResponseSchema } from '@kids-reporter/api-types'
 
+import type { TraceHeaders } from '@/types/trace-headers'
 import {
   contentApiResponseParseError,
   sendContentApiRequest,
@@ -10,7 +11,7 @@ export async function getAuthorAvatarBySlugContentApi({
   traceHeaders,
 }: {
   slug: string
-  traceHeaders?: Record<string, string>
+  traceHeaders?: TraceHeaders
 }) {
   const encoded = encodeURIComponent(slug)
   const response = await sendContentApiRequest({

@@ -136,28 +136,15 @@ export async function fetchCategorySubcategoriesTheme(
   return result
 }
 
-/** Walk down to all sub-subcategory ids under a category slug. Empty array if category missing. */
+/** Collect all sub-subcategory ids under a category slug. Empty array if category missing. */
 async function collectSubSubcategoryIdsForCategorySlug(
   slug: string
 ): Promise<number[]> {
-  const cat = await prisma.category.findUnique({
-    where: { slug },
-    select: {
-      subcategories: {
-        select: {
-          subSubcategories: { select: { id: true } },
-        },
-      },
-    },
+  const rows = await prisma.subSubcategory.findMany({
+    where: { subcategory: { category: { slug } } },
+    select: { id: true },
   })
-  if (!cat) return []
-  const ids: number[] = []
-  for (const sub of cat.subcategories) {
-    for (const ss of sub.subSubcategories) {
-      ids.push(ss.id)
-    }
-  }
-  return ids
+  return rows.map((r) => r.id)
 }
 
 /** `GET /v1/categories/by-slug/:slug/posts` (unknown category → empty feed; not 404). */
