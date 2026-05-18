@@ -6,7 +6,7 @@ import {
   V1MemberProfilePatchBodySchema,
   V1MemberProfileSchema,
 } from '@kids-reporter/api-types'
-import { prisma } from '@kids-reporter/db'
+import { Prisma, prisma } from '@kids-reporter/db'
 import type { z } from 'zod'
 
 import envVar from '../environment-variables.js'
@@ -101,18 +101,22 @@ export async function updateMemberProfile(
   userId: string,
   data: MemberProfilePatchInput
 ): Promise<MemberProfileDto | null> {
-  const existing = await prisma.member.findUnique({
-    where: { twreporter_user_id: userId },
-    select: { id: true },
-  })
-  if (!existing) return null
-
-  const updated = await prisma.member.update({
-    where: { twreporter_user_id: userId },
-    data,
-    select: memberSelect,
-  })
-  return mapMember(updated as MemberRow)
+  try {
+    const updated = await prisma.member.update({
+      where: { twreporter_user_id: userId },
+      data,
+      select: memberSelect,
+    })
+    return mapMember(updated as MemberRow)
+  } catch (e) {
+    if (
+      e instanceof Prisma.PrismaClientKnownRequestError &&
+      e.code === 'P2025'
+    ) {
+      return null
+    }
+    throw e
+  }
 }
 
 // --- Avatar (DB transaction colocated with FS unlink) ---

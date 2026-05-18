@@ -106,38 +106,49 @@ export type CreateChoiceAnswerDto = {
   question: { id: string } | undefined
 }
 
-/** `POST /v1/members/me/post-choice-answers` */
+/** `POST /v1/members/me/post-choice-answers` (P2002 → duplicate, P2003 → not_found). */
 export async function createMemberPostChoiceAnswer(
   memberId: string,
   input: { questionId: number; choiceIndex: number }
-): Promise<V1CreatePostChoiceAnswerResponse> {
-  const correct = await computeChoiceCorrect(
-    prisma,
-    input.questionId,
-    input.choiceIndex
-  )
-  const compositeKey = `${input.questionId}:${memberId}`
+): Promise<MutationResult<V1CreatePostChoiceAnswerResponse>> {
+  try {
+    const correct = await computeChoiceCorrect(
+      prisma,
+      input.questionId,
+      input.choiceIndex
+    )
+    const compositeKey = `${input.questionId}:${memberId}`
 
-  const created = await prisma.postChoiceAnswer.create({
-    data: {
-      questionId: input.questionId,
-      memberId,
-      choiceIndex: input.choiceIndex,
-      correct,
-      compositeKey,
-    },
-    select: {
-      id: true,
-      choiceIndex: true,
-      correct: true,
-      question: { select: { id: true } },
-    },
-  })
-  return {
-    id: String(created.id),
-    choiceIndex: created.choiceIndex,
-    correct: created.correct,
-    question: questionRefDto(created.question?.id),
+    const created = await prisma.postChoiceAnswer.create({
+      data: {
+        questionId: input.questionId,
+        memberId,
+        choiceIndex: input.choiceIndex,
+        correct,
+        compositeKey,
+      },
+      select: {
+        id: true,
+        choiceIndex: true,
+        correct: true,
+        question: { select: { id: true } },
+      },
+    })
+    return {
+      kind: 'ok',
+      data: {
+        id: String(created.id),
+        choiceIndex: created.choiceIndex,
+        correct: created.correct,
+        question: questionRefDto(created.question?.id),
+      },
+    }
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === 'P2002') return { kind: 'duplicate' }
+      if (e.code === 'P2003') return { kind: 'not_found' }
+    }
+    throw e
   }
 }
 
@@ -147,7 +158,7 @@ export type UpdateChoiceAnswerDto = {
   correct: boolean
 }
 
-/** `PATCH /v1/members/me/post-choice-answers/:id` (missing OR wrong-owner → forbidden). */
+/** `PATCH /v1/members/me/post-choice-answers/:id` (missing → not_found, wrong-owner → forbidden). */
 export async function updateMemberPostChoiceAnswer(
   memberId: string,
   id: number,
@@ -157,9 +168,8 @@ export async function updateMemberPostChoiceAnswer(
     where: { id },
     select: { memberId: true, questionId: true, choiceIndex: true },
   })
-  if (!existing || existing.memberId !== memberId) {
-    return { kind: 'forbidden' }
-  }
+  if (!existing) return { kind: 'not_found' }
+  if (existing.memberId !== memberId) return { kind: 'forbidden' }
 
   let choiceIndex: number | undefined =
     typeof data.choiceIndex === 'number' ? data.choiceIndex : undefined
@@ -207,29 +217,40 @@ export type CreateEssayAnswerDto = {
   question: { id: string } | undefined
 }
 
-/** `POST /v1/members/me/post-essay-answers` */
+/** `POST /v1/members/me/post-essay-answers` (P2002 → duplicate, P2003 → not_found). */
 export async function createMemberPostEssayAnswer(
   memberId: string,
   input: { questionId: number; content: string }
-): Promise<V1CreatePostEssayAnswerResponse> {
-  const compositeKey = `${input.questionId}:${memberId}`
-  const created = await prisma.postEssayAnswer.create({
-    data: {
-      questionId: input.questionId,
-      memberId,
-      content: input.content,
-      compositeKey,
-    },
-    select: {
-      id: true,
-      content: true,
-      question: { select: { id: true } },
-    },
-  })
-  return {
-    id: String(created.id),
-    content: created.content,
-    question: questionRefDto(created.question?.id),
+): Promise<MutationResult<V1CreatePostEssayAnswerResponse>> {
+  try {
+    const compositeKey = `${input.questionId}:${memberId}`
+    const created = await prisma.postEssayAnswer.create({
+      data: {
+        questionId: input.questionId,
+        memberId,
+        content: input.content,
+        compositeKey,
+      },
+      select: {
+        id: true,
+        content: true,
+        question: { select: { id: true } },
+      },
+    })
+    return {
+      kind: 'ok',
+      data: {
+        id: String(created.id),
+        content: created.content,
+        question: questionRefDto(created.question?.id),
+      },
+    }
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      if (e.code === 'P2002') return { kind: 'duplicate' }
+      if (e.code === 'P2003') return { kind: 'not_found' }
+    }
+    throw e
   }
 }
 
@@ -238,7 +259,7 @@ export type UpdateEssayAnswerDto = {
   content: string
 }
 
-/** `PATCH /v1/members/me/post-essay-answers/:id` (missing OR wrong-owner → forbidden). */
+/** `PATCH /v1/members/me/post-essay-answers/:id` (missing → not_found, wrong-owner → forbidden). */
 export async function updateMemberPostEssayAnswer(
   memberId: string,
   id: number,
@@ -248,9 +269,8 @@ export async function updateMemberPostEssayAnswer(
     where: { id },
     select: { memberId: true },
   })
-  if (!existing || existing.memberId !== memberId) {
-    return { kind: 'forbidden' }
-  }
+  if (!existing) return { kind: 'not_found' }
+  if (existing.memberId !== memberId) return { kind: 'forbidden' }
 
   const updated = await prisma.postEssayAnswer.update({
     where: { id },
