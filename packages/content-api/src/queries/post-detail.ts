@@ -16,6 +16,7 @@ import {
 } from '../utils/qna-utils.js'
 import {
   asOrderJson,
+  buildPostVisibilityWhere,
   buildPublicPostWhere,
   buildResizedLarge,
   buildResizedMedium,
@@ -315,7 +316,7 @@ export async function fetchPostDetailBySlug(
   now: Date,
   opts: PostDetailQueryOpts
 ): Promise<V1PostDetailBody | null> {
-  const publicWhere = buildPublicPostWhere(now)
+  const publicWhere = buildPostVisibilityWhere(now)
   const newsReadingOrder = newsReadingItemsOrderBy([{ order: 'asc' }])
   const relatedPostsWhere: Prisma.PostWhereInput = { slug: { notIn: [slug] } }
   const post = await prisma.post.findFirst({
@@ -516,7 +517,7 @@ export async function fetchPostMetaBySlug(
   slug: string,
   now: Date
 ): Promise<V1PostMetaBody | null> {
-  const publicWhere = buildPublicPostWhere(now)
+  const publicWhere = buildPostVisibilityWhere(now)
   const post = await prisma.post.findFirst({
     where: { AND: [{ slug }, publicWhere] },
     select: {
@@ -557,7 +558,7 @@ export async function fetchPostEssayQuestionsBySlug(
   slug: string,
   now: Date
 ): Promise<V1PostEssayQuestionsBody | null> {
-  const publicWhere = buildPublicPostWhere(now)
+  const publicWhere = buildPostVisibilityWhere(now)
   const post = await prisma.post.findFirst({
     where: { AND: [{ slug }, publicWhere] },
     select: {

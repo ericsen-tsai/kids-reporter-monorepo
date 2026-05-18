@@ -1,3 +1,5 @@
+import type { Prisma } from '@kids-reporter/db'
+
 import envVar from '../environment-variables.js'
 
 /** Match Keystone manual-order virtual: only IDs listed in JSON appear, in order (no trailing extras). */
@@ -28,6 +30,10 @@ export const buildPublicPostWhere = (now: Date) => ({
     },
   ],
 })
+
+/** Post visibility for by-slug reads. Preview server matches CMS preview_headless (no status filter). */
+export const buildPostVisibilityWhere = (now: Date): Prisma.PostWhereInput =>
+  envVar.isPreviewServer ? {} : buildPublicPostWhere(now)
 
 /** Category/subcategory virtual `relatedPosts` uses published OR archived only (see `packages/cms/lists/category.ts`). */
 export const buildCategoryFeedPostWhere = (subSubcategoryIds: number[]) => ({
