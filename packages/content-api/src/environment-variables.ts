@@ -10,7 +10,10 @@ const {
   GO_API_JWT_ISSUER,
   GO_API_JWT_AUDIENCE,
   IMAGES_STORAGE_PATH,
+  IS_PREVIEW_SERVER,
 } = process.env
+
+const isPreviewServer = IS_PREVIEW_SERVER === 'true'
 
 const parsedRequestTimeoutMs = Number(REQUEST_TIMEOUT_MS)
 const requestTimeoutMs =
@@ -63,6 +66,7 @@ const envVar = {
     /** Local filesystem root for Keystone `images` storage (member avatars). */
     storagePath: IMAGES_STORAGE_PATH || '',
   },
+  isPreviewServer,
 }
 
 if (envVar.cors.allowOrigins === '*') {
