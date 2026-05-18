@@ -4,6 +4,7 @@ import {
   V1CategoryBySlugSubcategoriesThemeResponseSchema,
 } from '@kids-reporter/api-types'
 
+import type { TraceHeaders } from '@/types/trace-headers'
 import {
   contentApiResponseParseError,
   sendContentApiRequest,
@@ -20,7 +21,7 @@ export async function getCategoryPostsContentApi({
   slug: string
   take?: number
   skip?: number
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 }) {
   const enc = encodeURIComponent(slug)
   const response = await sendContentApiRequest({
@@ -49,7 +50,7 @@ export async function getCategoryMetadataContentApi({
 }: {
   slug: string
   subcategorySlug?: string
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 }) {
   const enc = encodeURIComponent(slug)
   const response = await sendContentApiRequest({
@@ -80,7 +81,7 @@ export async function getCategorySubcategoriesThemeContentApi({
   traceHeaders,
 }: {
   slug: string
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 }) {
   const enc = encodeURIComponent(slug)
   const response = await sendContentApiRequest({

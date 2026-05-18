@@ -9,6 +9,7 @@ import {
   getTagPostsContentApi,
 } from '@/api/content-api/tag-collection'
 import envVars from '@/environment-variables'
+import type { TraceHeaders } from '@/types/trace-headers'
 import { firstOrderByEntry } from '@/utils/first-order-by'
 import { logContentApiFallback } from '@/utils/log-content-api-fallback'
 import { sendRestGqlRequest } from '@/utils/send-rest-gql'
@@ -18,7 +19,7 @@ export async function getTagMetaBySlug({
   traceHeaders,
 }: {
   slug: string
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 }): Promise<GetTagMetaQuery['tag']> {
   if (envVars.useContentApi) {
     try {
@@ -43,7 +44,7 @@ export async function getTagMetaBySlug({
 
 export async function getTagPostsBySlugPaged(
   variables: GetTagPostsQueryVariables,
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 ): Promise<GetTagPostsQuery['tag']> {
   const slug = variables.where?.slug
   const order = firstOrderByEntry(variables.orderBy ?? undefined)

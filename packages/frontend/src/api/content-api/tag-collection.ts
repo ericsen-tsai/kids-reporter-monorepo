@@ -3,6 +3,7 @@ import {
   V1TagBySlugPostsResponseSchema,
 } from '@kids-reporter/api-types'
 
+import type { TraceHeaders } from '@/types/trace-headers'
 import {
   contentApiResponseParseError,
   sendContentApiRequest,
@@ -15,7 +16,7 @@ export async function getTagMetaContentApi({
   traceHeaders,
 }: {
   slug: string
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 }) {
   const enc = encodeURIComponent(slug)
   const response = await sendContentApiRequest({
@@ -49,7 +50,7 @@ export async function getTagPostsContentApi({
   take?: number
   skip?: number
   orderBy?: string
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 }) {
   const enc = encodeURIComponent(slug)
   const response = await sendContentApiRequest({

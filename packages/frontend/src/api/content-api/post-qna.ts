@@ -19,12 +19,11 @@ import type {
 } from '__generated__/operations/answers.generated'
 import type { PostEssayAnswerOrderByInput } from '__generated__/types'
 
+import type { TraceHeaders } from '@/types/trace-headers'
 import {
   ContentApiRequestError,
   sendContentApiRequest,
 } from '@/utils/send-content-api'
-
-type TraceHeaders = Headers | Record<string, string | undefined>
 
 function questionIdFromGqlCreateData(data: Record<string, unknown>): unknown {
   const q = data.question as { connect?: { id?: unknown } } | undefined

@@ -7,12 +7,13 @@ import {
 import { getSubcategoriesContentApi } from '@/api/content-api/subcategories'
 import { getSubcategoryPostsContentApi } from '@/api/content-api/subcategory-posts'
 import envVars from '@/environment-variables'
+import type { TraceHeaders } from '@/types/trace-headers'
 import { logContentApiFallback } from '@/utils/log-content-api-fallback'
 import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
 export const getSubcategoryPosts = async (
   variables: GetSubcategoryPostsQueryVariables,
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 ) => {
   const slug = variables.where?.slug
   if (envVars.useContentApi && slug) {
@@ -36,9 +37,7 @@ export const getSubcategoryPosts = async (
   return response?.data?.data?.subcategory
 }
 
-export const getSubcategories = async (
-  traceHeaders?: Headers | Record<string, string | undefined>
-) => {
+export const getSubcategories = async (traceHeaders?: TraceHeaders) => {
   if (envVars.useContentApi) {
     try {
       return await getSubcategoriesContentApi({ traceHeaders })

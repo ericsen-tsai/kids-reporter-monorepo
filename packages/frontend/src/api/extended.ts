@@ -10,6 +10,7 @@ import {
 } from '@/api/content-api/member-activity'
 import type { GetMemberPostsWithAnswersQuerySchema } from '@/api/member-posts-with-answers-schema'
 import envVars from '@/environment-variables'
+import type { TraceHeaders } from '@/types/trace-headers'
 import { logContentApiFallback } from '@/utils/log-content-api-fallback'
 import { sendRestGqlRequest } from '@/utils/send-rest-gql'
 
@@ -17,7 +18,7 @@ export type { GetMemberPostsWithAnswersQuerySchema } from '@/api/member-posts-wi
 
 export const getMemberPostsWithAnswers = async (
   variables: GetMemberPostsWithAnswersQueryVariables & { accessToken: string },
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 ) => {
   const { accessToken, ...restVariables } = variables
   if (envVars.useContentApi) {
@@ -47,7 +48,7 @@ export const getMemberEssayAnswersHasLiked = async (
   variables: GetMemberEssayAnswersHasLikedQueryVariables & {
     accessToken: string
   },
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 ) => {
   const { accessToken, ...restVariables } = variables
   if (envVars.useContentApi) {

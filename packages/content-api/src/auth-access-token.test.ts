@@ -97,12 +97,13 @@ describe('POST /auth/access-token', () => {
     })
 
     const app = createApp({ corsAllowOrigin: ['https://kids.twreporter.org'] })
-    await request(app)
+    const res = await request(app)
       .post('/auth/access-token')
       .set('Cookie', 'id_token=fake-id-token')
       .set('Origin', 'https://kids.twreporter.org')
       .set('X-Cloud-Trace-Context', traceHeader)
 
+    expect(res.status).toBe(200)
     expect(axios.post).toHaveBeenCalledWith(
       expect.any(String),
       undefined,

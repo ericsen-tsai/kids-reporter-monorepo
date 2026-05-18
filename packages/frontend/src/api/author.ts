@@ -12,6 +12,7 @@ import {
 } from '@/api/content-api/author-collection'
 import { DEFAULT_AVATAR } from '@/constants'
 import envVars from '@/environment-variables'
+import type { TraceHeaders } from '@/types/trace-headers'
 import { firstOrderByEntry } from '@/utils/first-order-by'
 import { logContentApiFallback } from '@/utils/log-content-api-fallback'
 import { sendRestGqlRequest } from '@/utils/send-rest-gql'
@@ -21,7 +22,7 @@ export async function getAuthorAvatarBySlug({
   traceHeaders,
 }: {
   slug: string
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 }): Promise<string> {
   if (envVars.useContentApi) {
     try {
@@ -51,7 +52,7 @@ export async function getAuthorMetaBySlug({
   traceHeaders,
 }: {
   slug: string
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 }): Promise<GetAuthorMetaQuery['author']> {
   if (envVars.useContentApi) {
     try {
@@ -76,7 +77,7 @@ export async function getAuthorMetaBySlug({
 
 export async function getAuthorPostsBySlugPaged(
   variables: GetAuthorPostsQueryVariables,
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 ): Promise<GetAuthorPostsQuery['author']> {
   const slug = variables.where?.slug
   const order = firstOrderByEntry(variables.orderBy ?? undefined)

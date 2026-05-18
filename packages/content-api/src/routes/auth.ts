@@ -131,9 +131,9 @@ export function createAuthRouter({
           undefined,
           {
             headers: {
+              ...res.locals.traceContext?.traceHeaders,
               cookie: `id_token=${encodeURIComponent(String(idToken))}`,
               'content-type': 'application/json',
-              ...res.locals.traceContext?.traceHeaders,
             },
             timeout: envVar.apis.requestTimeoutMs,
           }

@@ -1,4 +1,5 @@
 import type { MemberPostsWithAnswersPayload } from '@/api/member-posts-with-answers-schema'
+import type { TraceHeaders } from '@/types/trace-headers'
 import { sendContentApiRequest } from '@/utils/send-content-api'
 
 export async function getMemberPostsWithAnswersContentApi({
@@ -10,7 +11,7 @@ export async function getMemberPostsWithAnswersContentApi({
   accessToken: string
   take?: number
   cursor?: string
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 }) {
   const response = (await sendContentApiRequest({
     path: '/v1/members/me/posts-with-answers',
@@ -31,7 +32,7 @@ export async function getMemberEssayAnswersHasLikedContentApi({
 }: {
   accessToken: string
   essayAnswerIds: string[]
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 }) {
   const response = (await sendContentApiRequest({
     path: '/v1/members/me/essay-answers/has-liked',

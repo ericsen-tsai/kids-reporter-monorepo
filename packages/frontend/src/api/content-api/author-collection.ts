@@ -5,6 +5,7 @@ import {
   V1AuthorPostsCountResponseSchema,
 } from '@kids-reporter/api-types'
 
+import type { TraceHeaders } from '@/types/trace-headers'
 import {
   ContentApiRequestError,
   contentApiResponseParseError,
@@ -18,7 +19,7 @@ export async function getAuthorMetaContentApi({
   traceHeaders,
 }: {
   slug: string
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 }) {
   const enc = encodeURIComponent(slug)
   const response = await sendContentApiRequest({
@@ -45,7 +46,7 @@ export async function getAuthorPostsCountContentApi({
   traceHeaders,
 }: {
   slug: string
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 }): Promise<GetAuthorPostsCountQuery['author'] | undefined> {
   try {
     const enc = encodeURIComponent(slug)
@@ -82,7 +83,7 @@ export async function getAuthorPostsContentApi({
   take?: number
   skip?: number
   orderBy?: string
-  traceHeaders?: Headers | Record<string, string | undefined>
+  traceHeaders?: TraceHeaders
 }) {
   const enc = encodeURIComponent(slug)
   const response = await sendContentApiRequest({
