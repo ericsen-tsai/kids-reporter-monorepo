@@ -37,9 +37,9 @@ RUN yarn workspace @kids-reporter/logger build \
   && yarn workspace @kids-reporter/draft-renderer build \
   && yarn workspace @kids-reporter/cms exec patch-package \
   && yarn workspace @kids-reporter/cms exec keystone build --no-ui \
-  && yarn workspace @kids-reporter/cms run build
-
-RUN yarn cache clean
+  && yarn workspace @kids-reporter/cms run build \
+  && SKIP_POSTINSTALL=true YARN_ENABLE_SCRIPTS=0 yarn workspaces focus @kids-reporter/cms --production \
+  && yarn cache clean
 
 WORKDIR /monorepo/packages/cms
 

@@ -16,13 +16,13 @@ COPY packages/routing-ui/package.json packages/routing-ui/
 COPY packages/api-types/package.json packages/api-types/
 COPY packages/draft-renderer/package.json packages/draft-renderer/
 
+RUN SKIP_POSTINSTALL=true yarn workspaces focus @kids-reporter/frontend --all
+
 COPY packages/frontend packages/frontend
 COPY packages/logger packages/logger
 COPY packages/routing-ui packages/routing-ui
 COPY packages/api-types packages/api-types
 COPY packages/draft-renderer packages/draft-renderer
-
-RUN SKIP_POSTINSTALL=true yarn workspaces focus @kids-reporter/frontend --all
 
 RUN yarn workspace @kids-reporter/logger build \
   && yarn workspace @kids-reporter/api-types build \

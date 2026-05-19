@@ -16,18 +16,19 @@ COPY packages/api-types/package.json packages/api-types/
 COPY packages/db/package.json packages/db/
 COPY packages/logger/package.json packages/logger/
 
+RUN SKIP_POSTINSTALL=true YARN_ENABLE_SCRIPTS=0 yarn workspaces focus @kids-reporter/content-api --all
+
 COPY packages/cms/schema.prisma packages/cms/schema.prisma
 COPY packages/content-api packages/content-api
 COPY packages/api-types packages/api-types
 COPY packages/db packages/db
 COPY packages/logger packages/logger
 
-RUN SKIP_POSTINSTALL=true YARN_ENABLE_SCRIPTS=0 yarn workspaces focus @kids-reporter/content-api --all
-
 RUN yarn workspace @kids-reporter/logger build \
   && yarn workspace @kids-reporter/api-types build \
   && yarn workspace @kids-reporter/db build \
-  && yarn workspace @kids-reporter/content-api run build
+  && yarn workspace @kids-reporter/content-api run build \
+  && SKIP_POSTINSTALL=true YARN_ENABLE_SCRIPTS=0 yarn workspaces focus @kids-reporter/content-api --production
 
 FROM node:${NODE_VERSION}
 

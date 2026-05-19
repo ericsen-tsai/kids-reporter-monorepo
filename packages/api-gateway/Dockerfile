@@ -16,11 +16,10 @@ COPY packages/api-gateway packages/api-gateway
 COPY packages/logger packages/logger
 
 RUN yarn workspace @kids-reporter/logger build \
-  && yarn workspace @kids-reporter/api-gateway run build
+  && yarn workspace @kids-reporter/api-gateway run build \
+  && SKIP_POSTINSTALL=true YARN_ENABLE_SCRIPTS=0 yarn workspaces focus @kids-reporter/api-gateway --production
 
 FROM node:${NODE_VERSION}
-
-RUN corepack enable && corepack prepare yarn@4.9.4 --activate
 
 WORKDIR /monorepo/packages/api-gateway
 

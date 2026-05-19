@@ -35,23 +35,22 @@ COPY packages/draft-editor/package.json packages/draft-editor/
 COPY packages/draft-renderer/package.json packages/draft-renderer/
 COPY packages/logger/package.json packages/logger/
 
+RUN SKIP_POSTINSTALL=true yarn workspaces focus @kids-reporter/cms --all
+
 COPY packages/cms packages/cms
 COPY packages/core packages/core
 COPY packages/draft-editor packages/draft-editor
 COPY packages/draft-renderer packages/draft-renderer
 COPY packages/logger packages/logger
 
-RUN SKIP_POSTINSTALL=true yarn workspaces focus @kids-reporter/cms --all
-
 RUN yarn workspace @kids-reporter/logger build \
   && yarn workspace @kids-reporter/cms-core build \
   && yarn workspace @kids-reporter/draft-editor build \
   && yarn workspace @kids-reporter/draft-renderer build \
   && yarn workspace @kids-reporter/cms exec patch-package \
-  && yarn workspace @kids-reporter/cms exec keystone build --no-ui \
-  && yarn workspace @kids-reporter/cms run build
-
-RUN yarn cache clean
+  && yarn workspace @kids-reporter/cms run build \
+  && SKIP_POSTINSTALL=true YARN_ENABLE_SCRIPTS=0 yarn workspaces focus @kids-reporter/cms --production \
+  && yarn cache clean
 
 RUN chmod +x packages/cms/run.sh
 
