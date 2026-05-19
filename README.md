@@ -33,8 +33,8 @@ We need `husky` and `lint-staged` installed first.
 ### Yarn v4 (Berry) Notes
 
 - This repo uses Yarn v4 with node_modules (`.yarnrc.yml` sets `nodeLinker: node-modules`).
-- Yarn is pinned via `packageManager` in `package.json` and resolved by Corepack.
-- Subpackage Docker builds copy `.yarnrc.yml` and enable Corepack in the image.
+- Yarn is pinned via `packageManager` (`yarn@4.9.4`) in the root and deployable app packages (`cms`, `content-api`, `api-gateway`, `frontend`), resolved by Corepack.
+- App Docker images build from the **monorepo root** (`docker build -f packages/<app>/Dockerfile .`) using `yarn workspaces focus` and explicit `yarn workspace` build steps.
 
 ### 如何在 workspaces 中新增 subpkg？
 

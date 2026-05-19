@@ -2,6 +2,7 @@
   "name": "@kids-reporter/content-api",
   "type": "module",
   "version": "0.0.1",
+  "packageManager": "yarn@4.9.4",
   "private": true,
   "scripts": {
     "dev": "make dev",
@@ -12,7 +13,7 @@
     "lint:check": "eslint src --ext .ts,.js",
     "type-check": "tsc --noEmit",
     "test": "vitest run",
-    "postinstall": "bash -c 'SKIP_BUILD_DEPS=\"${SKIP_BUILD_DEPS:-}\" DB_GENERATE_LOCAL=\"${DB_GENERATE_LOCAL:-\"true\"}\" make postinstall'"
+    "postinstall": "bash -c 'if [ \"${SKIP_POSTINSTALL:-}\" = \"true\" ]; then exit 0; fi; SKIP_BUILD_DEPS=\"${SKIP_BUILD_DEPS:-}\" DB_GENERATE_LOCAL=\"${DB_GENERATE_LOCAL:-\"true\"}\" make postinstall'"
   },
   "dependencies": {
     "@kids-reporter/api-types": "^0.0.1",

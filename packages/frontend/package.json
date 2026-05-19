@@ -1,6 +1,7 @@
 {
   "name": "@kids-reporter/frontend",
   "version": "1.0.10",
+  "packageManager": "yarn@4.9.4",
   "private": true,
   "scripts": {
     "dev": "concurrently \"yarn codegen:local --watch\" \"next dev --port ${PORT:-3000}\"",
@@ -13,7 +14,7 @@
     "type-check": "tsc --noEmit",
     "codegen:local": "graphql-codegen --config codegen.local.ts",
     "codegen:cloudbuild": "graphql-codegen --config codegen.cloudbuild.ts",
-    "postinstall": "yarn codegen:local && yarn workspace @kids-reporter/logger build && yarn workspace @kids-reporter/routing-ui build"
+    "postinstall": "bash -c 'if [ \"${SKIP_POSTINSTALL:-}\" = \"true\" ]; then exit 0; fi; yarn codegen:local && yarn workspace @kids-reporter/logger build && yarn workspace @kids-reporter/routing-ui build'"
   },
   "dependencies": {
     "@googleapis/customsearch": "^1.0.4",

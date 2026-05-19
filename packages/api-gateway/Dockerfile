@@ -2,31 +2,34 @@ ARG NODE_VERSION=20.19.5
 
 FROM node:${NODE_VERSION} AS build
 
-RUN corepack enable
+RUN corepack enable && corepack prepare yarn@4.9.4 --activate
 
-WORKDIR /build
+WORKDIR /monorepo
 
-# copy from root at build time (in cloudbuild.yaml)
-COPY package.json yarn.lock .yarnrc.yml /build/
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY packages/api-gateway/package.json packages/api-gateway/
+COPY packages/logger/package.json packages/logger/
 
-RUN yarn install --immutable
+RUN YARN_ENABLE_SCRIPTS=0 yarn workspaces focus @kids-reporter/api-gateway --all
 
-COPY . /build/
+COPY packages/api-gateway packages/api-gateway
+COPY packages/logger packages/logger
 
-RUN yarn build
-
+RUN yarn workspace @kids-reporter/logger build \
+  && yarn workspace @kids-reporter/api-gateway run build
 
 FROM node:${NODE_VERSION}
 
-RUN corepack enable
+RUN corepack enable && corepack prepare yarn@4.9.4 --activate
 
-WORKDIR /app
+WORKDIR /monorepo/packages/api-gateway
 
 ENV NODE_ENV=production
 
-# Automatically leverage output traces to reduce image size
-COPY --from=build /build/node_modules ./node_modules
-COPY --from=build /build/dist ./dist
-COPY --from=build /build/package.json ./package.json
+COPY --from=build /monorepo/package.json /monorepo/package.json
+COPY --from=build /monorepo/node_modules /monorepo/node_modules
+COPY --from=build /monorepo/packages/api-gateway/package.json ./package.json
+COPY --from=build /monorepo/packages/api-gateway/dist ./dist
+COPY --from=build /monorepo/packages/logger /monorepo/packages/logger
 
 CMD ["node", "dist/server.js"]
