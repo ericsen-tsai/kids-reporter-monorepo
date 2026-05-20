@@ -14,7 +14,7 @@
     "type-check": "tsc --noEmit",
     "codegen:local": "graphql-codegen --config codegen.local.ts",
     "codegen:cloudbuild": "graphql-codegen --config codegen.cloudbuild.ts",
-    "postinstall": "bash -c 'SKIP_BUILD_DEPS=\"${SKIP_BUILD_DEPS:-}\" SKIP_CODEGEN_LOCAL=\"${SKIP_CODEGEN_LOCAL:-}\" make postinstall'"
+    "postinstall": "make postinstall"
   },
   "dependencies": {
     "@googleapis/customsearch": "^1.0.4",

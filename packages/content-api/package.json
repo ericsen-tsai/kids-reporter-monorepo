@@ -13,7 +13,7 @@
     "lint:check": "eslint src --ext .ts,.js",
     "type-check": "tsc --noEmit",
     "test": "vitest run",
-    "postinstall": "bash -c 'SKIP_BUILD_DEPS=\"${SKIP_BUILD_DEPS:-}\" DB_GENERATE_LOCAL=\"${DB_GENERATE_LOCAL:-\"true\"}\" make postinstall'"
+    "postinstall": "make postinstall"
   },
   "dependencies": {
     "@kids-reporter/api-types": "^0.0.1",
