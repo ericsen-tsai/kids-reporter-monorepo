@@ -37,12 +37,12 @@ WORKDIR $APP_DIR
 COPY . $APP_DIR
 
 ## Install application dependencies
-RUN SKIP_BUILD_DEPS=true yarn install --immutable
+RUN SKIP_BUILD_DEPS=true yarn install
 
 ## Build application bundles
 RUN yarn build
 
-RUN yarn cache clean
+RUN yarn cache clean --all
 
 ## Ensure the script is executable
 RUN chmod +x run.sh

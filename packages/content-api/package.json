@@ -3,6 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "private": true,
+  "packageManager": "yarn@4.9.4",
   "scripts": {
     "dev": "make dev",
     "build": "make build",

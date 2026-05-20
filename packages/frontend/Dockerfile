@@ -12,7 +12,7 @@ WORKDIR /build
 # copy from root at build time (in cloudbuild.yaml)
 COPY package.json yarn.lock .yarnrc.yml /build/
 
-RUN yarn install --immutable --ignore-scripts
+RUN SKIP_BUILD_DEPS=true SKIP_CODEGEN_LOCAL=true yarn install --mode=skip-build
 
 COPY . /build/
 

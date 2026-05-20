@@ -1,6 +1,7 @@
 {
   "name": "@kids-reporter/cms",
   "version": "1.0.12",
+  "packageManager": "yarn@4.9.4",
   "description": "",
   "scripts": {
     "dev": "dotenv -e .env.local -- keystone dev",
