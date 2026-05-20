@@ -115,3 +115,4 @@ substitutions:
   _ENV_FILE: '' # default value
   _DEPLOYMENT_TYPE: 'service' # default value
   _DOCKERFILE: 'Dockerfile' # default value
+  _USE_CONTENT_API: 'false' # default value
