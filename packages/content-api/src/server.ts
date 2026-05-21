@@ -20,6 +20,7 @@ async function start() {
       gcpProjectId: envVar.gcp.projectId,
       corsAllowOrigin: envVar.cors.allowOrigins,
       enableOpenApi: envVar.enableOpenApi,
+      basePath: envVar.basePath,
     })
     server = http.createServer(app)
     // Defensive timeouts: reduce exposure to slowloris/hung connections.

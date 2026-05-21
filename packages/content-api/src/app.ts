@@ -21,10 +21,12 @@ export function createApp({
   gcpProjectId = 'kids-reporter',
   corsAllowOrigin = [],
   enableOpenApi = false,
+  basePath = '',
 }: {
   gcpProjectId?: string
   corsAllowOrigin: string[] | string
   enableOpenApi?: boolean
+  basePath?: string
 }) {
   const app = express()
 
@@ -63,7 +65,7 @@ export function createApp({
 
   app.use(createHealthRouter())
   if (enableOpenApi) {
-    app.use(createOpenApiRouter())
+    app.use(createOpenApiRouter({ basePath }))
   }
   app.use('/v1', createV1Router())
 

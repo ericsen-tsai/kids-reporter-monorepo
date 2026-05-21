@@ -12,6 +12,7 @@ const {
   IMAGES_STORAGE_PATH,
   IS_PREVIEW_SERVER,
   CURRENT_ENVIRONMENT,
+  BASE_PATH,
 } = process.env
 
 const isPreviewServer = IS_PREVIEW_SERVER === 'true'
@@ -72,6 +73,7 @@ const envVar = {
   },
   isPreviewServer,
   enableOpenApi,
+  basePath: BASE_PATH?.replace(/\/+$/, '') || '',
 }
 
 if (envVar.cors.allowOrigins === '*') {

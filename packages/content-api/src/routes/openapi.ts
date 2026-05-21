@@ -1,8 +1,8 @@
 import { getOpenApiDocument } from '@kids-reporter/api-types'
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import swaggerUi from 'swagger-ui-express'
 
-export function createOpenApiRouter() {
+export function createOpenApiRouter({ basePath = '' } = {}) {
   const router = express.Router()
 
   router.get('/openapi.json', (_req, res) => {
@@ -13,11 +13,13 @@ export function createOpenApiRouter() {
   router.use(
     '/docs',
     swaggerUi.serve,
-    swaggerUi.setup(undefined, {
-      swaggerOptions: {
-        url: '/openapi.json',
-      },
-    })
+    (req: Request, res: Response, next: NextFunction) => {
+      swaggerUi.setup(undefined, {
+        swaggerOptions: {
+          url: `${basePath}/openapi.json`,
+        },
+      })(req, res, next)
+    }
   )
 
   return router
