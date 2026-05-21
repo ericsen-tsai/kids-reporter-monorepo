@@ -11,9 +11,13 @@ const {
   GO_API_JWT_AUDIENCE,
   IMAGES_STORAGE_PATH,
   IS_PREVIEW_SERVER,
+  CURRENT_ENVIRONMENT,
 } = process.env
 
 const isPreviewServer = IS_PREVIEW_SERVER === 'true'
+
+// only enable OpenAPI in non-production environments
+const enableOpenApi = CURRENT_ENVIRONMENT !== 'prod'
 
 const parsedRequestTimeoutMs = Number(REQUEST_TIMEOUT_MS)
 const requestTimeoutMs =
@@ -67,6 +71,7 @@ const envVar = {
     storagePath: IMAGES_STORAGE_PATH || '',
   },
   isPreviewServer,
+  enableOpenApi,
 }
 
 if (envVar.cors.allowOrigins === '*') {
