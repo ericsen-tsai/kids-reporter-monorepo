@@ -17,8 +17,12 @@ const {
 
 const isPreviewServer = IS_PREVIEW_SERVER === 'true'
 
-// only enable OpenAPI in non-production environments
-const enableOpenApi = CURRENT_ENVIRONMENT !== 'prod'
+const normalizedCurrentEnvironment = CURRENT_ENVIRONMENT?.trim().toLowerCase()
+const openApiEnabledEnvironments = new Set(['local', 'dev', 'staging'])
+// only enable OpenAPI in explicitly allowed non-production environments
+const enableOpenApi = openApiEnabledEnvironments.has(
+  normalizedCurrentEnvironment || ''
+)
 
 const parsedRequestTimeoutMs = Number(REQUEST_TIMEOUT_MS)
 const requestTimeoutMs =
