@@ -66,7 +66,11 @@ const buildUrl = (path: string) => {
   return `${base}${normalizedPath}`
 }
 
-function contentApiFailureLogSeverity(status?: number): LogSeverity {
+function contentApiFailureLogSeverity(
+  status?: number,
+  isCancel?: boolean
+): LogSeverity {
+  if (isCancel) return 'INFO'
   if (status === 404) return 'INFO'
   if (status !== undefined && status >= 400 && status < 500) return 'WARNING'
   return 'ERROR'
@@ -78,13 +82,18 @@ function contentApiFailureLogMessage({
   status,
   errorMessage,
   annotatedErr,
+  isCancel,
 }: {
   method: ContentApiMethod
   path: string
   status?: number
   errorMessage: string
   annotatedErr: unknown
+  isCancel?: boolean
 }): string {
+  if (isCancel) {
+    return `content-api request cancelled: ${method} ${path}`
+  }
   if (status === 404) {
     return `content-api 404 ${method} ${path}`
   }
@@ -167,14 +176,16 @@ export async function sendContentApiRequest<TData = unknown>({
       : annotatedErr instanceof Error
         ? annotatedErr.message
         : String(annotatedErr)
+    const isCancel = axios.isCancel(err)
     emitStructured({
-      severity: contentApiFailureLogSeverity(status),
+      severity: contentApiFailureLogSeverity(status, isCancel),
       message: contentApiFailureLogMessage({
         method,
         path,
         status,
         errorMessage,
         annotatedErr,
+        isCancel,
       }),
       context: {
         path,
