@@ -1,5 +1,5 @@
 import { RestErrorBodySchema } from '@kids-reporter/api-types'
-import { emitStructured } from '@kids-reporter/logger'
+import { emitStructured, type LogSeverity } from '@kids-reporter/logger'
 import errors from '@twreporter/errors'
 import axios, { AxiosRequestConfig } from 'axios'
 import { ZodError } from 'zod'
@@ -64,6 +64,37 @@ const buildUrl = (path: string) => {
       : CONTENT_API_ORIGIN
   const normalizedPath = path.startsWith('/') ? path : `/${path}`
   return `${base}${normalizedPath}`
+}
+
+function contentApiFailureLogSeverity(status?: number): LogSeverity {
+  if (status === 404) return 'INFO'
+  if (status !== undefined && status >= 400 && status < 500) return 'WARNING'
+  return 'ERROR'
+}
+
+function contentApiFailureLogMessage({
+  method,
+  path,
+  status,
+  errorMessage,
+  annotatedErr,
+}: {
+  method: ContentApiMethod
+  path: string
+  status?: number
+  errorMessage: string
+  annotatedErr: unknown
+}): string {
+  if (status === 404) {
+    return `content-api 404 ${method} ${path}`
+  }
+  if (status !== undefined && status >= 400 && status < 500) {
+    return `content-api ${status} ${method} ${path}: ${errorMessage}`
+  }
+  return errors.helpers.printAll(annotatedErr, {
+    withStack: true,
+    withPayload: false,
+  })
 }
 
 /**
@@ -137,10 +168,13 @@ export async function sendContentApiRequest<TData = unknown>({
         ? annotatedErr.message
         : String(annotatedErr)
     emitStructured({
-      severity: 'ERROR',
-      message: errors.helpers.printAll(annotatedErr, {
-        withStack: true,
-        withPayload: false,
+      severity: contentApiFailureLogSeverity(status),
+      message: contentApiFailureLogMessage({
+        method,
+        path,
+        status,
+        errorMessage,
+        annotatedErr,
       }),
       context: {
         path,
