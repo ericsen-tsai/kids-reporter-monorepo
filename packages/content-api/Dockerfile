@@ -10,7 +10,7 @@ WORKDIR /build
 # Makefile must exist before install: postinstall runs `make postinstall` (db-generate, etc.).
 COPY package.json yarn.lock .yarnrc.yml Makefile /build/
 
-RUN SKIP_BUILD_DEPS=true DB_GENERATE_LOCAL=false yarn install --immutable
+RUN SKIP_BUILD_DEPS=true DB_GENERATE_LOCAL=false yarn install
 
 COPY . /build/
 
@@ -29,4 +29,3 @@ COPY --from=build /build/dist ./dist
 COPY --from=build /build/package.json ./package.json
 
 CMD ["node", "dist/server.js"]
-
