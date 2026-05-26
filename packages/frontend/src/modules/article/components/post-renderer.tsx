@@ -4,6 +4,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import { ArticleBodyDraftRenderer } from '@kids-reporter/draft-renderer'
 import { cn } from '@kids-reporter/routing-ui'
 import { RawDraftContentState } from 'draft-js'
+import { useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton'
 
 import { FontSizeLevel, STICKY_HEADER_HEIGHT } from '@/constants'
@@ -24,6 +25,36 @@ type PostProp = {
 function PostRenderer({ content, shouldMount }: PostProp) {
   const { onImageModalOpen, fontSize } = useArticleContext()
 
+  useEffect(() => {
+    if (!shouldMount) return
+
+    const hash = window.location.hash
+    if (!hash) {
+      window.scrollTo(0, 0)
+      return
+    }
+
+    const scrollToHashTarget = () => {
+      const id = decodeURIComponent(hash.slice(1))
+      const anchor = document.getElementById(id)
+      if (!anchor) return false
+
+      const elementPosition = anchor.getBoundingClientRect().top
+      const offsetPosition =
+        elementPosition + window.scrollY - STICKY_HEADER_HEIGHT
+      window.scrollTo({ top: offsetPosition, behavior: 'auto' })
+      return true
+    }
+
+    if (!scrollToHashTarget()) {
+      requestAnimationFrame(() => {
+        if (!scrollToHashTarget()) {
+          requestAnimationFrame(scrollToHashTarget)
+        }
+      })
+    }
+  }, [shouldMount])
+
   return (
     <div
       className={cn(
@@ -39,9 +70,6 @@ function PostRenderer({ content, shouldMount }: PostProp) {
         <ArticleBodyDraftRenderer
           rawContentState={trimEmptyBlocks(content)}
           onImageModalOpen={onImageModalOpen}
-          initiallyScrollTo={
-            typeof window !== 'undefined' ? window.location.hash : undefined
-          }
           offsetTop={STICKY_HEADER_HEIGHT}
         />
       )}
