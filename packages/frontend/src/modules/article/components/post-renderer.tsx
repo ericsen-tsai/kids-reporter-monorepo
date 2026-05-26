@@ -35,23 +35,39 @@ function PostRenderer({ content, shouldMount }: PostProp) {
     }
 
     const scrollToHashTarget = () => {
-      const id = decodeURIComponent(hash.slice(1))
+      let id = ''
+      try {
+        id = decodeURIComponent(hash.slice(1))
+      } catch {
+        return false
+      }
+
       const anchor = document.getElementById(id)
       if (!anchor) return false
 
       const elementPosition = anchor.getBoundingClientRect().top
-      const offsetPosition =
-        elementPosition + window.scrollY - STICKY_HEADER_HEIGHT
+      const headerOffset = window.matchMedia('(min-width: 768px)').matches
+        ? STICKY_HEADER_HEIGHT
+        : 0
+      const offsetPosition = elementPosition + window.scrollY - headerOffset
       window.scrollTo({ top: offsetPosition, behavior: 'auto' })
       return true
     }
 
+    let rafId1: number | undefined
+    let rafId2: number | undefined
+
     if (!scrollToHashTarget()) {
-      requestAnimationFrame(() => {
+      rafId1 = requestAnimationFrame(() => {
         if (!scrollToHashTarget()) {
-          requestAnimationFrame(scrollToHashTarget)
+          rafId2 = requestAnimationFrame(scrollToHashTarget)
         }
       })
+    }
+
+    return () => {
+      if (rafId1 !== undefined) cancelAnimationFrame(rafId1)
+      if (rafId2 !== undefined) cancelAnimationFrame(rafId2)
     }
   }, [shouldMount])
 
