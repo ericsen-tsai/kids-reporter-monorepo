@@ -12,10 +12,10 @@ COPY package.json yarn.lock .yarnrc.yml Makefile /build/
 
 RUN SKIP_BUILD_DEPS=true DB_GENERATE_LOCAL=false yarn install
 
-COPY . /build/
+# Exclude lockfile to prevent lockfile got overridden by the repo root lockfile.
+COPY --exclude=yarn.lock . /build/
 
-# Relink workspace deps after source copy, then build.
-RUN SKIP_BUILD_DEPS=true DB_GENERATE_LOCAL=false yarn install && yarn build
+RUN yarn build
 
 FROM node:${NODE_VERSION}
 
