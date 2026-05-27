@@ -15,11 +15,10 @@ COPY package.json yarn.lock .yarnrc.yml Makefile /build/
 
 RUN SKIP_BUILD_DEPS=true SKIP_CODEGEN_LOCAL=true yarn install --mode=skip-build
 
-COPY . /build/
+# Exclude lockfile to prevent lockfile got overridden by the repo root lockfile.
+COPY --exclude=yarn.lock . /build/
 
-# Relink workspace deps after source copy, then build (codegen runs in build:cloudbuild).
-RUN SKIP_BUILD_DEPS=true SKIP_CODEGEN_LOCAL=true yarn install --mode=skip-build && DEPLOYMENT_ID=${DEPLOYMENT_ID} NEXT_PUBLIC_USE_CONTENT_API=${USE_CONTENT_API} yarn build:cloudbuild
-
+RUN DEPLOYMENT_ID=${DEPLOYMENT_ID} NEXT_PUBLIC_USE_CONTENT_API=${USE_CONTENT_API} yarn build:cloudbuild
 
 FROM node:${NODE_VERSION}
 
