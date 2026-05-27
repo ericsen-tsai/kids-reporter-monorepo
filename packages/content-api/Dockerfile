@@ -12,8 +12,10 @@ COPY package.json yarn.lock .yarnrc.yml Makefile /build/
 
 RUN SKIP_BUILD_DEPS=true DB_GENERATE_LOCAL=false yarn install
 
-# Exclude lockfile to prevent lockfile got overridden by the repo root lockfile.
-COPY --exclude=yarn.lock . /build/
+# Preserve the post-install lockfile from being overwritten by the build context copy.
+RUN cp /build/yarn.lock /tmp/yarn.lock.bak
+COPY . /build/
+RUN mv /tmp/yarn.lock.bak /build/yarn.lock
 
 RUN yarn build
 
