@@ -1,15 +1,15 @@
 'use client'
 
-import { GetPostQuery } from '__generated__/operations/content.generated'
 import { cn } from '@kids-reporter/routing-ui'
 import { memo, useMemo, useState } from 'react'
 
 import Divider from '@/components/divider'
+import { PostDetail } from '@/types/api'
 import { RecursiveNonNullable } from '@/types/utils'
 
 type NewsReadingProps = {
   className?: string
-  items: RecursiveNonNullable<GetPostQuery['post']>['newsReadingGroup']['items']
+  items: RecursiveNonNullable<PostDetail>['newsReadingGroup']['items']
 }
 
 function NewsReading({ className, items }: NewsReadingProps) {

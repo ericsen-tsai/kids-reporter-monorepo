@@ -48,25 +48,6 @@ const requireUserId = (
   return userId
 }
 
-/** Match the previous member+role check used by `posts-with-answers` / `has-liked`. */
-const requireMemberWithRole = async (
-  req: express.Request,
-  res: express.Response
-): Promise<{ id: string } | null> => {
-  const userId = requireUserId(req, res)
-  if (!userId) return null
-  const member = await findMemberIdRole(userId)
-  if (!member) {
-    sendJsonError(res, 404, 'not_found', 'Not found')
-    return null
-  }
-  if (member.role !== 'member' && member.role !== 'admin') {
-    sendJsonError(res, 403, 'forbidden', 'Forbidden')
-    return null
-  }
-  return { id: member.id }
-}
-
 export function createV1MembersRouter() {
   const router = express.Router()
   router.use(verifyGoApiJwt)
@@ -121,8 +102,17 @@ export function createV1MembersRouter() {
   router.get(
     '/me/posts-with-answers',
     asyncRoute(async (req, res) => {
-      const member = await requireMemberWithRole(req, res)
-      if (!member) return
+      const userId = requireUserId(req, res)
+      if (!userId) return
+      const member = await findMemberIdRole(userId)
+      if (!member) {
+        sendJsonError(res, 404, 'not_found', 'Not found')
+        return
+      }
+      if (member.role !== 'member' && member.role !== 'admin') {
+        sendJsonError(res, 403, 'forbidden', 'Forbidden')
+        return
+      }
 
       const parsedQ = V1MemberPostsWithAnswersQuerySchema.parse(req.query)
       const result = await fetchMemberPostsWithAnswers(member.id, {
@@ -136,8 +126,17 @@ export function createV1MembersRouter() {
   router.get(
     '/me/essay-answers/has-liked',
     asyncRoute(async (req, res) => {
-      const member = await requireMemberWithRole(req, res)
-      if (!member) return
+      const userId = requireUserId(req, res)
+      if (!userId) return
+      const member = await findMemberIdRole(userId)
+      if (!member) {
+        sendJsonError(res, 404, 'not_found', 'Not found')
+        return
+      }
+      if (member.role !== 'member' && member.role !== 'admin') {
+        sendJsonError(res, 403, 'forbidden', 'Forbidden')
+        return
+      }
 
       const queryStr = essayAnswerIdsQueryToString(
         req.query.essayAnswerIds as string | string[] | undefined
