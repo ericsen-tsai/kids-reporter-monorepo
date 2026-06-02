@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@kids-reporter/api-types": "^0.0.3",
+    "@kids-reporter/content-api-kit": "^0.0.1",
     "@kids-reporter/db": "^0.0.1",
     "@kids-reporter/logger": "^0.0.2",
     "@prisma/client": "5.22.0",

@@ -1,8 +1,7 @@
+import { createContentApiApp } from '@kids-reporter/content-api-kit'
 import { emitStructured } from '@kids-reporter/logger'
 // @ts-ignore `@twreporter/errors` does not have typescript definition file yet
 import _errors from '@twreporter/errors'
-import cookieParser from 'cookie-parser'
-import cors from 'cors'
 import express from 'express'
 import { ZodError } from 'zod'
 
@@ -17,6 +16,14 @@ import { sendJsonError } from './utils/send-json-error.js'
 const errors = _errors.default
 const statusCodes = consts.statusCodes
 
+function joinBasePath(basePath: string, path: string): string {
+  const trimmedBase = basePath.replace(/\/+$/, '')
+  const normalizedBase = trimmedBase === '/' ? '' : trimmedBase
+  if (!normalizedBase) return path
+  if (!path || path === '/') return normalizedBase
+  return `${normalizedBase}${path.startsWith('/') ? '' : '/'}${path}`
+}
+
 export function createApp({
   gcpProjectId = 'kids-reporter',
   corsAllowOrigin = [],
@@ -28,46 +35,13 @@ export function createApp({
   enableOpenApi?: boolean
   basePath?: string
 }) {
-  const app = express()
-
-  const corsOptsPublic: cors.CorsOptions = {
-    origin: corsAllowOrigin,
-    credentials: false,
+  if (corsAllowOrigin === '*') {
+    emitStructured({
+      severity: 'ALERT',
+      message:
+        'Invalid configuration: CORS_ALLOW_ORIGINS="*" cannot be used with credentialed /auth/* routes.',
+    })
   }
-  const corsOptsCredentialed: cors.CorsOptions = (() => {
-    if (corsAllowOrigin === '*') {
-      emitStructured({
-        severity: 'ALERT',
-        message:
-          'Invalid configuration: CORS_ALLOW_ORIGINS="*" cannot be used with credentialed /auth/* routes.',
-      })
-      return { origin: false, credentials: true }
-    }
-    return {
-      origin: corsAllowOrigin,
-      credentials: true,
-    }
-  })()
-
-  app.use(middlewareCreator.createLoggerMw(gcpProjectId), cookieParser())
-
-  app.use(express.json({ limit: '1mb' }))
-
-  // Auth route requires cookies; use credentialed CORS only on /auth/*
-  app.use(
-    '/auth',
-    cors(corsOptsCredentialed),
-    createAuthRouter({ corsAllowOrigin })
-  )
-
-  // Public routes: non-credentialed CORS
-  app.use(cors(corsOptsPublic))
-
-  app.use(createHealthRouter())
-  if (enableOpenApi) {
-    app.use(createOpenApiRouter({ basePath }))
-  }
-  app.use('/v1', createV1Router())
 
   const errorHandler: express.ErrorRequestHandler = (err, _req, res, _next) => {
     if (err instanceof ZodError) {
@@ -127,7 +101,30 @@ export function createApp({
     )
   }
 
-  app.use(errorHandler)
+  const openApiMountPath = '/openapi'
 
-  return app
+  return createContentApiApp({
+    basePath,
+    corsAllowOrigin,
+    jsonLimit: '1mb',
+    loggerMiddleware: middlewareCreator.createLoggerMw(gcpProjectId),
+    openApi: {
+      enabled: enableOpenApi,
+      path: openApiMountPath,
+      corsMode: 'public',
+      router: createOpenApiRouter({
+        basePath: joinBasePath(basePath, openApiMountPath),
+      }),
+    },
+    routes: [
+      {
+        path: '/auth',
+        corsMode: 'credentialed',
+        router: createAuthRouter({ corsAllowOrigin }),
+      },
+      { path: '/', corsMode: 'public', router: createHealthRouter() },
+      { path: '/v1', corsMode: 'public', router: createV1Router() },
+    ],
+    errorHandler,
+  })
 }
