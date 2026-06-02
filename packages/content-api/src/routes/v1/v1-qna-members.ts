@@ -6,6 +6,9 @@ import {
   V1MemberPostEssayAnswersQuerySchema,
   V1PatchPostChoiceAnswerBodySchema,
   V1PatchPostEssayAnswerBodySchema,
+  V1PostChoiceAnswerPathIdSchema,
+  V1PostEssayAnswerLikePathIdSchema,
+  V1PostEssayAnswerPathIdSchema,
 } from '@kids-reporter/api-types'
 import express from 'express'
 import { z } from 'zod'
@@ -81,18 +84,22 @@ function sendMutationError(
   return false
 }
 
-function parseNumericIdParam(
+function parsePathIdParam(
   req: express.Request,
-  res: express.Response
+  res: express.Response,
+  schema:
+    | typeof V1PostChoiceAnswerPathIdSchema
+    | typeof V1PostEssayAnswerPathIdSchema
+    | typeof V1PostEssayAnswerLikePathIdSchema
 ): number | null {
-  const id = Number(req.params.id)
-  if (!Number.isFinite(id)) {
+  const parsed = schema.safeParse(req.params)
+  if (!parsed.success) {
     sendJsonError(res, 400, 'invalid_request', 'Invalid id', {
       reason: 'invalid_id',
     })
     return null
   }
-  return id
+  return parsed.data.id
 }
 
 export function createV1QnaMembersRouter() {
@@ -158,7 +165,7 @@ export function createV1QnaMembersRouter() {
       const member = await requireMember(req, res)
       if (!member) return
 
-      const id = parseNumericIdParam(req, res)
+      const id = parsePathIdParam(req, res, V1PostChoiceAnswerPathIdSchema)
       if (id == null) return
 
       const parsed = V1PatchPostChoiceAnswerBodySchema.safeParse(req.body ?? {})
@@ -207,7 +214,7 @@ export function createV1QnaMembersRouter() {
       const member = await requireMember(req, res)
       if (!member) return
 
-      const id = parseNumericIdParam(req, res)
+      const id = parsePathIdParam(req, res, V1PostEssayAnswerPathIdSchema)
       if (id == null) return
 
       const parsed = V1PatchPostEssayAnswerBodySchema.safeParse(req.body ?? {})
@@ -258,7 +265,7 @@ export function createV1QnaMembersRouter() {
       const member = await requireMember(req, res)
       if (!member) return
 
-      const likeId = parseNumericIdParam(req, res)
+      const likeId = parsePathIdParam(req, res, V1PostEssayAnswerLikePathIdSchema)
       if (likeId == null) return
 
       const result = await deleteMemberEssayAnswerLike(member.id, likeId)

@@ -18,7 +18,6 @@ import {
 } from '../../queries/member-activity.js'
 import {
   findMemberForAvatarUpload,
-  findMemberIdRole,
   findMemberProfile,
   MEMBER_AVATAR_MIMES,
   removeMemberAvatar,
@@ -46,25 +45,6 @@ const requireUserId = (
     return null
   }
   return userId
-}
-
-/** Match the previous member+role check used by `posts-with-answers` / `has-liked`. */
-const requireMemberWithRole = async (
-  req: express.Request,
-  res: express.Response
-): Promise<{ id: string } | null> => {
-  const userId = requireUserId(req, res)
-  if (!userId) return null
-  const member = await findMemberIdRole(userId)
-  if (!member) {
-    sendJsonError(res, 404, 'not_found', 'Not found')
-    return null
-  }
-  if (member.role !== 'member' && member.role !== 'admin') {
-    sendJsonError(res, 403, 'forbidden', 'Forbidden')
-    return null
-  }
-  return { id: member.id }
 }
 
 export function createV1MembersRouter() {
@@ -121,11 +101,11 @@ export function createV1MembersRouter() {
   router.get(
     '/me/posts-with-answers',
     asyncRoute(async (req, res) => {
-      const member = await requireMemberWithRole(req, res)
-      if (!member) return
+      const userId = requireUserId(req, res)
+      if (!userId) return
 
       const parsedQ = V1MemberPostsWithAnswersQuerySchema.parse(req.query)
-      const result = await fetchMemberPostsWithAnswers(member.id, {
+      const result = await fetchMemberPostsWithAnswers(userId, {
         take: parsedQ.take,
         cursor: parsedQ.cursor,
       })
@@ -136,8 +116,8 @@ export function createV1MembersRouter() {
   router.get(
     '/me/essay-answers/has-liked',
     asyncRoute(async (req, res) => {
-      const member = await requireMemberWithRole(req, res)
-      if (!member) return
+      const userId = requireUserId(req, res)
+      if (!userId) return
 
       const queryStr = essayAnswerIdsQueryToString(
         req.query.essayAnswerIds as string | string[] | undefined
@@ -158,10 +138,7 @@ export function createV1MembersRouter() {
       const essayAnswerIds = essayAnswerIdsFromCommaSeparatedParam(
         parsedQ.data.essayAnswerIds
       )
-      const result = await fetchMemberEssayAnswerLikes(
-        member.id,
-        essayAnswerIds
-      )
+      const result = await fetchMemberEssayAnswerLikes(userId, essayAnswerIds)
       res.json(result)
     })
   )
