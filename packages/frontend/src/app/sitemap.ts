@@ -32,7 +32,7 @@ const fetchSitemaps = async (): Promise<
   const postRows = await getSitemapPostsContentApi({
     sinceDays: 60,
     traceHeaders,
-  })
+  }).catch(() => [])
   const posts = postRows.map((post) => ({
     url: `${KIDS_URL_ORIGIN}/article/${post.slug}`,
     lastModified: post.publishedDate
@@ -44,7 +44,7 @@ const fetchSitemaps = async (): Promise<
   const projectRows = await getSitemapProjectsContentApi({
     sinceDays: 60,
     traceHeaders,
-  })
+  }).catch(() => [])
   const topics = projectRows.map((topic) => ({
     url: `${KIDS_URL_ORIGIN}/topic/${topic.slug}`,
     lastModified: topic.publishedDate

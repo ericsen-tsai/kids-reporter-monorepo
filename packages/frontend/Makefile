@@ -2,7 +2,7 @@ P := "\\033[32m[+]\\033[0m"
 
 help:
 	@echo "$(P) make postinstall - run after dependencies installation"
-	@echo "$(P) make build-deps - build workspace deps (logger, routing-ui, api-types)"
+	@echo "$(P) make build-deps - build workspace deps (logger, routing-ui)"
 
 postinstall:
 	@$(MAKE) build-deps

@@ -66,6 +66,7 @@ import {
   V1UpdatePostChoiceAnswerResponseSchema,
   V1UpdatePostEssayAnswerResponseSchema,
 } from '@kids-reporter/api-types'
+import type { z } from 'zod'
 
 export type {
   AccessTokenResponse,
@@ -96,7 +97,6 @@ export type {
   V1SubSubcategoryPostsRequest,
   V1TagPostsRequest,
 }
-import type { z } from 'zod'
 
 // Shared contract (from api-types)
 export type Post = PostContent

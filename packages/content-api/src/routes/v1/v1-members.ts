@@ -105,7 +105,14 @@ export function createV1MembersRouter() {
       const userId = requireUserId(req, res)
       if (!userId) return
       const member = await findMemberIdRole(userId)
-      if (!member) return
+      if (!member) {
+        sendJsonError(res, 404, 'not_found', 'Not found')
+        return
+      }
+      if (member.role !== 'member' && member.role !== 'admin') {
+        sendJsonError(res, 403, 'forbidden', 'Forbidden')
+        return
+      }
 
       const parsedQ = V1MemberPostsWithAnswersQuerySchema.parse(req.query)
       const result = await fetchMemberPostsWithAnswers(member.id, {
@@ -122,7 +129,14 @@ export function createV1MembersRouter() {
       const userId = requireUserId(req, res)
       if (!userId) return
       const member = await findMemberIdRole(userId)
-      if (!member) return
+      if (!member) {
+        sendJsonError(res, 404, 'not_found', 'Not found')
+        return
+      }
+      if (member.role !== 'member' && member.role !== 'admin') {
+        sendJsonError(res, 403, 'forbidden', 'Forbidden')
+        return
+      }
 
       const queryStr = essayAnswerIdsQueryToString(
         req.query.essayAnswerIds as string | string[] | undefined

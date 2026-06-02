@@ -62,14 +62,14 @@ export async function transferItemsToCards(
         const proj = await getProjectRelatedPostsCountContentApi({
           slug,
           traceHeaders,
-        })
+        }).catch(() => undefined)
         contentSummary.postCount = proj?.relatedPostsCount ?? 0
       } else if (contentType === ContentType.AUTHOR && slug) {
         contentSummary.category = '作者'
         const author = await getAuthorPostsCountContentApi({
           slug,
           traceHeaders,
-        })
+        }).catch(() => undefined)
         contentSummary.postCount = author?.postsCount ?? 0
       } else if (contentType === ContentType.TAG && slug) {
         contentSummary.category = '標籤'
@@ -78,9 +78,10 @@ export async function transferItemsToCards(
           take: 1,
           orderBy: 'publishedDate:desc',
           traceHeaders,
-        })
-        contentSummary.postCount = tag.postsCount
-        contentSummary.image = tag.posts?.[0]?.heroImage?.resized?.small
+        }).catch(() => undefined)
+        contentSummary.postCount = tag?.postsCount ?? 0
+        contentSummary.image =
+          tag?.posts?.[0]?.heroImage?.resized?.small ?? contentSummary.image
       }
 
       return { content: contentSummary }
