@@ -2,26 +2,18 @@ P := "\\033[32m[+]\\033[0m"
 
 help:
 	@echo "$(P) make postinstall - run after dependencies installation"
-	@echo "$(P) make build-deps - build workspace deps (logger, routing-ui)"
+	@echo "$(P) make build-deps - build workspace deps (logger, routing-ui, api-types)"
 
 postinstall:
-	@$(MAKE) build-deps codegen-local
+	@$(MAKE) build-deps
 
 build-deps:
 	@if [ "$(SKIP_BUILD_DEPS)" = "true" ]; then \
 		echo "$(P) Build deps skipped"; \
 	else \
-		echo "$(P) build logger and routing-ui"; \
+		echo "$(P) build logger, routing-ui, and api-types"; \
 		cd ../logger && yarn build; \
 		cd ../routing-ui && yarn build; \
 	fi
 
-codegen-local:
-	@if [ "$(SKIP_CODEGEN_LOCAL)" = "true" ]; then \
-		echo "$(P) Codegen skipped"; \
-	else \
-		echo "$(P) graphql codegen (local)"; \
-		yarn codegen:local; \
-	fi
-
-.PHONY: help postinstall build-deps codegen-local
+.PHONY: help postinstall build-deps

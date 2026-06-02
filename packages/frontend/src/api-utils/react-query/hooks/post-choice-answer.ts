@@ -1,9 +1,6 @@
-import {
-  CreatePostChoiceAnswerMutationVariables,
-  UpdatePostChoiceAnswerMutationVariables,
-} from '__generated__/operations/answers.generated'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
+import type { V1CreatePostChoiceAnswerBody } from '@/types/api'
 import {
   createPostChoiceAnswer,
   getPostChoiceAnswersByMemberId,
@@ -44,8 +41,8 @@ export function useCreatePostChoiceAnswerMutation({
   accessToken: string
 }) {
   return useMutation({
-    mutationFn: (variables: CreatePostChoiceAnswerMutationVariables) =>
-      createPostChoiceAnswer(variables, accessToken),
+    mutationFn: (body: V1CreatePostChoiceAnswerBody) =>
+      createPostChoiceAnswer(body, accessToken),
   })
 }
 
@@ -55,7 +52,9 @@ export function useUpdatePostChoiceAnswerMutation({
   accessToken: string
 }) {
   return useMutation({
-    mutationFn: (variables: UpdatePostChoiceAnswerMutationVariables) =>
-      updatePostChoiceAnswer(variables, accessToken),
+    mutationFn: (variables: {
+      id: string | number
+      data: { choiceIndex?: number }
+    }) => updatePostChoiceAnswer(variables, accessToken),
   })
 }
