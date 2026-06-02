@@ -46,7 +46,7 @@ function ChoiceAnswerItem({ answer }: { answer: MemberReadingChoiceAnswer }) {
             {correctOptionIndex + 1}. {options[correctOptionIndex]?.content}
           </p>
           <p className="prose-p2 text-neutral-800">
-            {String(answer.question.reason ?? '')}
+            {String(answer.question?.reason ?? '')}
           </p>
         </div>
       )}

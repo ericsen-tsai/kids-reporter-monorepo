@@ -99,39 +99,30 @@ function parsePostToContent(post: PostDetail) {
       ? `/category/${category.slug}/${subcategory.slug}/${subSubcategory.slug}`
       : ''
 
-  const twReporterRelatedPosts: PostSummary[] =
-    (
-      post?.TWReporterRelatedPostsJSON as
-        | {
-            ogTitle?: string
-            src: string
-            ogImgSrc?: string
-            ogDescription?: string
-            publishedDate?: string
-            subcategory?: string
-            category?: string
-          }[]
-        | null
-        | undefined
-    )?.map(
-      (twReporterPost: {
-        ogTitle?: string
-        src: string
-        ogImgSrc?: string
-        ogDescription?: string
-        publishedDate?: string
-        subcategory?: string
-        category?: string
-      }) => ({
-        title: twReporterPost.ogTitle ?? '',
-        url: twReporterPost.src,
-        image: twReporterPost.ogImgSrc ?? '',
-        desc: twReporterPost.ogDescription ?? '',
-        category: twReporterPost.category ?? '',
-        subSubcategory: twReporterPost.subcategory ?? '',
-        publishedDate: twReporterPost.publishedDate ?? '',
-      })
-    ) ?? []
+  type TwReporterRelatedPostJson = {
+    ogTitle?: string
+    src: string
+    ogImgSrc?: string
+    ogDescription?: string
+    publishedDate?: string
+    subcategory?: string
+    category?: string
+  }
+
+  const twReporterRelatedPosts: PostSummary[] = (
+    (post?.TWReporterRelatedPostsJSON as
+      | TwReporterRelatedPostJson[]
+      | null
+      | undefined) ?? []
+  ).map((twReporterPost) => ({
+    title: twReporterPost.ogTitle ?? '',
+    url: twReporterPost.src,
+    image: twReporterPost.ogImgSrc ?? '',
+    desc: twReporterPost.ogDescription ?? '',
+    category: twReporterPost.category ?? '',
+    subSubcategory: twReporterPost.subcategory ?? '',
+    publishedDate: twReporterPost.publishedDate ?? '',
+  }))
 
   return {
     topicURL,

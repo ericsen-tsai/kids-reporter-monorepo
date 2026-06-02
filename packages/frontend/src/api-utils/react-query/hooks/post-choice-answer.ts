@@ -1,11 +1,11 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-import type { V1CreatePostChoiceAnswerBody } from '@/types/api'
 import {
   createPostChoiceAnswer,
   getPostChoiceAnswersByMemberId,
   updatePostChoiceAnswer,
 } from '@/api/post-choice-answer'
+import type { V1CreatePostChoiceAnswerBody } from '@/types/api'
 
 export const POST_CHOICE_ANSWERS_QUERY_KEY = 'post-choice-answers'
 

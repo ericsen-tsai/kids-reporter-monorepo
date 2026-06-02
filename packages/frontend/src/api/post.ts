@@ -66,10 +66,7 @@ export const getPostsPaged = async (
   variables: V1PostsQuery,
   traceHeaders?: Record<string, string>
 ): Promise<PostContent[] | undefined> => {
-  if (
-    variables.orderBy != null &&
-    variables.orderBy !== 'publishedDate:desc'
-  ) {
+  if (variables.orderBy != null && variables.orderBy !== 'publishedDate:desc') {
     return undefined
   }
 

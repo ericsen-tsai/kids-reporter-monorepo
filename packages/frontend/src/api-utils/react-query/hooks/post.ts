@@ -8,8 +8,8 @@ import {
 import { PostWithTwoTopLikesAnswersPerQuestion } from '@/modules/idea-hub/types'
 import type {
   PostEssayAnswerOrderBy,
-  PostsEssayAnswersWithLikesPost,
   PostOrderBy,
+  PostsEssayAnswersWithLikesPost,
   V1CategoryPostsRequest,
   V1PostsEssayAnswersWithLikesQuery,
 } from '@/types/api'

@@ -265,7 +265,11 @@ export function createV1QnaMembersRouter() {
       const member = await requireMember(req, res)
       if (!member) return
 
-      const likeId = parsePathIdParam(req, res, V1PostEssayAnswerLikePathIdSchema)
+      const likeId = parsePathIdParam(
+        req,
+        res,
+        V1PostEssayAnswerLikePathIdSchema
+      )
       if (likeId == null) return
 
       const result = await deleteMemberEssayAnswerLike(member.id, likeId)

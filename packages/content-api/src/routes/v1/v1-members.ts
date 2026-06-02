@@ -18,6 +18,7 @@ import {
 } from '../../queries/member-activity.js'
 import {
   findMemberForAvatarUpload,
+  findMemberIdRole,
   findMemberProfile,
   MEMBER_AVATAR_MIMES,
   removeMemberAvatar,
@@ -103,9 +104,11 @@ export function createV1MembersRouter() {
     asyncRoute(async (req, res) => {
       const userId = requireUserId(req, res)
       if (!userId) return
+      const member = await findMemberIdRole(userId)
+      if (!member) return
 
       const parsedQ = V1MemberPostsWithAnswersQuerySchema.parse(req.query)
-      const result = await fetchMemberPostsWithAnswers(userId, {
+      const result = await fetchMemberPostsWithAnswers(member.id, {
         take: parsedQ.take,
         cursor: parsedQ.cursor,
       })
@@ -118,6 +121,8 @@ export function createV1MembersRouter() {
     asyncRoute(async (req, res) => {
       const userId = requireUserId(req, res)
       if (!userId) return
+      const member = await findMemberIdRole(userId)
+      if (!member) return
 
       const queryStr = essayAnswerIdsQueryToString(
         req.query.essayAnswerIds as string | string[] | undefined
@@ -138,7 +143,10 @@ export function createV1MembersRouter() {
       const essayAnswerIds = essayAnswerIdsFromCommaSeparatedParam(
         parsedQ.data.essayAnswerIds
       )
-      const result = await fetchMemberEssayAnswerLikes(userId, essayAnswerIds)
+      const result = await fetchMemberEssayAnswerLikes(
+        member.id,
+        essayAnswerIds
+      )
       res.json(result)
     })
   )
