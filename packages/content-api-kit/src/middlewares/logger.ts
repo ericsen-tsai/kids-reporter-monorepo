@@ -35,7 +35,11 @@ export function createLoggerMw(
   const opts: CreateLoggerMwOptions =
     typeof projectIdOrOpts === 'string'
       ? { projectId: projectIdOrOpts }
-      : projectIdOrOpts
+      : (projectIdOrOpts ?? { projectId: '' })
+
+  if (!opts.projectId) {
+    throw new Error('projectId is required for createLoggerMw')
+  }
 
   const slowThresholdMs =
     typeof opts.slowThresholdMs === 'number' && opts.slowThresholdMs > 0

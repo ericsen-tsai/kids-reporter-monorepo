@@ -64,7 +64,7 @@ export function verifyGoApiAccessToken(
   token: string,
   opts: GoApiJwtOptions
 ): GoApiAccessTokenPayload {
-  if (!opts.secret) {
+  if (!opts?.secret) {
     throw new Error('GO_API_JWT_SECRET is not configured')
   }
 
@@ -94,7 +94,7 @@ export function verifyGoApiJwt(opts: GoApiJwtOptions) {
       reason: GoApiJwtAuthFailureReason,
       extra?: { jwtLibraryErrorName?: string }
     ) => {
-      opts.onReject?.({
+      opts?.onReject?.({
         reason,
         path: req.originalUrl,
         method: req.method,

@@ -18,7 +18,8 @@ import { sendJsonError } from './utils/send-json-error.js'
 const errors = _errors.default
 const statusCodes = consts.statusCodes
 
-function joinBasePath(basePath: string, path: string): string {
+function joinBasePath(basePath: string | undefined, path: string): string {
+  if (!basePath) return path
   const trimmedBase = basePath.replace(/\/+$/, '')
   const normalizedBase = trimmedBase === '/' ? '' : trimmedBase
   if (!normalizedBase) return path
