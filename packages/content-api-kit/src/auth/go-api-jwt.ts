@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 
-import { sendJsonError } from '../lib/send-json-error.js'
+import { sendJsonError } from '../utils/send-json-error.js'
 
 export type GoApiJwtOptions = {
   secret: string
