@@ -4189,11 +4189,38 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@kids-reporter/content-api-kit@npm:^0.0.1, @kids-reporter/content-api-kit@workspace:packages/content-api-kit":
+  version: 0.0.0-use.local
+  resolution: "@kids-reporter/content-api-kit@workspace:packages/content-api-kit"
+  dependencies:
+    "@babel/cli": "npm:^7.18.5"
+    "@babel/core": "npm:^7.18.5"
+    "@babel/plugin-transform-runtime": "npm:^7.18.5"
+    "@babel/preset-env": "npm:^7.18.2"
+    "@babel/preset-typescript": "npm:^7.17.12"
+    "@babel/runtime": "npm:^7.18.5"
+    "@kids-reporter/logger": "npm:^0.0.2"
+    "@types/cookie-parser": "npm:^1.4.6"
+    "@types/cors": "npm:^2.8.15"
+    "@types/express": "npm:^4.17.20"
+    "@types/jsonwebtoken": "npm:^9.0.6"
+    typescript: "npm:5.9.2"
+    vitest: "npm:^3.2.4"
+  peerDependencies:
+    cookie-parser: ^1.4.6
+    cors: ^2.8.5
+    express: ^4.18.2
+    jsonwebtoken: ^9.0.2
+    zod: ^4.1.12
+  languageName: unknown
+  linkType: soft
+
 "@kids-reporter/content-api@workspace:packages/content-api":
   version: 0.0.0-use.local
   resolution: "@kids-reporter/content-api@workspace:packages/content-api"
   dependencies:
     "@kids-reporter/api-types": "npm:^0.0.3"
+    "@kids-reporter/content-api-kit": "npm:^0.0.1"
     "@kids-reporter/db": "npm:^0.0.1"
     "@kids-reporter/logger": "npm:^0.0.2"
     "@prisma/client": "npm:5.22.0"
@@ -4218,6 +4245,7 @@ __metadata:
     swagger-ui-express: "npm:^5.0.1"
     typescript: "npm:5.9.2"
     vitest: "npm:^3.2.4"
+    zod: "npm:^4.1.12"
   languageName: unknown
   linkType: soft
 

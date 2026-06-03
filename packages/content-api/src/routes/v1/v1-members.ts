@@ -5,13 +5,15 @@ import {
   V1MemberPostsWithAnswersQuerySchema,
   V1MemberProfilePatchBodySchema,
 } from '@kids-reporter/api-types'
+import { asyncRoute, sendJsonError } from '@kids-reporter/content-api-kit'
+import { verifyGoApiJwt } from '@kids-reporter/content-api-kit/auth/go-api-jwt'
+import { emitStructured } from '@kids-reporter/logger'
 import express from 'express'
 import multer from 'multer'
 import { z } from 'zod'
 
 import consts from '../../constants.js'
 import envVar from '../../environment-variables.js'
-import { verifyGoApiJwt } from '../../middlewares/verify-go-api-jwt.js'
 import {
   fetchMemberEssayAnswerLikes,
   fetchMemberPostsWithAnswers,
@@ -25,8 +27,6 @@ import {
   replaceMemberAvatar,
   updateMemberProfile,
 } from '../../queries/members.js'
-import { asyncRoute } from '../../utils/async-route.js'
-import { sendJsonError } from '../../utils/send-json-error.js'
 
 const statusCodes = consts.statusCodes
 
@@ -50,7 +50,24 @@ const requireUserId = (
 
 export function createV1MembersRouter() {
   const router = express.Router()
-  router.use(verifyGoApiJwt)
+  router.use(
+    verifyGoApiJwt({
+      secret: envVar.goApiJwt.secret,
+      issuer: envVar.goApiJwt.issuer,
+      audience: envVar.goApiJwt.audience,
+      onReject: (info, res) => {
+        emitStructured({
+          severity: 'WARNING',
+          message: 'Go API JWT request rejected',
+          goApiJwtAuthFailureReason: info.reason,
+          path: info.path,
+          method: info.method,
+          jwtLibraryErrorName: info.jwtLibraryErrorName,
+          ...res.locals?.globalLogFields,
+        })
+      },
+    })
+  )
 
   router.get(
     '/me',
