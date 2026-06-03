@@ -1,4 +1,7 @@
-import { createContentApiApp } from '@kids-reporter/content-api-kit'
+import {
+  createContentApiApp,
+  createLoggerMw,
+} from '@kids-reporter/content-api-kit'
 import { emitStructured } from '@kids-reporter/logger'
 // @ts-ignore `@twreporter/errors` does not have typescript definition file yet
 import _errors from '@twreporter/errors'
@@ -6,7 +9,6 @@ import express from 'express'
 import { ZodError } from 'zod'
 
 import consts from './constants.js'
-import middlewareCreator from './middlewares/index.js'
 import { createAuthRouter } from './routes/auth.js'
 import { createHealthRouter } from './routes/health.js'
 import { createOpenApiRouter } from './routes/openapi.js'
@@ -107,7 +109,10 @@ export function createApp({
     basePath,
     corsAllowOrigin,
     jsonLimit: '1mb',
-    loggerMiddleware: middlewareCreator.createLoggerMw(gcpProjectId),
+    loggerMiddleware: createLoggerMw({
+      projectId: gcpProjectId,
+      slowThresholdMs: consts.slowThresholdMs,
+    }),
     openApi: {
       enabled: enableOpenApi,
       path: openApiMountPath,

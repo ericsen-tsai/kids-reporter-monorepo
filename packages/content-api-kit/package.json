@@ -24,7 +24,8 @@
   "scripts": {
     "build": "bash ./scripts/build.sh",
     "type-check": "tsc --noEmit -p tsconfig.json",
-    "lint:check": "eslint src --config ./eslint.config.mjs --ext .ts"
+    "lint:check": "eslint src --config ./eslint.config.mjs --ext .ts",
+    "test": "vitest run"
   },
   "peerDependencies": {
     "cookie-parser": "^1.4.6",
@@ -34,7 +35,8 @@
     "zod": "^4.0.0"
   },
   "dependencies": {
-    "@babel/runtime": "^7.18.5"
+    "@babel/runtime": "^7.18.5",
+    "@kids-reporter/logger": "^0.0.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.18.5",
@@ -45,6 +47,8 @@
     "@types/cookie-parser": "^1.4.6",
     "@types/cors": "^2.8.15",
     "@types/express": "^4.17.20",
-    "typescript": "5.9.2"
+    "@types/jsonwebtoken": "^9.0.6",
+    "typescript": "5.9.2",
+    "vitest": "^3.2.4"
   }
 }
