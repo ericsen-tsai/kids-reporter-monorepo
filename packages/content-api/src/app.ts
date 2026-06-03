@@ -1,6 +1,7 @@
 import {
   createContentApiApp,
   createLoggerMw,
+  sendJsonError,
 } from '@kids-reporter/content-api-kit'
 import { emitStructured } from '@kids-reporter/logger'
 // @ts-ignore `@twreporter/errors` does not have typescript definition file yet
@@ -13,19 +14,9 @@ import { createAuthRouter } from './routes/auth.js'
 import { createHealthRouter } from './routes/health.js'
 import { createOpenApiRouter } from './routes/openapi.js'
 import { createV1Router } from './routes/v1/index.js'
-import { sendJsonError } from './utils/send-json-error.js'
 
 const errors = _errors.default
 const statusCodes = consts.statusCodes
-
-function joinBasePath(basePath: string | undefined, path: string): string {
-  if (!basePath) return path
-  const trimmedBase = basePath.replace(/\/+$/, '')
-  const normalizedBase = trimmedBase === '/' ? '' : trimmedBase
-  if (!normalizedBase) return path
-  if (!path || path === '/') return normalizedBase
-  return `${normalizedBase}${path.startsWith('/') ? '' : '/'}${path}`
-}
 
 export function createApp({
   gcpProjectId = 'kids-reporter',
@@ -104,8 +95,6 @@ export function createApp({
     )
   }
 
-  const openApiMountPath = '/openapi'
-
   return createContentApiApp({
     basePath,
     corsAllowOrigin,
@@ -116,10 +105,10 @@ export function createApp({
     }),
     openApi: {
       enabled: enableOpenApi,
-      path: openApiMountPath,
       corsMode: 'public',
+      path: '',
       router: createOpenApiRouter({
-        basePath: joinBasePath(basePath, openApiMountPath),
+        basePath,
       }),
     },
     routes: [

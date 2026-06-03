@@ -35,6 +35,10 @@ router.use(
     secret: process.env.GO_API_JWT_SECRET ?? '',
     issuer: 'https://go-api.twreporter.org',
     audience: 'https://www.twreporter.org',
+    onReject: (info, res) => {
+      // Optional: log rejections with request trace fields from your logger middleware
+      console.warn('JWT rejected', info, res.locals)
+    },
   })
 )
 router.get('/me', (req, res) => res.json({ userId: req.goApiJwtUserId }))

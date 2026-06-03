@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
-import type express from 'express'
-
+/* eslint-disable @typescript-eslint/no-namespace -- Express module augmentation uses namespace Express */
 declare global {
   namespace Express {
     interface Request {

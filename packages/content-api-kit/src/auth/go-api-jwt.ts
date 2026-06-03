@@ -1,3 +1,5 @@
+import './express-augmentation.js'
+
 import type { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 
@@ -11,12 +13,15 @@ export type GoApiJwtOptions = {
    * Optional callback for logging/metrics. The kit does not dictate any logging
    * library; consumers can integrate with their own structured logger.
    */
-  onReject?: (info: {
-    reason: GoApiJwtAuthFailureReason
-    path?: string
-    method?: string
-    jwtLibraryErrorName?: string
-  }) => void
+  onReject?: (
+    info: {
+      reason: GoApiJwtAuthFailureReason
+      path?: string
+      method?: string
+      jwtLibraryErrorName?: string
+    },
+    res: Response
+  ) => void
 }
 
 /** Machine-readable reason for logs/metrics; responses stay a generic 401. */
@@ -94,12 +99,15 @@ export function verifyGoApiJwt(opts: GoApiJwtOptions) {
       reason: GoApiJwtAuthFailureReason,
       extra?: { jwtLibraryErrorName?: string }
     ) => {
-      opts?.onReject?.({
-        reason,
-        path: req.originalUrl,
-        method: req.method,
-        ...extra,
-      })
+      opts?.onReject?.(
+        {
+          reason,
+          path: req.originalUrl,
+          method: req.method,
+          ...extra,
+        },
+        res
+      )
       sendJsonError(res, 401, 'unauthorized', 'Unauthorized')
     }
 

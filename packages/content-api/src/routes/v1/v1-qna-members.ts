@@ -10,6 +10,7 @@ import {
   V1PostEssayAnswerLikePathIdSchema,
   V1PostEssayAnswerPathIdSchema,
 } from '@kids-reporter/api-types'
+import { asyncRoute, sendJsonError } from '@kids-reporter/content-api-kit'
 import { verifyGoApiJwt } from '@kids-reporter/content-api-kit/auth/go-api-jwt'
 import { emitStructured } from '@kids-reporter/logger'
 import express from 'express'
@@ -29,8 +30,6 @@ import {
   updateMemberPostChoiceAnswer,
   updateMemberPostEssayAnswer,
 } from '../../queries/qna-members.js'
-import { asyncRoute } from '../../utils/async-route.js'
-import { sendJsonError } from '../../utils/send-json-error.js'
 
 const statusCodes = consts.statusCodes
 
@@ -111,7 +110,7 @@ export function createV1QnaMembersRouter() {
       secret: envVar.goApiJwt.secret,
       issuer: envVar.goApiJwt.issuer,
       audience: envVar.goApiJwt.audience,
-      onReject: (info) => {
+      onReject: (info, res) => {
         emitStructured({
           severity: 'WARNING',
           message: 'Go API JWT request rejected',
@@ -119,6 +118,7 @@ export function createV1QnaMembersRouter() {
           path: info.path,
           method: info.method,
           jwtLibraryErrorName: info.jwtLibraryErrorName,
+          ...res.locals?.globalLogFields,
         })
       },
     })

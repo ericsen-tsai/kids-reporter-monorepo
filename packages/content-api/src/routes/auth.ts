@@ -1,3 +1,4 @@
+import { sendJsonError } from '@kids-reporter/content-api-kit'
 import {
   type GoApiAccessTokenPayload,
   verifyGoApiAccessToken,
@@ -9,7 +10,6 @@ import express from 'express'
 
 import consts from '../constants.js'
 import envVar from '../environment-variables.js'
-import { sendJsonError } from '../utils/send-json-error.js'
 
 const statusCodes = consts.statusCodes
 

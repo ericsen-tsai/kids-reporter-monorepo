@@ -25,11 +25,12 @@ export function sendJsonError(
   message: string,
   details?: unknown
 ) {
-  res.status(status).json({
+  const body: JsonErrorBody = {
     error: {
       code,
       message,
       ...(details !== undefined ? { details } : {}),
     },
-  } satisfies JsonErrorBody)
+  }
+  res.status(status).json(body)
 }

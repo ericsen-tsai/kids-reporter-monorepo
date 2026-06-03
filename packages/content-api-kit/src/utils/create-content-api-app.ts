@@ -3,7 +3,11 @@ import cors from 'cors'
 import express from 'express'
 
 import { defaultErrorHandler } from './default-error-handler.js'
-import type { ContentApiCorsMode, CreateContentApiAppOptions } from './types.js'
+import type {
+  ContentApiCorsMode,
+  ContentApiRouteMount,
+  CreateContentApiAppOptions,
+} from './types.js'
 
 function normalizeBasePath(raw?: string): string {
   const s = (raw ?? '').trim()
@@ -39,7 +43,6 @@ export function createContentApiApp(
 
   const basePath = normalizeBasePath(options.basePath)
   const jsonLimit = options.jsonLimit ?? '1mb'
-  const credentialedCorsPath = options.credentialedCorsPath ?? '/auth'
 
   const publicCorsOpts = buildCorsOptions({
     corsAllowOrigin: options.corsAllowOrigin,
@@ -56,17 +59,34 @@ export function createContentApiApp(
   app.use(cookieParser())
   app.use(express.json({ limit: jsonLimit }))
 
-  // Credentialed CORS is applied only to a specific segment (default `/auth`).
-  // This is intentionally separate from the public CORS policy.
-  if (credentialedCorsPath) {
-    app.use(
-      joinBasePath(basePath, credentialedCorsPath),
-      cors(credentialedCorsOpts)
-    )
-  }
-
   if (options.beforeRoutes?.length) {
     app.use(...options.beforeRoutes)
+  }
+
+  const mountRoute = (m: ContentApiRouteMount) => {
+    const mountPath = joinBasePath(basePath, m.path)
+    const mode: ContentApiCorsMode = m.corsMode ?? 'public'
+    if (mode === 'credentialed') {
+      app.use(mountPath, cors(credentialedCorsOpts), m.router)
+    } else if (mode === 'public') {
+      app.use(mountPath, cors(publicCorsOpts), m.router)
+    } else {
+      app.use(mountPath, m.router)
+    }
+  }
+
+  const routes = options.routes ?? []
+  const credentialedRoutes = routes.filter(
+    (m) => (m.corsMode ?? 'public') === 'credentialed'
+  )
+  const otherRoutes = routes.filter(
+    (m) => (m.corsMode ?? 'public') !== 'credentialed'
+  )
+
+  // Credentialed routes before OpenAPI so a root-mounted public OpenAPI CORS
+  // layer does not answer /auth/* preflight with credentials: false.
+  for (const m of credentialedRoutes) {
+    mountRoute(m)
   }
 
   if (options.openApi?.enabled) {
@@ -87,16 +107,8 @@ export function createContentApiApp(
     }
   }
 
-  for (const m of options.routes) {
-    const mountPath = joinBasePath(basePath, m.path)
-    const mode: ContentApiCorsMode = m.corsMode ?? 'public'
-    if (mode === 'credentialed') {
-      app.use(mountPath, cors(credentialedCorsOpts), m.router)
-    } else if (mode === 'public') {
-      app.use(mountPath, cors(publicCorsOpts), m.router)
-    } else {
-      app.use(mountPath, m.router)
-    }
+  for (const m of otherRoutes) {
+    mountRoute(m)
   }
 
   app.use(options.errorHandler ?? defaultErrorHandler)

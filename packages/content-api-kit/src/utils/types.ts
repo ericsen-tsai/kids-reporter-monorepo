@@ -28,12 +28,6 @@ export type CreateContentApiAppOptions = {
   /** CORS allow origin (string or allowlist). Required if you enable CORS modes. */
   corsAllowOrigin: string[] | string
 
-  /**
-   * Where to apply credentialed CORS rules. Defaults to `/auth` to match the
-   * existing service behavior.
-   */
-  credentialedCorsPath?: string
-
   /** Optional middleware injected early (e.g., structured logger). */
   loggerMiddleware?: express.RequestHandler
 

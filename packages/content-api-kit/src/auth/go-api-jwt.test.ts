@@ -19,7 +19,8 @@ describe('verifyGoApiJwt', () => {
     expect(res.status).toHaveBeenCalledWith(401)
     expect(next).not.toHaveBeenCalled()
     expect(onReject).toHaveBeenCalledWith(
-      expect.objectContaining({ reason: 'missing_authorization_header' })
+      expect.objectContaining({ reason: 'missing_authorization_header' }),
+      res
     )
   })
 
@@ -42,7 +43,8 @@ describe('verifyGoApiJwt', () => {
     expect(res.status).toHaveBeenCalledWith(401)
     expect(next).not.toHaveBeenCalled()
     expect(onReject).toHaveBeenCalledWith(
-      expect.objectContaining({ reason: 'empty_bearer_token' })
+      expect.objectContaining({ reason: 'empty_bearer_token' }),
+      res
     )
   })
 
