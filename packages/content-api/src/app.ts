@@ -96,7 +96,6 @@ export function createApp({
   }
 
   return createContentApiApp({
-    basePath,
     corsAllowOrigin,
     jsonLimit: '1mb',
     loggerMiddleware: createLoggerMw({
