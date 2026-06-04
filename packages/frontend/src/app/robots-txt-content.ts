@@ -92,8 +92,7 @@ User-agent: Meta-ExternalFetcher
 User-agent: meta-externalfetcher
 Disallow: /
 
-User-agent: Meta-WebIndexer
-User-agent: meta-webindexer/1.1
+User-agent: meta-webindexer
 Disallow: /
 
 User-agent: MyCentralAIScraperBot
@@ -112,7 +111,6 @@ User-agent: omgilibot
 Disallow: /
 
 User-agent: peer39_crawler
-User-agent: peer39_crawler/1.0
 Disallow: /
 
 User-agent: Poseidon Research Crawler
