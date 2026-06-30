@@ -44,7 +44,8 @@ function PostRenderer({ content, shouldMount }: PostProp) {
     let correctionRafId: number | undefined
     let correctionTimeoutId: ReturnType<typeof setTimeout> | undefined
     let resizeObserver: ResizeObserver | undefined
-    const isTabletViewport = window.matchMedia('(min-width: 768px)').matches
+    const tabletMediaQuery = window.matchMedia('(min-width: 768px)')
+    const getIsTabletViewport = () => tabletMediaQuery.matches
 
     const scrollToHashTarget = () => {
       let id = ''
@@ -60,7 +61,7 @@ function PostRenderer({ content, shouldMount }: PostProp) {
       if (!anchor) return false
 
       const elementPosition = anchor.getBoundingClientRect().top
-      const headerOffset = isTabletViewport ? STICKY_HEADER_HEIGHT : 0
+      const headerOffset = getIsTabletViewport() ? STICKY_HEADER_HEIGHT : 0
       const offsetPosition = elementPosition + window.scrollY - headerOffset
       window.scrollTo({ top: offsetPosition, behavior: 'auto' })
       return true
