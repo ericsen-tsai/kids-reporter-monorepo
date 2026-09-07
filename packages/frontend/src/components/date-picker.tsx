@@ -19,10 +19,20 @@ type DatePickerProps = {
 const parseLocalDate = (value?: string): Date | undefined => {
   if (!value) return undefined
   const normalized = value.replaceAll('/', '-')
-  const [year, month, day] = normalized.split('-').map(Number)
-  if (!year || !month || !day) return undefined
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(normalized)
+  if (!match) return undefined
+  const year = Number(match[1])
+  const month = Number(match[2])
+  const day = Number(match[3])
   const date = new Date(year, month - 1, day)
-  if (isNaN(date.getTime())) return undefined
+  if (
+    isNaN(date.getTime()) ||
+    date.getFullYear() !== year ||
+    date.getMonth() !== month - 1 ||
+    date.getDate() !== day
+  ) {
+    return undefined
+  }
   return date
 }
 

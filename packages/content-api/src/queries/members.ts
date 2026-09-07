@@ -144,13 +144,13 @@ const toPrismaMemberPatch = (
         : new Date(`${data.birthday}T00:00:00.000Z`)
   }
   if ('locationCountry' in data) {
-    patch.locationCountry = data.locationCountry ?? ''
+    patch.locationCountry = data.locationCountry ?? null
   }
   if ('locationRegion' in data) {
-    patch.locationRegion = data.locationRegion ?? ''
+    patch.locationRegion = data.locationRegion ?? null
   }
   if ('identity' in data) {
-    patch.identity = data.identity ?? ''
+    patch.identity = data.identity ?? null
   }
   return patch
 }

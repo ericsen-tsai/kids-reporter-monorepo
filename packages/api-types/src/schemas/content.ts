@@ -378,6 +378,8 @@ export const V1MemberIdentitySchema = z.enum([
 
 export const V1MemberLocationCountrySchema = z.enum(['taiwan', 'other'])
 
+export const V1MemberBirthdaySchema = z.iso.date()
+
 export const V1MemberProfileSchema = z
   .object({
     id: z.string(),
@@ -385,7 +387,7 @@ export const V1MemberProfileSchema = z
     email: z.string(),
     nickname: z.string(),
     contactEmail: z.string(),
-    birthday: z.string().nullable().optional(),
+    birthday: V1MemberBirthdaySchema.nullable().optional(),
     locationCountry: V1MemberLocationCountrySchema.nullable().optional(),
     locationRegion: z.string().nullable().optional(),
     identity: V1MemberIdentitySchema.nullable().optional(),
@@ -404,7 +406,7 @@ export const V1MemberProfilePatchBodySchema = z
     name: z.string().optional(),
     nickname: z.string().optional(),
     contactEmail: z.string().optional(),
-    birthday: z.string().nullable().optional(),
+    birthday: V1MemberBirthdaySchema.nullable().optional(),
     locationCountry: V1MemberLocationCountrySchema.nullable().optional(),
     locationRegion: z.string().nullable().optional(),
     identity: V1MemberIdentitySchema.nullable().optional(),
