@@ -2,6 +2,7 @@
 import { Input } from '@kids-reporter/routing-ui'
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
 
+import { DatePicker } from '@/components/date-picker'
 import Divider from '@/components/divider'
 import {
   Select,
@@ -132,6 +133,7 @@ function EditMode({ id, joinedAt }: EditModeProps) {
                   error={!!fieldState.error}
                   errorMessage={fieldState.error?.message}
                   id={field.name}
+                  className="bg-white [&_input:-webkit-autofill]:shadow-[inset_0_0_0_1000px_white]"
                 />
               )}
             />
@@ -149,15 +151,13 @@ function EditMode({ id, joinedAt }: EditModeProps) {
             name="birthday"
             control={control}
             render={({ field, fieldState }) => (
-              <Input
-                type="date"
+              <DatePicker
+                id={field.name}
                 value={field.value || ''}
-                onChange={(value) => field.onChange(value)}
+                onChange={field.onChange}
                 onBlur={field.onBlur}
                 placeholder="請選擇出生年月日"
                 error={!!fieldState.error}
-                errorMessage={fieldState.error?.message}
-                id={field.name}
               />
             )}
           />
