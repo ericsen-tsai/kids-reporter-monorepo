@@ -225,8 +225,11 @@ export default async function Category({
   )
 
   if (!postsRes) {
-    emitStructured({ severity: 'WARNING', message: 'Empty related posts!' })
-    redirect(ERROR_PAGE)
+    emitStructured({
+      severity: 'WARNING',
+      message: `Category posts not found! ${path?.join('/') ?? ''}`,
+    })
+    notFound()
   }
 
   if ('subcategory' in postsRes && postsRes.subcategory) {
