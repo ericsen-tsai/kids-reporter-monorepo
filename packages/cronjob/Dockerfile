@@ -9,7 +9,7 @@ WORKDIR /app
 COPY package*.json .yarnrc.yml ./
 
 # Install the application dependencies
-RUN yarn install --immutable
+RUN yarn install
 
 # Copy the rest of the application code to the working directory
 COPY . .
