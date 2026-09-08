@@ -95,10 +95,10 @@ export default list({
           )
         }
       }
-      const buttonText = resolvedData.buttonText ?? item?.buttonText
+      const buttonText = resolvedData.buttonText ?? item?.buttonText ?? ''
       if (
         (buttonStatus === 'custom' || buttonStatus === 'showIntro') &&
-        buttonText === ''
+        (typeof buttonText !== 'string' || buttonText.trim() === '')
       ) {
         addValidationError('按鈕文字不能為空')
       }
