@@ -227,7 +227,7 @@ export default async function Category({
   if (!postsRes) {
     emitStructured({
       severity: 'WARNING',
-      message: `Category posts not found! ${path?.join('/') ?? ''}`,
+      message: `Category posts not found. URL path is: /${path?.join('/') ?? ''}`,
     })
     notFound()
   }
