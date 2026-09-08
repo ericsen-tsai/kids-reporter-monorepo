@@ -33,8 +33,6 @@ type IntroButtonConfig = Pick<
 type AllSiteBaodaozaiEventTriggerProps = {
   id: EventId
   intro?: Partial<CallBaodaozaiIntro> | null
-  /** @deprecated Prefer `intro` */
-  content?: string
   isIdle: boolean
 }
 
@@ -84,20 +82,13 @@ function createBaodaozaiEventConfig({
 function AllSiteBaodaozaiEventTrigger({
   id,
   intro,
-  content,
   isIdle,
 }: AllSiteBaodaozaiEventTriggerProps) {
   const isAtTop = useIsAtTop(35)
   const [isFirstRenderAtTop, setIsFirstRenderAtTop] = useState(isAtTop)
   const { openDialog } = useFeatureIntroDialogContext()
 
-  const resolvedIntro = useMemo(
-    () =>
-      resolveCallBaodaozaiIntro(
-        intro ?? (content !== undefined ? { content } : undefined)
-      ),
-    [intro, content]
-  )
+  const resolvedIntro = useMemo(() => resolveCallBaodaozaiIntro(intro), [intro])
 
   useEffect(() => {
     if (!isAtTop && isFirstRenderAtTop) {

@@ -6,7 +6,10 @@ import CommonCollection from '@/components/common-collection'
 import { PostSummary } from '@/components/types'
 import { CATEGORY_COLLECTION_ILLUSTRATIONS } from '@/constants'
 import useAllSiteBaodaozaiIdleTimer from '@/hooks/use-site-baodaozai-idle-timer'
-import { BaodaozaiVisibilitySetter } from '@/services/call-baodaozai'
+import {
+  BaodaozaiInitializer,
+  BaodaozaiVisibilitySetter,
+} from '@/services/call-baodaozai'
 import { CategorySlug } from '@/types'
 import type { CallBaodaozaiIntro } from '@/types/api'
 
@@ -51,6 +54,7 @@ function CategoryCollectionModule({
       {showIntro && (
         <>
           <BaodaozaiVisibilitySetter show={true} />
+          <BaodaozaiInitializer intro={intro} />
           <AllSiteBaodaozaiEventTrigger
             id="show-intro"
             intro={intro}

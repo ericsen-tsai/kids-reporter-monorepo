@@ -48,26 +48,10 @@ export default list({
     buttonText: text({
       label: '按鈕文字',
       defaultValue: '開始介紹',
-      ui: {
-        // Keystone 6.5: itemView reacts after save; createView shows the field.
-        itemView: {
-          fieldMode: ({ item }) =>
-            item?.buttonStatus === 'hidden' ? 'hidden' : 'edit',
-        },
-      },
     }),
     buttonUrl: text({
       label: '超連結對象',
       defaultValue: '',
-      ui: {
-        itemView: {
-          fieldMode: ({ item }) =>
-            item?.buttonStatus === 'custom' ? 'edit' : 'hidden',
-        },
-        createView: {
-          fieldMode: 'edit',
-        },
-      },
     }),
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
@@ -100,13 +84,23 @@ export default list({
     validateInput: async ({ resolvedData, item, addValidationError }) => {
       const buttonStatus =
         resolvedData.buttonStatus ?? item?.buttonStatus ?? 'showIntro'
-      if (buttonStatus !== 'custom') return
-
-      const buttonUrl = resolvedData.buttonUrl ?? item?.buttonUrl ?? ''
-      if (typeof buttonUrl !== 'string' || !isValidHttpUrl(buttonUrl.trim())) {
-        addValidationError(
-          '超連結對象必須是有效的 http:// 或 https:// 網址（按鈕狀態為「自訂按鈕」時必填）'
-        )
+      if (buttonStatus === 'custom') {
+        const buttonUrl = resolvedData.buttonUrl ?? item?.buttonUrl ?? ''
+        if (
+          typeof buttonUrl !== 'string' ||
+          !isValidHttpUrl(buttonUrl.trim())
+        ) {
+          addValidationError(
+            '超連結對象必須是有效的 http:// 或 https:// 網址（按鈕狀態為「自訂按鈕」時必填）'
+          )
+        }
+      }
+      const buttonText = resolvedData.buttonText ?? item?.buttonText
+      if (
+        (buttonStatus === 'custom' || buttonStatus === 'showIntro') &&
+        buttonText === ''
+      ) {
+        addValidationError('按鈕文字不能為空')
       }
     },
   },

@@ -8,7 +8,10 @@ import Pagination from '@/components/pagination'
 import { PostSummary } from '@/components/types'
 import { TOPIC_PAGE_ROUTE } from '@/constants'
 import useAllSiteBaodaozaiIdleTimer from '@/hooks/use-site-baodaozai-idle-timer'
-import { BaodaozaiVisibilitySetter } from '@/services/call-baodaozai'
+import {
+  BaodaozaiInitializer,
+  BaodaozaiVisibilitySetter,
+} from '@/services/call-baodaozai'
 import type { CallBaodaozaiIntro } from '@/types/api'
 
 import FeaturedTopicCard from '../components/featured-topic-card'
@@ -40,6 +43,7 @@ function TopicAllModule({
   return (
     <main className="mx-auto flex flex-col items-center justify-center">
       <BaodaozaiVisibilitySetter show={true} />
+      <BaodaozaiInitializer intro={topicsIntro} />
       <AllSiteBaodaozaiEventTrigger
         id="show-intro"
         intro={topicsIntro}

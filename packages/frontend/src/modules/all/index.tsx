@@ -6,7 +6,10 @@ import CommonCollection from '@/components/common-collection'
 import { PostSummary } from '@/components/types'
 import { POST_PER_PAGE } from '@/constants'
 import useAllSiteBaodaozaiIdleTimer from '@/hooks/use-site-baodaozai-idle-timer'
-import { BaodaozaiVisibilitySetter } from '@/services/call-baodaozai'
+import {
+  BaodaozaiInitializer,
+  BaodaozaiVisibilitySetter,
+} from '@/services/call-baodaozai'
 import type { CallBaodaozaiIntro } from '@/types/api'
 
 type AllModuleProps = {
@@ -31,6 +34,7 @@ function AllModule({ intro, posts }: AllModuleProps) {
   return (
     <main>
       <BaodaozaiVisibilitySetter show={true} />
+      <BaodaozaiInitializer intro={intro} />
       <AllSiteBaodaozaiEventTrigger
         id="show-intro"
         intro={intro}

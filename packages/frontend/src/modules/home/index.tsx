@@ -3,6 +3,7 @@
 import AllSiteBaodaozaiEventTrigger from '@/components/all-site-baodaozai-event-trigger'
 import { PostSummary } from '@/components/types'
 import useAllSiteBaodaozaiIdleTimer from '@/hooks/use-site-baodaozai-idle-timer'
+import { BaodaozaiInitializer } from '@/services/call-baodaozai'
 import type { CallBaodaozaiIntro } from '@/types/api'
 
 import CategoryPostCards from './components/category-post-cards'
@@ -34,6 +35,7 @@ function HomeModule({
   const { isIdle: isAllSiteBaodaozaiIdle } = useAllSiteBaodaozaiIdleTimer()
   return (
     <>
+      <BaodaozaiInitializer intro={intro} />
       <AllSiteBaodaozaiEventTrigger
         id="show-intro"
         intro={intro}
