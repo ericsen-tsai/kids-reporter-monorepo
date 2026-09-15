@@ -79,17 +79,17 @@ steps:
           dev)
             MIN_INSTANCES=0
             MAX_INSTANCES=3
-            CMS_BUCKET=dev-kids-storage.twreporter.org
+            STORAGE_BUCKET=dev-kids-storage.twreporter.org
             ;;
           staging)
             MIN_INSTANCES=0
             MAX_INSTANCES=3
-            CMS_BUCKET=staging-kids-storage.twreporter.org
+            STORAGE_BUCKET=staging-kids-storage.twreporter.org
             ;;
           prod)
             MIN_INSTANCES=1
             MAX_INSTANCES=10
-            CMS_BUCKET=kids-storage.twreporter.org
+            STORAGE_BUCKET=kids-storage.twreporter.org
             ;;
           *)
             echo "Unsupported _ENV: ${_ENV}" >&2
@@ -144,9 +144,9 @@ steps:
             VOLUME_ARGS=(
               --clear-volume-mounts
               --clear-volumes
-              --add-volume="name=cms-files,type=cloud-storage,bucket=$${CMS_BUCKET},readonly=false,mount-options=only-dir=files"
+              --add-volume="name=cms-files,type=cloud-storage,bucket=$${STORAGE_BUCKET},readonly=false,mount-options=only-dir=files"
               --add-volume-mount="volume=cms-files,mount-path=/app/public/files"
-              --add-volume="name=cms-images,type=cloud-storage,bucket=$${CMS_BUCKET},readonly=false,mount-options=only-dir=images"
+              --add-volume="name=cms-images,type=cloud-storage,bucket=$${STORAGE_BUCKET},readonly=false,mount-options=only-dir=images"
               --add-volume-mount="volume=cms-images,mount-path=/app/public/images"
             )
             ;;
@@ -160,6 +160,12 @@ steps:
             PROBE_ARGS=(
               --startup-probe="httpGet.path=/health,initialDelaySeconds=0,timeoutSeconds=5,periodSeconds=10,failureThreshold=24"
               --readiness-probe="httpGet.path=/health,timeoutSeconds=5,periodSeconds=10,failureThreshold=3,successThreshold=1"
+            )
+            VOLUME_ARGS=(
+              --clear-volume-mounts
+              --clear-volumes
+              --add-volume="name=content-api-images,type=cloud-storage,bucket=$${STORAGE_BUCKET},readonly=false,mount-options=only-dir=images"
+              --add-volume-mount="volume=content-api-images,mount-path=/app/public/images"
             )
             ;;
           content-api:content-api-for-preview)
