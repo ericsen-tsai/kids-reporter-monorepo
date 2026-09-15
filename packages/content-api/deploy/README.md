@@ -35,6 +35,9 @@ content-api service.
 Passwords, connection strings, and JWT secrets must not be added to these
 files — see `## Secrets` below.
 
+The images storage bucket is attached by Cloud Run as a Cloud Storage volume
+at `/app/public/images` (public content-api only; preview has no mount).
+
 ## Secrets
 
 Secret IDs follow the Cloud Run service name. Public and preview services

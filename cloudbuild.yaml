@@ -161,6 +161,12 @@ steps:
               --startup-probe="httpGet.path=/health,initialDelaySeconds=0,timeoutSeconds=5,periodSeconds=10,failureThreshold=24"
               --readiness-probe="httpGet.path=/health,timeoutSeconds=5,periodSeconds=10,failureThreshold=3,successThreshold=1"
             )
+            VOLUME_ARGS=(
+              --clear-volume-mounts
+              --clear-volumes
+              --add-volume="name=content-api-images,type=cloud-storage,bucket=$${CMS_BUCKET},readonly=false,mount-options=only-dir=images"
+              --add-volume-mount="volume=content-api-images,mount-path=/app/public/images"
+            )
             ;;
           content-api:content-api-for-preview)
             SERVICE_NAME="${_ENV}-content-api-for-preview"
