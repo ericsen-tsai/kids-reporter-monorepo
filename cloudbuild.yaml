@@ -117,16 +117,19 @@ steps:
             PORT=3000
             TIMEOUT=30s
             CONCURRENCY=80
-            PROBE_ARGS=(
-              --startup-probe="httpGet.path=/api/health,initialDelaySeconds=0,timeoutSeconds=5,periodSeconds=10,failureThreshold=24"
-              --readiness-probe="httpGet.path=/api/health,timeoutSeconds=5,periodSeconds=10,failureThreshold=3,successThreshold=1"
-              --liveness-probe="httpGet.path=/api/health,initialDelaySeconds=0,timeoutSeconds=2,periodSeconds=30,failureThreshold=3"
-            )
+            HEALTH_PATH=/api/health
             if [[ "${_SERVICE_NAME}" == "frontend-for-preview" ]]; then
               SERVICE_NAME="${_ENV}-frontend-for-preview"
               FRONTEND_CONFIG_NAME=frontend-for-preview
               INGRESS=internal
+              # Preview Next.js sets basePath=/preview-server (next.config.mjs).
+              HEALTH_PATH=/preview-server/api/health
             fi
+            PROBE_ARGS=(
+              --startup-probe="httpGet.path=$${HEALTH_PATH},initialDelaySeconds=0,timeoutSeconds=5,periodSeconds=10,failureThreshold=24"
+              --readiness-probe="httpGet.path=$${HEALTH_PATH},timeoutSeconds=5,periodSeconds=10,failureThreshold=3,successThreshold=1"
+              --liveness-probe="httpGet.path=$${HEALTH_PATH},initialDelaySeconds=0,timeoutSeconds=2,periodSeconds=30,failureThreshold=3"
+            )
             SECRETS="SEARCH_API_KEY=$${SERVICE_NAME}_search-api-key:latest,NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$${SERVICE_NAME}_next-server-actions-encryption-key:latest"
             ENV_FILE="packages/frontend/deploy/env.${_ENV}.$${FRONTEND_CONFIG_NAME}.runtime.yaml"
             ;;
