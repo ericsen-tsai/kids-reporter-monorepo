@@ -37,9 +37,15 @@ export class ContentApiRequestError extends Error {
     status?: number,
     options?: { cause?: Error; errorCode?: string; errorDetails?: unknown }
   ) {
-    // Only pass a plain Error as cause — never Axios/AnnotatingError
+    // Copy only message/name/stack — never Axios/AnnotatingError
     // (AxiosError.request is a Writable that Cloud Logging splits).
-    super(message, options?.cause ? { cause: options.cause } : undefined)
+    let cause: Error | undefined
+    if (options?.cause) {
+      cause = new Error(options.cause.message)
+      cause.name = options.cause.name
+      if (options.cause.stack) cause.stack = options.cause.stack
+    }
+    super(message, cause ? { cause } : undefined)
     this.name = 'ContentApiRequestError'
     this.path = path
     this.url = url
