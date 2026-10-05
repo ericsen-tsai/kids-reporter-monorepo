@@ -2186,6 +2186,44 @@ input PostEssayAnswerLikeOrderByInput {
   updatedAt: OrderDirection
 }
 
+type Bookmark {
+  id: ID!
+  type: String
+  post: Post
+  project: Project
+  member: Member
+  compositeKey: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input BookmarkWhereUniqueInput {
+  id: ID
+  compositeKey: String
+}
+
+input BookmarkWhereInput {
+  AND: [BookmarkWhereInput!]
+  OR: [BookmarkWhereInput!]
+  NOT: [BookmarkWhereInput!]
+  id: IDFilter
+  type: StringFilter
+  post: PostWhereInput
+  project: ProjectWhereInput
+  member: MemberWhereInput
+  compositeKey: StringNullableFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input BookmarkOrderByInput {
+  id: OrderDirection
+  type: OrderDirection
+  compositeKey: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
 type PopularKeyword {
   id: ID!
   name: String
@@ -2365,6 +2403,8 @@ type Mutation {
   deletePostEssayQuestions(where: [PostEssayQuestionWhereUniqueInput!]!): [PostEssayQuestion]
   deletePostEssayAnswerLike(where: PostEssayAnswerLikeWhereUniqueInput!): PostEssayAnswerLike
   deletePostEssayAnswerLikes(where: [PostEssayAnswerLikeWhereUniqueInput!]!): [PostEssayAnswerLike]
+  deleteBookmark(where: BookmarkWhereUniqueInput!): Bookmark
+  deleteBookmarks(where: [BookmarkWhereUniqueInput!]!): [Bookmark]
   createPopularKeyword(data: PopularKeywordCreateInput!): PopularKeyword
   createPopularKeywords(data: [PopularKeywordCreateInput!]!): [PopularKeyword]
   updatePopularKeyword(where: PopularKeywordWhereUniqueInput!, data: PopularKeywordUpdateInput!): PopularKeyword
@@ -2468,6 +2508,9 @@ type Query {
   postEssayAnswerLike(where: PostEssayAnswerLikeWhereUniqueInput!): PostEssayAnswerLike
   postEssayAnswerLikes(where: PostEssayAnswerLikeWhereInput! = {}, orderBy: [PostEssayAnswerLikeOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostEssayAnswerLikeWhereUniqueInput): [PostEssayAnswerLike!]
   postEssayAnswerLikesCount(where: PostEssayAnswerLikeWhereInput! = {}): Int
+  bookmark(where: BookmarkWhereUniqueInput!): Bookmark
+  bookmarks(where: BookmarkWhereInput! = {}, orderBy: [BookmarkOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookmarkWhereUniqueInput): [Bookmark!]
+  bookmarksCount(where: BookmarkWhereInput! = {}): Int
   popularKeyword(where: PopularKeywordWhereUniqueInput!): PopularKeyword
   popularKeywords(where: PopularKeywordWhereInput! = {}, orderBy: [PopularKeywordOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PopularKeywordWhereUniqueInput): [PopularKeyword!]
   popularKeywordsCount(where: PopularKeywordWhereInput! = {}): Int
