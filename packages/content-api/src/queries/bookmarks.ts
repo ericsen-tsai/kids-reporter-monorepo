@@ -70,25 +70,40 @@ const mapProjectCard = (p: ProjectCardRow) => {
   }
 }
 
-const isPublicPost = (
-  status: string | null,
-  publishedDate: Date | null,
-  now: Date
-) => {
-  if (status === 'published') return true
-  if (status === 'scheduled' && publishedDate != null && publishedDate < now) {
-    return true
-  }
-  return false
-}
-
-const isPublicProject = (status: string | null) => status === 'published'
-
 export type ListBookmarksOpts = {
   take: number
   skip: number
   type?: BookmarkType
   slug?: string
+}
+
+function buildListBookmarksWhere(
+  memberId: string,
+  opts: ListBookmarksOpts,
+  now: Date
+): Prisma.BookmarkWhereInput {
+  const publicPost = {
+    ...buildPublicPostWhere(now),
+    ...(opts.slug ? { slug: opts.slug } : {}),
+  }
+  const publicProject = {
+    ...buildPublicProjectWhere(),
+    ...(opts.slug ? { slug: opts.slug } : {}),
+  }
+
+  if (opts.type === 'post') {
+    return { memberId, type: 'post', post: publicPost }
+  }
+  if (opts.type === 'project') {
+    return { memberId, type: 'project', project: publicProject }
+  }
+  return {
+    memberId,
+    OR: [
+      { type: 'post', post: buildPublicPostWhere(now) },
+      { type: 'project', project: buildPublicProjectWhere() },
+    ],
+  }
 }
 
 /** `GET /v1/members/me/bookmarks` */
@@ -98,16 +113,7 @@ export async function listMemberBookmarks(
   now: Date
 ): Promise<V1BookmarksResponse> {
   const rows = await prisma.bookmark.findMany({
-    where: {
-      memberId,
-      ...(opts.type ? { type: opts.type } : {}),
-      ...(opts.slug && opts.type === 'post'
-        ? { post: { slug: opts.slug } }
-        : {}),
-      ...(opts.slug && opts.type === 'project'
-        ? { project: { slug: opts.slug } }
-        : {}),
-    },
+    where: buildListBookmarksWhere(memberId, opts, now),
     orderBy: { createdAt: 'desc' },
     take: opts.take,
     skip: opts.skip,
@@ -115,38 +121,32 @@ export async function listMemberBookmarks(
       id: true,
       type: true,
       createdAt: true,
-      post: { select: { ...postCardSelect, status: true } },
-      project: { select: { ...projectCardSelect, status: true } },
+      post: { select: postCardSelect },
+      project: { select: projectCardSelect },
     },
   })
 
   const out: V1BookmarksResponse = []
   for (const row of rows) {
     if (row.type === 'post') {
-      const post = row.post as (PostCardRow & { status: string | null }) | null
-      if (!post || !isPublicPost(post.status, post.publishedDate, now)) continue
-      const { status: _status, ...card } = post
+      const post = row.post as PostCardRow | null
+      if (!post) continue
       out.push({
         id: String(row.id),
         createdAt: row.createdAt ? row.createdAt.toISOString() : null,
         type: 'post',
-        post: mapPostCard(card),
+        post: mapPostCard(post),
       })
       continue
     }
     if (row.type === 'project') {
-      const project = row.project as
-        | (ProjectCardRow & {
-            status: string | null
-          })
-        | null
-      if (!project || !isPublicProject(project.status)) continue
-      const { status: _status, ...card } = project
+      const project = row.project as ProjectCardRow | null
+      if (!project) continue
       out.push({
         id: String(row.id),
         createdAt: row.createdAt ? row.createdAt.toISOString() : null,
         type: 'project',
-        project: mapProjectCard(card),
+        project: mapProjectCard(project),
       })
     }
   }

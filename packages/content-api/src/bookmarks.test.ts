@@ -3,11 +3,22 @@ import request from 'supertest'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { createApp } from './app.js'
+import { listMemberBookmarks } from './queries/bookmarks.js'
+import {
+  buildPublicPostWhere,
+  buildPublicProjectWhere,
+} from './utils/v1-helpers.js'
 
-const { mockFindMember, mockCreateBookmark, mockFindPost } = vi.hoisted(() => ({
+const {
+  mockFindMember,
+  mockCreateBookmark,
+  mockFindPost,
+  mockFindManyBookmarks,
+} = vi.hoisted(() => ({
   mockFindMember: vi.fn(),
   mockCreateBookmark: vi.fn(),
   mockFindPost: vi.fn(),
+  mockFindManyBookmarks: vi.fn(),
 }))
 
 vi.mock('@kids-reporter/db', () => ({
@@ -32,12 +43,38 @@ vi.mock('@kids-reporter/db', () => ({
     },
     bookmark: {
       create: (...args: unknown[]) => mockCreateBookmark(...args),
-      findMany: vi.fn(),
+      findMany: (...args: unknown[]) => mockFindManyBookmarks(...args),
       findUnique: vi.fn(),
       delete: vi.fn(),
     },
   },
 }))
+
+describe('listMemberBookmarks', () => {
+  beforeEach(() => {
+    mockFindManyBookmarks.mockReset()
+    mockFindManyBookmarks.mockResolvedValue([])
+  })
+
+  it('applies public visibility in findMany before take/skip', async () => {
+    const now = new Date('2026-01-15T00:00:00.000Z')
+    await listMemberBookmarks('member-cuid-1', { take: 12, skip: 0 }, now)
+
+    expect(mockFindManyBookmarks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: {
+          memberId: 'member-cuid-1',
+          OR: [
+            { type: 'post', post: buildPublicPostWhere(now) },
+            { type: 'project', project: buildPublicProjectWhere() },
+          ],
+        },
+        take: 12,
+        skip: 0,
+      })
+    )
+  })
+})
 
 describe('POST /v1/members/me/bookmarks', () => {
   const secret = process.env.GO_API_JWT_SECRET!

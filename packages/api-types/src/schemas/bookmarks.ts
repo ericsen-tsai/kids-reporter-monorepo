@@ -49,13 +49,20 @@ const BookmarkProjectCardSchema = V1ProjectsItemSchema.omit({
 })
 
 export const V1BookmarkItemSchema = z
-  .object({
-    id: z.string(),
-    createdAt: z.iso.datetime().nullable(),
-    type: V1BookmarkTypeSchema,
-    post: PostContentSchema.optional(),
-    project: BookmarkProjectCardSchema.optional(),
-  })
+  .discriminatedUnion('type', [
+    z.object({
+      id: z.string(),
+      createdAt: z.iso.datetime().nullable(),
+      type: z.literal('post'),
+      post: PostContentSchema,
+    }),
+    z.object({
+      id: z.string(),
+      createdAt: z.iso.datetime().nullable(),
+      type: z.literal('project'),
+      project: BookmarkProjectCardSchema,
+    }),
+  ])
   .openapi('BookmarkItem')
 
 export const V1BookmarksResponseSchema = z.array(V1BookmarkItemSchema)
