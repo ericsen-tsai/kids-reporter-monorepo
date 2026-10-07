@@ -2,22 +2,25 @@ import type { CreateBookmarkResponse, V1CreateBookmarkBody } from '@/types/api'
 import type { TraceHeaders } from '@/types/trace-headers'
 import { sendContentApiRequest } from '@/utils/send-content-api'
 
-export type PostBookmarkLookup = { id: string }
+export type BookmarkLookup = { id: string }
+export type BookmarkType = V1CreateBookmarkBody['type']
 
-export async function getPostBookmarkBySlugContentApi({
+export async function getBookmarkBySlugContentApi({
   accessToken,
+  type,
   slug,
   traceHeaders,
 }: {
   accessToken: string
+  type: BookmarkType
   slug: string
   traceHeaders?: TraceHeaders
-}): Promise<PostBookmarkLookup | null> {
+}): Promise<BookmarkLookup | null> {
   const rows = await sendContentApiRequest<Array<{ id: string }>>({
     path: '/v1/members/me/bookmarks',
     method: 'GET',
     authToken: accessToken,
-    query: { type: 'post', slug, take: 1 },
+    query: { type, slug, take: 1 },
     traceHeaders,
   })
   if (!Array.isArray(rows)) {
