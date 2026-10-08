@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useTogglePostBookmark } from '@/api-utils/react-query/hooks/bookmark'
 import { DEFAULT_SCROLL_DOWN_DISTANCE } from '@/components/table-of-content'
+import { aboveToolbarToastOptions } from '@/components/toaster'
 import { FontSizeLevel } from '@/constants'
 import useClickOutside from '@/hooks/use-click-outside'
 import {
@@ -371,13 +372,15 @@ function Toolbar({ topicURL, postSlug }: ToolbarProp) {
     useState(false)
   const { hydrated, member, tokens } = useHydratedAuthStore()
   const isLogin = hydrated && !!member && !!tokens?.accessToken
-  const { isBookmarked, isPending, toggle } = useTogglePostBookmark({
+  const { isBookmarked, isLoading, isPending, toggle } = useTogglePostBookmark({
     postSlug,
+    memberId: member?.id,
     accessToken: tokens?.accessToken,
     enabled: isLogin,
+    toastOptions: aboveToolbarToastOptions,
   })
   const bookmark = isLogin
-    ? { isBookmarked, isPending, onToggle: toggle }
+    ? { isBookmarked, isPending: isPending || isLoading, onToggle: toggle }
     : undefined
 
   return (

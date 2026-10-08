@@ -33,9 +33,10 @@ function TopicContentWithMask({
 
   const { hydrated, member, tokens } = useHydratedAuthStore()
   const isLogin = hydrated && !!member && !!tokens?.accessToken
-  const { isBookmarked, isPending, toggle } = useToggleBookmark({
+  const { isBookmarked, isLoading, isPending, toggle } = useToggleBookmark({
     type: 'project',
     slug,
+    memberId: member?.id,
     accessToken: tokens?.accessToken,
     enabled: isLogin,
   })
@@ -123,7 +124,7 @@ function TopicContentWithMask({
           <button
             type="button"
             onClick={toggle}
-            disabled={isPending}
+            disabled={isPending || isLoading}
             aria-label={isBookmarked ? '取消收藏專題' : '收藏此專題'}
             className="my-2 flex h-11 w-60 cursor-pointer items-center justify-center gap-1 rounded-full border-2 border-neutral-400 bg-white px-5 py-2 prose-p1-bold text-neutral-900 transition-colors disabled:cursor-default disabled:opacity-60 desktop:w-75"
           >

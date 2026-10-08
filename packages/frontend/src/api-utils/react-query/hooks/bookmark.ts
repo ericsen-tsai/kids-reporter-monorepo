@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useRef } from 'react'
-import { toast } from 'sonner'
+import { type ExternalToast, toast } from 'sonner'
 
 import {
   type BookmarkLookup,
@@ -11,10 +11,14 @@ import {
   deleteBookmarkContentApi,
   getBookmarkBySlugContentApi,
 } from '@/api/content-api/bookmarks'
-import { aboveToolbarToastOptions } from '@/components/toaster'
 import { ContentApiRequestError } from '@/utils/send-content-api'
 
-const MEMBER_BOOKMARK_QUERY_KEY = 'member-bookmark'
+import {
+  bookmarkQueryKey,
+  isDeletableBookmarkId,
+  OPTIMISTIC_BOOKMARK_ID,
+  rollbackBookmarkCache,
+} from './bookmark-cache'
 
 const BOOKMARKED_TOAST: Record<BookmarkType, string> = {
   post: '已收藏此文章',
@@ -24,49 +28,61 @@ const BOOKMARKED_TOAST: Record<BookmarkType, string> = {
 export function useBookmarkQuery({
   type,
   slug,
+  memberId,
   accessToken,
   enabled,
 }: {
   type: BookmarkType
   slug: string
+  memberId?: string
   accessToken?: string
   enabled: boolean
 }) {
   return useQuery({
-    queryKey: useBookmarkQuery.getQueryKey(type, slug),
+    queryKey: useBookmarkQuery.getQueryKey(type, slug, memberId ?? ''),
     queryFn: () =>
       getBookmarkBySlugContentApi({
         accessToken: accessToken!,
         type,
         slug,
       }),
-    enabled: enabled && !!accessToken && !!slug,
+    enabled: enabled && !!accessToken && !!slug && !!memberId,
   })
 }
 
-useBookmarkQuery.getQueryKey = (type: BookmarkType, slug: string) => [
-  MEMBER_BOOKMARK_QUERY_KEY,
-  type,
-  slug,
-]
+useBookmarkQuery.getQueryKey = (
+  type: BookmarkType,
+  slug: string,
+  memberId: string
+) => bookmarkQueryKey(memberId, type, slug)
 
 export function useToggleBookmark({
   type,
   slug,
+  memberId,
   accessToken,
   enabled,
+  toastOptions,
 }: {
   type: BookmarkType
   slug: string
+  memberId?: string
   accessToken?: string
   enabled: boolean
+  toastOptions?: ExternalToast
 }) {
   const queryClient = useQueryClient()
   const toggleLockRef = useRef(false)
-  const queryKey = useBookmarkQuery.getQueryKey(type, slug)
+  const queryKey = useBookmarkQuery.getQueryKey(type, slug, memberId ?? '')
   const bookmarkedToast = BOOKMARKED_TOAST[type]
 
-  const query = useBookmarkQuery({ type, slug, accessToken, enabled })
+  const query = useBookmarkQuery({
+    type,
+    slug,
+    memberId,
+    accessToken,
+    enabled,
+  })
 
   const createMutation = useMutation({
     mutationFn: () => createBookmarkContentApi({ type, slug }, accessToken!),
@@ -79,9 +95,11 @@ export function useToggleBookmark({
   const toggle = useCallback(async () => {
     if (
       !accessToken ||
+      !memberId ||
       toggleLockRef.current ||
       createMutation.isPending ||
-      deleteMutation.isPending
+      deleteMutation.isPending ||
+      queryClient.getQueryState(queryKey)?.status === 'pending'
     ) {
       return
     }
@@ -95,12 +113,16 @@ export function useToggleBookmark({
 
     try {
       if (isBookmarked && current) {
+        if (!isDeletableBookmarkId(current.id)) {
+          await queryClient.invalidateQueries({ queryKey })
+          return
+        }
         queryClient.setQueryData<BookmarkLookup | null>(queryKey, null)
         await deleteMutation.mutateAsync(current.id)
-        toast.success('已取消收藏', aboveToolbarToastOptions)
+        toast.success('已取消收藏', toastOptions)
       } else {
         queryClient.setQueryData<BookmarkLookup | null>(queryKey, {
-          id: 'optimistic',
+          id: OPTIMISTIC_BOOKMARK_ID,
         })
         try {
           const created = await createMutation.mutateAsync()
@@ -111,15 +133,15 @@ export function useToggleBookmark({
           // Already saved on server — refresh real id
           if (error instanceof ContentApiRequestError && error.status === 409) {
             await queryClient.invalidateQueries({ queryKey })
-            toast.success(bookmarkedToast, aboveToolbarToastOptions)
+            toast.success(bookmarkedToast, toastOptions)
             return
           }
           throw error
         }
-        toast.success(bookmarkedToast, aboveToolbarToastOptions)
+        toast.success(bookmarkedToast, toastOptions)
       }
     } catch {
-      queryClient.setQueryData(queryKey, previous)
+      queryClient.setQueryData(queryKey, rollbackBookmarkCache(previous))
     } finally {
       toggleLockRef.current = false
     }
@@ -128,8 +150,10 @@ export function useToggleBookmark({
     bookmarkedToast,
     createMutation,
     deleteMutation,
+    memberId,
     queryClient,
     queryKey,
+    toastOptions,
   ])
 
   return {
@@ -142,17 +166,23 @@ export function useToggleBookmark({
 
 export function useTogglePostBookmark({
   postSlug,
+  memberId,
   accessToken,
   enabled,
+  toastOptions,
 }: {
   postSlug: string
+  memberId?: string
   accessToken?: string
   enabled: boolean
+  toastOptions?: ExternalToast
 }) {
   return useToggleBookmark({
     type: 'post',
     slug: postSlug,
+    memberId,
     accessToken,
     enabled,
+    toastOptions,
   })
 }
