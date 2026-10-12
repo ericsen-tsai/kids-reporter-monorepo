@@ -112,7 +112,7 @@ function TopicContentWithMask({
               onClick={handleButtonClick}
               aria-expanded={isExpanded}
               variant="secondary"
-              className="w-60 desktop:w-75"
+              className="mb-4 w-60 desktop:w-75"
             >
               {isExpanded ? '顯示部分' : '顯示全文'}
             </Button>
@@ -121,16 +121,18 @@ function TopicContentWithMask({
       </div>
       {isLogin && (
         <div className="flex justify-center">
-          <button
+          <Button
             type="button"
+            variant="neutral"
             onClick={toggle}
-            disabled={isPending || isLoading}
+            disabled={isLoading}
+            isLoading={isPending}
             aria-label={isBookmarked ? '取消收藏專題' : '收藏此專題'}
-            className="my-2 flex h-11 w-60 cursor-pointer items-center justify-center gap-1 rounded-full border-2 border-neutral-400 bg-white px-5 py-2 prose-p1-bold text-neutral-900 transition-colors disabled:cursor-default disabled:opacity-60 desktop:w-75"
+            className="w-60 desktop:w-75"
           >
             {isBookmarked ? <BookmarkFilledIcon /> : <BookmarkOutlineIcon />}
             {isBookmarked ? '已收藏專題' : '收藏此專題'}
-          </button>
+          </Button>
         </div>
       )}
     </div>
