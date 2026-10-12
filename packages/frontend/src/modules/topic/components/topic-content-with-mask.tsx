@@ -137,7 +137,7 @@ function TopicContentWithMask({
           onClick={onBookmarkClick}
           disabled={isLogin && isLoading}
           isLoading={isLogin && isPending}
-          aria-label={isBookmarked ? '取消收藏專題' : '收藏此專題'}
+          aria-label={isLogin && isBookmarked ? '取消收藏專題' : '收藏此專題'}
           className="w-60 desktop:w-75"
         >
           {isLogin && isBookmarked ? (
