@@ -42,12 +42,14 @@ function MyReadingResponse() {
     currentPagePosts == null && (isLoading || hasNextPage || isFetchingNextPage)
 
   // ponytail: drains every cursor page so a numbered click can show that slice.
+  // loadedPages.length is a dep because hasNextPage stays true until the last cursor,
+  // so a finished fetch would not re-run this effect on its own.
   // Ceiling: one request per 5 answers. Upgrade path is offset/skip.
   useEffect(() => {
     if (hasNextPage) {
       fetchNextPage()
     }
-  }, [fetchNextPage, hasNextPage])
+  }, [fetchNextPage, hasNextPage, loadedPages.length])
 
   const [openedAccordionItemValue, setOpenedAccordionItemValue] = useState<
     string | undefined
