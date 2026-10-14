@@ -10,6 +10,7 @@ import {
   createBookmarkContentApi,
   deleteBookmarkContentApi,
   getBookmarkBySlugContentApi,
+  listBookmarksContentApi,
 } from '@/api/content-api/bookmarks'
 import { ContentApiRequestError } from '@/utils/send-content-api'
 
@@ -163,6 +164,41 @@ export function useToggleBookmark({
     toggle,
   }
 }
+
+const MEMBER_BOOKMARKS_QUERY_KEY = 'member-bookmarks'
+
+export function useMemberBookmarksQuery({
+  memberId,
+  accessToken,
+  take,
+  skip,
+}: {
+  memberId?: string
+  accessToken?: string
+  take: number
+  skip: number
+}) {
+  return useQuery({
+    queryKey: useMemberBookmarksQuery.getQueryKey(memberId ?? '', take, skip),
+    queryFn: () =>
+      listBookmarksContentApi({
+        accessToken: accessToken!,
+        take,
+        skip,
+      }),
+    enabled: !!accessToken && !!memberId,
+    placeholderData: (previous) => previous,
+  })
+}
+
+useMemberBookmarksQuery.getQueryKey = (
+  memberId: string,
+  take: number,
+  skip: number
+) => [MEMBER_BOOKMARKS_QUERY_KEY, memberId, take, skip] as const
+
+useMemberBookmarksQuery.listQueryKey = (memberId: string) =>
+  [MEMBER_BOOKMARKS_QUERY_KEY, memberId] as const
 
 export function useTogglePostBookmark({
   postSlug,
