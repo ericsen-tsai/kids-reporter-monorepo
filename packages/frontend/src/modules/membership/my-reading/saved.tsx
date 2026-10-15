@@ -268,7 +268,7 @@ function MyReadingSaved() {
           </h1>
         </div>
         {bookmarksCount === 0 ? (
-          <div className="flex flex-col items-center justify-center gap-1 py-[72px] text-center prose-p1 text-neutral-700">
+          <div className="flex min-h-50 flex-col items-center justify-center gap-1 text-center prose-p1 text-neutral-700">
             <p>你還沒有收藏任何報導</p>
             <p className="flex items-center justify-center gap-1">
               點擊
