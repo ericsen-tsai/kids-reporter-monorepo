@@ -128,8 +128,10 @@ function SavedCard({
 
 function MyReadingSaved() {
   const [currentPage, setCurrentPage] = useState(1)
-  const [pendingId, setPendingId] = useState<string | null>(null)
-  const pendingRef = useRef<string | null>(null)
+  const [pendingIds, setPendingIds] = useState<ReadonlySet<string>>(
+    () => new Set()
+  )
+  const pendingRef = useRef(new Set<string>())
   const { member, tokens } = useHydratedAuthStore()
   const queryClient = useQueryClient()
   const skip = (currentPage - 1) * PAGE_SIZE
@@ -154,18 +156,17 @@ function MyReadingSaved() {
   }, [currentPage, totalPages])
 
   const clearPending = useCallback((id: string) => {
-    if (pendingRef.current !== id) return
-    pendingRef.current = null
-    setPendingId(null)
+    if (!pendingRef.current.delete(id)) return
+    setPendingIds(new Set(pendingRef.current))
   }, [])
 
   const unsave = useCallback(
     (item: BookmarkItem) => {
       const accessToken = tokens?.accessToken
       const memberId = member?.id
-      if (!accessToken || !memberId || pendingRef.current) return
-      pendingRef.current = item.id
-      setPendingId(item.id)
+      if (!accessToken || !memberId || pendingRef.current.has(item.id)) return
+      pendingRef.current.add(item.id)
+      setPendingIds(new Set(pendingRef.current))
 
       let undone = false
       let settled = false
@@ -271,7 +272,10 @@ function MyReadingSaved() {
             <p>你還沒有收藏任何報導</p>
             <p className="flex items-center justify-center gap-1">
               點擊
-              <span className="inline-flex size-5 shrink-0 [&>svg]:size-5" aria-hidden>
+              <span
+                className="inline-flex size-5 shrink-0 [&>svg]:size-5"
+                aria-hidden
+              >
                 <BookmarkOutlineIcon />
               </span>
               收藏你喜愛的文章或專題
@@ -283,7 +287,7 @@ function MyReadingSaved() {
               <SavedCard
                 key={item.id}
                 item={item}
-                pending={pendingId === item.id}
+                pending={pendingIds.has(item.id)}
                 disabled={isPlaceholderData}
                 onUnsave={unsave}
               />
