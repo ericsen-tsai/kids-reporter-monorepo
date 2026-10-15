@@ -57,7 +57,7 @@ function PostQuestionAnswersList({
           <AccordionItem
             key={group.slug}
             value={group.slug}
-            className="border-b-[2px] border-b-neutral-200 last:border-b"
+            className="border-b-[2px] border-b-neutral-200 last:border-b-0"
           >
             <AccordionTrigger
               className={cn(
