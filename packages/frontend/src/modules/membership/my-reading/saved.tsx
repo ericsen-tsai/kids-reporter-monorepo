@@ -15,7 +15,11 @@ import { useMemberBookmarksQuery } from '@/api-utils/react-query/hooks/bookmark'
 import { bookmarkQueryKey } from '@/api-utils/react-query/hooks/bookmark-cache'
 import ImageWithFallback from '@/components/image-with-fallback'
 import Pagination from '@/components/pagination'
-import { ArrowLeft, ToolbarBookmarkFilledIcon } from '@/icons'
+import {
+  ArrowLeft,
+  BookmarkOutlineIcon,
+  ToolbarBookmarkFilledIcon,
+} from '@/icons'
 import { useHydratedAuthStore } from '@/services/auth/use-hydrated-auth-store'
 import type { MemberBookmarksResponse } from '@/types/api'
 import { getFormattedDate } from '@/utils'
@@ -262,17 +266,30 @@ function MyReadingSaved() {
             {title}
           </h1>
         </div>
-        <div className="grid grid-cols-1 gap-6 tablet:grid-cols-2 tablet:gap-x-6 tablet:gap-y-8 desktop:grid-cols-3 desktop:gap-x-8 desktop:gap-y-10">
-          {bookmarks.map((item) => (
-            <SavedCard
-              key={item.id}
-              item={item}
-              pending={pendingId === item.id}
-              disabled={isPlaceholderData}
-              onUnsave={unsave}
-            />
-          ))}
-        </div>
+        {bookmarksCount === 0 ? (
+          <div className="flex flex-col items-center justify-center gap-1 py-[72px] text-center prose-p1 text-neutral-700">
+            <p>你還沒有收藏任何報導</p>
+            <p className="flex items-center justify-center gap-1">
+              點擊
+              <span className="inline-flex size-5 shrink-0 [&>svg]:size-5" aria-hidden>
+                <BookmarkOutlineIcon />
+              </span>
+              收藏你喜愛的文章或專題
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-6 tablet:grid-cols-2 tablet:gap-x-6 tablet:gap-y-8 desktop:grid-cols-3 desktop:gap-x-8 desktop:gap-y-10">
+            {bookmarks.map((item) => (
+              <SavedCard
+                key={item.id}
+                item={item}
+                pending={pendingId === item.id}
+                disabled={isPlaceholderData}
+                onUnsave={unsave}
+              />
+            ))}
+          </div>
+        )}
         {totalPages > 0 && !isLoading && (
           <Pagination
             className="mt-10 desktop:mt-14"
