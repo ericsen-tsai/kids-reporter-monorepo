@@ -135,14 +135,21 @@ function MyReadingSaved() {
   const { member, tokens } = useHydratedAuthStore()
   const queryClient = useQueryClient()
   const skip = (currentPage - 1) * PAGE_SIZE
-  const { data, isLoading, isPlaceholderData } = useMemberBookmarksQuery({
-    memberId: member?.id,
-    accessToken: tokens?.accessToken,
-    take: PAGE_SIZE,
-    skip,
-  })
+  const { data, isLoading, isPlaceholderData, isError, isFetching, refetch } =
+    useMemberBookmarksQuery({
+      memberId: member?.id,
+      accessToken: tokens?.accessToken,
+      take: PAGE_SIZE,
+      skip,
+    })
 
-  const bookmarksCount = data?.bookmarksCount
+  // ponytail: remember the last total so a failed uncached page still paginates.
+  const lastCountRef = useRef<number | null>(null)
+  if (data) lastCountRef.current = data.bookmarksCount
+
+  const showLoadError = isError && !data
+  const bookmarksCount =
+    data?.bookmarksCount ?? (showLoadError ? lastCountRef.current : null)
   const bookmarks = data?.bookmarks ?? []
   const totalPages =
     bookmarksCount == null || bookmarksCount === 0
@@ -189,7 +196,12 @@ function MyReadingSaved() {
             queryClient.setQueryData<MemberBookmarksResponse>(
               listKey,
               (current) => {
-                if (!current) return current
+                if (
+                  !current ||
+                  !current.bookmarks.some((row) => row.id === item.id)
+                ) {
+                  return current
+                }
                 return {
                   bookmarks: current.bookmarks.filter(
                     (row) => row.id !== item.id
@@ -267,7 +279,24 @@ function MyReadingSaved() {
             {title}
           </h1>
         </div>
-        {bookmarksCount === 0 ? (
+        {showLoadError ? (
+          <div className="flex min-h-50 flex-col items-center justify-center gap-4 text-center">
+            <p className="prose-p1 text-neutral-700">
+              載入發生錯誤，請稍候再試
+            </p>
+            <Button
+              type="button"
+              variant="neutral"
+              size={44}
+              isLoading={isFetching}
+              onClick={() => {
+                void refetch()
+              }}
+            >
+              重試
+            </Button>
+          </div>
+        ) : bookmarksCount === 0 ? (
           <div className="flex min-h-50 flex-col items-center justify-center gap-1 text-center prose-p1 text-neutral-700">
             <p>你還沒有收藏任何報導</p>
             <p className="flex items-center justify-center gap-1">

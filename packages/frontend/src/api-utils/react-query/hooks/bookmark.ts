@@ -26,6 +26,12 @@ const BOOKMARKED_TOAST: Record<BookmarkType, string> = {
   project: '已收藏此專題',
 }
 
+const MEMBER_BOOKMARKS_QUERY_KEY = 'member-bookmarks'
+
+function memberBookmarksListKey(memberId: string) {
+  return [MEMBER_BOOKMARKS_QUERY_KEY, memberId] as const
+}
+
 export function useBookmarkQuery({
   type,
   slug,
@@ -134,6 +140,9 @@ export function useToggleBookmark({
           // Already saved on server — refresh real id
           if (error instanceof ContentApiRequestError && error.status === 409) {
             await queryClient.invalidateQueries({ queryKey })
+            await queryClient.invalidateQueries({
+              queryKey: memberBookmarksListKey(memberId),
+            })
             toast.success(bookmarkedToast, toastOptions)
             return
           }
@@ -141,6 +150,9 @@ export function useToggleBookmark({
         }
         toast.success(bookmarkedToast, toastOptions)
       }
+      await queryClient.invalidateQueries({
+        queryKey: memberBookmarksListKey(memberId),
+      })
     } catch {
       queryClient.setQueryData(queryKey, rollbackBookmarkCache(previous))
     } finally {
@@ -164,8 +176,6 @@ export function useToggleBookmark({
     toggle,
   }
 }
-
-const MEMBER_BOOKMARKS_QUERY_KEY = 'member-bookmarks'
 
 export function useMemberBookmarksQuery({
   memberId,
@@ -197,8 +207,7 @@ useMemberBookmarksQuery.getQueryKey = (
   skip: number
 ) => [MEMBER_BOOKMARKS_QUERY_KEY, memberId, take, skip] as const
 
-useMemberBookmarksQuery.listQueryKey = (memberId: string) =>
-  [MEMBER_BOOKMARKS_QUERY_KEY, memberId] as const
+useMemberBookmarksQuery.listQueryKey = memberBookmarksListKey
 
 export function useTogglePostBookmark({
   postSlug,
