@@ -180,6 +180,7 @@ function HistoryCard({
     const bookmarkId = current.id
     const previous = current
     lockRef.current = true
+    setPending(true)
     void queryClient.cancelQueries({ queryKey })
     queryClient.setQueryData<BookmarkLookup | null>(queryKey, null)
 
@@ -187,6 +188,7 @@ function HistoryCard({
     let settled = false
     const release = () => {
       lockRef.current = false
+      setPending(false)
       confirmUnsaveRef.current = null
       unsaveToastIdRef.current = null
     }
@@ -197,6 +199,8 @@ function HistoryCard({
       void (async () => {
         try {
           await deleteBookmarkContentApi(bookmarkId, accessToken)
+          await queryClient.cancelQueries({ queryKey })
+          queryClient.setQueryData<BookmarkLookup | null>(queryKey, null)
           await queryClient.invalidateQueries({
             queryKey: useMemberBookmarksQuery.listQueryKey(memberId),
           })

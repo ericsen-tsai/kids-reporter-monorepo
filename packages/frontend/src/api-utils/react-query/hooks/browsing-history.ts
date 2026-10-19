@@ -60,10 +60,13 @@ export function useRecordBrowsingHistory(
   const { hydrated, member, tokens } = useHydratedAuthStore()
   const recordedRef = useRef<string | null>(null)
   const accessToken = tokens?.accessToken
+  const expiresAt = tokens?.expiresAt
   const memberId = member?.id
 
   useEffect(() => {
     if (!hydrated || !memberId || !accessToken || !slug) return
+    // AuthProvider refreshes an expired persisted token asynchronously. Skip the dedup key until then, or a 401 drops this visit.
+    if (expiresAt && expiresAt <= Math.round(Date.now() / 1000)) return
     const key = `${type}:${slug}`
     if (recordedRef.current === key) return
     recordedRef.current = key
@@ -75,7 +78,7 @@ export function useRecordBrowsingHistory(
         })
       )
       .catch(() => {})
-  }, [accessToken, hydrated, memberId, queryClient, slug, type])
+  }, [accessToken, expiresAt, hydrated, memberId, queryClient, slug, type])
 }
 
 export function RecordBrowsingHistory({
