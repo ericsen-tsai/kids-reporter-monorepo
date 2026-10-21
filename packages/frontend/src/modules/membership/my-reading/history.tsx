@@ -394,11 +394,8 @@ function MyReadingHistory() {
             </Button>
           </div>
         ) : !data ? (
-          <div
-            className="flex flex-col gap-6 desktop:gap-10"
-            aria-busy="true"
-            aria-label="載入中"
-          >
+          <div className="flex flex-col gap-6 desktop:gap-10" role="status">
+            <span className="sr-only">載入中</span>
             {Array.from({ length: 4 }, (_, index) => (
               <HistoryCardSkeleton key={index} />
             ))}
