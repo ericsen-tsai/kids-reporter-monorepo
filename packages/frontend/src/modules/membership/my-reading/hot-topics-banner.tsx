@@ -4,7 +4,7 @@ import 'swiper/css'
 
 import { Button, cn } from '@kids-reporter/routing-ui'
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Autoplay } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import type { Swiper as SwiperCore } from 'swiper/types'
@@ -15,6 +15,19 @@ import { getMemberDisplayName } from '@/modules/idea-hub/utils'
 import type { HotTopic } from '@/types/api'
 
 const AUTOPLAY_MS = 7000
+
+function syncInactiveSlides(swiper: SwiperCore) {
+  if (swiper.destroyed || !swiper.slides) return
+  swiper.slides.forEach((slide) => {
+    const topicIndex = slide.getAttribute('data-swiper-slide-index')
+    const inactive =
+      Boolean(swiper.params.loop) &&
+      topicIndex != null &&
+      Number(topicIndex) !== swiper.realIndex
+    if (inactive) slide.setAttribute('inert', '')
+    else slide.removeAttribute('inert')
+  })
+}
 
 function formatMonthDay(iso: string) {
   const date = new Date(iso)
@@ -93,6 +106,13 @@ function HotTopicsCarousel({ topics }: { topics: HotTopic[] }) {
   const setHoldRef = useRef(setHold)
   setHoldRef.current = setHold
 
+  useLayoutEffect(() => {
+    const swiper = swiperRef.current
+    if (!swiper) return
+    // afterInit does not run again when Swiper rebuilds slides for a new topic list
+    syncInactiveSlides(swiper)
+  }, [activeIndex, canLoop, topics])
+
   useEffect(() => {
     const node = rootRef.current
     if (!node || !canLoop) return
@@ -137,8 +157,12 @@ function HotTopicsCarousel({ topics }: { topics: HotTopic[] }) {
         onBeforeInit={(swiper) => {
           swiperRef.current = swiper
         }}
+        onAfterInit={(swiper) => {
+          syncInactiveSlides(swiper)
+        }}
         onSlideChange={(swiper) => {
           setActiveIndex(swiper.realIndex)
+          syncInactiveSlides(swiper)
         }}
       >
         {topics.map((topic) => (
@@ -209,7 +233,12 @@ function HotTopicsBanner() {
     )
   }
   if (!data || data.length === 0) return null
-  return <HotTopicsCarousel topics={data} />
+  return (
+    <HotTopicsCarousel
+      key={data.length > 1 ? 'looping' : 'single'}
+      topics={data}
+    />
+  )
 }
 
 export default HotTopicsBanner
